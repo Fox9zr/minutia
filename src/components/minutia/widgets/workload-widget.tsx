@@ -92,7 +92,7 @@ export function WorkloadWidget({
       </div>
 
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2 mt-1 mb-5">
-        <span>{openIssues.length} open</span>
+        <span>{openIssues.length} открыто</span>
         <span className="text-ink-4">·</span>
         <span>{ownerCount} owners</span>
         {unassignedCount > 0 && (

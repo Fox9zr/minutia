@@ -1085,7 +1085,7 @@ function SeriesWidget({
             <span className="flex-1 min-w-0 text-sm text-ink transition-colors break-words">{series.name}</span>
             {series.open_issues_count > 0 && (
               <span className="text-xs text-accent font-medium tabular-nums">
-                {series.open_issues_count} open
+                {series.open_issues_count} открыто
               </span>
             )}
           </Link>

@@ -72,7 +72,7 @@ export function CarryoverBriefingPanel({
       </div>
 
       <p className="mt-1 text-xs text-ink-3">
-        {issueCount} open {issueCount === 1 ? "item" : "items"} carried from earlier meetings.
+        {issueCount} перенесённых поручений с прошлых встреч.
       </p>
 
       {error && <p className="mt-3 text-sm text-danger">{error}</p>}
