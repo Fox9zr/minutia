@@ -62,7 +62,7 @@ export function AddWidgetButton() {
           )}
         >
           <Plus className="size-3.5" />
-          Add widget
+          Добавить виджет
         </button>
       </HintTooltip>
 

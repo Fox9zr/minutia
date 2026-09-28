@@ -211,7 +211,7 @@ function HeroWidget({
         />
         <div>
           <h2 className="font-display text-lg font-semibold text-ink leading-tight">
-            Open items across your series
+            Открытые поручения по вашим сериям
           </h2>
         </div>
       </div>
@@ -233,7 +233,7 @@ function HeroWidget({
         <div className="mt-6 pt-5 border-t border-rule">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <p className="text-xs text-ink-3">
-              Issues across last {recentMeetings.length} meetings
+              Поручения по последним {recentMeetings.length} встречам
             </p>
             {avgLife > 0 && (
               <p className="text-xs text-ink-4">
@@ -324,7 +324,7 @@ function NextMeetingWidget({
       <div className="flex items-center gap-2 mb-4">
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-accent">
           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
-          Next meeting
+          Следующая встреча
         </span>
       </div>
       <h3 className="font-display text-lg font-semibold text-ink mb-1 break-words">
@@ -1071,7 +1071,7 @@ function SeriesWidget({
       <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
         <h3 className="font-display text-base font-semibold text-ink">Ваши серии встреч</h3>
         <Link href="/series" className="text-xs text-ink-3 hover:text-accent transition-colors">
-          View all
+          Показать все
         </Link>
       </div>
       <div className="space-y-1">
@@ -1373,7 +1373,7 @@ export default function Dashboard() {
             <div>
               <h1 className="font-display text-2xl font-semibold text-ink">Доска OIL</h1>
               <p className="mt-1 text-sm text-ink-3">
-                Outstanding Issues Log. Everything still open across your meetings.
+                Журнал незакрытых вопросов. Всё открытое по вашим встречам в одном месте.
               </p>
             </div>
             <AddWidgetButton />

@@ -7,10 +7,10 @@ export const MEETING_STATUSES = ["upcoming", "live", "completed"] as const;
 export const CADENCES = ["daily", "weekly", "biweekly", "monthly", "adhoc"] as const;
 
 export const CADENCE_LABELS: Record<Cadence, string> = {
-  daily: "Daily",
-  weekly: "Weekly",
-  biweekly: "Biweekly",
-  monthly: "Monthly",
+  daily: "Ежедневно",
+  weekly: "Еженедельно",
+  biweekly: "Раз в две недели",
+  monthly: "Ежемесячно",
   adhoc: "Ad hoc",
 };
 
