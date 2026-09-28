@@ -27,7 +27,7 @@ export default function DashboardLoading() {
             </div>
           </div>
 
-          {/* Следующая встреча card */}
+          {/* Next meeting card */}
           <div className="rounded-xl bg-card shadow-[var(--shadow-raised)] p-6">
             <Skeleton className="h-3 w-20 mb-4" />
             <Skeleton className="h-5 w-3/4 mb-1" />

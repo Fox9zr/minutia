@@ -29,7 +29,7 @@ import {
   undoPendingDelete,
   isPendingDelete,
   markCommitting,
-} from "@/lib/в ожидании-delete";
+} from "@/lib/pending-delete";
 import { StatusChip } from "@/components/minutia/status-chip";
 import { CategoryBadge } from "@/components/minutia/category-badge";
 import { IssueKey } from "@/components/minutia/issue-key";
@@ -249,7 +249,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
   const [dueOpen, setDueOpen] = React.useState(false);
   const updateInputRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const statusCycle: IssueStatus[] = ["открыто", "в ожидании", "in_progress", "resolved"];
+  const statusCycle: IssueStatus[] = ["open", "pending", "in_progress", "resolved"];
 
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -354,7 +354,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
     if (!issue) return;
     updateIssueStatus.mutate({
       issueId: issue.id,
-      серияId: issue.серия_id,
+      seriesId: issue.series_id,
       oldStatus: issue.status,
       newStatus,
     });
@@ -476,7 +476,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           {/* Due date */}
           <div className="flex items-center gap-2 text-sm">
             <span className="text-ink-3 w-20 shrink-0">Due</span>
-            <Popover открыто={dueOpen} onOpenChange={setDueOpen}>
+            <Popover open={dueOpen} onOpenChange={setDueOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="ghost"
@@ -552,7 +552,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             <div className="flex items-center gap-2 text-sm">
               <span className="text-ink-3 w-20 shrink-0">Создано в</span>
               <Link
-                href={`/серия/${issue.серия_id}/meetings/${raisedIn.id}`}
+                href={`/series/${issue.series_id}/meetings/${raisedIn.id}`}
                 className="text-sm text-ink hover:text-accent transition-colors underline underline-offset-2"
               >
                 {raisedIn.title}

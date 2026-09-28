@@ -10,7 +10,7 @@ export type AdminAccess = {
 // Two distinct admin kinds gate /admin: an instance admin (profiles.role) runs the
 // whole deployment; an org admin (organization_members.role) runs workspace access.
 // Overview/Settings/Health are instance administration; Users is workspace
-// administration, открыто to both.
+// administration, open to both.
 export async function resolveAdminAccess(): Promise<AdminAccess | null> {
   const supabase = await createClient();
   const {

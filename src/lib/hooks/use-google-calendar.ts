@@ -7,13 +7,13 @@ import type {
   GoogleCalendarEvent,
   GoogleCalendarAgendaItem,
 } from "@/lib/types";
-import { серияKeys } from "./use-серия";
+import { seriesKeys } from "./use-series";
 import { meetingKeys } from "./use-meetings";
 
 export const calendarKeys = {
   status: ["calendar", "status"] as const,
   calendars: ["calendar", "calendars"] as const,
-  events: (серияId: string) => ["calendar", "events", серияId] as const,
+  events: (seriesId: string) => ["calendar", "events", seriesId] as const,
   agenda: ["calendar", "agenda"] as const,
 };
 
@@ -45,17 +45,17 @@ export function useCalendarList() {
   });
 }
 
-export function useCalendarEvents(серияId: string | undefined) {
+export function useCalendarEvents(seriesId: string | undefined) {
   const { data: status } = useGoogleCalendarStatus();
 
   return useQuery<GoogleCalendarEvent[]>({
-    queryKey: calendarKeys.events(серияId ?? ""),
+    queryKey: calendarKeys.events(seriesId ?? ""),
     queryFn: async () => {
-      const res = await fetch(`/api/calendar/events?серияId=${серияId}`);
+      const res = await fetch(`/api/calendar/events?seriesId=${seriesId}`);
       if (!res.ok) throw new Error("Не удалось получить события");
       return res.json();
     },
-    enabled: !!серияId && !!status?.connected,
+    enabled: !!seriesId && !!status?.connected,
     staleTime: 5 * 60 * 1000,
     retry: 1,
   });
@@ -106,19 +106,19 @@ export function useLinkCalendar() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ серияId, calendarId }: { серияId: string; calendarId: string }) => {
+    mutationFn: async ({ seriesId, calendarId }: { seriesId: string; calendarId: string }) => {
       const res = await fetch("/api/calendar/link", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ серияId, calendarId }),
+        body: JSON.stringify({ seriesId, calendarId }),
       });
       if (!res.ok) throw new Error("Не удалось привязать календарь");
       return res.json();
     },
-    onSuccess: (_data, { серияId }) => {
-      queryClient.invalidateQueries({ queryKey: серияKeys.all });
-      queryClient.invalidateQueries({ queryKey: серияKeys.detail(серияId) });
-      queryClient.invalidateQueries({ queryKey: calendarKeys.events(серияId) });
+    onSuccess: (_data, { seriesId }) => {
+      queryClient.invalidateQueries({ queryKey: seriesKeys.all });
+      queryClient.invalidateQueries({ queryKey: seriesKeys.detail(seriesId) });
+      queryClient.invalidateQueries({ queryKey: calendarKeys.events(seriesId) });
     },
   });
 }
@@ -127,19 +127,19 @@ export function useUnlinkCalendar() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (серияId: string) => {
+    mutationFn: async (seriesId: string) => {
       const res = await fetch("/api/calendar/unlink", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ серияId }),
+        body: JSON.stringify({ seriesId }),
       });
       if (!res.ok) throw new Error("Не удалось отвязать календарь");
       return res.json();
     },
-    onSuccess: (_data, серияId) => {
-      queryClient.invalidateQueries({ queryKey: серияKeys.all });
-      queryClient.invalidateQueries({ queryKey: серияKeys.detail(серияId) });
-      queryClient.invalidateQueries({ queryKey: calendarKeys.events(серияId) });
+    onSuccess: (_data, seriesId) => {
+      queryClient.invalidateQueries({ queryKey: seriesKeys.all });
+      queryClient.invalidateQueries({ queryKey: seriesKeys.detail(seriesId) });
+      queryClient.invalidateQueries({ queryKey: calendarKeys.events(seriesId) });
     },
   });
 }

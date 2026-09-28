@@ -1,9 +1,9 @@
 import { getAiConfig, type AiConfig } from "./config";
 import { AiNotConfiguredError, dispatchAi } from "./call";
-import { getTextFromOpenRouter } from "./ask-серия-answer";
-import { streamOpenAiCompatible } from "./providers/открытоai-compatible-stream";
+import { getTextFromOpenRouter } from "./ask-series-answer";
+import { streamOpenAiCompatible } from "./providers/openai-compatible-stream";
 
-// Honest streaming transport. открытоai-compatible providers stream real tokens;
+// Honest streaming transport. openai-compatible providers stream real tokens;
 // anthropic (and any non-streaming provider) fall back to one blocking call
 // yielded as a single delta so the flowing recap still works everywhere. The
 // operator-resolved AiConfig picks the model; we never hardcode one.
@@ -19,7 +19,7 @@ export async function* streamAi(input: {
   if (!config) throw new AiNotConfiguredError("ИИ не настроен.");
   const timeoutMs = input.timeoutMs ?? 60_000;
 
-  if (config.provider === "открытоai-compatible") {
+  if (config.provider === "openai-compatible") {
     yield* streamOpenAiCompatible({
       baseUrl: config.baseUrl,
       apiKey: config.apiKey,

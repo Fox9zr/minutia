@@ -9,18 +9,18 @@ export interface PendingItem {
   category?: string;
   priority?: string;
   meeting_id: string;
-  серия_id: string;
+  series_id: string;
   created_at: string;
 }
 
 const DB_NAME = "minutia_offline";
-const STORE_NAME = "в ожидании_captures";
+const STORE_NAME = "pending_captures";
 const AUDIO_STORE_NAME = "audio_chunks";
 const DB_VERSION = 2;
 
-function открытоDB(): Promise<IDBDatabase> {
+function openDB(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.открыто(DB_NAME, DB_VERSION);
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onupgradeneeded = () => {
       const db = request.result;
@@ -35,14 +35,14 @@ function открытоDB(): Promise<IDBDatabase> {
 
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
-    // Another tab holding an older version открыто would otherwise hang the upgrade.
+    // Another tab holding an older version open would otherwise hang the upgrade.
     request.onblocked = () =>
       reject(new Error("Обновление IndexedDB заблокировано другой открытой вкладкой"));
   });
 }
 
 export async function addPendingItem(item: PendingItem): Promise<void> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     tx.objectStore(STORE_NAME).put(item);
@@ -58,7 +58,7 @@ export async function addPendingItem(item: PendingItem): Promise<void> {
 }
 
 export async function getPendingItems(): Promise<PendingItem[]> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readonly");
     const request = tx.objectStore(STORE_NAME).getAll();
@@ -78,7 +78,7 @@ export async function getPendingItems(): Promise<PendingItem[]> {
 }
 
 export async function removePendingItem(id: string): Promise<void> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     tx.objectStore(STORE_NAME).delete(id);
@@ -94,7 +94,7 @@ export async function removePendingItem(id: string): Promise<void> {
 }
 
 export async function getPendingCount(): Promise<number> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readonly");
     const request = tx.objectStore(STORE_NAME).count();
@@ -127,7 +127,7 @@ export async function appendAudioChunk(
   seq: number,
   blob: Blob
 ): Promise<void> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(AUDIO_STORE_NAME, "readwrite");
     tx.objectStore(AUDIO_STORE_NAME).put({
@@ -148,7 +148,7 @@ export async function appendAudioChunk(
 }
 
 export async function getAudioChunks(meetingId: string): Promise<Blob[]> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(AUDIO_STORE_NAME, "readonly");
     const index = tx.objectStore(AUDIO_STORE_NAME).index("by_meeting");
@@ -168,11 +168,11 @@ export async function getAudioChunks(meetingId: string): Promise<Blob[]> {
 }
 
 export async function clearAudioChunks(meetingId: string): Promise<void> {
-  const db = await открытоDB();
+  const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(AUDIO_STORE_NAME, "readwrite");
     const store = tx.objectStore(AUDIO_STORE_NAME);
-    const cursorRequest = store.index("by_meeting").открытоCursor(
+    const cursorRequest = store.index("by_meeting").openCursor(
       IDBKeyRange.only(meetingId)
     );
     cursorRequest.onsuccess = () => {

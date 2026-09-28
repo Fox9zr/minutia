@@ -14,7 +14,7 @@ import {
 
 export function CreateClient() {
   const router = useRouter();
-  const [открыто, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const [busy, setBusy] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -119,7 +119,7 @@ export function CreateClient() {
         </p>
       )}
       <CreateRetro
-        открыто={открыто}
+        open={open}
         initialName=""
         templates={TEMPLATES}
         onClose={() => setOpen(false)}

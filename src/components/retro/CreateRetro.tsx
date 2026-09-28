@@ -9,19 +9,19 @@ import { Icons } from "./icons";
 const pastels = ["var(--c-rose)", "var(--c-amber)", "var(--c-sage)", "var(--c-sky)"];
 
 export interface CreateRetroProps {
-  открыто: boolean;
+  open: boolean;
   initialName?: string;
   templates: RetroTemplate[];
   onClose: () => void;
   onCreate: (opts: { name: string; template: RetroTemplate }) => void;
 }
 
-export function CreateRetro({ открыто, initialName, templates, onClose, onCreate }: CreateRetroProps) {
+export function CreateRetro({ open, initialName, templates, onClose, onCreate }: CreateRetroProps) {
   const [name, setName] = React.useState(initialName || "");
   const [tpl, setTpl] = React.useState("ssc");
 
-  React.useEffect(() => { if (открыто) setName(initialName || ""); }, [открыто, initialName]);
-  if (!открыто) return null;
+  React.useEffect(() => { if (open) setName(initialName || ""); }, [open, initialName]);
+  if (!open) return null;
 
   return (
     <div style={{ position: "absolute", inset: 0, zIndex: 60, overflowY: "auto", background: "var(--studio-void)" }}>

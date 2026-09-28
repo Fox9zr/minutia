@@ -76,7 +76,7 @@ export function audioContentType(mime: string): string {
 
 /**
  * Object key within MEETING_AUDIO_BUCKET. The meeting id is the first path
- * segment so storage RLS can authorize by joining meetings -> meeting_серия.
+ * segment so storage RLS can authorize by joining meetings -> meeting_series.
  */
 export function audioStoragePath(meetingId: string, mime = "audio/webm"): string {
   return `${meetingId}/recording.${audioExtensionForMime(mime)}`;
@@ -125,7 +125,7 @@ export interface UploadMeetingAudioParams {
 
 /**
  * Upload a finished recording to private storage and stamp the meeting row.
- * Storage write happens first; the row is only marked 'в ожидании' once the audio
+ * Storage write happens first; the row is only marked 'pending' once the audio
  * is durably stored, so a failed upload never queues a non-existent file for
  * transcription. Throws on either failure (the caller still completes the
  * meeting; the recording survives in IndexedDB for retry).
@@ -147,7 +147,7 @@ export async function uploadMeetingAudio(
       audio_file_path: path,
       audio_duration_seconds: Math.round(durationSeconds),
       audio_file_size_bytes: blob.size,
-      transcription_status: "в ожидании",
+      transcription_status: "pending",
     })
     .eq("id", meetingId);
   if (updateError) throw updateError;

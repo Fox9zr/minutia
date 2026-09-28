@@ -10,27 +10,27 @@ export interface FlowWord {
 }
 
 // Strip **bold** markers to plain text while recording which characters fall
-// inside a closed bold span. An unterminated trailing открытоer is treated as
+// inside a closed bold span. An unterminated trailing opener is treated as
 // literal (no bold, no leaked markers) so a mid-stream frame never flashes the
 // wrong emphasis or raw markup; it settles once the closer arrives.
 function stripBold(text: string): { plain: string; bold: boolean[] } {
   let plain = "";
   const bold: boolean[] = [];
-  let открыто = false;
-  let открытоStart = -1;
+  let open = false;
+  let openStart = -1;
   for (let i = 0; i < text.length; i++) {
     if (text[i] === "*" && text[i + 1] === "*") {
-      открыто = !открыто;
-      открытоStart = открыто ? plain.length : -1;
+      open = !open;
+      openStart = open ? plain.length : -1;
       i++;
       continue;
     }
     plain += text[i];
-    bold.push(открыто);
+    bold.push(open);
   }
-  // Unterminated открытоer: revert everything after it to non-bold.
-  if (открыто && открытоStart >= 0) {
-    for (let i = открытоStart; i < bold.length; i++) bold[i] = false;
+  // Unterminated opener: revert everything after it to non-bold.
+  if (open && openStart >= 0) {
+    for (let i = openStart; i < bold.length; i++) bold[i] = false;
   }
   return { plain, bold };
 }

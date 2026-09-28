@@ -16,7 +16,7 @@ export type InviteRequestRecord = {
   email: string;
   organization_id: string | null;
   requested_path: string;
-  status: "в ожидании" | "approved" | "rejected";
+  status: "pending" | "approved" | "rejected";
   created_at: string;
 };
 

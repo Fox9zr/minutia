@@ -53,7 +53,7 @@ export function AiUnavailableNotice({ className }: { className?: string }) {
           <a
             href={cta.href}
             target="_blank"
-            rel="noоткрытоer noreferrer"
+            rel="noopener noreferrer"
             className="ml-auto shrink-0 font-medium text-accent underline underline-offset-2 hover:text-accent-hover"
           >
             {cta.label}

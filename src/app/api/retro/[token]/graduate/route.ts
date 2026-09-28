@@ -7,9 +7,9 @@ import { parseDue } from "@/lib/retro/parse-due";
 export const dynamic = "force-dynamic";
 
 // Account-gated graduation: turn a retro's action items into tracked Minutia
-// issues under a new or existing серия. Ownership is derived from the session,
+// issues under a new or existing series. Ownership is derived from the session,
 // never the client. Reads of the default-deny retro_* tables use service-role;
-// серия/meeting/issue inserts use the user-scoped client so RLS enforces access.
+// series/meeting/issue inserts use the user-scoped client so RLS enforces access.
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ token: string }> }
@@ -29,7 +29,7 @@ export async function POST(
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
-  let body: { target?: "new" | "existing"; name?: string; серия_id?: string };
+  let body: { target?: "new" | "existing"; name?: string; series_id?: string };
   try {
     body = await request.json();
   } catch {
@@ -39,15 +39,15 @@ export async function POST(
   const svc = createServiceRoleClient();
   const { data: board } = await svc
     .from("retro_boards")
-    .select("id, name, saved_to_серия_id")
+    .select("id, name, saved_to_series_id")
     .eq("token", token)
     .single();
   if (!board) {
     return NextResponse.json({ error: "Доска не найдена" }, { status: 404 });
   }
-  if (board.saved_to_серия_id) {
+  if (board.saved_to_series_id) {
     return NextResponse.json(
-      { серия_id: board.saved_to_серия_id, issue_count: 0, already_saved: true },
+      { series_id: board.saved_to_series_id, issue_count: 0, already_saved: true },
       { status: 200 }
     );
   }
@@ -85,18 +85,18 @@ export async function POST(
   // Validate access to an existing target up front (read-only, before claiming).
   let existingSeriesId: string | null = null;
   if (body.target === "existing") {
-    if (!body.серия_id) {
-      return NextResponse.json({ error: "серия_id required" }, { status: 400 });
+    if (!body.series_id) {
+      return NextResponse.json({ error: "series_id required" }, { status: 400 });
     }
-    const { data: серия } = await supabase
-      .from("meeting_серия")
+    const { data: series } = await supabase
+      .from("meeting_series")
       .select("id")
-      .eq("id", body.серия_id)
+      .eq("id", body.series_id)
       .single();
-    if (!серия) {
+    if (!series) {
       return NextResponse.json({ error: "Серия недоступна" }, { status: 403 });
     }
-    existingSeriesId = серия.id;
+    existingSeriesId = series.id;
   }
 
   // Atomic claim: prevents concurrent double-graduation (double-click, auto +
@@ -111,30 +111,30 @@ export async function POST(
   if (!claimed) {
     const { data: b2 } = await svc
       .from("retro_boards")
-      .select("saved_to_серия_id")
+      .select("saved_to_series_id")
       .eq("id", board.id)
       .single();
     return NextResponse.json(
-      { серия_id: b2?.saved_to_серия_id ?? null, issue_count: 0, already_saved: true },
-      { status: b2?.saved_to_серия_id ? 200 : 409 }
+      { series_id: b2?.saved_to_series_id ?? null, issue_count: 0, already_saved: true },
+      { status: b2?.saved_to_series_id ? 200 : 409 }
     );
   }
   // Release the claim if a later step fails, so the user can retry.
   const release = () =>
-    svc.from("retro_boards").update({ claimed_by: null }).eq("id", board.id).is("saved_to_серия_id", null);
+    svc.from("retro_boards").update({ claimed_by: null }).eq("id", board.id).is("saved_to_series_id", null);
 
-  // Resolve the target серия (create new only after claiming).
-  let серияId: string;
+  // Resolve the target series (create new only after claiming).
+  let seriesId: string;
   if (existingSeriesId) {
-    серияId = existingSeriesId;
+    seriesId = existingSeriesId;
   } else {
     const { data: profile } = await supabase
       .from("profiles")
       .select("current_organization_id")
       .eq("id", user.id)
       .single();
-    const { data: серия, error } = await supabase
-      .from("meeting_серия")
+    const { data: series, error } = await supabase
+      .from("meeting_series")
       .insert({
         name: (body.name || board.name).slice(0, 120),
         description: "Создано из ретроспективы Minutia",
@@ -143,22 +143,22 @@ export async function POST(
       })
       .select("id")
       .single();
-    if (error || !серия) {
+    if (error || !series) {
       await release();
       return NextResponse.json({ error: "Не удалось создать серию" }, { status: 400 });
     }
-    серияId = серия.id;
+    seriesId = series.id;
   }
 
   // A meeting to anchor the issues (issues.raised_in_meeting_id is required).
   const { count } = await supabase
     .from("meetings")
     .select("id", { count: "exact", head: true })
-    .eq("серия_id", серияId);
+    .eq("series_id", seriesId);
   const { data: meeting, error: meetingErr } = await supabase
     .from("meetings")
     .insert({
-      серия_id: серияId,
+      series_id: seriesId,
       sequence_number: (count ?? 0) + 1,
       title: "Ретроспектива",
       status: "completed",
@@ -177,7 +177,7 @@ export async function POST(
     const { data: issue, error: issueErr } = await supabase
       .from("issues")
       .insert({
-        серия_id: серияId,
+        series_id: seriesId,
         raised_in_meeting_id: meeting.id,
         title: a.text,
         category: "action",
@@ -192,18 +192,18 @@ export async function POST(
     if (a.id) await svc.from("retro_actions").update({ graduated_issue_id: issue.id }).eq("id", a.id);
   }
 
-  // Persist the conversion. Setting saved_to_серия_id is what exempts the board
+  // Persist the conversion. Setting saved_to_series_id is what exempts the board
   // from expiry (_retro_live_board) and cleanup, so the TTL never fires; we do
   // not null expires_at (the column is NOT NULL). If this write fails, release
   // the claim so the board does not get stuck unsavable.
   const { error: finalErr } = await svc
     .from("retro_boards")
-    .update({ saved_to_серия_id: серияId, claimed_by: user.id })
+    .update({ saved_to_series_id: seriesId, claimed_by: user.id })
     .eq("id", board.id);
   if (finalErr) {
     await release();
     return NextResponse.json({ error: "Не удалось завершить сохранение" }, { status: 500 });
   }
 
-  return NextResponse.json({ серия_id: серияId, issue_count: issueCount });
+  return NextResponse.json({ series_id: seriesId, issue_count: issueCount });
 }

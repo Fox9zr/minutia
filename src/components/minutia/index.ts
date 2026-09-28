@@ -9,7 +9,7 @@ export { TimelineNode } from "./timeline-node";
 export { CaptureInput } from "./capture-input";
 export { EmptyState } from "./empty-state";
 export { SyncIndicator } from "./sync-indicator";
-export { CreateSeriesDialog } from "./create-серия-dialog";
+export { CreateSeriesDialog } from "./create-series-dialog";
 export { MeetingTimelineItem } from "./meeting-timeline-item";
 export { AppSidebar } from "./app-sidebar";
 export { AppHeader } from "./app-header";

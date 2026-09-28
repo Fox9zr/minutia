@@ -11,7 +11,7 @@ import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { cn } from "@/lib/utils";
 import { useUpdateProfile } from "@/lib/hooks/use-profile";
 import { useCompleteOnboarding } from "@/lib/hooks/use-profile";
-import { useCreateSeries } from "@/lib/hooks/use-серия";
+import { useCreateSeries } from "@/lib/hooks/use-series";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
 import type { Cadence } from "@/lib/types";
 
@@ -31,7 +31,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
   const nameInputRef = React.useRef<HTMLInputElement>(null);
 
   const [name, setName] = React.useState(userName ?? "");
-  const [серияName, setSeriesName] = React.useState("");
+  const [seriesName, setSeriesName] = React.useState("");
   const [cadence, setCadence] = React.useState<Cadence>("weekly");
   const [attendees, setAttendees] = React.useState("");
   const [createdSeriesId, setCreatedSeriesId] = React.useState<string | null>(null);
@@ -77,17 +77,17 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
   }
 
   async function handleFinishStep1() {
-    if (серияName.trim()) {
+    if (seriesName.trim()) {
       const attendeeList = attendees
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
-      const серия = await createSeries.mutateAsync({
-        name: серияName.trim(),
+      const series = await createSeries.mutateAsync({
+        name: seriesName.trim(),
         cadence,
         default_attendees: attendeeList,
       });
-      setCreatedSeriesId(серия.id);
+      setCreatedSeriesId(series.id);
     }
     goNext();
   }
@@ -95,7 +95,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
   async function handleComplete() {
     await completeOnboarding.mutateAsync();
     if (createdSeriesId) {
-      router.push(`/серия/${createdSeriesId}`);
+      router.push(`/series/${createdSeriesId}`);
     } else {
       router.push("/");
     }
@@ -176,7 +176,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
                 transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
               >
                 <StepCreateSeries
-                  серияName={серияName}
+                  seriesName={seriesName}
                   onSeriesNameChange={setSeriesName}
                   cadence={cadence}
                   onCadenceChange={setCadence}
@@ -333,11 +333,11 @@ function StepWelcome({
 }
 
 // ---------------------------------------------------------------------------
-// Step 1: Create first серия
+// Step 1: Create first series
 // ---------------------------------------------------------------------------
 
 function StepCreateSeries({
-  серияName,
+  seriesName,
   onSeriesNameChange,
   cadence,
   onCadenceChange,
@@ -347,7 +347,7 @@ function StepCreateSeries({
   onSkip,
   isPending,
 }: {
-  серияName: string;
+  seriesName: string;
   onSeriesNameChange: (v: string) => void;
   cadence: Cadence;
   onCadenceChange: (v: Cadence) => void;
@@ -361,22 +361,22 @@ function StepCreateSeries({
     <div className="space-y-5">
       <div>
         <h2 className="font-display text-xl font-semibold text-ink">
-          Create your first серия
+          Create your first series
         </h2>
         <p className="text-sm text-ink-3 mt-1">
-          A серия is a recurring meeting you want to track issues for.
+          A series is a recurring meeting you want to track issues for.
         </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="onboard-серия" className="text-ink-2">
+        <Label htmlFor="onboard-series" className="text-ink-2">
           Meeting name
         </Label>
         <Input
-          id="onboard-серия"
-          value={серияName}
+          id="onboard-series"
+          value={seriesName}
           onChange={(e) => onSeriesNameChange(e.target.value)}
-          placeholder="e.g. Еженедельно Standup, Vendor Sync, 1:1 with Alex"
+          placeholder="e.g. Weekly Standup, Vendor Sync, 1:1 with Alex"
           autoFocus
           className="h-11 rounded-xl"
         />
@@ -428,7 +428,7 @@ function StepCreateSeries({
         </Button>
         <Button variant="accent"
           onClick={onNext}
-          disabled={!серияName.trim() || isPending}
+          disabled={!seriesName.trim() || isPending}
           className="flex-1 h-11 rounded-xl"
         >
           {isPending ? "Creating..." : "Создать серию"}

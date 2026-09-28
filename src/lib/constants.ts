@@ -1,23 +1,23 @@
 import type { IssueCategory, IssueStatus, Priority, MeetingStatus, Cadence } from "./types";
 
 export const ISSUE_CATEGORIES = ["action", "decision", "info", "risk", "blocker"] as const;
-export const ISSUE_STATUSES = ["открыто", "in_progress", "в ожидании", "resolved", "dropped"] as const;
+export const ISSUE_STATUSES = ["open", "in_progress", "pending", "resolved", "dropped"] as const;
 export const PRIORITIES = ["low", "medium", "high", "critical"] as const;
 export const MEETING_STATUSES = ["upcoming", "live", "completed"] as const;
 export const CADENCES = ["daily", "weekly", "biweekly", "monthly", "adhoc"] as const;
 
 export const CADENCE_LABELS: Record<Cadence, string> = {
-  daily: "Ежедневно",
-  weekly: "Еженедельно",
-  biweekly: "Раз в две недели",
-  monthly: "Ежемесячно",
-  adhoc: "По мере необходимости",
+  daily: "Daily",
+  weekly: "Weekly",
+  biweekly: "Biweekly",
+  monthly: "Monthly",
+  adhoc: "Ad hoc",
 };
 
 export const STATUS_CONFIG: Record<IssueStatus, { label: string; color: string }> = {
-  открыто: { label: "Открыть", color: "ink" },
+  open: { label: "Открыть", color: "ink" },
   in_progress: { label: "В работе", color: "accent" },
-  в ожидании: { label: "В ожидании", color: "warn" },
+  pending: { label: "В ожидании", color: "warn" },
   resolved: { label: "Решено", color: "success" },
   dropped: { label: "Исключено", color: "ink-3" },
 };

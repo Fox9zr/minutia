@@ -10,7 +10,7 @@ export default function AdminUsersPage() {
           Workspace members
         </h2>
         <p className="text-sm text-ink-3">
-          Invite teammates, manage roles, and revoke в ожидании invitations.
+          Invite teammates, manage roles, and revoke pending invitations.
         </p>
       </div>
       <WorkspaceMembers />

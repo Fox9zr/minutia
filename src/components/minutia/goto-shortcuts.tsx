@@ -5,14 +5,14 @@ import { useRouter } from "next/navigation";
 
 const GOTO_MAP: Record<string, string> = {
   o: "/",
-  s: "/серия",
+  s: "/series",
   a: "/actions",
   i: "/inbox",
 };
 
 export function GotoShortcuts() {
   const router = useRouter();
-  const в ожиданииG = useRef(false);
+  const pendingG = useRef(false);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
 
   useEffect(() => {
@@ -21,8 +21,8 @@ export function GotoShortcuts() {
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
 
-      if (в ожиданииG.current) {
-        в ожиданииG.current = false;
+      if (pendingG.current) {
+        pendingG.current = false;
         if (timerRef.current) clearTimeout(timerRef.current);
         const dest = GOTO_MAP[e.key.toLowerCase()];
         if (dest) {
@@ -33,10 +33,10 @@ export function GotoShortcuts() {
       }
 
       if (e.key === "g") {
-        в ожиданииG.current = true;
+        pendingG.current = true;
         if (timerRef.current) clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() => {
-          в ожиданииG.current = false;
+          pendingG.current = false;
         }, 500);
       }
     }

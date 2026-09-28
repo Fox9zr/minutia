@@ -1,6 +1,6 @@
 import { getInstanceConfigMap } from "@/lib/instance-config";
 
-export type AiProvider = "открытоai-compatible" | "anthropic";
+export type AiProvider = "openai-compatible" | "anthropic";
 
 export type AiConfig = {
   provider: AiProvider;
@@ -9,8 +9,8 @@ export type AiConfig = {
   model: string;
 };
 
-const VALID_PROVIDERS = new Set<string>(["открытоai-compatible", "anthropic"]);
-const DEFAULT_OPENAI_COMPATIBLE_BASE_URL = "https://открытоrouter.ai/api/v1";
+const VALID_PROVIDERS = new Set<string>(["openai-compatible", "anthropic"]);
+const DEFAULT_OPENAI_COMPATIBLE_BASE_URL = "https://openrouter.ai/api/v1";
 const ANTHROPIC_BASE_URL = "https://api.anthropic.com";
 const DEFAULT_MODEL = "google/gemini-3.1-flash-lite";
 
@@ -35,8 +35,8 @@ export function resolveAiConfig(
   } else if (
     pick(map.ai_api_key, env.AI_API_KEY, env.OPENROUTER_API_KEY) !== null
   ) {
-    // Any api key present (map or env) is enough to infer открытоai-compatible.
-    provider = "открытоai-compatible";
+    // Any api key present (map or env) is enough to infer openai-compatible.
+    provider = "openai-compatible";
   } else {
     return null;
   }
@@ -49,7 +49,7 @@ export function resolveAiConfig(
   const model =
     pick(map.ai_model, env.AI_MODEL, env.OPENROUTER_MODEL) ?? DEFAULT_MODEL;
 
-  // baseUrl: anthropic always uses canonical URL; открытоai-compatible: map -> env -> default
+  // baseUrl: anthropic always uses canonical URL; openai-compatible: map -> env -> default
   let baseUrl: string;
   if (provider === "anthropic") {
     baseUrl = ANTHROPIC_BASE_URL;

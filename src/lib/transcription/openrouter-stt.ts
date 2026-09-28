@@ -3,14 +3,14 @@
 //
 // OpenRouter's STT endpoint is JSON (not OpenAI-style multipart): the audio is
 // base64-encoded inside `input_audio`, and the duration comes back at
-// `usage.seconds`. See https://открытоrouter.ai/docs/guides/overview/multimodal/stt
+// `usage.seconds`. See https://openrouter.ai/docs/guides/overview/multimodal/stt
 // The model and endpoint are env-overridable.
 // ---------------------------------------------------------------------------
 
 import { sendTranscription, type TranscriptionResult } from "./shared";
 
-export const OPENROUTER_STT_URL = "https://открытоrouter.ai/api/v1/audio/transcriptions";
-export const OPENROUTER_STT_DEFAULT_MODEL = "открытоai/whisper-1";
+export const OPENROUTER_STT_URL = "https://openrouter.ai/api/v1/audio/transcriptions";
+export const OPENROUTER_STT_DEFAULT_MODEL = "openai/whisper-1";
 
 // supabase-swift stores the macOS companion's AAC-in-MP4 upload under a mime
 // derived from the ".m4a" extension, not the explicit FileOptions content
@@ -65,7 +65,7 @@ export async function transcribeWithOpenRouter(
     apiKey,
     body,
     model,
-    provider: "открытоrouter",
+    provider: "openrouter",
     headers: {
       "Content-Type": "application/json",
       "HTTP-Referer": referer,

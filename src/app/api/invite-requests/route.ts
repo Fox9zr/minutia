@@ -216,7 +216,7 @@ export async function POST(request: NextRequest) {
                             </td>
                           </tr>
                         </table>
-                        <p style="margin:4px 0 0;color:#6b665f;font-size:12px;line-height:19px;">${escapeHtml(actionNote)} Buttons открыто a review screen first, so email previews cannot change access.</p>
+                        <p style="margin:4px 0 0;color:#6b665f;font-size:12px;line-height:19px;">${escapeHtml(actionNote)} Buttons open a review screen first, so email previews cannot change access.</p>
                       </td>
                     </tr>
                   </table>

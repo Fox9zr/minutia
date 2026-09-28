@@ -19,25 +19,25 @@ export function WorkloadWidget({
   id,
   index,
   issues,
-  серияList,
+  seriesList,
   onStatusChange,
 }: {
   id: string;
   index: number;
   issues: Issue[];
-  серияList: (MeetingSeries & { открыто_issues_count: number })[];
-  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) => void;
+  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
-  const [view, setView] = React.useState<"owner" | "серия" | "overdue">("owner");
+  const [view, setView] = React.useState<"owner" | "series" | "overdue">("owner");
   const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
 
-  const открытоIssues = issues.filter(
+  const openIssues = issues.filter(
     (i) => i.status !== "resolved" && i.status !== "dropped"
   );
 
   const ownerGroups = React.useMemo(() => {
     const map = new Map<string, Issue[]>();
-    for (const issue of открытоIssues) {
+    for (const issue of openIssues) {
       const key = issue.owner_name ?? "Unassigned";
       const list = map.get(key) ?? [];
       list.push(issue);
@@ -53,25 +53,25 @@ export function WorkloadWidget({
       .sort((a, b) => b.issues.length - a.issues.length);
 
     return groups;
-  }, [открытоIssues]);
+  }, [openIssues]);
 
   const maxItems = Math.max(1, ...ownerGroups.map((g) => g.issues.length));
   const unassignedCount = ownerGroups.find((g) => g.name === "Unassigned")?.issues.length ?? 0;
   const ownerCount = ownerGroups.filter((g) => g.name !== "Unassigned").length;
-  const totalOverdue = открытоIssues.filter(isOverdue).length;
+  const totalOverdue = openIssues.filter(isOverdue).length;
 
-  const серияMap = React.useMemo(() => {
+  const seriesMap = React.useMemo(() => {
     const m = new Map<string, MeetingSeries>();
-    for (const s of серияList) m.set(s.id, s);
+    for (const s of seriesList) m.set(s.id, s);
     return m;
-  }, [серияList]);
+  }, [seriesList]);
 
   return (
     <WidgetShell id={id} index={index}>
       <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
         <h3 className="font-display text-lg font-semibold text-ink">Нагрузка</h3>
         <div className="flex flex-wrap items-center gap-1" role="tablist">
-          {(["owner", "серия", "overdue"] as const).map((v) => (
+          {(["owner", "series", "overdue"] as const).map((v) => (
             <button
               key={v}
               type="button"
@@ -85,14 +85,14 @@ export function WorkloadWidget({
                   : "bg-paper-2 text-ink-3 hover:text-ink-2"
               )}
             >
-              {v === "owner" ? "By Owner" : v === "серия" ? "По сериям" : "Overdue"}
+              {v === "owner" ? "By Owner" : v === "series" ? "По сериям" : "Overdue"}
             </button>
           ))}
         </div>
       </div>
 
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2 mt-1 mb-5">
-        <span>{открытоIssues.length} открыто</span>
+        <span>{openIssues.length} open</span>
         <span className="text-ink-4">·</span>
         <span>{ownerCount} owners</span>
         {unassignedCount > 0 && (
@@ -186,11 +186,11 @@ export function WorkloadWidget({
                       {issue.title}
                     </PrefetchIssueLink>
                     <span className="min-w-0 text-[11px] text-ink-4 truncate">
-                      {серияMap.get(issue.серия_id)?.name}
+                      {seriesMap.get(issue.series_id)?.name}
                     </span>
                     <StatusChip
                       status={issue.status}
-                      onChange={(s) => onStatusChange(issue.id, issue.status, s, issue.серия_id)}
+                      onChange={(s) => onStatusChange(issue.id, issue.status, s, issue.series_id)}
                     />
                     {issue.due_date && (() => {
                       const over = isOverdue(issue);

@@ -20,12 +20,12 @@ export interface WidgetFootprint {
 }
 
 // Order matters in the CSS Grid bento (cards flow in array order). The top
-// band fills 4 cols (hero 2 + next-meeting 1 + серия 1) before the full-width
+// band fills 4 cols (hero 2 + next-meeting 1 + series 1) before the full-width
 // outstanding card, then decisions + age.
 const DEFAULT_WIDGETS: WidgetInstance[] = [
   { id: "hero-1", type: "hero" },
   { id: "next-meeting-1", type: "next-meeting" },
-  { id: "серия-1", type: "серия" },
+  { id: "series-1", type: "series" },
   { id: "outstanding-1", type: "outstanding" },
   { id: "decisions-1", type: "decisions" },
   { id: "age-1", type: "age" },
@@ -36,12 +36,12 @@ const DEFAULT_WIDGETS: WidgetInstance[] = [
 const FOOTPRINTS: Record<string, WidgetFootprint> = {
   hero: { colSpan: 2, rowSpan: 1, resizable: true },
   "next-meeting": { colSpan: 1, rowSpan: 1, resizable: true },
-  серия: { colSpan: 1, rowSpan: 1, resizable: true },
+  series: { colSpan: 1, rowSpan: 1, resizable: true },
   outstanding: { colSpan: 4, rowSpan: 1, resizable: false },
   decisions: { colSpan: 1, rowSpan: 1, resizable: true },
   age: { colSpan: 1, rowSpan: 1, resizable: true },
   "stale-items": { colSpan: 1, rowSpan: 1, resizable: true },
-  "серия-health": { colSpan: 2, rowSpan: 1, resizable: true },
+  "series-health": { colSpan: 2, rowSpan: 1, resizable: true },
   "meeting-triage": { colSpan: 2, rowSpan: 1, resizable: true },
   workload: { colSpan: 2, rowSpan: 1, resizable: true },
 };

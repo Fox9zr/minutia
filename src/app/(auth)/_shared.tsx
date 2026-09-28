@@ -2,7 +2,7 @@
 
 import { motion } from "motion/react";
 
-/** Only allow same-origin relative redirects to avoid открыто-redirect abuse. */
+/** Only allow same-origin relative redirects to avoid open-redirect abuse. */
 export function getSafeNext(value: string | null) {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return "/";
   return value;

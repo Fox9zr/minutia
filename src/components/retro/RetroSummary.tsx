@@ -79,8 +79,8 @@ export function RetroSummary({ boardName, columns, cards, votes, actions, savedS
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, paddingTop: 8 }}>
           {savedSeriesId && (
-            <Link href={`/серия/${savedSeriesId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-bright)" }}>
-              Open the серия &rarr;
+            <Link href={`/series/${savedSeriesId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-bright)" }}>
+              Open the series &rarr;
             </Link>
           )}
           <Button variant="ghost" onClick={onExport} iconLeft={<Icons.Download size={17} />}>Экспорт в Markdown</Button>

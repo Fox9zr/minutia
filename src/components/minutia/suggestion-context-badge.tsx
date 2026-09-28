@@ -15,9 +15,9 @@ import type { IssueStatus, SuggestionType } from "@/lib/types";
 // reviewer reads provenance before reading the item.
 
 const STATUS_PALETTE: Record<IssueStatus, string> = {
-  открыто: "bg-paper-2 text-ink-2 ring-rule",
+  open: "bg-paper-2 text-ink-2 ring-rule",
   in_progress: "bg-accent-soft text-accent ring-accent/20",
-  в ожидании: "bg-warn-soft text-warn ring-warn/20",
+  pending: "bg-warn-soft text-warn ring-warn/20",
   resolved: "bg-success-soft text-success ring-success/25",
   dropped: "bg-paper-2 text-ink-3 ring-rule",
 };
@@ -67,7 +67,7 @@ export function SuggestionContextBadge({
     return relatedHref ? (
       <Link
         href={relatedHref}
-        aria-label={`Duplicate of ${key}, открыто item`}
+        aria-label={`Duplicate of ${key}, open item`}
         className={cn(PILL_BASE, palette, "hover:ring-warn/50", className)}
       >
         {content}
@@ -80,7 +80,7 @@ export function SuggestionContextBadge({
   }
 
   // status_update: tone the badge by the target status, so "resolved" reads green.
-  const palette = suggestedStatus ? STATUS_PALETTE[suggestedStatus] : STATUS_PALETTE.открыто;
+  const palette = suggestedStatus ? STATUS_PALETTE[suggestedStatus] : STATUS_PALETTE.open;
   const content = (
     <>
       <ArrowUpRight className="size-3 shrink-0" aria-hidden="true" />
@@ -95,7 +95,7 @@ export function SuggestionContextBadge({
   return relatedHref ? (
     <Link
       href={relatedHref}
-      aria-label={`${label}, открыто item`}
+      aria-label={`${label}, open item`}
       className={cn(PILL_BASE, palette, "hover:brightness-95", className)}
     >
       {content}

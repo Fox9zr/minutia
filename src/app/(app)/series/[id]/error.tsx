@@ -28,7 +28,7 @@ export default function SeriesDetailError({
         Series not found
       </h2>
       <p className="max-w-md text-sm text-ink-2 mb-6">
-        This серия may have been deleted, or the link is invalid.
+        This series may have been deleted, or the link is invalid.
         Try again or return to the dashboard.
       </p>
       {process.env.NODE_ENV === "development" && error.message && (

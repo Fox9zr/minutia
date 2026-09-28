@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
         organization_id: auth.organizationId,
         email,
         role,
-        status: existingProfile ? "accepted" : "в ожидании",
+        status: existingProfile ? "accepted" : "pending",
         invited_by: auth.userId,
         accepted_by: existingProfile?.id ?? null,
         accepted_at: existingProfile ? new Date().toISOString() : null,
@@ -279,7 +279,7 @@ export async function DELETE(request: NextRequest) {
     .update({ status: "revoked" })
     .eq("id", parsed.data.id)
     .eq("organization_id", auth.organizationId)
-    .eq("status", "в ожидании")
+    .eq("status", "pending")
     .select("id")
     .maybeSingle();
 

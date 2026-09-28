@@ -30,17 +30,17 @@ export function MeetingTriageWidget({
   index,
   issues,
   meetings,
-  серияList,
+  seriesList,
   onStatusChange,
 }: {
   id: string;
   index: number;
   issues: Issue[];
   meetings: (Meeting & { issues_raised: number; issues_resolved: number })[];
-  серияList: (MeetingSeries & { открыто_issues_count: number })[];
-  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) => void;
+  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
-  const открытоIssues = issues.filter(
+  const openIssues = issues.filter(
     (i) => i.status !== "resolved" && i.status !== "dropped"
   );
 
@@ -56,7 +56,7 @@ export function MeetingTriageWidget({
     const newSinceLast: Issue[] = [];
     const stuck: Issue[] = [];
 
-    for (const issue of открытоIssues) {
+    for (const issue of openIssues) {
       const createdAt = new Date(issue.created_at);
       const isNew = lastMeetingDate && createdAt > lastMeetingDate;
 
@@ -71,7 +71,7 @@ export function MeetingTriageWidget({
     }
 
     return { carried, newSinceLast, stuck };
-  }, [открытоIssues, lastMeetingDate]);
+  }, [openIssues, lastMeetingDate]);
 
   const meetingCount = (issue: Issue): number => {
     if (!lastMeetingDate) return 1;
@@ -194,7 +194,7 @@ function TriageRow({
 }: {
   issue: Issue;
   badge?: React.ReactNode;
-  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) => void;
+  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
   return (
     <div className="group flex flex-wrap items-center gap-x-3 gap-y-1 rounded-lg px-3 py-2.5 hover:bg-paper-2 transition-colors">
@@ -208,7 +208,7 @@ function TriageRow({
       {badge}
       <StatusChip
         status={issue.status}
-        onChange={(s) => onStatusChange(issue.id, issue.status, s, issue.серия_id)}
+        onChange={(s) => onStatusChange(issue.id, issue.status, s, issue.series_id)}
       />
       {issue.owner_name && (
         <span className="hidden sm:inline-flex items-center justify-center size-6 rounded-full bg-paper-3 text-[10px] font-medium text-ink shrink-0" title={issue.owner_name}>

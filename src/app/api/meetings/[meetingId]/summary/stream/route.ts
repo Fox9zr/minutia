@@ -29,7 +29,7 @@ export async function POST(
   const { data: meeting, error } = await supabase
     .from("meetings")
     .select(
-      "title, attendees, notes_markdown, raw_notes_markdown, transcript_raw, серия:meeting_серия!inner(name)"
+      "title, attendees, notes_markdown, raw_notes_markdown, transcript_raw, series:meeting_series!inner(name)"
     )
     .eq("id", meetingId)
     .single();
@@ -62,7 +62,7 @@ export async function POST(
 
   const prompt = buildSummaryPrompt({
     title: meeting.title,
-    серияName: (meeting.серия as unknown as { name: string } | null)?.name ?? "Серия без названия",
+    seriesName: (meeting.series as unknown as { name: string } | null)?.name ?? "Серия без названия",
     attendees: meeting.attendees ?? [],
     transcript,
   });

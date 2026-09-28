@@ -50,10 +50,10 @@ export function buildSegmentFile(init: Uint8Array, clusters: Uint8Array): Uint8A
 }
 
 /** Cut when enough bytes have piled up, capped by the max interval. */
-export function shouldCutSegment(в ожиданииBytes: number, msSinceLastCut: number): boolean {
+export function shouldCutSegment(pendingBytes: number, msSinceLastCut: number): boolean {
   return (
-    в ожиданииBytes >= SEGMENT_MIN_BYTES &&
-    (в ожиданииBytes >= SEGMENT_TARGET_BYTES || msSinceLastCut >= SEGMENT_MAX_MS)
+    pendingBytes >= SEGMENT_MIN_BYTES &&
+    (pendingBytes >= SEGMENT_TARGET_BYTES || msSinceLastCut >= SEGMENT_MAX_MS)
   );
 }
 

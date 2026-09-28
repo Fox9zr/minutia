@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
-import { SeriesDetailContent } from "./серия-detail-content";
+import { SeriesDetailContent } from "./series-detail-content";
 
 export async function generateMetadata({
   params,
@@ -10,7 +10,7 @@ export async function generateMetadata({
   const { id } = await params;
   const supabase = await createClient();
   const { data } = await supabase
-    .from("meeting_серия")
+    .from("meeting_series")
     .select("name")
     .eq("id", id)
     .single();
@@ -23,5 +23,5 @@ export default async function SeriesDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  return <SeriesDetailContent серияId={id} />;
+  return <SeriesDetailContent seriesId={id} />;
 }

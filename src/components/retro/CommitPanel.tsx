@@ -85,10 +85,10 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
                   Your action items are now tracked in Minutia.
                 </h3>
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: 15, lineHeight: 1.5, color: "color-mix(in oklab, var(--card-ink) 78%, transparent)", margin: "0 0 20px", maxWidth: 460 }}>
-                  Next retro starts with whatever&apos;s still открыто.
+                  Next retro starts with whatever&apos;s still open.
                 </p>
-                <Link href={`/серия/${savedSeriesId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-deep)" }}>
-                  Open the серия &rarr;
+                <Link href={`/series/${savedSeriesId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-deep)" }}>
+                  Open the series &rarr;
                 </Link>
               </React.Fragment>
             ) : (
@@ -100,7 +100,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
                   The only retro where the action items don&apos;t die.
                 </h3>
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: 15, lineHeight: 1.5, color: "color-mix(in oklab, var(--card-ink) 78%, transparent)", margin: "0 0 20px", maxWidth: 460 }}>
-                  Keep these alive in Minutia so your next retro starts with what&apos;s still открыто. One tap seeds a living issue log, no copy-paste, nothing forgotten.
+                  Keep these alive in Minutia so your next retro starts with what&apos;s still open. One tap seeds a living issue log, no copy-paste, nothing forgotten.
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                   <Button variant="primary" size="lg" onClick={onSave} disabled={saving} iconRight={<Icons.ArrowRight size={18} />}>
@@ -130,7 +130,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
         )}
 
         <ConfirmDialog
-          открыто={confirmEnd}
+          open={confirmEnd}
           tone="danger"
           title="Завершить ретроспективу?"
           body="This ends the retro for everyone. The board becomes read-only and live editing stops. This can't be undone."

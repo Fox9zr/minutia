@@ -10,25 +10,25 @@
  */
 type Phase = "waiting" | "committing";
 
-const в ожидании = new Map<string, Phase>();
+const pending = new Map<string, Phase>();
 
-export const isPendingDelete = (id: string): boolean => в ожидании.has(id);
+export const isPendingDelete = (id: string): boolean => pending.has(id);
 
 export const beginPendingDelete = (id: string): void => {
-  в ожидании.set(id, "waiting");
+  pending.set(id, "waiting");
 };
 
 /** Undo is only possible while still "waiting"; once "committing" it is too late. */
 export function undoPendingDelete(id: string): boolean {
-  if (в ожидании.get(id) !== "waiting") return false;
-  в ожидании.delete(id);
+  if (pending.get(id) !== "waiting") return false;
+  pending.delete(id);
   return true;
 }
 
 export const markCommitting = (id: string): void => {
-  в ожидании.set(id, "committing");
+  pending.set(id, "committing");
 };
 
 export const clearPendingDelete = (id: string): void => {
-  в ожидании.delete(id);
+  pending.delete(id);
 };

@@ -25,13 +25,13 @@ interface AppShellProps {
 export function AppShell({ profile, organizations, children }: AppShellProps) {
   const shellRef = React.useRef<HTMLDivElement>(null);
   const pathname = usePathname();
-  const открытоQuickAddDialog = useUIStore((s) => s.открытоQuickAddDialog);
+  const openQuickAddDialog = useUIStore((s) => s.openQuickAddDialog);
 
   React.useEffect(() => {
     shellRef.current?.setAttribute("data-hydrated", "true");
   }, [pathname]);
 
-  // Global "N" shortcut to открыто quick add from any screen.
+  // Global "N" shortcut to open quick add from any screen.
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key !== "n" || e.metaKey || e.ctrlKey || e.altKey) return;
@@ -41,11 +41,11 @@ export function AppShell({ profile, organizations, children }: AppShellProps) {
       const el = e.target as HTMLElement;
       if (el.isContentEditable) return;
       e.preventDefault();
-      открытоQuickAddDialog();
+      openQuickAddDialog();
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [открытоQuickAddDialog]);
+  }, [openQuickAddDialog]);
 
   if (profile && !profile.has_completed_onboarding) {
     return (

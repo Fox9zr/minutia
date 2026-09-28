@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import { createSeriesSchema, type CreateSeriesInput } from "@/lib/schemas";
-import { useCreateSeries } from "@/lib/hooks/use-серия";
+import { useCreateSeries } from "@/lib/hooks/use-series";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
 import type { Cadence } from "@/lib/types";
 import {
@@ -26,12 +26,12 @@ import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
 interface CreateSeriesDialogProps {
-  открыто: boolean;
-  onOpenChange: (открыто: boolean) => void;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function CreateSeriesDialog({
-  открыто,
+  open,
   onOpenChange,
 }: CreateSeriesDialogProps) {
   const createSeries = useCreateSeries();
@@ -71,13 +71,13 @@ export function CreateSeriesDialog({
   }
 
   return (
-    <Dialog открыто={открыто} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-lg p-0" showCloseButton>
         <div className="px-8 pt-8 pb-2">
           <DialogHeader className="space-y-1.5 mb-0">
             <DialogTitle className="font-display text-xl">Создать серию</DialogTitle>
             <DialogDescription className="text-sm text-ink-3">
-              A серия groups your recurring meetings together.
+              A series groups your recurring meetings together.
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -85,10 +85,10 @@ export function CreateSeriesDialog({
         <form onSubmit={handleSubmit(onSubmit)} className="px-8 pb-8 space-y-6">
           {/* Name */}
           <div className="space-y-2">
-            <Label htmlFor="серия-name" className="text-sm font-semibold text-ink">Название</Label>
+            <Label htmlFor="series-name" className="text-sm font-semibold text-ink">Название</Label>
             <Input
-              id="серия-name"
-              placeholder="e.g. Еженедельно Standup"
+              id="series-name"
+              placeholder="e.g. Weekly Standup"
               {...register("name")}
               aria-invalid={!!errors.name}
               className="h-11"
@@ -100,9 +100,9 @@ export function CreateSeriesDialog({
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="серия-description" className="text-sm font-semibold text-ink">Описание</Label>
+            <Label htmlFor="series-description" className="text-sm font-semibold text-ink">Описание</Label>
             <Textarea
-              id="серия-description"
+              id="series-description"
               placeholder="Необязательное описание"
               {...register("description")}
               className="min-h-[100px]"
@@ -147,9 +147,9 @@ export function CreateSeriesDialog({
 
           {/* Default attendees */}
           <div className="space-y-2">
-            <Label htmlFor="серия-attendees" className="text-sm font-semibold text-ink">Участники по умолчанию</Label>
+            <Label htmlFor="series-attendees" className="text-sm font-semibold text-ink">Участники по умолчанию</Label>
             <Input
-              id="серия-attendees"
+              id="series-attendees"
               placeholder="email@example.com, another@example.com"
               onChange={handleAttendeesChange}
               className="h-11"
@@ -166,7 +166,7 @@ export function CreateSeriesDialog({
               {createSeries.isPending && (
                 <Loader2 className="size-3.5 animate-spin" />
               )}
-              Create серия
+              Create series
             </Button>
           </div>
         </form>

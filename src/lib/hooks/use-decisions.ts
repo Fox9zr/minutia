@@ -20,23 +20,23 @@ type MeetingWithDecisions = { decisions?: Decision[] } | undefined;
 // ---------------------------------------------------------------------------
 export const decisionKeys = {
   all: ["decisions"] as const,
-  list: (filters: { meetingId?: string; серияId?: string; limit?: number }) =>
+  list: (filters: { meetingId?: string; seriesId?: string; limit?: number }) =>
     ["decisions", filters] as const,
 };
 
 // ---------------------------------------------------------------------------
-// useDecisions - fetch decisions, optionally filtered by meeting or серия
+// useDecisions - fetch decisions, optionally filtered by meeting or series
 // ---------------------------------------------------------------------------
 export function useDecisions(
   meetingId?: string,
-  серияId?: string,
+  seriesId?: string,
   enabled = true,
   limit?: number
 ) {
   const supabase = createClient();
 
   return useQuery<Decision[]>({
-    queryKey: decisionKeys.list({ meetingId, серияId, limit }),
+    queryKey: decisionKeys.list({ meetingId, seriesId, limit }),
     enabled,
     queryFn: async () => {
       let query = supabase
@@ -47,8 +47,8 @@ export function useDecisions(
       if (meetingId) {
         query = query.eq("meeting_id", meetingId);
       }
-      if (серияId) {
-        query = query.eq("серия_id", серияId);
+      if (seriesId) {
+        query = query.eq("series_id", seriesId);
       }
       if (limit !== undefined) {
         query = query.limit(limit);
@@ -71,7 +71,7 @@ export function useCreateDecision() {
   return useMutation<
     Decision,
     Error,
-    CreateDecisionInput & { meeting_id: string; серия_id: string },
+    CreateDecisionInput & { meeting_id: string; series_id: string },
     { rollback: () => void; tempId: string }
   >({
     mutationFn: async (input) => {
@@ -110,7 +110,7 @@ export function useCreateDecision() {
           (old) =>
             old ? { ...old, decisions: [optimistic, ...(old.decisions ?? [])] } : old
         ),
-        // Standalone decision lists (серия detail, palette, dashboard).
+        // Standalone decision lists (series detail, palette, dashboard).
         patch<Decision[]>(
           { queryKey: decisionKeys.all, predicate: isListCache },
           appendDecision(optimistic)

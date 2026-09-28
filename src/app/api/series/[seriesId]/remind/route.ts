@@ -18,9 +18,9 @@ import type { Issue } from "@/lib/types";
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ серияId: string }> }
+  { params }: { params: Promise<{ seriesId: string }> }
 ) {
-  const { серияId } = await params;
+  const { seriesId } = await params;
   const supabase = await createClient();
   const {
     data: { user },
@@ -30,31 +30,31 @@ export async function POST(
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
-  const { data: серия } = await supabase
-    .from("meeting_серия")
+  const { data: series } = await supabase
+    .from("meeting_series")
     .select("id, name, owner_id")
-    .eq("id", серияId)
+    .eq("id", seriesId)
     .single();
 
-  if (!серия) {
+  if (!series) {
     return NextResponse.json({ error: "Серия не найдена" }, { status: 404 });
   }
 
   const admin = createServiceRoleClient();
 
-  // Reminders gather every owner's email across the серия, so the trigger is
+  // Reminders gather every owner's email across the series, so the trigger is
   // restricted to those who manage it (owner/facilitator), mirroring the UI
   // gate. Keyed on the requesting user's own id via service-role to avoid RLS
   // false-negatives on the membership lookup.
   const { data: membership } = await admin
-    .from("серия_participants")
+    .from("series_participants")
     .select("role")
-    .eq("серия_id", серияId)
+    .eq("series_id", seriesId)
     .eq("user_id", user.id)
     .maybeSingle();
 
   const canRemind =
-    серия.owner_id === user.id ||
+    series.owner_id === user.id ||
     membership?.role === "owner" ||
     membership?.role === "facilitator";
 
@@ -65,12 +65,12 @@ export async function POST(
     );
   }
 
-  const { data: серияIssues } = await admin
+  const { data: seriesIssues } = await admin
     .from("issues")
     .select("*")
-    .eq("серия_id", серияId);
+    .eq("series_id", seriesId);
 
-  const issues = (серияIssues ?? []) as Issue[];
+  const issues = (seriesIssues ?? []) as Issue[];
   const ownerIds = [
     ...new Set(
       issues.map((issue) => issue.owner_user_id).filter((v): v is string => !!v)
@@ -126,8 +126,8 @@ export async function POST(
     reminderWebhookUrl,
   });
 
-  const appUrl = absoluteAppUrl(request.url, `/серия/${серияId}`);
-  const ctx: ReminderContext = { серияName: серия.name, appUrl };
+  const appUrl = absoluteAppUrl(request.url, `/series/${seriesId}`);
+  const ctx: ReminderContext = { seriesName: series.name, appUrl };
 
   try {
     let sent = 0;

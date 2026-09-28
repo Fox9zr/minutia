@@ -10,10 +10,10 @@ export async function GET(request: NextRequest) {
 
   const supabase = createServiceRoleClient();
 
-  const [usersRes, серияRes, meetingsRes, открытоIssuesRes, configRes] =
+  const [usersRes, seriesRes, meetingsRes, openIssuesRes, configRes] =
     await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
-      supabase.from("meeting_серия").select("*", { count: "exact", head: true }),
+      supabase.from("meeting_series").select("*", { count: "exact", head: true }),
       supabase.from("meetings").select("*", { count: "exact", head: true }),
       supabase
         .from("issues")
@@ -32,9 +32,9 @@ export async function GET(request: NextRequest) {
 
   return NextResponse.json({
     users: usersRes.count ?? 0,
-    серия: серияRes.count ?? 0,
+    series: seriesRes.count ?? 0,
     meetings: meetingsRes.count ?? 0,
-    открытоIssues: открытоIssuesRes.count ?? 0,
+    openIssues: openIssuesRes.count ?? 0,
     instanceName: config.instance_name || "Minutia",
     version: process.env.npm_package_version || "0.1.0",
     deploymentMode: config.hosted_mode === "true" ? "hosted" : "self-host",

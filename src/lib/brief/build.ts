@@ -13,9 +13,9 @@ export type BriefEmail = {
 };
 
 export type BuildSeriesBriefInput = {
-  серия: { name: string; cadence?: string | null };
+  series: { name: string; cadence?: string | null };
   nextMeeting?: { title?: string | null; date: Date | string } | null;
-  открытоIssues: BriefIssue[];
+  openIssues: BriefIssue[];
   recipients: string[];
   guestUrl: string;
   instanceUrl?: string;
@@ -90,29 +90,29 @@ function sectionText(title: string, issues: BriefIssue[], emptyNote: string): st
 }
 
 export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
-  const { серия, nextMeeting, открытоIssues, recipients, guestUrl, instanceUrl } =
+  const { series, nextMeeting, openIssues, recipients, guestUrl, instanceUrl } =
     input;
 
   const dateLabel = nextMeeting ? formatMeetingDate(nextMeeting.date) : null;
-  const cadence = серия.cadence ? `${серия.cadence} cadence` : null;
+  const cadence = series.cadence ? `${series.cadence} cadence` : null;
   const metaLine = [dateLabel, cadence].filter(Boolean).join(" · ");
 
   return recipients.map((email) => {
-    const mine = открытоIssues.filter((issue) =>
+    const mine = openIssues.filter((issue) =>
       ownerMatchesRecipient(email, {
         ownerName: issue.owner_name,
         ownerEmail: issue.ownerEmail ?? null,
       })
     );
     const mineIds = new Set(mine.map((issue) => issue.id));
-    const also = [...открытоIssues]
+    const also = [...openIssues]
       .filter((issue) => !mineIds.has(issue.id))
       .sort(byPriority)
       .slice(0, MAX_ALSO);
 
     const subject = dateLabel
-      ? `Brief: ${серия.name} on ${dateLabel}`
-      : `Brief: ${серия.name}`;
+      ? `Brief: ${series.name} on ${dateLabel}`
+      : `Brief: ${series.name}`;
 
     const bodyHtml =
       (metaLine
@@ -128,9 +128,9 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
 
     const html = renderEmailLayout({
       preheader: mine.length
-        ? `You have ${mine.length} открыто item${mine.length === 1 ? "" : "s"} before ${серия.name}`
-        : `Pre-meeting brief for ${серия.name}`,
-      heading: серия.name,
+        ? `You have ${mine.length} open item${mine.length === 1 ? "" : "s"} before ${series.name}`
+        : `Pre-meeting brief for ${series.name}`,
+      heading: series.name,
       bodyHtml,
       cta,
       footerNote: "Вы в списке участников этой серии встреч.",
@@ -138,7 +138,7 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
     });
 
     const text = [
-      `Brief: ${серия.name}`,
+      `Brief: ${series.name}`,
       metaLine,
       "",
       sectionText("Ваши открытые задачи", mine, "У вас нет открытых задач. Отлично."),

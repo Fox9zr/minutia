@@ -44,9 +44,9 @@ export type NormalizedGoogleCalendarEvent = {
   iCalUID: string | null;
   recurringEventId: string | null;
   originalStartTime: string | null;
-  серияKey: string;
+  seriesKey: string;
   meetingKey: string;
-  серияKind: "recurring" | "adhoc";
+  seriesKind: "recurring" | "adhoc";
   cadence: Cadence;
   title: string;
   description: string | null;
@@ -94,14 +94,14 @@ export function normalizeGoogleCalendarEvent({
 
   const recurringIdentity = event.recurringEventId ?? null;
   const originalStartTime = event.originalStartTime?.dateTime ?? event.originalStartTime?.date ?? null;
-  const серияKind = recurringIdentity ? "recurring" : "adhoc";
+  const seriesKind = recurringIdentity ? "recurring" : "adhoc";
   const recurringKey = recurringIdentity ?? event.iCalUID ?? event.id;
-  const серияKey = recurringIdentity
+  const seriesKey = recurringIdentity
     ? `gcal:${calendarId}:recurring:${recurringKey}`
     : `gcal:${calendarId}:event:${event.id}`;
   const meetingKey = recurringIdentity
     ? `gcal:${calendarId}:recurring:${recurringKey}:instance:${originalStartTime ?? event.id}`
-    : серияKey;
+    : seriesKey;
 
   return {
     calendarId,
@@ -109,9 +109,9 @@ export function normalizeGoogleCalendarEvent({
     iCalUID: event.iCalUID ?? null,
     recurringEventId: recurringIdentity,
     originalStartTime,
-    серияKey,
+    seriesKey,
     meetingKey,
-    серияKind,
+    seriesKind,
     cadence: recurringIdentity ? "weekly" : "adhoc",
     title: event.summary?.trim() || "(No title)",
     description: event.description?.trim() || null,

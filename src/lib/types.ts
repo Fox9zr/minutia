@@ -1,16 +1,16 @@
 export type IssueCategory = "action" | "decision" | "info" | "risk" | "blocker";
-export type IssueStatus = "открыто" | "in_progress" | "в ожидании" | "resolved" | "dropped";
+export type IssueStatus = "open" | "in_progress" | "pending" | "resolved" | "dropped";
 export type Priority = "low" | "medium" | "high" | "critical";
 export type MeetingStatus = "upcoming" | "live" | "completed";
 export type Cadence = "daily" | "weekly" | "biweekly" | "monthly" | "adhoc";
 export type ItemSource = "manual" | "transcript" | "email" | "api" | "ai_suggested" | "calendar_auto_draft";
 export type AuthorType = "human" | "ai" | "system";
 export type SharePermission = "view" | "comment";
-export type ShareResourceType = "meeting" | "серия" | "issue";
+export type ShareResourceType = "meeting" | "series" | "issue";
 export type Theme = "light" | "dark" | "system";
 export type UserRole = "user" | "admin";
 export type TranscriptionStatus =
-  | "в ожидании"
+  | "pending"
   | "processing"
   | "completed"
   | "failed";
@@ -64,7 +64,7 @@ export interface OrganizationInvitation {
   organization_id: string;
   email: string;
   role: OrganizationRole;
-  status: "в ожидании" | "accepted" | "revoked";
+  status: "pending" | "accepted" | "revoked";
   invited_by: string;
   accepted_by: string | null;
   created_at: Date;
@@ -100,15 +100,15 @@ export interface MeetingSeries {
   default_attendees: string[];
   gcal_calendar_id: string | null;
   gcal_sync_enabled: boolean;
-  gcal_серия_key: string | null;
-  gcal_серия_kind: "recurring" | "adhoc" | null;
+  gcal_series_key: string | null;
+  gcal_series_kind: "recurring" | "adhoc" | null;
   gcal_last_synced_at: Date | null;
   created_at: Date;
   updated_at: Date;
 }
 
 export interface SeriesParticipant {
-  серия_id: string;
+  series_id: string;
   user_id: string;
   role: SeriesParticipantRole;
   invited_by: string | null;
@@ -134,9 +134,9 @@ export interface GoogleCalendarAgendaItem {
   id: string;
   calendarId: string;
   eventId: string;
-  серияId: string;
+  seriesId: string;
   meetingId: string;
-  серияKind: "recurring" | "adhoc";
+  seriesKind: "recurring" | "adhoc";
   title: string;
   description: string | null;
   startAt: string;
@@ -166,7 +166,7 @@ export interface TranscriptionSegmentRow {
 
 export interface Meeting {
   id: string;
-  серия_id: string;
+  series_id: string;
   sequence_number: number;
   title: string;
   date: Date;
@@ -205,7 +205,7 @@ export interface Issue {
   id: string;
   issue_number: number;
   raised_in_meeting_id: string;
-  серия_id: string;
+  series_id: string;
   title: string;
   description: string | null;
   category: IssueCategory;
@@ -225,7 +225,7 @@ export interface Issue {
 export interface MeetingAiSuggestion {
   id: string;
   meeting_id: string;
-  серия_id: string;
+  series_id: string;
   type: SuggestionType;
   category: IssueCategory;
   title: string;
@@ -238,7 +238,7 @@ export interface MeetingAiSuggestion {
   // status a status_update would move it to. Null for a plain new_item.
   related_issue_number: number | null;
   suggested_status: IssueStatus | null;
-  status: "в ожидании" | "accepted" | "rejected";
+  status: "pending" | "accepted" | "rejected";
   ai_model: string | null;
   ai_prompt_version: string | null;
   created_issue_id: string | null;
@@ -262,7 +262,7 @@ export interface IssueUpdate {
 export interface Decision {
   id: string;
   meeting_id: string;
-  серия_id: string;
+  series_id: string;
   title: string;
   rationale: string | null;
   made_by: string | null;
@@ -310,5 +310,5 @@ export type IssueWithUpdates = Issue & {
 
 export type SeriesWithMeetings = MeetingSeries & {
   meetings: Meeting[];
-  открыто_issues_count: number;
+  open_issues_count: number;
 };

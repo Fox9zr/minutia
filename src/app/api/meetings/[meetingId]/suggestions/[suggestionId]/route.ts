@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { userManagesSeries } from "@/lib/серия/manage-access";
+import { userManagesSeries } from "@/lib/series/manage-access";
 
 const reviewSchema = z.object({
   action: z.enum(["accept", "reject"]),
@@ -12,7 +12,7 @@ const reviewSchema = z.object({
   due_date: z.iso.date().nullable().optional(),
   // MIN-121: a status_update can be retargeted at review time.
   suggested_status: z
-    .enum(["открыто", "in_progress", "в ожидании", "resolved", "dropped"])
+    .enum(["open", "in_progress", "pending", "resolved", "dropped"])
     .nullable()
     .optional(),
 });
@@ -51,15 +51,15 @@ export async function PATCH(
   }
 
   // Accepting a suggestion mutates the OIL (creates an issue/decision, or moves
-  // an existing item), so restrict review to those who manage the серия.
-  if (!(await userManagesSeries(suggestion.серия_id, user.id))) {
+  // an existing item), so restrict review to those who manage the series.
+  if (!(await userManagesSeries(suggestion.series_id, user.id))) {
     return NextResponse.json(
       { error: "Только владельцы и ведущие серии могут проверять предложения ИИ.", request_id: requestId },
       { status: 403 }
     );
   }
 
-  if (suggestion.status !== "в ожидании") {
+  if (suggestion.status !== "pending") {
     return NextResponse.json(
       { error: "Предложение ИИ уже рассмотрено.", request_id: requestId },
       { status: 409 }
@@ -121,7 +121,7 @@ export async function PATCH(
     const { data: existing, error: findError } = await supabase
       .from("issues")
       .select("id, status")
-      .eq("серия_id", suggestion.серия_id)
+      .eq("series_id", suggestion.series_id)
       .eq("issue_number", suggestion.related_issue_number)
       .maybeSingle();
 
@@ -210,7 +210,7 @@ export async function PATCH(
   }
 
   // A duplicate warning is informational: accepting it would create the very
-  // duplicate it flags. The reviewer dismisses it (reject) or открытоs the
+  // duplicate it flags. The reviewer dismisses it (reject) or opens the
   // existing item instead.
   if (suggestion.type === "duplicate_warning") {
     return NextResponse.json(
@@ -227,7 +227,7 @@ export async function PATCH(
       .from("decisions")
       .insert({
         meeting_id: meetingId,
-        серия_id: suggestion.серия_id,
+        series_id: suggestion.series_id,
         title,
         rationale: details || suggestion.source_excerpt || "",
         made_by: ownerName,
@@ -273,7 +273,7 @@ export async function PATCH(
   const { data: issue, error: issueError } = await supabase
     .from("issues")
     .insert({
-      серия_id: suggestion.серия_id,
+      series_id: suggestion.series_id,
       raised_in_meeting_id: meetingId,
       title,
       description: details || suggestion.source_excerpt || "",
@@ -282,7 +282,7 @@ export async function PATCH(
       owner_name: ownerName,
       owner_user_id: null,
       due_date: dueDate,
-      status: "открыто",
+      status: "open",
       source: "ai_suggested",
       ai_confidence: suggestion.confidence,
     })

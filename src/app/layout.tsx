@@ -29,13 +29,13 @@ export const metadata: Metadata = {
     template: "%s | Minutia",
   },
   description:
-    "The открыто-source Outstanding Issues Log for recurring meetings. Track outstanding issues, decisions, and action items across every meeting.",
+    "The open-source Outstanding Issues Log for recurring meetings. Track outstanding issues, decisions, and action items across every meeting.",
   icons: {
     icon: { url: "/icon.svg", type: "image/svg+xml" },
     apple: "/icon.svg",
   },
   manifest: "/manifest.json",
-  открытоGraph: {
+  openGraph: {
     title: "Minutia",
     description:
       "Open-source реестр открытых вопросов для регулярных встреч.",

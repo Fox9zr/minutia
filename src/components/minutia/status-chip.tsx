@@ -13,9 +13,9 @@ interface StatusChipProps {
 }
 
 const statusColorMap: Record<IssueStatus, { bg: string; text: string }> = {
-  открыто: { bg: "bg-paper-3", text: "text-ink" },
+  open: { bg: "bg-paper-3", text: "text-ink" },
   in_progress: { bg: "bg-accent-soft", text: "text-accent" },
-  в ожидании: { bg: "bg-warn-soft", text: "text-warn" },
+  pending: { bg: "bg-warn-soft", text: "text-warn" },
   resolved: { bg: "bg-success-soft", text: "text-success" },
   dropped: { bg: "bg-paper-3", text: "text-ink-3" },
 };

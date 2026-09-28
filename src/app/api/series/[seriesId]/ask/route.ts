@@ -1,12 +1,12 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { parseAskSeriesAnswer } from "@/lib/ai/ask-серия-answer";
+import { parseAskSeriesAnswer } from "@/lib/ai/ask-series-answer";
 import { createClient } from "@/lib/supabase/server";
 import { callAi } from "@/lib/ai/call";
 import { hasAiConfigured } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
 
-const PROMPT_VERSION = "ask-серия-v1";
+const PROMPT_VERSION = "ask-series-v1";
 const SYSTEM_PROMPT = "Отвечайте только на основе предоставленных материалов встречи. Возвращайте только корректный JSON.";
 
 const requestSchema = z.object({
@@ -15,7 +15,7 @@ const requestSchema = z.object({
 
 function buildPrompt(input: {
   question: string;
-  серия: { id: string; name: string; description: string | null };
+  series: { id: string; name: string; description: string | null };
   meetings: Array<{
     id: string;
     title: string;
@@ -53,7 +53,7 @@ function buildPrompt(input: {
     `Question: ${input.question}`,
     "",
     "Series:",
-    JSON.stringify(input.серия, null, 2),
+    JSON.stringify(input.series, null, 2),
     "",
     "Meetings:",
     JSON.stringify(input.meetings, null, 2),
@@ -68,10 +68,10 @@ function buildPrompt(input: {
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ серияId: string }> }
+  { params }: { params: Promise<{ seriesId: string }> }
 ) {
   const requestId = crypto.randomUUID();
-  const { серияId } = await params;
+  const { seriesId } = await params;
 
   let body: z.infer<typeof requestSchema>;
   try {
@@ -103,12 +103,12 @@ export async function POST(
     );
   }
 
-  const { data: серия, error: серияError } = await supabase
-    .from("meeting_серия")
+  const { data: series, error: seriesError } = await supabase
+    .from("meeting_series")
     .select("id,name,description")
-    .eq("id", серияId)
+    .eq("id", seriesId)
     .single();
-  if (серияError || !серия) {
+  if (seriesError || !series) {
     return NextResponse.json({ error: "Серия не найдена", request_id: requestId }, { status: 404 });
   }
 
@@ -117,19 +117,19 @@ export async function POST(
       supabase
         .from("meetings")
         .select("id,title,date,status,notes_markdown,raw_notes_markdown,ai_notes_markdown")
-        .eq("серия_id", серияId)
+        .eq("series_id", seriesId)
         .order("date", { ascending: false })
         .limit(40),
       supabase
         .from("issues")
         .select("id,title,description,status,category,owner_name,due_date,raised_in_meeting_id")
-        .eq("серия_id", серияId)
+        .eq("series_id", seriesId)
         .order("created_at", { ascending: false })
         .limit(80),
       supabase
         .from("decisions")
         .select("id,title,rationale,made_by,meeting_id")
-        .eq("серия_id", серияId)
+        .eq("series_id", seriesId)
         .order("created_at", { ascending: false })
         .limit(80),
     ]);
@@ -143,7 +143,7 @@ export async function POST(
 
   const prompt = buildPrompt({
     question: body.question,
-    серия,
+    series,
     meetings: meetings ?? [],
     issues: issues ?? [],
     decisions: decisions ?? [],
@@ -164,7 +164,7 @@ export async function POST(
   try {
     normalized = parseAskSeriesAnswer({
       providerData,
-      серияId,
+      seriesId,
       meetings: (meetings ?? []).map((meeting) => ({
         id: meeting.id,
         title: meeting.title,

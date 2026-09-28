@@ -59,7 +59,7 @@ export function RetroClient({
   const [revealComplete, setRevealComplete] = React.useState(false);
   const [myVotes, setMyVotes] = React.useState<Set<string>>(() => new Set());
   const [carryDone, setCarryDone] = React.useState<Record<string, boolean>>({});
-  const [editor, setEditor] = React.useState<{ открыто: boolean; mode: "add" | "edit"; colId: string | null; cardId: string | null }>({ открыто: false, mode: "add", colId: null, cardId: null });
+  const [editor, setEditor] = React.useState<{ open: boolean; mode: "add" | "edit"; colId: string | null; cardId: string | null }>({ open: false, mode: "add", colId: null, cardId: null });
   const [showShare, setShowShare] = React.useState(false);
   const [spotIndex, setSpotIndex] = React.useState(0);
   const [suggestion, setSuggestion] = React.useState<{ label: string; count: number } | null>(null);
@@ -72,7 +72,7 @@ export function RetroClient({
   const ended = !!board.ended_at;
   const [now, setNow] = React.useState(0);
   const [saving, setSaving] = React.useState(false);
-  const [savedSeriesId, setSavedSeriesId] = React.useState<string | null>(board.saved_to_серия_id);
+  const [savedSeriesId, setSavedSeriesId] = React.useState<string | null>(board.saved_to_series_id);
   const [redirecting, setRedirecting] = React.useState(false);
   const [saveError, setSaveError] = React.useState<string | null>(null);
   const [exported, setExported] = React.useState(false);
@@ -242,7 +242,7 @@ export function RetroClient({
         event: () => (isReflect || !existing ? { t: "card.updated", key: me.key } : { t: "card.updated", key: me.key, card: { ...existing, text, color } }),
       });
     }
-    setEditor({ открыто: false, mode: "add", colId: null, cardId: null });
+    setEditor({ open: false, mode: "add", colId: null, cardId: null });
   }
 
   function deleteCard() {
@@ -252,7 +252,7 @@ export function RetroClient({
       optimistic: (s) => ({ ...s, cards: s.cards.filter((c) => c.id !== cardId) }),
       event: () => ({ t: "card.deleted", key: me.key, card_id: cardId }),
     });
-    setEditor({ открыто: false, mode: "add", colId: null, cardId: null });
+    setEditor({ open: false, mode: "add", colId: null, cardId: null });
   }
 
   function vote(cardId: string) {
@@ -330,9 +330,9 @@ export function RetroClient({
         setSaving(false);
         return null;
       }
-      setSavedSeriesId(json.серия_id);
+      setSavedSeriesId(json.series_id);
       setSaving(false);
-      return json.серия_id ?? null;
+      return json.series_id ?? null;
     } catch {
       setSaveError("Не удалось связаться с сервером.");
       setSaving(false);
@@ -350,21 +350,21 @@ export function RetroClient({
     if (typeof window === "undefined") return;
     if (new URLSearchParams(window.location.search).get("graduate") !== "1") return;
     graduatedRef.current = true;
-    const handOff = (серияId: string) => {
+    const handOff = (seriesId: string) => {
       setRedirecting(true);
       window.setTimeout(() => {
-        window.location.href = `/серия/${серияId}`;
+        window.location.href = `/series/${seriesId}`;
       }, 1500);
     };
     // Already graduated in a prior or concurrent session: hand the user straight
-    // into the existing серия rather than stranding them on the retro page.
+    // into the existing series rather than stranding them on the retro page.
     if (savedSeriesId) {
       handOff(savedSeriesId);
       return;
     }
     void (async () => {
-      const серияId = await saveToMinutia();
-      if (серияId) handOff(серияId);
+      const seriesId = await saveToMinutia();
+      if (seriesId) handOff(seriesId);
     })();
   }, [savedSeriesId, saveToMinutia]);
 
@@ -506,10 +506,10 @@ export function RetroClient({
             carry={carry}
             onToggleCarry={toggleCarry}
             cards={snapshot.cards}
-            onAddCardClick={(colId) => setEditor({ открыто: true, mode: "add", colId, cardId: null })}
+            onAddCardClick={(colId) => setEditor({ open: true, mode: "add", colId, cardId: null })}
             onEditCard={(cardId) => {
               const c = snapshot.cards.find((x) => x.id === cardId);
-              if (c) setEditor({ открыто: true, mode: "edit", colId: c.column_id, cardId });
+              if (c) setEditor({ open: true, mode: "edit", colId: c.column_id, cardId });
             }}
             me={me.key}
             suggestion={suggestion}
@@ -519,17 +519,17 @@ export function RetroClient({
       </main>
 
       <CardEditor
-        открыто={editor.открыто}
+        open={editor.open}
         mode={editor.mode}
         colTitle={editorCol?.title ?? ""}
         initialText={editing?.text ?? ""}
         initialColor={(editing?.color ?? me.color) as PastelColor}
         onSave={saveCard}
-        onClose={() => setEditor({ открыто: false, mode: "add", colId: null, cardId: null })}
+        onClose={() => setEditor({ open: false, mode: "add", colId: null, cardId: null })}
         onDelete={editor.mode === "edit" ? deleteCard : undefined}
       />
       <ShareInvite
-        открыто={showShare}
+        open={showShare}
         boardName={board.name}
         template={template ?? null}
         people={people.length ? people : snapshot.participants}

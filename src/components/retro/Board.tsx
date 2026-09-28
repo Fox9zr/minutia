@@ -78,20 +78,20 @@ export function Board({ columns, phase, revealedSet, revealComplete, votes, onVo
     return false;
   }
 
-  const открытоCarry = carry.filter((c) => !c.done);
+  const openCarry = carry.filter((c) => !c.done);
 
   return (
     <div style={{ display: "flex", height: "100%", minHeight: 0 }}>
-      {/* LEFT: Still открыто carryover rail */}
+      {/* LEFT: Still open carryover rail */}
       <aside style={{ width: 268, flex: "0 0 268px", background: "var(--studio-surface)", borderRight: "1px solid var(--studio-line)", padding: "var(--space-5) var(--space-4)", overflowY: "auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-          <Icons.Clock size={15} style={{ color: открытоCarry.length ? "var(--warn)" : "var(--success)" }} />
+          <Icons.Clock size={15} style={{ color: openCarry.length ? "var(--warn)" : "var(--success)" }} />
           <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-2)" }}>Не закрыто</span>
-          <Badge tone={открытоCarry.length ? "warn" : "success"} style={{ marginLeft: "auto" }}>{открытоCarry.length}</Badge>
+          <Badge tone={openCarry.length ? "warn" : "success"} style={{ marginLeft: "auto" }}>{openCarry.length}</Badge>
         </div>
         {carry.length === 0 ? (
           <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Нет перенесенных задач" body="С чистого листа: первое ретро в серии или все предыдущие задачи закрыты." />
-        ) : открытоCarry.length === 0 ? (
+        ) : openCarry.length === 0 ? (
           <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Нет открытых задач" body="Отличный знак: все предыдущие задачи закрыты." tone="success" />
         ) : (
           <React.Fragment>

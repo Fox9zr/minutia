@@ -1,7 +1,7 @@
 // MIN-121: Series-history context for AI item extraction.
 //
 // This is the moat. Competitors summarize one meeting in isolation; Minutia
-// feeds the model the living state of the whole серия (открыто OIL items, recent
+// feeds the model the living state of the whole series (open OIL items, recent
 // decisions, recent status changes) so it can deduplicate, detect resolutions,
 // follow up on prior items, and flag contradictions.
 //
@@ -10,8 +10,8 @@
 // the prompt rendering, and the referential-integrity normalization are all
 // pure and deterministic.
 
-/** Statuses that count as "still открыто" and therefore carry across meetings. */
-export const OPEN_ISSUE_STATUSES = ["открыто", "in_progress", "в ожидании"] as const;
+/** Statuses that count as "still open" and therefore carry across meetings. */
+export const OPEN_ISSUE_STATUSES = ["open", "in_progress", "pending"] as const;
 
 export interface SeriesContextIssue {
   issue_number: number;
@@ -40,7 +40,7 @@ export interface SeriesContextUpdate {
 }
 
 export interface SeriesContext {
-  открытоIssues: SeriesContextIssue[];
+  openIssues: SeriesContextIssue[];
   recentDecisions: SeriesContextDecision[];
   recentUpdates: SeriesContextUpdate[];
 }
@@ -69,7 +69,7 @@ interface SupabaseLike {
 export type SeriesContextClient = SupabaseLike;
 
 // Bound the context so the prompt stays well within the model's window even for
-// long-running серия. Most-recent-first ordering keeps the freshest signal.
+// long-running series. Most-recent-first ordering keeps the freshest signal.
 const OPEN_ISSUE_LIMIT = 50;
 const DECISION_LIMIT = 20;
 const UPDATE_LIMIT = 30;
@@ -82,44 +82,44 @@ function num(value: unknown): number | null {
 }
 
 /**
- * Load the full серия history that informs context-aware extraction: every
- * открыто OIL item across all meetings in the серия, the most recent decisions,
- * and the most recent status changes. All three are серия-scoped (RLS already
- * confines them to серия the caller can access).
+ * Load the full series history that informs context-aware extraction: every
+ * open OIL item across all meetings in the series, the most recent decisions,
+ * and the most recent status changes. All three are series-scoped (RLS already
+ * confines them to series the caller can access).
  */
 export async function buildSeriesContext(
   supabase: SupabaseLike,
-  серияId: string
+  seriesId: string
 ): Promise<SeriesContext> {
   const [issuesRes, decisionsRes, updatesRes] = await Promise.all([
     supabase
       .from("issues")
       .select("issue_number, title, category, status, priority, owner_name, due_date")
-      .eq("серия_id", серияId)
+      .eq("series_id", seriesId)
       .in("status", OPEN_ISSUE_STATUSES)
       .order("created_at", { ascending: false })
       .limit(OPEN_ISSUE_LIMIT),
     supabase
       .from("decisions")
       .select("title, rationale, made_by, created_at")
-      .eq("серия_id", серияId)
+      .eq("series_id", seriesId)
       .order("created_at", { ascending: false })
       .limit(DECISION_LIMIT),
     supabase
       .from("issue_updates")
       .select(
-        "previous_status, new_status, note, created_at, issue:issues!inner(issue_number, title, серия_id)"
+        "previous_status, new_status, note, created_at, issue:issues!inner(issue_number, title, series_id)"
       )
-      .eq("issue.серия_id", серияId)
+      .eq("issue.series_id", seriesId)
       .order("created_at", { ascending: false })
       .limit(UPDATE_LIMIT),
   ]);
 
-  const открытоIssues: SeriesContextIssue[] = (issuesRes.data ?? []).map((row) => ({
+  const openIssues: SeriesContextIssue[] = (issuesRes.data ?? []).map((row) => ({
     issue_number: num(row.issue_number) ?? 0,
     title: str(row.title) ?? "",
     category: str(row.category) ?? "action",
-    status: str(row.status) ?? "открыто",
+    status: str(row.status) ?? "open",
     priority: str(row.priority) ?? "medium",
     owner_name: str(row.owner_name),
     due_date: str(row.due_date),
@@ -138,11 +138,11 @@ export async function buildSeriesContext(
     const embedded = (Array.isArray(row.issue) ? row.issue[0] : row.issue) as
       | Record<string, unknown>
       | undefined;
-    // Belt-and-suspenders серия scoping: the embedded-resource filter
-    // (.eq("issue.серия_id", ...)) is PostgREST-version-dependent, so never
-    // trust it alone. Drop any update whose issue is not in this серия, so
-    // cross-серия history can never leak into the prompt.
-    if (str(embedded?.серия_id) !== серияId) return [];
+    // Belt-and-suspenders series scoping: the embedded-resource filter
+    // (.eq("issue.series_id", ...)) is PostgREST-version-dependent, so never
+    // trust it alone. Drop any update whose issue is not in this series, so
+    // cross-series history can never leak into the prompt.
+    if (str(embedded?.series_id) !== seriesId) return [];
     return [{
       issue_number: num(embedded?.issue_number),
       issue_title: str(embedded?.title),
@@ -153,18 +153,18 @@ export async function buildSeriesContext(
     }];
   });
 
-  return { открытоIssues, recentDecisions, recentUpdates };
+  return { openIssues, recentDecisions, recentUpdates };
 }
 
 /**
- * Render the серия context as a compact, OIL-keyed prompt block the model can
+ * Render the series context as a compact, OIL-keyed prompt block the model can
  * reason over. Deterministic so it is unit-testable and reproducible across
  * runs. Empty sections read "(none)" rather than vanishing, so the model knows
  * the difference between "no history" and "history omitted".
  */
 export function formatSeriesContextForPrompt(context: SeriesContext): string {
-  const issues = context.открытоIssues.length
-    ? context.открытоIssues
+  const issues = context.openIssues.length
+    ? context.openIssues
         .map(
           (i) =>
             `  - OIL-${i.issue_number} [${i.category}] ${i.title} (status: ${i.status}, owner: ${
@@ -219,13 +219,13 @@ export interface RawSuggestion {
 /**
  * Enforce referential integrity on the model's output before it ever reaches
  * the OIL board. The model can hallucinate references, so every status_update /
- * duplicate_warning must point at a real открыто item, and:
+ * duplicate_warning must point at a real open item, and:
  *
  * - new_item: any stray reference or status is cleared (it is, by definition,
  *   not about an existing item).
- * - status_update: kept only when it targets a real открыто item AND moves it to a
+ * - status_update: kept only when it targets a real open item AND moves it to a
  *   genuinely different status; a no-op or dangling update is dropped as noise.
- * - duplicate_warning: kept only when it points at a real открыто item; it never
+ * - duplicate_warning: kept only when it points at a real open item; it never
  *   carries a status change.
  *
  * This is what keeps the cross-meeting badges trustworthy, which is what keeps
@@ -233,9 +233,9 @@ export interface RawSuggestion {
  */
 export function normalizeSuggestions<T extends RawSuggestion>(
   suggestions: T[],
-  открытоIssues: { issue_number: number; status: string }[]
+  openIssues: { issue_number: number; status: string }[]
 ): T[] {
-  const statusByNumber = new Map(открытоIssues.map((i) => [i.issue_number, i.status]));
+  const statusByNumber = new Map(openIssues.map((i) => [i.issue_number, i.status]));
 
   return suggestions.flatMap((suggestion): T[] => {
     if (suggestion.type === "status_update") {

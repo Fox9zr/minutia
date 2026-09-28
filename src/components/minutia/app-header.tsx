@@ -11,7 +11,7 @@ import { HintTooltip } from "@/components/minutia/hint-tooltip";
 const pageTitles: Record<string, string> = {
   "/": "Доска OIL",
   "/dashboard": "Доска OIL",
-  "/серия": "Series",
+  "/series": "Series",
   "/actions": "Мои поручения",
   "/inbox": "Inbox",
   "/settings": "Settings",
@@ -22,10 +22,10 @@ function resolveTitle(pathname: string): string {
   if (pageTitles[pathname]) return pageTitles[pathname];
 
   // Series detail
-  if (/^\/серия\/[^/]+$/.test(pathname)) return "Series";
+  if (/^\/series\/[^/]+$/.test(pathname)) return "Series";
 
   // Meeting detail
-  if (/^\/серия\/[^/]+\/meetings\/[^/]+$/.test(pathname)) return "Meeting";
+  if (/^\/series\/[^/]+\/meetings\/[^/]+$/.test(pathname)) return "Meeting";
 
   // Issue detail
   if (/^\/issues\/[^/]+$/.test(pathname)) return "Issue";
@@ -39,7 +39,7 @@ function resolveTitle(pathname: string): string {
 
 export function AppHeader() {
   const pathname = usePathname();
-  const открытоCommandPalette = useUIStore((s) => s.открытоCommandPalette);
+  const openCommandPalette = useUIStore((s) => s.openCommandPalette);
   const calendarSidebarOpen = useUIStore((s) => s.calendarSidebarOpen);
   const toggleCalendarSidebar = useUIStore((s) => s.toggleCalendarSidebar);
   const title = resolveTitle(pathname);
@@ -56,7 +56,7 @@ export function AppHeader() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={открытоCommandPalette}
+          onClick={openCommandPalette}
           data-tour="command-palette"
           className="hidden gap-1.5 text-ink-3 hover:text-ink sm:flex"
         >
@@ -72,7 +72,7 @@ export function AppHeader() {
         <Button
           variant="ghost"
           size="icon-sm"
-          onClick={открытоCommandPalette}
+          onClick={openCommandPalette}
           data-tour="command-palette"
           className="text-ink-3 hover:text-ink sm:hidden"
         >

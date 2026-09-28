@@ -7,35 +7,35 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
-import { isPendingDelete } from "@/lib/в ожидании-delete";
+import { isPendingDelete } from "@/lib/pending-delete";
 import type { Meeting } from "@/lib/types";
 import type { CreateMeetingInput } from "@/lib/schemas";
 import { issueKeys } from "./use-issues";
-import { серияKeys } from "./use-серия";
+import { seriesKeys } from "./use-series";
 
 // ---------------------------------------------------------------------------
 // Query key factory
 // ---------------------------------------------------------------------------
 export const meetingKeys = {
   all: ["meetings"] as const,
-  list: (серияId: string) => ["meetings", серияId] as const,
+  list: (seriesId: string) => ["meetings", seriesId] as const,
   detail: (id: string) => ["meetings", "detail", id] as const,
 };
 
 // ---------------------------------------------------------------------------
-// useMeetings - all meetings in a серия
+// useMeetings - all meetings in a series
 // ---------------------------------------------------------------------------
-export function useMeetings(серияId: string) {
+export function useMeetings(seriesId: string) {
   const supabase = createClient();
 
   return useQuery<Meeting[]>({
-    queryKey: meetingKeys.list(серияId),
-    enabled: !!серияId,
+    queryKey: meetingKeys.list(seriesId),
+    enabled: !!seriesId,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("meetings")
         .select("*")
-        .eq("серия_id", серияId)
+        .eq("series_id", seriesId)
         .order("date", { ascending: false });
 
       if (error) throw error;
@@ -85,11 +85,11 @@ export function useCreateMeeting() {
 
   return useMutation({
     mutationFn: async (input: CreateMeetingInput) => {
-      // Get current meeting count in the серия for sequence numbering
+      // Get current meeting count in the series for sequence numbering
       const { count, error: countError } = await supabase
         .from("meetings")
         .select("*", { count: "exact", head: true })
-        .eq("серия_id", input.серия_id);
+        .eq("series_id", input.series_id);
 
       if (countError) throw countError;
 
@@ -108,9 +108,9 @@ export function useCreateMeeting() {
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({
-        queryKey: meetingKeys.list(variables.серия_id),
+        queryKey: meetingKeys.list(variables.series_id),
       });
-      queryClient.invalidateQueries({ queryKey: серияKeys.all });
+      queryClient.invalidateQueries({ queryKey: seriesKeys.all });
     },
   });
 }
@@ -140,7 +140,7 @@ export function useStartMeeting() {
         queryKey: meetingKeys.detail(data.id),
       });
       queryClient.invalidateQueries({
-        queryKey: meetingKeys.list(data.серия_id),
+        queryKey: meetingKeys.list(data.series_id),
       });
     },
   });
@@ -154,9 +154,9 @@ export function useStartOrJoinMeeting() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (серияId: string) => {
+    mutationFn: async (seriesId: string) => {
       const { data, error } = await supabase.rpc("start_or_join_meeting", {
-        target_серия_id: серияId,
+        target_series_id: seriesId,
       });
 
       if (error) throw error;
@@ -171,12 +171,12 @@ export function useStartOrJoinMeeting() {
         queryKey: meetingKeys.detail(data.id),
       });
       queryClient.invalidateQueries({
-        queryKey: meetingKeys.list(data.серия_id),
+        queryKey: meetingKeys.list(data.series_id),
       });
       queryClient.invalidateQueries({
-        queryKey: серияKeys.detail(data.серия_id),
+        queryKey: seriesKeys.detail(data.series_id),
       });
-      queryClient.invalidateQueries({ queryKey: серияKeys.all });
+      queryClient.invalidateQueries({ queryKey: seriesKeys.all });
     },
   });
 }
@@ -184,11 +184,11 @@ export function useStartOrJoinMeeting() {
 // ---------------------------------------------------------------------------
 // useMeetingRealtime - live query refresh for meeting collaboration
 // ---------------------------------------------------------------------------
-export function useMeetingRealtime(meetingId: string, серияId: string) {
+export function useMeetingRealtime(meetingId: string, seriesId: string) {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
-    if (!meetingId || !серияId) return;
+    if (!meetingId || !seriesId) return;
 
     const supabase = createClient();
     const refreshMeeting = () => {
@@ -199,14 +199,14 @@ export function useMeetingRealtime(meetingId: string, серияId: string) {
         queryKey: meetingKeys.detail(meetingId),
       });
       void queryClient.invalidateQueries({
-        queryKey: meetingKeys.list(серияId),
+        queryKey: meetingKeys.list(seriesId),
       });
       void queryClient.invalidateQueries({
-        queryKey: issueKeys.list(серияId),
+        queryKey: issueKeys.list(seriesId),
       });
       void queryClient.invalidateQueries({ queryKey: ["decisions"] });
       void queryClient.invalidateQueries({
-        queryKey: серияKeys.detail(серияId),
+        queryKey: seriesKeys.detail(seriesId),
       });
     };
 
@@ -228,7 +228,7 @@ export function useMeetingRealtime(meetingId: string, серияId: string) {
           event: "*",
           schema: "public",
           table: "issues",
-          filter: `серия_id=eq.${серияId}`,
+          filter: `series_id=eq.${seriesId}`,
         },
         refreshMeeting
       )
@@ -249,7 +249,7 @@ export function useMeetingRealtime(meetingId: string, серияId: string) {
       window.clearInterval(interval);
       void supabase.removeChannel(channel);
     };
-  }, [meetingId, queryClient, серияId]);
+  }, [meetingId, queryClient, seriesId]);
 }
 
 type PresenceMeta = {
@@ -329,7 +329,7 @@ export function useMeetingPresence(meetingId: string) {
 // ---------------------------------------------------------------------------
 // useEndMeeting - set status to 'completed', set completed_at
 // ---------------------------------------------------------------------------
-// useAllMeetings - recent meetings across all серия (for dashboard charts)
+// useAllMeetings - recent meetings across all series (for dashboard charts)
 // ---------------------------------------------------------------------------
 export function useAllMeetings() {
   const supabase = createClient();
@@ -347,7 +347,7 @@ export function useAllMeetings() {
 
       return (data ?? []).map((m: any) => ({
         ...m,
-        серия: undefined,
+        series: undefined,
         issues_raised: m.raised_issues?.[0]?.count ?? 0,
         issues_resolved: m.resolved_issues?.[0]?.count ?? 0,
       }));
@@ -358,7 +358,7 @@ export function useAllMeetings() {
 // ---------------------------------------------------------------------------
 // useMeetingsByMonth - all meetings for a calendar month (for sidebar)
 // ---------------------------------------------------------------------------
-export type MeetingWithSeries = Meeting & { серия_name: string; серия_id: string };
+export type MeetingWithSeries = Meeting & { series_name: string; series_id: string };
 
 export function useMeetingsByMonth(year: number, month: number, enabled = true) {
   const supabase = createClient();
@@ -372,7 +372,7 @@ export function useMeetingsByMonth(year: number, month: number, enabled = true) 
 
       const { data, error } = await supabase
         .from("meetings")
-        .select("*, серия:meeting_серия!inner(name)")
+        .select("*, series:meeting_series!inner(name)")
         .gte("date", start.toISOString())
         .lte("date", end.toISOString())
         .order("date", { ascending: true });
@@ -381,8 +381,8 @@ export function useMeetingsByMonth(year: number, month: number, enabled = true) 
 
       return (data ?? []).map((m: any) => ({
         ...m,
-        серия_name: m.серия?.name ?? "Unknown",
-        серия: undefined,
+        series_name: m.series?.name ?? "Unknown",
+        series: undefined,
       }));
     },
     staleTime: 2 * 60 * 1000,
@@ -541,7 +541,7 @@ export function useEndMeeting() {
         queryKey: meetingKeys.detail(data.id),
       });
       queryClient.invalidateQueries({
-        queryKey: meetingKeys.list(data.серия_id),
+        queryKey: meetingKeys.list(data.series_id),
       });
       // Refresh issues since meeting end may affect OIL board
       queryClient.invalidateQueries({ queryKey: issueKeys.all });

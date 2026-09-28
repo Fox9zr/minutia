@@ -19,7 +19,7 @@ interface TimelineMeeting extends Meeting {
 
 interface DateAnchoredTimelineProps {
   meetings: TimelineMeeting[];
-  серияId: string;
+  seriesId: string;
 }
 
 function isSameDay(a: Date, b: Date): boolean {
@@ -51,13 +51,13 @@ const ISSUE_PREVIEW_LIMIT = 2;
 
 function MeetingSection({
   meeting,
-  серияId,
+  seriesId,
   index,
   isFuture,
   scrollTargetRef,
 }: {
   meeting: TimelineMeeting;
-  серияId: string;
+  seriesId: string;
   index: number;
   isFuture: boolean;
   scrollTargetRef?: React.RefObject<HTMLDivElement | null>;
@@ -69,7 +69,7 @@ function MeetingSection({
   const resolvedCount = meeting.issues.filter(
     (i) => i.status === "resolved"
   ).length;
-  const открытоCount = issueCount - resolvedCount;
+  const openCount = issueCount - resolvedCount;
 
   const topIssue = meeting.issues[0];
 
@@ -230,7 +230,7 @@ function MeetingSection({
 
               {/* Link to full meeting */}
               <Link
-                href={`/серия/${серияId}/meetings/${meeting.id}`}
+                href={`/series/${seriesId}/meetings/${meeting.id}`}
                 className="inline-flex items-center gap-1 text-xs text-accent hover:underline"
               >
                 Open meeting details
@@ -248,7 +248,7 @@ const INITIAL_DISPLAY_COUNT = 5;
 
 export function DateAnchoredTimeline({
   meetings,
-  серияId,
+  seriesId,
 }: DateAnchoredTimelineProps) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -350,7 +350,7 @@ export function DateAnchoredTimeline({
               <div data-meeting-date={meeting.date}>
                 <MeetingSection
                   meeting={meeting}
-                  серияId={серияId}
+                  seriesId={seriesId}
                   index={i}
                   isFuture={isFuture}
                 />
@@ -366,7 +366,7 @@ export function DateAnchoredTimeline({
           onClick={() => setShowAll(true)}
           className="mt-3 ml-10 text-xs text-accent hover:underline"
         >
-          Показать все {sorted.length} meetings
+          View all {sorted.length} meetings
         </button>
       )}
     </div>

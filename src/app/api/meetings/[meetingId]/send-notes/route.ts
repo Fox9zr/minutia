@@ -3,7 +3,7 @@ import { z } from "zod";
 import { absoluteAppUrl, sendMail } from "@/lib/email";
 import { buildMeetingNotesEmail, extractEmails } from "@/lib/meeting-notes-email";
 import { createClient } from "@/lib/supabase/server";
-import { userManagesSeries } from "@/lib/серия/manage-access";
+import { userManagesSeries } from "@/lib/series/manage-access";
 import type { Decision, Issue, Meeting, MeetingSeries } from "@/lib/types";
 
 const schema = z.object({
@@ -11,7 +11,7 @@ const schema = z.object({
 });
 
 type MeetingPayload = Meeting & {
-  серия: Pick<MeetingSeries, "id" | "name" | "default_attendees">;
+  series: Pick<MeetingSeries, "id" | "name" | "default_attendees">;
   issues: Issue[];
   decisions: Decision[];
 };
@@ -47,7 +47,7 @@ export async function POST(
 
   const { data: meeting, error: meetingError } = await supabase
     .from("meetings")
-    .select("*, серия:meeting_серия!inner(id, name, default_attendees), issues:issues!raised_in_meeting_id(*), decisions(*)")
+    .select("*, series:meeting_series!inner(id, name, default_attendees), issues:issues!raised_in_meeting_id(*), decisions(*)")
     .eq("id", meetingId)
     .single();
 
@@ -57,7 +57,7 @@ export async function POST(
 
   const payload = meeting as MeetingPayload;
 
-  const canManage = await userManagesSeries(payload.серия_id, user.id);
+  const canManage = await userManagesSeries(payload.series_id, user.id);
   if (!canManage) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -69,10 +69,10 @@ export async function POST(
     );
   }
 
-  const { data: серияIssues, error: issuesError } = await supabase
+  const { data: seriesIssues, error: issuesError } = await supabase
     .from("issues")
     .select("*")
-    .eq("серия_id", payload.серия_id);
+    .eq("series_id", payload.series_id);
 
   if (issuesError) {
     return NextResponse.json({ error: issuesError.message }, { status: 500 });
@@ -80,7 +80,7 @@ export async function POST(
 
   const recipients = parsed.data.recipients?.length
     ? parsed.data.recipients
-    : extractEmails([...(payload.attendees ?? []), ...(payload.серия.default_attendees ?? [])]);
+    : extractEmails([...(payload.attendees ?? []), ...(payload.series.default_attendees ?? [])]);
 
   if (recipients.length === 0) {
     return NextResponse.json(
@@ -89,7 +89,7 @@ export async function POST(
     );
   }
 
-  const allIssues = (серияIssues ?? []) as Issue[];
+  const allIssues = (seriesIssues ?? []) as Issue[];
   const resolvedIssues = allIssues.filter(
     (issue) =>
       issue.resolved_in_meeting_id === meetingId &&
@@ -107,7 +107,7 @@ export async function POST(
   const appUrl = absoluteAppUrl(request.url);
   const email = buildMeetingNotesEmail({
     meeting: payload,
-    серияName: payload.серия.name,
+    seriesName: payload.series.name,
     raisedIssues: payload.issues ?? [],
     resolvedIssues,
     carriedIssues,

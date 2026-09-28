@@ -12,31 +12,31 @@ export function SeriesHealthWidget({
   id,
   index,
   issues,
-  серияList,
+  seriesList,
 }: {
   id: string;
   index: number;
   issues: Issue[];
-  серияList: (MeetingSeries & { открыто_issues_count: number })[];
+  seriesList: (MeetingSeries & { open_issues_count: number })[];
 }) {
-  const серияStats = React.useMemo(() => {
-    return серияList.map((серия) => {
-      const серияIssues = issues.filter((i) => i.серия_id === серия.id);
-      const total = серияIssues.length;
-      const открыто = серияIssues.filter(
-        (i) => i.status === "открыто"
+  const seriesStats = React.useMemo(() => {
+    return seriesList.map((series) => {
+      const seriesIssues = issues.filter((i) => i.series_id === series.id);
+      const total = seriesIssues.length;
+      const open = seriesIssues.filter(
+        (i) => i.status === "open"
       ).length;
-      const inProgress = серияIssues.filter(
-        (i) => i.status === "in_progress" || i.status === "в ожидании"
+      const inProgress = seriesIssues.filter(
+        (i) => i.status === "in_progress" || i.status === "pending"
       ).length;
-      const resolved = серияIssues.filter(
+      const resolved = seriesIssues.filter(
         (i) => i.status === "resolved" || i.status === "dropped"
       ).length;
       const resolutionRate = total > 0 ? Math.round((resolved / total) * 100) : 0;
 
-      return { серия, total, открыто, inProgress, resolved, resolutionRate };
+      return { series, total, open, inProgress, resolved, resolutionRate };
     });
-  }, [issues, серияList]);
+  }, [issues, seriesList]);
 
   const healthDot = (rate: number) => {
     if (rate >= 70) return "bg-success";
@@ -54,24 +54,24 @@ export function SeriesHealthWidget({
       </div>
 
       <div className="space-y-5">
-        {серияStats.map(({ серия, total, открыто, inProgress, resolved, resolutionRate }) => {
-          const открытоPct = total > 0 ? (открыто / total) * 100 : 0;
+        {seriesStats.map(({ series, total, open, inProgress, resolved, resolutionRate }) => {
+          const openPct = total > 0 ? (open / total) * 100 : 0;
           const progressPct = total > 0 ? (inProgress / total) * 100 : 0;
           const resolvedPct = total > 0 ? (resolved / total) * 100 : 0;
 
           return (
-            <div key={серия.id}>
+            <div key={series.id}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-2">
                 <span className={cn("size-2 rounded-full", healthDot(resolutionRate))} />
                 <Link
-                  href={`/серия/${серия.id}`}
+                  href={`/series/${series.id}`}
                   className="min-w-0 text-sm font-semibold text-ink hover:text-accent transition-colors break-words"
                 >
-                  {серия.name}
+                  {series.name}
                 </Link>
                 <span className="inline-flex items-center gap-1 text-xs text-ink-4">
-                  <MinutiaCadenceIcon cadence={серия.cadence} className="size-3 text-ink" />
-                  {CADENCE_LABELS[серия.cadence]}
+                  <MinutiaCadenceIcon cadence={series.cadence} className="size-3 text-ink" />
+                  {CADENCE_LABELS[series.cadence]}
                 </span>
                 <span className="ml-auto text-xs text-ink-4 tabular-nums">
                   {total} items
@@ -87,8 +87,8 @@ export function SeriesHealthWidget({
               </div>
 
               <div className="flex h-2 rounded-full overflow-hidden bg-paper-2">
-                {открытоPct > 0 && (
-                  <div className="bg-accent" style={{ width: `${открытоPct}%` }} />
+                {openPct > 0 && (
+                  <div className="bg-accent" style={{ width: `${openPct}%` }} />
                 )}
                 {progressPct > 0 && (
                   <div className="bg-warn" style={{ width: `${progressPct}%` }} />

@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { getTextFromOpenRouter } from "./ask-серия-answer";
+import { getTextFromOpenRouter } from "./ask-series-answer";
 
-// Pure carry-over logic: turn a серия' открыто issues into a ranked, scored
+// Pure carry-over logic: turn a series' open issues into a ranked, scored
 // accountability summary. The AI only narrates this; the numbers are computed
 // here so they are deterministic and testable.
 const DAY_MS = 86_400_000;
@@ -19,7 +19,7 @@ export type CarryoverIssue = {
 };
 
 export type RankedCarryoverIssue = CarryoverIssue & {
-  days_открыто: number;
+  days_open: number;
   overdue: boolean;
 };
 
@@ -41,7 +41,7 @@ export function summarizeCarryover(issues: CarryoverIssue[], today: Date): Carry
   const ranked: RankedCarryoverIssue[] = issues.map((issue) => ({
     ...issue,
     overdue: issue.due_date != null && issue.due_date < todayStr,
-    days_открыто: Math.max(
+    days_open: Math.max(
       0,
       Math.floor((today.getTime() - new Date(issue.created_at).getTime()) / DAY_MS)
     ),
@@ -54,14 +54,14 @@ export function summarizeCarryover(issues: CarryoverIssue[], today: Date): Carry
       if (b.due_date == null) return -1;
       return a.due_date < b.due_date ? -1 : 1;
     }
-    return b.days_открыто - a.days_открыто; // staler first
+    return b.days_open - a.days_open; // staler first
   });
 
   return {
     total: ranked.length,
     overdue_count: ranked.filter((issue) => issue.overdue).length,
     no_owner_count: ranked.filter((issue) => !issue.owner_name).length,
-    stale_count: ranked.filter((issue) => issue.days_открыто >= STALE_DAYS).length,
+    stale_count: ranked.filter((issue) => issue.days_open >= STALE_DAYS).length,
     issues: ranked,
   };
 }

@@ -8,7 +8,7 @@ import { useUpsellNoticeUrl } from "@/lib/hooks/use-ai-access";
 import { resolveUpsellCta, shouldShowNudge, nudgeStorageKey, UPSELL_DEFAULT_CTA_LABEL } from "@/lib/upsell";
 import { startUpgrade } from "@/lib/billing/upgrade-actions";
 
-// True until the first-run tour is finished, so the nudge never auto-открытоs over
+// True until the first-run tour is finished, so the nudge never auto-opens over
 // the onboarding prompt (both anchor bottom-right). Read decoupled from the tour
 // component to avoid prop drilling.
 function firstRunTourPending(): boolean {
@@ -24,9 +24,9 @@ function firstRunTourPending(): boolean {
 
 // Capacity nudge: the board-full FAB. Replaces the old dead-end (disabled FAB +
 // "limit reached" tooltip) with a calm, dismissible explanation and, when the
-// instance configures a destination, a neutral CTA. It auto-открытоs once at the
+// instance configures a destination, a neutral CTA. It auto-opens once at the
 // moment the board fills (a success moment, not an interruption); dismissing it
-// starts a 14-day cooldown so it never nags. Clicking the FAB reоткрытоs it anytime.
+// starts a 14-day cooldown so it never nags. Clicking the FAB reopens it anytime.
 //
 // Finding 4 fix: when upgradeEnabled is true the button always renders, even if
 // the operator has not set capacity_notice_url, so a correctly-configured hosted
@@ -36,7 +36,7 @@ const SLOT = "capacity" as const;
 export function CapacityNudge({ limit }: { limit: number }) {
   const { data } = useUpsellNoticeUrl(SLOT);
   const cta = resolveUpsellCta(data?.ctaUrl);
-  const [открыто, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const [upgradeError, setUpgradeError] = React.useState(false);
   const [isPending, setIsPending] = React.useState(false);
 
@@ -49,8 +49,8 @@ export function CapacityNudge({ limit }: { limit: number }) {
 
   function handleOpenChange(next: boolean) {
     setOpen(next);
-    // Closing is a dismissal: record it so the nudge does not auto-открыто again
-    // until the cooldown elapses (clicking the FAB still reоткрытоs it on demand).
+    // Closing is a dismissal: record it so the nudge does not auto-open again
+    // until the cooldown elapses (clicking the FAB still reopens it on demand).
     if (!next) window.localStorage.setItem(nudgeStorageKey(SLOT), String(Date.now()));
   }
 
@@ -67,7 +67,7 @@ export function CapacityNudge({ limit }: { limit: number }) {
   }
 
   return (
-    <Popover открыто={открыто} onOpenChange={handleOpenChange}>
+    <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <motion.button
           type="button"
@@ -113,7 +113,7 @@ export function CapacityNudge({ limit }: { limit: number }) {
           <a
             href={cta.href}
             target="_blank"
-            rel="noоткрытоer noreferrer"
+            rel="noopener noreferrer"
             className="mt-2.5 inline-flex items-center gap-1 text-xs font-medium text-accent transition-colors hover:text-accent-hover"
           >
             {cta.label}

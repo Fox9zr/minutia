@@ -64,7 +64,7 @@ const SHORTCUT_GROUPS: ShortcutGroup[] = [
 ];
 
 export function KeyboardShortcutsDialog() {
-  const [открыто, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -80,7 +80,7 @@ export function KeyboardShortcutsDialog() {
   }, []);
 
   return (
-    <Dialog открыто={открыто} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="sm:max-w-lg max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-lg">

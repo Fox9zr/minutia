@@ -72,7 +72,7 @@ export function CarryoverBriefingPanel({
       </div>
 
       <p className="mt-1 text-xs text-ink-3">
-        {issueCount} открыто {issueCount === 1 ? "item" : "items"} carried from earlier meetings.
+        {issueCount} open {issueCount === 1 ? "item" : "items"} carried from earlier meetings.
       </p>
 
       {error && <p className="mt-3 text-sm text-danger">{error}</p>}
@@ -80,7 +80,7 @@ export function CarryoverBriefingPanel({
       {briefing && (
         <div className="mt-3">
           <div className="mb-3 flex flex-wrap gap-2">
-            <Stat label="открыто" value={briefing.issues_count} />
+            <Stat label="open" value={briefing.issues_count} />
             <Stat label="overdue" value={briefing.overdue_count} tone="danger" />
             <Stat label="no owner" value={briefing.no_owner_count} tone="warn" />
           </div>

@@ -13,7 +13,7 @@ import {
   Building2,
 } from "lucide-react";
 import { signOut } from "@/lib/supabase/auth-actions";
-import { useSeries } from "@/lib/hooks/use-серия";
+import { useSeries } from "@/lib/hooks/use-series";
 import { useIssues } from "@/lib/hooks/use-issues";
 import { useUnreadCount } from "@/lib/hooks/use-notifications";
 import {
@@ -75,24 +75,24 @@ interface AppSidebarProps {
 
 export function AppSidebar({ profile, organizations }: AppSidebarProps) {
   const pathname = usePathname();
-  const { data: серияList } = useSeries();
+  const { data: seriesList } = useSeries();
   const { data: issues } = useIssues();
   const { data: unreadCount } = useUnreadCount();
   const currentOrganization = organizations.find(
     (organization) => organization.id === profile?.current_organization_id
   );
 
-  const открытоIssues = (issues ?? []).filter(
+  const openIssues = (issues ?? []).filter(
     (i) => i.status !== "resolved" && i.status !== "dropped"
   );
-  const outstandingCount = открытоIssues.length;
+  const outstandingCount = openIssues.length;
   const myActionsCount = profile
-    ? открытоIssues.filter((issue) => isMyActionIssue(issue, profile)).length
+    ? openIssues.filter((issue) => isMyActionIssue(issue, profile)).length
     : 0;
 
   const navItems = [
     { label: "К исполнению", href: "/", icon: CircleDot, count: outstandingCount },
-    { label: "Серия", href: "/серия", icon: SquareStack, count: 0 },
+    { label: "Серия", href: "/series", icon: SquareStack, count: 0 },
     { label: "Мои поручения", href: "/actions", icon: CheckSquare, count: myActionsCount },
     { label: "Входящие", href: "/inbox", icon: Bell, count: unreadCount ?? 0 },
   ] as const;
@@ -129,7 +129,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
                     >
                       <Link href={item.href}>
                         <item.icon className="size-4" />
-                        <span data-tour={item.href === "/серия" ? "серия-nav" : undefined}>
+                        <span data-tour={item.href === "/series" ? "series-nav" : undefined}>
                           {item.label}
                         </span>
                         <CountBadge
@@ -145,28 +145,28 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {серияList && серияList.length > 0 && (
+        {seriesList && seriesList.length > 0 && (
           <SidebarGroup className="px-3 mt-4">
             <SidebarGroupLabel className="h-auto px-3 mb-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-ink-4">
               Series
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className="gap-0.5">
-                {серияList.map((серия) => {
-                  const серияActive = pathname.startsWith(`/серия/${серия.id}`);
+                {seriesList.map((series) => {
+                  const seriesActive = pathname.startsWith(`/series/${series.id}`);
                   return (
-                    <SidebarMenuItem key={серия.id}>
+                    <SidebarMenuItem key={series.id}>
                       <SidebarMenuButton
                         asChild
-                        isActive={серияActive}
+                        isActive={seriesActive}
                         className={cn(
                           "h-9 rounded-md px-3 text-[14px] text-ink-2 transition-all",
-                          серияActive && "text-ink font-medium"
+                          seriesActive && "text-ink font-medium"
                         )}
                       >
-                        <Link href={`/серия/${серия.id}`}>
-                          <span>{серия.name}</span>
-                          <CountBadge count={серия.открыто_issues_count} />
+                        <Link href={`/series/${series.id}`}>
+                          <span>{series.name}</span>
+                          <CountBadge count={series.open_issues_count} />
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>

@@ -3,7 +3,7 @@
  * Anthropic omits baseUrl because its endpoint is always https://api.anthropic.com.
  */
 export function aiFormFields(
-  provider: "открытоai-compatible" | "anthropic"
+  provider: "openai-compatible" | "anthropic"
 ): readonly string[] {
   if (provider === "anthropic") {
     return ["provider", "apiKey", "model"] as const;

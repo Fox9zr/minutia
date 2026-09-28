@@ -8,7 +8,7 @@ import { Icons } from "./icons";
 const PAL: PastelColor[] = ["amber", "rose", "sage", "sky", "lilac", "sand"];
 
 export interface CardEditorProps {
-  открыто: boolean;
+  open: boolean;
   mode: "add" | "edit";
   colTitle?: string;
   initialText?: string;
@@ -18,21 +18,21 @@ export interface CardEditorProps {
   onDelete?: () => void;
 }
 
-export function CardEditor({ открыто, mode, colTitle, initialText, initialColor, onSave, onClose, onDelete }: CardEditorProps) {
+export function CardEditor({ open, mode, colTitle, initialText, initialColor, onSave, onClose, onDelete }: CardEditorProps) {
   const [text, setText] = React.useState(initialText || "");
   const [color, setColor] = React.useState<PastelColor>(initialColor || "sky");
   const ref = React.useRef<HTMLTextAreaElement>(null);
 
   React.useEffect(() => {
-    if (открыто) {
+    if (open) {
       setText(initialText || "");
       setColor(initialColor || "sky");
       const t = setTimeout(() => ref.current && ref.current.focus(), 60);
       return () => clearTimeout(t);
     }
-  }, [открыто, initialText, initialColor]);
+  }, [open, initialText, initialColor]);
 
-  if (!открыто) return null;
+  if (!open) return null;
   const pastel = "var(--c-" + color + ")";
   function save() { if (text.trim()) onSave(text.trim(), color); }
 

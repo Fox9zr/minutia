@@ -241,7 +241,7 @@ function LoginForm() {
             minutia
           </h1>
           <p className="mt-2 font-sans text-sm text-ink-3">
-            The открыто-source Outstanding Issues Log for recurring meetings.
+            The open-source Outstanding Issues Log for recurring meetings.
           </p>
         </div>
 
@@ -468,7 +468,7 @@ function LoginForm() {
         <a
           href="https://github.com/shiprite-dev/minutia"
           target="_blank"
-          rel="noоткрытоer noreferrer"
+          rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-ink-3 underline underline-offset-4 transition-colors hover:text-ink-2"
         >
           GitHub

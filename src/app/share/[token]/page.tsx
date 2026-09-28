@@ -24,15 +24,15 @@ type ServerSupabaseClient = Awaited<ReturnType<typeof createClient>>;
 
 type GuestSharePayload = {
   share: GuestShare;
-  resource_type: "meeting" | "серия" | "issue";
+  resource_type: "meeting" | "series" | "issue";
   expired?: boolean;
   meeting?: Meeting;
-  серия?: MeetingSeries | null;
+  series?: MeetingSeries | null;
   issue?: Issue;
   meetings?: Meeting[];
   issues?: Issue[];
-  открыто_issues?: Issue[];
-  открыто_issues_count?: number;
+  open_issues?: Issue[];
+  open_issues_count?: number;
   decisions?: Decision[];
   updates?: IssueUpdate[];
   updated_at?: string;
@@ -148,7 +148,7 @@ function ShareLayout({
             <a
               href="https://github.com/shiprite-dev/minutia"
               target="_blank"
-              rel="noоткрытоer noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-md border border-rule px-4 py-2 text-sm font-medium text-ink transition-colors hover:bg-paper-2"
             >
               <svg
@@ -230,14 +230,14 @@ function SectionHeading({
 
 function MeetingShareView({
   meeting,
-  серия,
+  series,
   issues,
   decisions,
   share,
   updatedAt,
 }: {
   meeting: Meeting & { issues?: Issue[]; decisions?: Decision[] };
-  серия: MeetingSeries | null;
+  series: MeetingSeries | null;
   issues: Issue[];
   decisions: Decision[];
   share: GuestShare;
@@ -252,8 +252,8 @@ function MeetingShareView({
           <ViewOnlyBadge />
         </div>
         <div className="mt-3">
-          {серия && (
-            <p className="text-sm text-ink-2">{серия.name}</p>
+          {series && (
+            <p className="text-sm text-ink-2">{series.name}</p>
           )}
           <h1 className="font-display text-2xl font-semibold text-ink mt-1">
             {meeting.title}
@@ -363,17 +363,17 @@ function SeriesIssueRow({ issue }: { issue: Issue }) {
 }
 
 function SeriesShareView({
-  серия,
+  series,
   meetings,
-  открытоIssuesCount,
-  открытоIssues,
+  openIssuesCount,
+  openIssues,
   share,
   youEmail,
 }: {
-  серия: MeetingSeries;
+  series: MeetingSeries;
   meetings: Meeting[];
-  открытоIssuesCount: number;
-  открытоIssues: Issue[];
+  openIssuesCount: number;
+  openIssues: Issue[];
   share: GuestShare;
   youEmail?: string;
 }) {
@@ -383,7 +383,7 @@ function SeriesShareView({
   const recentMeetings = sortedMeetings.slice(0, 10);
 
   const myItems = youEmail
-    ? открытоIssues.filter((issue) =>
+    ? openIssues.filter((issue) =>
         ownerMatchesRecipient(youEmail, { ownerName: issue.owner_name })
       )
     : [];
@@ -397,16 +397,16 @@ function SeriesShareView({
           <ViewOnlyBadge />
         </div>
         <h1 className="font-display text-2xl font-semibold text-ink mt-3">
-          {серия.name}
+          {series.name}
         </h1>
-        {серия.description && (
+        {series.description && (
           <p className="mt-2 text-sm text-ink-2 leading-relaxed">
-            {серия.description}
+            {series.description}
           </p>
         )}
       </div>
 
-      {/* Your в ожидании items (guest deep-link) */}
+      {/* Your pending items (guest deep-link) */}
       {youEmail && (
         <section className="mb-8 rounded-lg border border-accent/30 bg-accent-soft/40 p-4 sm:p-5">
           <SectionHeading count={myItems.length}>Ваши задачи в ожидании</SectionHeading>
@@ -426,12 +426,12 @@ function SeriesShareView({
 
       {/* Open Issues */}
       <section className="mb-8">
-        <SectionHeading count={открытоIssuesCount}>Открытые вопросы</SectionHeading>
-        {открытоIssues.length === 0 ? (
+        <SectionHeading count={openIssuesCount}>Открытые вопросы</SectionHeading>
+        {openIssues.length === 0 ? (
           <p className="mt-3 text-sm text-ink-3">Нет открытых задач.</p>
         ) : (
           <div className="mt-4 space-y-2">
-            {открытоIssues.map((issue) => (
+            {openIssues.map((issue) => (
               <SeriesIssueRow key={issue.id} issue={issue} />
             ))}
           </div>
@@ -710,16 +710,16 @@ export default async function GuestSharePage({
 
       // Redirect to the actual resource in-app
       let resourceUrl = `/issues/${existingShare.resource_id}`;
-      if (existingShare.resource_type === "серия") {
-        resourceUrl = `/серия/${existingShare.resource_id}`;
+      if (existingShare.resource_type === "series") {
+        resourceUrl = `/series/${existingShare.resource_id}`;
       } else if (existingShare.resource_type === "meeting") {
         const { data: mtg } = await supabase
           .from("meetings")
-          .select("серия_id")
+          .select("series_id")
           .eq("id", existingShare.resource_id)
           .single();
         resourceUrl = mtg
-          ? `/серия/${mtg.серия_id}/meetings/${existingShare.resource_id}`
+          ? `/series/${mtg.series_id}/meetings/${existingShare.resource_id}`
           : `/`;
       }
 
@@ -768,7 +768,7 @@ export default async function GuestSharePage({
     return (
       <MeetingShareView
         meeting={payload.meeting}
-        серия={payload.серия ?? null}
+        series={payload.series ?? null}
         issues={payload.issues ?? []}
         decisions={payload.decisions ?? []}
         share={guestShare}
@@ -777,8 +777,8 @@ export default async function GuestSharePage({
     );
   }
 
-  if (payload.resource_type === "серия") {
-    if (!payload.серия) {
+  if (payload.resource_type === "series") {
+    if (!payload.series) {
       return (
         <ErrorView
           title="Серия не найдена"
@@ -789,10 +789,10 @@ export default async function GuestSharePage({
 
     return (
       <SeriesShareView
-        серия={payload.серия}
+        series={payload.series}
         meetings={payload.meetings ?? []}
-        открытоIssuesCount={payload.открыто_issues_count ?? 0}
-        открытоIssues={payload.открыто_issues ?? []}
+        openIssuesCount={payload.open_issues_count ?? 0}
+        openIssues={payload.open_issues ?? []}
         share={guestShare}
         youEmail={youEmail}
       />

@@ -96,7 +96,7 @@ export function buildNewUserOrganizationInviteEmail({
     "",
     `Set your password: ${acceptUrl}`,
     "",
-    "No temporary password is shared. This one-time link lets you choose your own password and открыто the workspace.",
+    "No temporary password is shared. This one-time link lets you choose your own password and open the workspace.",
   ].filter(Boolean).join("\n");
 
   const html = buildEmailHtml({
@@ -106,7 +106,7 @@ export function buildNewUserOrganizationInviteEmail({
     body: `Use this invite to set your password and join ${organizationName}.`,
     buttonLabel: "Установить пароль",
     buttonUrl: acceptUrl,
-    footer: "No temporary password is shared. The invite link is one-time use and should only be открытоed by the invited teammate.",
+    footer: "No temporary password is shared. The invite link is one-time use and should only be opened by the invited teammate.",
   });
 
   return { subject, text, html };

@@ -8,7 +8,7 @@
 
 import { sendTranscription, type TranscriptionResult } from "./shared";
 
-export const GROQ_BASE_URL = "https://api.groq.com/открытоai/v1";
+export const GROQ_BASE_URL = "https://api.groq.com/openai/v1";
 export const GROQ_DEFAULT_MODEL = "whisper-large-v3";
 
 export interface GroqTranscribeOptions {
