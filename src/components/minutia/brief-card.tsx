@@ -163,7 +163,7 @@ export function BriefCard({
               aria-hidden="true"
             />
             <span className="text-xs font-mono font-medium tracking-wider uppercase text-ink-3">
-              Brief
+              Сводка
             </span>
           </div>
           {nextMeetingDate && (
