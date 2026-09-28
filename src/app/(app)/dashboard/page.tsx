@@ -226,7 +226,7 @@ function HeroWidget({
           </>
         )}
         <span className="text-ink-4">·</span>
-        <span>{seriesCount} серий</span>
+        <span>{seriesCount} серия(й)</span>
       </div>
 
       {recentMeetings.length > 0 && (
@@ -352,7 +352,7 @@ function NextMeetingWidget({
       )}
       {nextSeries.open_issues_count > 0 && (
         <p className="text-sm text-ink-2 mb-5">
-          <span className="text-accent font-medium"><span className="font-mono">{nextSeries.open_issues_count}</span> items pending</span> from last meeting.
+          <span className="text-accent font-medium"><span className="font-mono">{nextSeries.open_issues_count}</span> поручений ожидает</span> с прошлой встречи.
         </p>
       )}
       <div className="flex items-center gap-3">
