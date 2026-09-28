@@ -484,7 +484,7 @@ function CalendarEventDetail({
           </Button>
           <Button variant="outline" asChild>
             <Link href={`/series/${event.seriesId}`}>
-              Open series
+              Открыть серию
               <ExternalLink className="size-3.5" />
             </Link>
           </Button>

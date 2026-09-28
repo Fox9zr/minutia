@@ -80,7 +80,7 @@ export function CarryoverBriefingPanel({
       {briefing && (
         <div className="mt-3">
           <div className="mb-3 flex flex-wrap gap-2">
-            <Stat label="open" value={briefing.issues_count} />
+            <Stat label="открыто" value={briefing.issues_count} />
             <Stat label="overdue" value={briefing.overdue_count} tone="danger" />
             <Stat label="no owner" value={briefing.no_owner_count} tone="warn" />
           </div>

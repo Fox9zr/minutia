@@ -358,7 +358,7 @@ function NextMeetingWidget({
       <div className="flex items-center gap-3">
         <Link href={`/series/${nextSeries.id}`} className="w-full">
           <Button variant="accent" className="w-full h-10">
-            Open series
+            Открыть серию
             <ArrowRight className="size-3.5 ml-1.5" />
           </Button>
         </Link>
@@ -542,8 +542,8 @@ function OutstandingWidget({
   const activeIssue = activeId ? issueById.get(activeId) : null;
 
   const filters = [
-    { key: "all" as const, label: "All" },
-    { key: "open" as const, label: "Открыть" },
+    { key: "all" as const, label: "Все" },
+    { key: "open" as const, label: "Открытые" },
     { key: "pending" as const, label: "В ожидании" },
     { key: "overdue" as const, label: "Просрочено" },
   ];
@@ -719,7 +719,7 @@ function OutstandingWidget({
                       {CADENCE_LABELS[series.cadence]}
                     </span>
                     <span className="ml-auto text-xs text-ink-4 tabular-nums">
-                      {seriesIssues.length} item{seriesIssues.length !== 1 ? "s" : ""}
+                      {seriesIssues.length} {seriesIssues.length % 10 === 1 && seriesIssues.length % 100 !== 11 ? "поручение" : [2,3,4].includes(seriesIssues.length % 10) ? "поручения" : "поручений"}
                     </span>
                   </div>
 
@@ -974,7 +974,7 @@ function AgeWidget({ id, widgetIndex, issues }: { id: string; widgetIndex: numbe
     <WidgetShell id={id} index={widgetIndex}>
       <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
         <h3 className="font-display text-base font-semibold text-ink">Срок открытых вопросов</h3>
-        <span className="text-[11px] text-ink-4">oldest first</span>
+        <span className="text-[11px] text-ink-4">старые сверху</span>
       </div>
       {maxAge > 0 && (
         <p className="text-xs text-ink-3 mb-4">
@@ -1019,7 +1019,7 @@ function DecisionsWidget({
   return (
     <WidgetShell id={id} index={widgetIndex}>
       <h3 className="font-display text-base font-semibold text-ink mb-4">
-        Recent decisions
+        Последние решения
       </h3>
       {recent.length === 0 ? (
         <p className="text-xs text-ink-3">Решения пока не записаны.</p>
