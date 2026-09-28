@@ -21,7 +21,7 @@ import { useDecisions } from "@/lib/hooks/use-decisions";
 import { BriefCard } from "@/components/minutia/brief-card";
 import { EmptyState } from "@/components/minutia/empty-state";
 import { IssueCard } from "@/components/minutia/issue-card";
-import { DateAnchoredХронология } from "@/components/minutia/date-anchored-timeline";
+import { DateAnchoredTimeline } from "@/components/minutia/date-anchored-timeline";
 import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
