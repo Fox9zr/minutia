@@ -6,7 +6,7 @@ import type { OwnerReminder, ReminderContext } from "./gather";
 export const MINUTIA_BRANDING = "Отправлено через Minutia";
 
 function ownerLabel(owner: OwnerReminder): string {
-  return owner.ownerName?.trim() || "Unassigned";
+  return owner.ownerName?.trim() || "Без ответственного";
 }
 
 function issueLine(issue: Issue): string {
@@ -14,7 +14,7 @@ function issueLine(issue: Issue): string {
 }
 
 function digestSubject(ctx: ReminderContext): string {
-  return `Open items in ${ctx.seriesName}`;
+  return `Открытые поручения: ${ctx.seriesName}`;
 }
 
 function totalIssues(owners: OwnerReminder[]): number {
@@ -25,12 +25,12 @@ function totalIssues(owners: OwnerReminder[]): number {
 // a flat list. Reads naturally for both the per-owner email and the full digest.
 function leadLine(owners: OwnerReminder[], ctx: ReminderContext): string {
   const n = totalIssues(owners);
-  const noun = n === 1 ? "item" : "items";
-  return `${n} open ${noun} waiting in ${ctx.seriesName}. A quick nudge keeps them moving:`;
+  const noun = n === 1 ? "поручение" : "поручений";
+  return `Ожидает ваших действий: ${n} ${noun} по серии «${ctx.seriesName}»:`;
 }
 
 function renderMarkdown(owners: OwnerReminder[], ctx: ReminderContext): string {
-  const lines = [`# Open items in ${ctx.seriesName}`, "", leadLine(owners, ctx), ""];
+  const lines = [`# Открытые поручения: ${ctx.seriesName}`, "", leadLine(owners, ctx), ""];
   for (const owner of owners) {
     lines.push(`## ${ownerLabel(owner)}`);
     for (const issue of owner.issues) lines.push(`- ${issueLine(issue)}`);
@@ -41,7 +41,7 @@ function renderMarkdown(owners: OwnerReminder[], ctx: ReminderContext): string {
 }
 
 function renderText(owners: OwnerReminder[], ctx: ReminderContext): string {
-  const lines = [`Open items in ${ctx.seriesName}`, "", leadLine(owners, ctx), ""];
+  const lines = [`Открытые поручения: ${ctx.seriesName}`, "", leadLine(owners, ctx), ""];
   for (const owner of owners) {
     lines.push(`${ownerLabel(owner)}:`);
     for (const issue of owner.issues) lines.push(`  - ${issueLine(issue)}`);
@@ -70,7 +70,7 @@ function renderHtml(owners: OwnerReminder[], ctx: ReminderContext): string {
 
   return renderEmailLayout({
     preheader: leadLine(owners, ctx),
-    heading: `Open items in ${ctx.seriesName}`,
+    heading: `Открытые поручения: ${ctx.seriesName}`,
     intro: leadLine(owners, ctx),
     bodyHtml: sections,
     cta: { label: "Открыть в Minutia", href: ctx.appUrl },
@@ -90,7 +90,7 @@ export function formatReminderDigest(owners: OwnerReminder[], ctx: ReminderConte
 
 export function formatOwnerEmail(owner: OwnerReminder, ctx: ReminderContext) {
   return {
-    subject: `${ownerLabel(owner)}: open items in ${ctx.seriesName}`,
+    subject: `${ownerLabel(owner)}: открытые поручения — ${ctx.seriesName}`,
     text: renderText([owner], ctx),
     html: renderHtml([owner], ctx),
   };
@@ -100,7 +100,7 @@ export function buildSlackMessage(owners: OwnerReminder[], ctx: ReminderContext)
   const blocks: unknown[] = [
     {
       type: "section",
-      text: { type: "mrkdwn", text: `*Open items in ${ctx.seriesName}*` },
+      text: { type: "mrkdwn", text: `*Открытые поручения: ${ctx.seriesName}*` },
     },
   ];
 
@@ -118,7 +118,7 @@ export function buildSlackMessage(owners: OwnerReminder[], ctx: ReminderContext)
   });
 
   return {
-    text: `Open items in ${ctx.seriesName} - ${MINUTIA_BRANDING} - ${ctx.appUrl}`,
+    text: `Открытые поручения: ${ctx.seriesName} — ${MINUTIA_BRANDING} — ${ctx.appUrl}`,
     blocks,
   };
 }

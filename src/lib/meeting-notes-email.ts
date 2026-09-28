@@ -120,7 +120,7 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
     appUrl,
   } = input;
   const meetingUrl = new URL(`/series/${meeting.series_id}/meetings/${meeting.id}`, appUrl).toString();
-  const subject = `${seriesName}: ${meeting.title} notes`;
+  const subject = `${seriesName}: протокол — ${meeting.title}`;
   const allIssueCount = raisedIssues.length + resolvedIssues.length + carriedIssues.length;
 
   const chips = `
@@ -137,18 +137,18 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
     ${section("Поднятые вопросы", raisedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(raisedIssues, appUrl)}</table>`)}
     ${section("Решено на этой встрече", resolvedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(resolvedIssues, appUrl)}</table>`)}
     ${section("Перенесено", carriedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(carriedIssues, appUrl)}</table>`)}
-    ${section("Decisions", decisions.length, decisionRows(decisions))}
-    ${section("Notes", 1, notesBlock(meeting.notes_markdown ?? ""))}
+    ${section("Решения", decisions.length, decisionRows(decisions))}
+    ${section("Заметки", 1, notesBlock(meeting.notes_markdown ?? ""))}
   `;
 
   const html = renderEmailLayout({
-    preheader: `${allIssueCount} tracked items, ${decisions.length} decisions, and meeting notes from Minutia.`,
+    preheader: `${allIssueCount} поручений, ${decisions.length} решений и заметки встречи — из Minutia.`,
     heading: meeting.title,
     intro: `${seriesName} · ${formatDate(meeting.date)}`,
     bodyHtml,
     cta: { label: "Открыть встречу в Minutia", href: meetingUrl },
     footerNote:
-      "Issue links open in Minutia. If you are not signed in, you will be asked to sign in first. If you do not have access, request an invite from the login screen.",
+      "Ссылки на поручения открываются в Minutia. Если вы не вошли в систему, вам предложат войти. Если нет доступа — запросите приглашение на экране входа.",
     footerUrl: appUrl,
   });
 
@@ -156,22 +156,22 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
     `${meeting.title} - ${seriesName}`,
     formatDate(meeting.date),
     "",
-    `Items raised (${raisedIssues.length})`,
+    `Поднято вопросов (${raisedIssues.length})`,
     ...raisedIssues.map((issue) => `- ${formatIssueKey(issue)} ${issue.title}: ${issueUrl(appUrl, issue.id)}`),
     "",
-    `Resolved this meeting (${resolvedIssues.length})`,
+    `Решено на встрече (${resolvedIssues.length})`,
     ...resolvedIssues.map((issue) => `- ${formatIssueKey(issue)} ${issue.title}: ${issueUrl(appUrl, issue.id)}`),
     "",
-    `Carried forward (${carriedIssues.length})`,
+    `Перенесено (${carriedIssues.length})`,
     ...carriedIssues.map((issue) => `- ${formatIssueKey(issue)} ${issue.title}: ${issueUrl(appUrl, issue.id)}`),
     "",
-    `Decisions (${decisions.length})`,
+    `Решения (${decisions.length})`,
     ...decisions.map((decision) => `- ${decision.title}`),
     "",
-    "Notes",
+    "Заметки",
     meeting.notes_markdown || "Заметки в свободной форме не зафиксированы.",
     "",
-    `Open meeting: ${meetingUrl}`,
+    `Открыть встречу: ${meetingUrl}`,
   ];
 
   return { subject, html, text: textLines.join("\n") };
