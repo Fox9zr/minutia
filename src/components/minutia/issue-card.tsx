@@ -97,7 +97,7 @@ export function IssueCard({
               overdue ? "text-accent" : "text-ink-3"
             )}
           >
-            {overdue && "Overdue: "}
+            {overdue && "Просрочено: "}
             {formatShortDate(issue.due_date)}
           </span>
         )}

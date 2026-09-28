@@ -102,7 +102,7 @@ export function MeetingTimelineItem({
           <div className="flex items-center gap-3 text-xs text-ink-3">
             <span>{itemsRaised} raised</span>
             <span className="text-ink-4">/</span>
-            <span>{itemsResolved} resolved</span>
+            <span>{itemsResolved} решено</span>
           </div>
         )}
 

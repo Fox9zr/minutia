@@ -15,8 +15,8 @@ const priorityColorMap: Record<Priority, string> = {
 };
 
 const priorityLabelMap: Record<Priority, string | null> = {
-  critical: "CRITICAL",
-  high: "HIGH",
+  critical: "КРИТИЧ.",
+  high: "ВЫСОКИЙ",
   medium: null,
   low: null,
 };

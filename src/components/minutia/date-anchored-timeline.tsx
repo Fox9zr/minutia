@@ -125,11 +125,11 @@ function MeetingSection({
           {/* Collapsed preview */}
           {!expanded && issueCount > 0 && (
             <div className="flex items-center gap-3 mt-1.5 text-xs text-ink-3">
-              <span>{issueCount} items</span>
+              <span>{issueCount} поручений</span>
               {resolvedCount > 0 && (
                 <>
                   <span className="text-ink-4">·</span>
-                  <span className="text-success">{resolvedCount} resolved</span>
+                  <span className="text-success">{resolvedCount} решено</span>
                 </>
               )}
               {topIssue && (
@@ -203,7 +203,7 @@ function MeetingSection({
                       onClick={() => setShowAllIssues(true)}
                       className="mt-1.5 text-xs text-accent hover:underline"
                     >
-                      Show all {meeting.issues.length} items
+                      Показать все {meeting.issues.length} поручений
                     </button>
                   )}
                 </div>
@@ -233,7 +233,7 @@ function MeetingSection({
                 href={`/series/${seriesId}/meetings/${meeting.id}`}
                 className="inline-flex items-center gap-1 text-xs text-accent hover:underline"
               >
-                Open meeting details
+                Открыть встречу
                 <ChevronRight className="size-3" />
               </Link>
             </div>
@@ -342,7 +342,7 @@ export function DateAnchoredTimeline({
                   <div className="size-2 rounded-full bg-accent shrink-0 ml-[11px]" />
                   <div className="h-px flex-1 bg-accent/30" />
                   <span className="text-[10px] font-mono uppercase tracking-wider text-accent font-bold shrink-0 pr-1">
-                    Today
+                    Сегодня
                   </span>
                 </div>
               )}

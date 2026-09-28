@@ -269,7 +269,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                 <span className="hidden sm:inline">
                   {liveMeeting ? "Присоединиться к встрече" : "Начать встречу"}
                 </span>
-                <span className="sm:hidden">{liveMeeting ? "Join" : "Start"}</span>
+                <span className="sm:hidden">{liveMeeting ? "К встрече" : "Начать"}</span>
               </Button>
             </div>
           </div>
@@ -383,7 +383,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
         {/* Meeting history timeline */}
         <section className="mb-8">
           <h2 className="font-display text-lg font-medium text-ink mb-4">
-            Timeline
+            Хронология встреч
           </h2>
 
           {sortedMeetings.length === 0 && (

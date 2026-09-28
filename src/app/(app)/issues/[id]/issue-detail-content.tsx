@@ -82,7 +82,7 @@ function formatISODate(date: Date | string): string {
 function sourceBadgeLabel(source: string): string {
   const map: Record<string, string> = {
     manual: "Вручную",
-    transcript: "Transcript",
+    transcript: "Транскрибация",
     email: "Email",
     api: "API",
     ai_suggested: "Предложено ИИ",
@@ -532,7 +532,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                       className={cn("size-2 rounded-full", priorityDotColor[p])}
                       aria-hidden="true"
                     />
-                    {p.charAt(0).toUpperCase() + p.slice(1)}
+                    {{ low: "Низкий", medium: "Средний", high: "Высокий", critical: "Критический" }[p] ?? p}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -565,14 +565,14 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             <div className="flex items-center gap-2">
               <span className="text-ink-3 w-20 shrink-0">Длительность</span>
               <span className="text-xs font-mono text-ink-2">
-                {durationDays} day{durationDays !== 1 ? "s" : ""}
+                {durationDays} дн.
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
             <span className="text-ink-3 w-20 shrink-0">С изменениями</span>
             <span className="text-xs font-mono text-ink-2">
-              {meetingsTouched} meeting{meetingsTouched !== 1 ? "s" : ""}
+              {meetingsTouched} встреч с изменениями
             </span>
           </div>
         </div>
@@ -580,7 +580,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
         {/* Description (inline editable) */}
         <div className="mb-8">
           <h2 className="text-xs font-mono font-medium text-ink-3 uppercase tracking-wider mb-2">
-            Description
+            Описание
           </h2>
           <InlineEditText
             value={issue.description ?? ""}
@@ -626,7 +626,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
               className="text-sm"
               onClick={() => setShowUpdateForm(true)}
             >
-              Add update
+              Добавить комментарий
               <kbd className="ml-2 text-[10px] text-ink-4 bg-paper-2 border border-rule rounded px-1 py-0.5">
                 C
               </kbd>
@@ -690,7 +690,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             onClick={handleDelete}
           >
             <Trash2 className="size-3.5" />
-            Delete issue
+            Удалить поручение
           </Button>
         </div>
       </div>
@@ -794,7 +794,7 @@ function TimelineUpdateNode({
         )}
         {!hasStatusChange && !update.previous_status && (
           <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded text-ink bg-paper-2">
-            Raised
+            Создано
           </span>
         )}
       </div>

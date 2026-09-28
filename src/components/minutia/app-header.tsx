@@ -22,13 +22,13 @@ function resolveTitle(pathname: string): string {
   if (pageTitles[pathname]) return pageTitles[pathname];
 
   // Series detail
-  if (/^\/series\/[^/]+$/.test(pathname)) return "Series";
+  if (/^\/series\/[^/]+$/.test(pathname)) return "Серии встреч";
 
   // Meeting detail
   if (/^\/series\/[^/]+\/meetings\/[^/]+$/.test(pathname)) return "Meeting";
 
   // Issue detail
-  if (/^\/issues\/[^/]+$/.test(pathname)) return "Issue";
+  if (/^\/issues\/[^/]+$/.test(pathname)) return "Поручение";
 
   // Fallback: try prefix match
   const prefix = Object.keys(pageTitles).find(
