@@ -16,14 +16,14 @@ function isEmailUnconfigured(message: string): boolean {
 
 async function ensureSeriesShareToken(
   admin: ReturnType<typeof createServiceRoleClient>,
-  seriesId: string,
+  серияId: string,
   userId: string
 ): Promise<string> {
   const { data: existing } = await admin
     .from("guest_shares")
     .select("token, expires_at")
-    .eq("resource_type", "series")
-    .eq("resource_id", seriesId)
+    .eq("resource_type", "серия")
+    .eq("resource_id", серияId)
     .eq("created_by", userId)
     .order("created_at", { ascending: false });
 
@@ -36,8 +36,8 @@ async function ensureSeriesShareToken(
   const token = crypto.randomUUID();
   const { error } = await admin.from("guest_shares").insert({
     token,
-    resource_type: "series",
-    resource_id: seriesId,
+    resource_type: "серия",
+    resource_id: серияId,
     permissions: "view",
     created_by: userId,
     expires_at: null,
@@ -48,9 +48,9 @@ async function ensureSeriesShareToken(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ seriesId: string }> }
+  { params }: { params: Promise<{ серияId: string }> }
 ) {
-  const { seriesId } = await params;
+  const { серияId } = await params;
   const dryRun = new URL(request.url).searchParams.get("dry") === "1";
 
   const supabase = await createClient();
@@ -62,27 +62,27 @@ export async function POST(
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
-  const { data: series } = await supabase
-    .from("meeting_series")
+  const { data: серия } = await supabase
+    .from("meeting_серия")
     .select("id, name, cadence, owner_id, default_attendees")
-    .eq("id", seriesId)
+    .eq("id", серияId)
     .single();
 
-  if (!series) {
+  if (!серия) {
     return NextResponse.json({ error: "Серия не найдена" }, { status: 404 });
   }
 
   const admin = createServiceRoleClient();
 
   const { data: membership } = await admin
-    .from("series_participants")
+    .from("серия_participants")
     .select("role")
-    .eq("series_id", seriesId)
+    .eq("серия_id", серияId)
     .eq("user_id", user.id)
     .maybeSingle();
 
   const canManage =
-    series.owner_id === user.id ||
+    серия.owner_id === user.id ||
     membership?.role === "owner" ||
     membership?.role === "facilitator";
 
@@ -93,8 +93,8 @@ export async function POST(
     );
   }
 
-  const recipients = extractEmails(series.default_attendees ?? []);
-  const token = await ensureSeriesShareToken(admin, seriesId, user.id);
+  const recipients = extractEmails(серия.default_attendees ?? []);
+  const token = await ensureSeriesShareToken(admin, серияId, user.id);
   const guestUrl = absoluteAppUrl(request.url, `/share/${token}`);
 
   if (dryRun) {
@@ -105,17 +105,17 @@ export async function POST(
     return NextResponse.json({ error: "no_recipient_emails", guestUrl }, { status: 422 });
   }
 
-  const { data: seriesIssues } = await admin
+  const { data: серияIssues } = await admin
     .from("issues")
     .select("*")
-    .eq("series_id", seriesId);
+    .eq("серия_id", серияId);
 
-  const openIssues = ((seriesIssues ?? []) as Issue[]).filter(
+  const открытоIssues = ((серияIssues ?? []) as Issue[]).filter(
     (issue) => issue.status !== "resolved" && issue.status !== "dropped"
   );
   const ownerIds = [
     ...new Set(
-      openIssues.map((issue) => issue.owner_user_id).filter((v): v is string => !!v)
+      открытоIssues.map((issue) => issue.owner_user_id).filter((v): v is string => !!v)
     ),
   ];
 
@@ -130,7 +130,7 @@ export async function POST(
     }
   }
 
-  const briefIssues: BriefIssue[] = openIssues.map((issue) => ({
+  const briefIssues: BriefIssue[] = открытоIssues.map((issue) => ({
     ...issue,
     ownerEmail: issue.owner_user_id ? emailByOwnerId[issue.owner_user_id] ?? null : null,
   }));
@@ -138,16 +138,16 @@ export async function POST(
   const { data: nextMeetingRow } = await admin
     .from("meetings")
     .select("title, date")
-    .eq("series_id", seriesId)
+    .eq("серия_id", серияId)
     .in("status", ["upcoming", "live"])
     .order("date", { ascending: true })
     .limit(1)
     .maybeSingle();
 
   const briefs = buildSeriesBrief({
-    series: { name: series.name, cadence: series.cadence },
+    серия: { name: серия.name, cadence: серия.cadence },
     nextMeeting: nextMeetingRow ?? null,
-    openIssues: briefIssues,
+    открытоIssues: briefIssues,
     recipients,
     guestUrl,
     instanceUrl: absoluteAppUrl(request.url, "/"),

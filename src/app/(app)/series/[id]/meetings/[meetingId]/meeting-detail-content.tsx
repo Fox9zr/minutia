@@ -18,7 +18,7 @@ import {
   useUpdateMeetingTranscript,
   useUpdateSpeakerMap,
 } from "@/lib/hooks/use-meetings";
-import { useSeriesDetail, useSeriesParticipantRole } from "@/lib/hooks/use-series";
+import { useSeriesDetail, useSeriesParticipantRole } from "@/lib/hooks/use-серия";
 import { useProfile } from "@/lib/hooks/use-profile";
 import { CompanionInstallPrompt } from "@/components/minutia/companion-install-prompt";
 import { buildCompanionRecordUrl, isMacPlatform } from "@/lib/companion-links";
@@ -59,7 +59,7 @@ import type { IssueCategory, IssueStatus, Issue, Decision, Meeting, MeetingAiSug
 import Link from "next/link";
 
 interface MeetingDetailContentProps {
-  seriesId: string;
+  серияId: string;
   meetingId: string;
 }
 
@@ -78,7 +78,7 @@ type AiNotesPayload = {
   risks: string[];
   blockers: string[];
   follow_ups: string[];
-  open_questions: string[];
+  открыто_questions: string[];
 };
 
 function suggestionCategoryLabel(category: IssueCategory) {
@@ -113,7 +113,7 @@ const emptyAiNotes: AiNotesPayload = {
   risks: [],
   blockers: [],
   follow_ups: [],
-  open_questions: [],
+  открыто_questions: [],
 };
 
 function parseAiNotesMarkdown(markdown: string): Partial<AiNotesPayload> {
@@ -125,7 +125,7 @@ function parseAiNotesMarkdown(markdown: string): Partial<AiNotesPayload> {
     blockers: "blockers",
     "follow-ups": "follow_ups",
     "follow ups": "follow_ups",
-    "open questions": "open_questions",
+    "открыто questions": "открыто_questions",
   };
   const parsed: Partial<AiNotesPayload> = {};
   let currentKey: keyof AiNotesPayload | null = null;
@@ -155,7 +155,7 @@ function normalizeAiNotesPreview(preview: AiNotesPreview): AiNotesPayload {
     risks: source.risks ?? [],
     blockers: source.blockers ?? [],
     follow_ups: source.follow_ups ?? [],
-    open_questions: source.open_questions ?? [],
+    открыто_questions: source.открыто_questions ?? [],
   };
 }
 
@@ -292,7 +292,7 @@ function CarriedIssueCard({
       r: "resolved",
       p: "in_progress",
       x: "dropped",
-      o: "open",
+      o: "открыто",
     };
     const newStatus = keyMap[e.key.toLowerCase()];
     if (newStatus && newStatus !== issue.status) {
@@ -584,28 +584,28 @@ function meetingDurationMinutes(meeting: Meeting): number | null {
 // ---------------------------------------------------------------------------
 
 export function MeetingDetailContent({
-  seriesId,
+  серияId,
   meetingId,
 }: MeetingDetailContentProps) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: meeting, isLoading: meetingLoading } = useMeeting(meetingId);
-  const { data: series } = useSeriesDetail(seriesId);
-  const { data: participantRole } = useSeriesParticipantRole(seriesId);
+  const { data: серия } = useSeriesDetail(серияId);
+  const { data: participantRole } = useSeriesParticipantRole(серияId);
   const { data: profile } = useProfile();
-  const { data: seriesIssues } = useIssues(seriesId);
+  const { data: серияIssues } = useIssues(серияId);
 
   // MIN-121: resolve an OIL number to its issue link so a context badge
   // ("Обновляет OIL-45", "Дубликат OIL-67") can deep-link to the item.
   const issueHrefByNumber = React.useMemo(() => {
     const map = new Map<number, string>();
-    for (const issue of seriesIssues ?? []) {
+    for (const issue of серияIssues ?? []) {
       map.set(issue.issue_number, `/issues/${issue.id}`);
     }
     return map;
-  }, [seriesIssues]);
+  }, [серияIssues]);
 
-  useMeetingRealtime(meetingId, seriesId);
+  useMeetingRealtime(meetingId, серияId);
   const presenceUsers = useMeetingPresence(meeting?.status === "live" ? meetingId : "");
   const confirm = useConfirm();
   const endMeeting = useEndMeeting();
@@ -616,7 +616,7 @@ export function MeetingDetailContent({
   const updateIssue = useUpdateIssue();
   const assignIssue = useAssignIssue();
 
-  const { isOnline, pendingCount, syncStatus, refreshCount } = useOfflineSync();
+  const { isOnline, в ожиданииCount, syncStatus, refreshCount } = useOfflineSync();
   const { data: aiAccess } = useAiAccess();
   const hasAccess = aiAccess?.hasAccess === true;
 
@@ -649,7 +649,7 @@ export function MeetingDetailContent({
   // Pending suggestions are the ones awaiting review; the count drives the
   // "Проверить предложения ИИ (N)" badge so the auto-extracted items are visible
   // without the facilitator having to guess they exist.
-  const pendingSuggestionCount = aiSuggestions.filter((s) => s.status === "pending").length;
+  const в ожиданииSuggestionCount = aiSuggestions.filter((s) => s.status === "в ожидании").length;
 
   // Load already-extracted suggestions (e.g. the ones the transcription
   // auto-generated) instead of re-running the model. This is what makes the
@@ -699,7 +699,7 @@ export function MeetingDetailContent({
     }
   }, [meetingId, loadSuggestions, recorder.waitForFastLane]);
 
-  // On open, surface suggestions already extracted for this meeting (typically
+  // On открыто, surface suggestions already extracted for this meeting (typically
   // auto-generated when its recording was transcribed) so the facilitator sees
   // the action-item count without having to re-run anything. Once per mount.
   // Must live above the loading early-return to keep hook order stable.
@@ -823,26 +823,26 @@ export function MeetingDetailContent({
   const meetingDecisions = meeting.decisions ?? [];
   const raisedInThisMeeting = meetingIssues;
 
-  const allCarriedIssues = (seriesIssues ?? []).filter(
+  const allCarriedIssues = (серияIssues ?? []).filter(
     (issue) => issue.raised_in_meeting_id !== meetingId
   );
   const carriedIssues = allCarriedIssues.filter(
     (issue) => issue.status !== "resolved" && issue.status !== "dropped"
   );
   // Issues resolved/dropped during this meeting (both carried AND raised here)
-  const allSeriesIssues = seriesIssues ?? [];
+  const allSeriesIssues = серияIssues ?? [];
   const doneThisMeeting = allSeriesIssues.filter(
     (issue) =>
       (issue.status === "resolved" || issue.status === "dropped") &&
       issue.resolved_in_meeting_id === meetingId
   );
 
-  const meetingSequence = series?.meetings
-    ? [...series.meetings]
+  const meetingSequence = серия?.meetings
+    ? [...серия.meetings]
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .findIndex((m) => m.id === meetingId) + 1
     : null;
-  const liveMeetingInSeries = series?.meetings?.find((m) => m.status === "live");
+  const liveMeetingInSeries = серия?.meetings?.find((m) => m.status === "live");
   const canManageMeeting =
     participantRole === "owner" || participantRole === "facilitator";
 
@@ -880,7 +880,7 @@ export function MeetingDetailContent({
           await createDecision.mutateAsync({
             title: text,
             meeting_id: meetingId,
-            series_id: seriesId,
+            серия_id: серияId,
           });
         } else {
           await createIssue.mutateAsync({
@@ -888,7 +888,7 @@ export function MeetingDetailContent({
             category,
             priority: "medium",
             meeting_id: meetingId,
-            series_id: seriesId,
+            серия_id: серияId,
           });
         }
       } catch {
@@ -900,7 +900,7 @@ export function MeetingDetailContent({
           category: category === "decision" ? undefined : category,
           priority: category === "decision" ? undefined : "medium",
           meeting_id: meetingId,
-          series_id: seriesId,
+          серия_id: серияId,
           created_at: new Date().toISOString(),
         });
         await refreshCount();
@@ -914,7 +914,7 @@ export function MeetingDetailContent({
         category: category === "decision" ? undefined : category,
         priority: category === "decision" ? undefined : "medium",
         meeting_id: meetingId,
-        series_id: seriesId,
+        серия_id: серияId,
         created_at: new Date().toISOString(),
       });
       await refreshCount();
@@ -928,7 +928,7 @@ export function MeetingDetailContent({
     if (!issue) return;
     updateIssueStatus.mutate({
       issueId,
-      seriesId,
+      серияId,
       oldStatus: issue.status,
       newStatus,
       meetingId,
@@ -975,10 +975,10 @@ export function MeetingDetailContent({
   }
 
   async function handleStartMeeting() {
-    const liveMeeting = await startOrJoinMeeting.mutateAsync(seriesId);
+    const liveMeeting = await startOrJoinMeeting.mutateAsync(серияId);
     nudgeCompanionRecord(liveMeeting.id);
     if (liveMeeting.id !== meetingId) {
-      router.push(`/series/${seriesId}/meetings/${liveMeeting.id}`);
+      router.push(`/серия/${серияId}/meetings/${liveMeeting.id}`);
     }
   }
 
@@ -1076,7 +1076,7 @@ export function MeetingDetailContent({
     await Promise.all([
       queryClient.invalidateQueries({ queryKey: meetingKeys.detail(meetingId) }),
       queryClient.invalidateQueries({ queryKey: issueKeys.all }),
-      queryClient.invalidateQueries({ queryKey: issueKeys.list(seriesId) }),
+      queryClient.invalidateQueries({ queryKey: issueKeys.list(серияId) }),
       queryClient.invalidateQueries({ queryKey: decisionKeys.all }),
     ]);
   }
@@ -1164,7 +1164,7 @@ export function MeetingDetailContent({
   if (meeting.status === "live") {
     return (
       <div className="min-h-full bg-paper">
-        <SyncIndicator status={syncStatus} pendingCount={pendingCount} />
+        <SyncIndicator status={syncStatus} в ожиданииCount={в ожиданииCount} />
 
         {/* Header bar */}
         <div className="border-b border-rule">
@@ -1176,7 +1176,7 @@ export function MeetingDetailContent({
               </span>
               <div>
                 <h1 className="font-display text-base font-semibold text-ink leading-tight">
-                  {series?.name}
+                  {серия?.name}
                   {meetingSequence && (
                     <span className="text-ink-3 font-normal"> - M-{meetingSequence}</span>
                   )}
@@ -1340,7 +1340,7 @@ export function MeetingDetailContent({
               <div aria-live="polite" aria-relevant="additions">
                 <InlineTaskList
                   issues={raisedInThisMeeting}
-                  attendees={meeting.attendees ?? series?.default_attendees ?? []}
+                  attendees={meeting.attendees ?? серия?.default_attendees ?? []}
                   onStatusChange={handleStatusChange}
                   onTitleChange={handleTitleChange}
                   onAssigneeChange={handleAssigneeChange}
@@ -1409,8 +1409,8 @@ export function MeetingDetailContent({
                     {syncStatus === "synced" && "Synced"}
                     {syncStatus === "syncing" && "Syncing..."}
                     {syncStatus === "offline" && (
-                      pendingCount > 0
-                        ? `${pendingCount} item${pendingCount === 1 ? "" : "s"} buffered`
+                      в ожиданииCount > 0
+                        ? `${в ожиданииCount} item${в ожиданииCount === 1 ? "" : "s"} buffered`
                         : "Offline"
                     )}
                   </span>
@@ -1430,13 +1430,13 @@ export function MeetingDetailContent({
   // UPCOMING MODE
   // =========================================================================
   if (meeting.status === "upcoming") {
-    const openIssues = (seriesIssues ?? []).filter(
+    const открытоIssues = (серияIssues ?? []).filter(
       (issue) => issue.status !== "resolved" && issue.status !== "dropped"
     );
     const agendaDrafts = raisedInThisMeeting.filter(
       (issue) => issue.source === "calendar_auto_draft"
     );
-    const briefIssues = openIssues.filter(
+    const briefIssues = открытоIssues.filter(
       (issue) => issue.source !== "calendar_auto_draft"
     );
 
@@ -1445,14 +1445,14 @@ export function MeetingDetailContent({
         <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-6">
             <Link
-              href={`/series/${seriesId}`}
+              href={`/серия/${серияId}`}
               className="text-ink-3 hover:text-ink transition-colors"
             >
               <ArrowLeft className="size-5" />
             </Link>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className="text-sm text-ink-2">{series?.name}</span>
+                <span className="text-sm text-ink-2">{серия?.name}</span>
                 {meetingSequence && (
                   <span className="text-xs font-mono text-ink-4">
                     M-{meetingSequence}
@@ -1477,7 +1477,7 @@ export function MeetingDetailContent({
               <CalendarDraftNotice count={agendaDrafts.length} />
               <InlineTaskList
                 issues={agendaDrafts}
-                attendees={meeting.attendees ?? series?.default_attendees ?? []}
+                attendees={meeting.attendees ?? серия?.default_attendees ?? []}
                 onStatusChange={handleStatusChange}
                 onTitleChange={handleTitleChange}
                 onAssigneeChange={handleAssigneeChange}
@@ -1487,17 +1487,17 @@ export function MeetingDetailContent({
 
           <div className="mb-6">
             <BriefCard
-              seriesId={seriesId}
-              seriesName={series?.name ?? ""}
+              серияId={серияId}
+              серияName={серия?.name ?? ""}
               nextMeetingDate={new Date(meeting.date)}
-              pendingIssues={briefIssues.slice(0, 10)}
+              в ожиданииIssues={briefIssues.slice(0, 10)}
             />
           </div>
 
           <div className="mb-8">
             {hasAccess ? (
-              <CarryoverBriefingPanel meetingId={meetingId} issueCount={openIssues.length} />
-            ) : openIssues.length > 0 ? (
+              <CarryoverBriefingPanel meetingId={meetingId} issueCount={открытоIssues.length} />
+            ) : открытоIssues.length > 0 ? (
               <AiUnavailableNotice />
             ) : null}
           </div>
@@ -1544,26 +1544,26 @@ export function MeetingDetailContent({
   return (
     <div className="min-h-full bg-paper">
       <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* Top row: back to series, centered breadcrumb, record actions */}
+        {/* Top row: back to серия, centered breadcrumb, record actions */}
         <div className="mb-8 flex items-center gap-3">
           <Link
-            href={`/series/${seriesId}`}
+            href={`/серия/${серияId}`}
             className="text-ink-3 transition-colors hover:text-ink"
             aria-label="Назад к серии"
           >
             <ArrowLeft className="size-5" />
           </Link>
           <p className="flex-1 truncate text-center font-mono text-[11px] uppercase tracking-[0.18em] text-ink-4">
-            {series?.name}
-            {series?.name && " / "}
+            {серия?.name}
+            {серия?.name && " / "}
             {formatShortDate(meeting.date)}
           </p>
           <div className="flex items-center gap-2">
             <SendMeetingNotesButton
               meetingId={meetingId}
-              attendees={meeting.attendees ?? series?.default_attendees ?? []}
+              attendees={meeting.attendees ?? серия?.default_attendees ?? []}
             />
-            {canManageMeeting && <RemindOwnersButton seriesId={seriesId} />}
+            {canManageMeeting && <RemindOwnersButton серияId={серияId} />}
             <ShareButton resource_type="meeting" resource_id={meetingId} />
           </div>
         </div>
@@ -1636,7 +1636,7 @@ export function MeetingDetailContent({
               <p className="mt-1 text-xs text-ink-3">
                 {transcribing
                   ? "Transcribing the recording and extracting action items…"
-                  : "AI extracts suggested issues and decisions from the notes and transcript, deduped against this series. Approve what should become durable work."}
+                  : "AI extracts suggested issues and decisions from the notes and transcript, deduped against this серия. Approve what should become durable work."}
               </p>
             </div>
             <Button
@@ -1653,9 +1653,9 @@ export function MeetingDetailContent({
                 <ListChecks className="size-3.5" />
               )}
               Review AI suggestions
-              {pendingSuggestionCount > 0 && (
+              {в ожиданииSuggestionCount > 0 && (
                 <span className="ml-1 rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-white">
-                  {pendingSuggestionCount}
+                  {в ожиданииSuggestionCount}
                 </span>
               )}
             </Button>
@@ -1720,7 +1720,7 @@ export function MeetingDetailContent({
               {aiSuggestions.length > 0 && (
                 <div className="divide-y divide-rule">
                   {aiSuggestions.map((suggestion, i) => {
-                    const isReviewed = suggestion.status !== "pending";
+                    const isReviewed = suggestion.status !== "в ожидании";
                     const relatedHref =
                       suggestion.related_issue_number != null
                         ? issueHrefByNumber.get(suggestion.related_issue_number) ?? null
@@ -1803,12 +1803,12 @@ export function MeetingDetailContent({
                                 ? "Применено к связанному элементу."
                                 : "Принято в работу.")}
                             {suggestion.status === "rejected" && "Dismissed."}
-                            {suggestion.status === "pending" &&
+                            {suggestion.status === "в ожидании" &&
                               (suggestion.type === "duplicate_warning"
                                 ? "Проверьте, чтобы отклонить, или откройте существующий элемент."
                                 : "Ожидает проверки.")}
                           </p>
-                          {suggestion.status === "pending" && (
+                          {suggestion.status === "в ожидании" && (
                             <div className="flex items-center gap-2">
                               <Button
                                 type="button"
@@ -1855,7 +1855,7 @@ export function MeetingDetailContent({
               <LogGroupLabel label="Поднятые вопросы" count={raisedInThisMeeting.length} />
               <InlineTaskList
                 issues={raisedInThisMeeting}
-                attendees={meeting.attendees ?? series?.default_attendees ?? []}
+                attendees={meeting.attendees ?? серия?.default_attendees ?? []}
                 onStatusChange={handleStatusChange}
                 onTitleChange={handleTitleChange}
                 onAssigneeChange={handleAssigneeChange}
@@ -1868,7 +1868,7 @@ export function MeetingDetailContent({
                 <LogGroupLabel label="Решено на этой встрече" count={doneThisMeeting.length} />
                 <InlineTaskList
                   issues={doneThisMeeting}
-                  attendees={meeting.attendees ?? series?.default_attendees ?? []}
+                  attendees={meeting.attendees ?? серия?.default_attendees ?? []}
                   onStatusChange={handleStatusChange}
                   onTitleChange={handleTitleChange}
                   onAssigneeChange={handleAssigneeChange}
@@ -1935,7 +1935,7 @@ export function MeetingDetailContent({
         <section className="mt-10">
           <button
             type="button"
-            onClick={() => setTranscriptOpen((open) => !open)}
+            onClick={() => setTranscriptOpen((открыто) => !открыто)}
             className="flex w-full items-baseline gap-3 text-left"
             aria-expanded={transcriptOpen}
           >
@@ -2093,7 +2093,7 @@ export function MeetingDetailContent({
                     />
                     <AiNotesSection
                       title="Открытые вопросы"
-                      items={structuredAiPreview.open_questions}
+                      items={structuredAiPreview.открыто_questions}
                       icon={HelpCircle}
                     />
                   </div>

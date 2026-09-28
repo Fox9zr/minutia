@@ -51,7 +51,7 @@ type OrgAdminData = {
     id: string;
     email: string;
     role: "admin" | "member";
-    status: "pending" | "accepted" | "revoked";
+    status: "в ожидании" | "accepted" | "revoked";
   }[];
 };
 
@@ -98,7 +98,7 @@ export function WorkspaceMembers() {
   const [inviteMessage, setInviteMessage] = useState("");
   const [inviteLink, setInviteLink] = useState("");
   const [linkCopied, setLinkCopied] = useState(false);
-  const [pendingInvite, setPendingInvite] = useState(false);
+  const [в ожиданииInvite, setPendingInvite] = useState(false);
   const [memberActionId, setMemberActionId] = useState<string | null>(null);
   const [memberMessage, setMemberMessage] = useState("");
   const [memberMessageState, setMemberMessageState] = useState<"success" | "error">("success");
@@ -311,7 +311,7 @@ export function WorkspaceMembers() {
             </Badge>
             <Badge variant="outline" className="gap-1.5">
               <Mail className="size-3" />
-              {orgAdmin.invitations.filter((invite) => invite.status === "pending").length} pending
+              {orgAdmin.invitations.filter((invite) => invite.status === "в ожидании").length} в ожидании
             </Badge>
           </div>
         </div>
@@ -405,7 +405,7 @@ export function WorkspaceMembers() {
               </Button>
             ) : upsellCta ? (
               <Button asChild size="sm" className="shrink-0">
-                <a href={upsellCta.href} target="_blank" rel="noopener noreferrer">
+                <a href={upsellCta.href} target="_blank" rel="noоткрытоer noreferrer">
                   <Sparkles className="size-3.5" />
                   {upsellCta.label}
                 </a>
@@ -486,7 +486,7 @@ export function WorkspaceMembers() {
           </div>
           <div className="divide-y divide-rule rounded-lg border border-rule">
             {orgAdmin.invitations
-              .filter((invite) => invite.status === "pending")
+              .filter((invite) => invite.status === "в ожидании")
               .map((invite) => (
                 <div key={invite.id} className="grid gap-3 p-3 text-sm sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center">
                   <div className="min-w-0">
@@ -508,14 +508,14 @@ export function WorkspaceMembers() {
                   </Button>
                 </div>
               ))}
-            {orgAdmin.invitations.filter((invite) => invite.status === "pending").length === 0 && (
+            {orgAdmin.invitations.filter((invite) => invite.status === "в ожидании").length === 0 && (
               <div className="p-3 text-sm text-ink-3">Нет приглашений на рассмотрении.</div>
             )}
           </div>
         </section>
       </CardContent>
 
-      <Dialog open={pendingInvite} onOpenChange={(open) => { if (!open) setPendingInvite(false); }}>
+      <Dialog открыто={в ожиданииInvite} onOpenChange={(открыто) => { if (!открыто) setPendingInvite(false); }}>
         <DialogContent showCloseButton={false}>
           <DialogHeader>
             <DialogTitle>Добавить лицензию?</DialogTitle>

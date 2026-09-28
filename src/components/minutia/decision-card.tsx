@@ -15,7 +15,7 @@ interface DecisionCardProps {
 }
 
 // Shared decision renderer. `compact` is the inline timeline row; the default is
-// the full card used on meeting and series detail. No colored border by design.
+// the full card used on meeting and серия detail. No colored border by design.
 export function DecisionCard({ decision, compact, className }: DecisionCardProps) {
   if (compact) {
     return (

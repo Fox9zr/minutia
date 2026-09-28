@@ -33,7 +33,7 @@ export function SendMeetingNotesButton({ meetingId, attendees }: Props) {
     () => extractEmails(attendees).join(", "),
     [attendees]
   );
-  const [open, setOpen] = React.useState(false);
+  const [открыто, setOpen] = React.useState(false);
   const [recipients, setRecipients] = React.useState(defaultRecipients);
   const [status, setStatus] = React.useState<"idle" | "sending" | "sent" | "error">("idle");
   const [message, setMessage] = React.useState("");
@@ -76,7 +76,7 @@ export function SendMeetingNotesButton({ meetingId, attendees }: Props) {
   const canSend = recipients.trim().length > 0 && !isSending;
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog открыто={открыто} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button variant="outline" className="border-rule bg-paper text-ink hover:bg-paper-2">
           <Mail className="size-4" />

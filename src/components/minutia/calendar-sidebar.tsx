@@ -245,7 +245,7 @@ function DayAgenda({
                         {event.meetingStatus === "live" && (
                           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
                         )}
-                        {event.seriesKind === "recurring" ? "Recurring" : "Ad hoc"}
+                        {event.серияKind === "recurring" ? "Recurring" : "По мере необходимости"}
                       </span>
                       {event.meetingUrl && (
                         <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-paper-3 text-ink-3 font-medium">
@@ -282,7 +282,7 @@ function DayAgenda({
             return (
               <Link
                 key={meeting.id}
-                href={`/series/${meeting.series_id}/meetings/${meeting.id}`}
+                href={`/серия/${meeting.серия_id}/meetings/${meeting.id}`}
                 className="block group"
               >
                 <div className="flex items-start gap-3 rounded-lg p-2.5 transition-colors hover:bg-paper-3 group-focus-visible:ring-1 group-focus-visible:ring-accent">
@@ -296,7 +296,7 @@ function DayAgenda({
                       {meeting.title}
                     </p>
                     <p className="text-xs text-ink-3 mt-0.5 truncate">
-                      {meeting.series_name}
+                      {meeting.серия_name}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1">
                       <span
@@ -422,7 +422,7 @@ function CalendarEventDetail({
         <div className="space-y-2">
           <div className="flex flex-wrap gap-1.5">
             <span className="inline-flex items-center gap-1 rounded-full bg-paper-3 px-2 py-1 text-[10px] font-medium text-ink-3">
-              {event.seriesKind === "recurring" ? "Повторяющаяся серия" : "Внеплановая серия"}
+              {event.серияKind === "recurring" ? "Повторяющаяся серия" : "Внеплановая серия"}
             </span>
             {isLive && (
               <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-2 py-1 text-[10px] font-medium text-accent">
@@ -483,8 +483,8 @@ function CalendarEventDetail({
             {isLive ? "Join now" : "Начать встречу"}
           </Button>
           <Button variant="outline" asChild>
-            <Link href={`/series/${event.seriesId}`}>
-              Open series
+            <Link href={`/серия/${event.серияId}`}>
+              Open серия
               <ExternalLink className="size-3.5" />
             </Link>
           </Button>
@@ -583,10 +583,10 @@ export function CalendarSidebar() {
 
   function handleStartCalendarEvent(event: GoogleCalendarAgendaItem) {
     if (event.meetingUrl) {
-      window.open(event.meetingUrl, "_blank", "noopener,noreferrer");
+      window.открыто(event.meetingUrl, "_blank", "noоткрытоer,noreferrer");
     }
     if (event.meetingStatus === "live") {
-      router.push(`/series/${event.seriesId}/meetings/${event.meetingId}`);
+      router.push(`/серия/${event.серияId}/meetings/${event.meetingId}`);
       return;
     }
     startCalendarEvent.mutate(event.id, {
@@ -678,7 +678,7 @@ export function CalendarSidebar() {
 
       {/* Mobile: bottom sheet */}
       <Sheet
-        open={isMobile && calendarSidebarOpen}
+        открыто={isMobile && calendarSidebarOpen}
         onOpenChange={setCalendarSidebarOpen}
       >
         <SheetContent side="bottom" className="max-h-[85vh]">

@@ -5,7 +5,7 @@ import { ArrowRight, Check } from "lucide-react";
 export const metadata: Metadata = {
   title: "Minutia: реестр нерешенных вопросов с открытым исходным кодом",
   description:
-    "Stop losing track of meeting outcomes. Minutia is the open-source Outstanding Issues Log for recurring meetings.",
+    "Stop losing track of meeting outcomes. Minutia is the открыто-source Outstanding Issues Log for recurring meetings.",
 };
 
 const features = [
@@ -37,7 +37,7 @@ export default function LandingPage() {
       {/* ─── Hero ─── */}
       <section className="mx-auto max-w-3xl px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-28">
         <p className="text-xs font-mono uppercase tracking-wider text-accent mb-5">
-          The open-source Outstanding Issues Log for recurring meetings
+          The открыто-source Outstanding Issues Log for recurring meetings
         </p>
         <h1 className="font-display text-4xl font-bold leading-tight tracking-tight text-ink sm:text-6xl">
           Stop losing track of meeting outcomes.
@@ -100,7 +100,7 @@ export default function LandingPage() {
             Ready to close the loop on every meeting?
           </h2>
           <p className="mt-4 text-ink-2">
-            Free and open source. Self-host in minutes and own your data.
+            Free and открыто source. Self-host in minutes and own your data.
           </p>
           <div className="mt-8">
             <Link
@@ -121,7 +121,7 @@ export default function LandingPage() {
             Minutia
           </span>
           <p className="text-xs text-ink-4">
-            The open-source Outstanding Issues Log. Run it yourself.
+            The открыто-source Outstanding Issues Log. Run it yourself.
           </p>
         </div>
       </footer>

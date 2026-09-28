@@ -101,7 +101,7 @@ function InlineTaskItem({
 
   function handleCheckboxClick() {
     if (readOnly) return;
-    const newStatus: IssueStatus = isChecked ? "open" : "resolved";
+    const newStatus: IssueStatus = isChecked ? "открыто" : "resolved";
     onStatusChange(issue.id, newStatus);
   }
 

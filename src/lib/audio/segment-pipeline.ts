@@ -70,7 +70,7 @@ export function createSegmentPipeline(
   let segmentsTotal = 0;
 
   let init: Uint8Array | null = null;
-  let buffer: Uint8Array = new Uint8Array(0); // pending cluster bytes once init is known
+  let buffer: Uint8Array = new Uint8Array(0); // в ожидании cluster bytes once init is known
   let lastCutTime = now();
   let transcribeDisabled = false;
   let finalized = false;
@@ -189,7 +189,7 @@ export function createSegmentPipeline(
     }
 
     // Recorder has stopped, so every buffered cluster is complete: cut one
-    // final segment from all remaining bytes. Skip only when nothing is pending
+    // final segment from all remaining bytes. Skip only when nothing is в ожидании
     // and an earlier segment already completed (the tail is that last segment).
     if (buffer.length > 0) {
       enqueueSegment(buildSegmentFile(init, buffer));

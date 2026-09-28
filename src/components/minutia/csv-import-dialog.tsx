@@ -107,9 +107,9 @@ const CATEGORY_MAP: Record<string, IssueCategory> = {
 };
 
 const STATUS_MAP: Record<string, IssueStatus> = {
-  open: "open", new: "open", backlog: "open", todo: "open",
+  открыто: "открыто", new: "открыто", backlog: "открыто", todo: "открыто",
   in_progress: "in_progress", "in progress": "in_progress", active: "in_progress", doing: "in_progress", wip: "in_progress",
-  pending: "pending", waiting: "pending", review: "pending", blocked: "pending",
+  в ожидании: "в ожидании", waiting: "в ожидании", review: "в ожидании", blocked: "в ожидании",
   resolved: "resolved", done: "resolved", closed: "resolved", completed: "resolved", fixed: "resolved",
   dropped: "dropped", cancelled: "dropped", canceled: "dropped", wontfix: "dropped",
 };
@@ -129,7 +129,7 @@ function normalizeValue(field: FieldKey, raw: string): string | null {
     case "category":
       return CATEGORY_MAP[val.toLowerCase().replace(/[^a-z]/g, "")] ?? "action";
     case "status":
-      return STATUS_MAP[val.toLowerCase().replace(/[_-]/g, " ").trim()] ?? "open";
+      return STATUS_MAP[val.toLowerCase().replace(/[_-]/g, " ").trim()] ?? "открыто";
     case "priority":
       return PRIORITY_MAP[val.toLowerCase().replace(/[^a-z0-9]/g, "")] ?? "medium";
     case "due_date": {
@@ -148,16 +148,16 @@ function normalizeValue(field: FieldKey, raw: string): string | null {
 type Step = "upload" | "map" | "preview" | "done";
 
 interface CsvImportDialogProps {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  seriesId: string;
+  открыто: boolean;
+  onOpenChange: (открыто: boolean) => void;
+  серияId: string;
   meetingId: string;
 }
 
 export function CsvImportDialog({
-  open,
+  открыто,
   onOpenChange,
-  seriesId,
+  серияId,
   meetingId,
 }: CsvImportDialogProps) {
   const [step, setStep] = useState<Step>("upload");
@@ -251,7 +251,7 @@ export function CsvImportDialog({
 
           const issue: Record<string, unknown> = {
             title,
-            series_id: seriesId,
+            серия_id: серияId,
             raised_in_meeting_id: meetingId,
             source: "manual" as const,
             owner_user_id: null,
@@ -281,7 +281,7 @@ export function CsvImportDialog({
   });
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
+    <Dialog открыто={открыто} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl max-h-[85vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>
@@ -417,7 +417,7 @@ export function CsvImportDialog({
               {importCount} items imported
             </p>
             <p className="text-xs text-ink-3">
-              They appear on the OIL Board for this series.
+              They appear on the OIL Board for this серия.
             </p>
           </div>
         )}

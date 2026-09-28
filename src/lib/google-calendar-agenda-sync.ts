@@ -29,9 +29,9 @@ type StoredCalendarAgendaRow = {
   id: string;
   calendar_id: string;
   event_id: string;
-  series_id: string;
+  серия_id: string;
   meeting_id: string;
-  series_kind: "recurring" | "adhoc";
+  серия_kind: "recurring" | "adhoc";
   summary: string;
   description: string | null;
   start_at: string;
@@ -156,11 +156,11 @@ async function ensureSeries({
   event: NormalizedGoogleCalendarEvent;
 }): Promise<SeriesRow> {
   const { data: existing, error: existingError } = await supabase
-    .from("meeting_series")
+    .from("meeting_серия")
     .select("id, name")
     .eq("owner_id", userId)
     .eq("organization_id", organizationId)
-    .eq("gcal_series_key", event.seriesKey)
+    .eq("gcal_серия_key", event.серияKey)
     .maybeSingle<SeriesRow>();
 
   if (existingError) throw existingError;
@@ -172,14 +172,14 @@ async function ensureSeries({
     default_attendees: event.attendeeEmails,
     gcal_calendar_id: event.calendarId,
     gcal_sync_enabled: true,
-    gcal_series_key: event.seriesKey,
-    gcal_series_kind: event.seriesKind,
+    gcal_серия_key: event.серияKey,
+    gcal_серия_kind: event.серияKind,
     gcal_last_synced_at: new Date().toISOString(),
   };
 
   if (existing) {
     const { data, error } = await supabase
-      .from("meeting_series")
+      .from("meeting_серия")
       .update(payload)
       .eq("id", existing.id)
       .select("id, name")
@@ -190,7 +190,7 @@ async function ensureSeries({
   }
 
   const { data, error } = await supabase
-    .from("meeting_series")
+    .from("meeting_серия")
     .insert({
       ...payload,
       owner_id: userId,
@@ -207,12 +207,12 @@ async function ensureSeries({
 // once, when the meeting is first created, so re-syncing never duplicates drafts.
 async function draftAgendaIssues({
   supabase,
-  seriesId,
+  серияId,
   meetingId,
   description,
 }: {
   supabase: ServiceClient;
-  seriesId: string;
+  серияId: string;
   meetingId: string;
   description: string | null;
 }) {
@@ -221,11 +221,11 @@ async function draftAgendaIssues({
 
   const { error } = await supabase.from("issues").insert(
     drafts.map((draft) => ({
-      series_id: seriesId,
+      серия_id: серияId,
       raised_in_meeting_id: meetingId,
       title: draft.title,
       category: draft.category,
-      status: "open",
+      status: "открыто",
       source: "calendar_auto_draft",
     }))
   );
@@ -235,17 +235,17 @@ async function draftAgendaIssues({
 
 async function ensureMeeting({
   supabase,
-  seriesId,
+  серияId,
   event,
 }: {
   supabase: ServiceClient;
-  seriesId: string;
+  серияId: string;
   event: NormalizedGoogleCalendarEvent;
 }): Promise<MeetingRow> {
   const { data: existing, error: existingError } = await supabase
     .from("meetings")
     .select("id, status, notes_markdown")
-    .eq("series_id", seriesId)
+    .eq("серия_id", серияId)
     .eq("gcal_meeting_key", event.meetingKey)
     .maybeSingle<MeetingRow>();
 
@@ -283,7 +283,7 @@ async function ensureMeeting({
   const { count, error: countError } = await supabase
     .from("meetings")
     .select("id", { count: "exact", head: true })
-    .eq("series_id", seriesId);
+    .eq("серия_id", серияId);
 
   if (countError) throw countError;
 
@@ -291,7 +291,7 @@ async function ensureMeeting({
     .from("meetings")
     .insert({
       ...payload,
-      series_id: seriesId,
+      серия_id: серияId,
       sequence_number: (count ?? 0) + 1,
       status: "upcoming",
       notes_markdown: event.description ?? "",
@@ -307,7 +307,7 @@ async function ensureMeeting({
   try {
     await draftAgendaIssues({
       supabase,
-      seriesId,
+      серияId,
       meetingId: data.id,
       description: event.description,
     });
@@ -322,14 +322,14 @@ async function upsertCalendarEvent({
   supabase,
   userId,
   organizationId,
-  seriesId,
+  серияId,
   meetingId,
   event,
 }: {
   supabase: ServiceClient;
   userId: string;
   organizationId: string;
-  seriesId: string;
+  серияId: string;
   meetingId: string;
   event: NormalizedGoogleCalendarEvent;
 }) {
@@ -339,16 +339,16 @@ async function upsertCalendarEvent({
       {
         user_id: userId,
         organization_id: organizationId,
-        series_id: seriesId,
+        серия_id: серияId,
         meeting_id: meetingId,
         calendar_id: event.calendarId,
         event_id: event.providerEventId,
         i_cal_uid: event.iCalUID,
         recurring_event_id: event.recurringEventId,
         original_start_time: event.originalStartTime,
-        series_key: event.seriesKey,
+        серия_key: event.серияKey,
         meeting_key: event.meetingKey,
-        series_kind: event.seriesKind,
+        серия_kind: event.серияKind,
         summary: event.title,
         description: event.description,
         start_at: event.startAt,
@@ -383,13 +383,13 @@ export async function syncCalendarAgenda({
   const agenda: GoogleCalendarAgendaItem[] = [];
 
   for (const event of events) {
-    const series = await ensureSeries({ supabase, userId, organizationId, event });
-    const meeting = await ensureMeeting({ supabase, seriesId: series.id, event });
+    const серия = await ensureSeries({ supabase, userId, organizationId, event });
+    const meeting = await ensureMeeting({ supabase, серияId: серия.id, event });
     const calendarEvent = await upsertCalendarEvent({
       supabase,
       userId,
       organizationId,
-      seriesId: series.id,
+      серияId: серия.id,
       meetingId: meeting.id,
       event,
     });
@@ -398,9 +398,9 @@ export async function syncCalendarAgenda({
       id: calendarEvent.id,
       calendarId: event.calendarId,
       eventId: event.providerEventId,
-      seriesId: series.id,
+      серияId: серия.id,
       meetingId: meeting.id,
-      seriesKind: event.seriesKind,
+      серияKind: event.серияKind,
       title: event.title,
       description: event.description,
       startAt: event.startAt,
@@ -488,9 +488,9 @@ export async function listStoredCalendarAgenda({
       id,
       calendar_id,
       event_id,
-      series_id,
+      серия_id,
       meeting_id,
-      series_kind,
+      серия_kind,
       summary,
       description,
       start_at,
@@ -519,9 +519,9 @@ export async function listStoredCalendarAgenda({
       id: row.id,
       calendarId: row.calendar_id,
       eventId: row.event_id,
-      seriesId: row.series_id,
+      серияId: row.серия_id,
       meetingId: row.meeting_id,
-      seriesKind: row.series_kind,
+      серияKind: row.серия_kind,
       title: row.summary,
       description: row.description,
       startAt: row.start_at,
@@ -547,10 +547,10 @@ export async function startCalendarAgendaEvent({
   const supabase = createServiceRoleClient();
   const { data: event, error: eventError } = await supabase
     .from("google_calendar_events")
-    .select("id, series_id, meeting_id, meeting_url")
+    .select("id, серия_id, meeting_id, meeting_url")
     .eq("id", calendarEventId)
     .eq("user_id", userId)
-    .single<{ id: string; series_id: string; meeting_id: string; meeting_url: string | null }>();
+    .single<{ id: string; серия_id: string; meeting_id: string; meeting_url: string | null }>();
 
   if (eventError) throw eventError;
 
@@ -563,6 +563,6 @@ export async function startCalendarAgendaEvent({
 
   return {
     meetingUrl: event.meeting_url,
-    captureUrl: `/series/${event.series_id}/meetings/${event.meeting_id}`,
+    captureUrl: `/серия/${event.серия_id}/meetings/${event.meeting_id}`,
   };
 }

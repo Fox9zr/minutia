@@ -55,7 +55,7 @@ export interface RetroSnapshot {
     phase: RetroPhase;
     phase_started_at: string | null;
     settings: Record<string, unknown>;
-    saved_to_series_id: string | null;
+    saved_to_серия_id: string | null;
     expires_at: string;
     ended_at: string | null;
   };

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { requireAiAccess } from "@/lib/ai/access";
 import { hasAiConfigured } from "@/lib/ai/config";
 import { generateMeetingSuggestions } from "@/lib/ai/suggestions";
-import { userManagesSeries } from "@/lib/series/manage-access";
+import { userManagesSeries } from "@/lib/серия/manage-access";
 import { flattenSegments } from "@/lib/transcription";
 
 const requestSchema = z.object({
@@ -36,7 +36,7 @@ export async function PATCH(
   // the correction in one query, mirroring the suggestions route.
   const { data: meeting, error: meetingError } = await supabase
     .from("meetings")
-    .select("series_id, transcript_segments, speaker_map")
+    .select("серия_id, transcript_segments, speaker_map")
     .eq("id", meetingId)
     .single();
   if (meetingError || !meeting) {
@@ -44,9 +44,9 @@ export async function PATCH(
   }
 
   // Correcting attribution rewrites transcript_raw, so restrict it to those who
-  // manage the series (mirrors the suggestions route's generate gate). The
+  // manage the серия (mirrors the suggestions route's generate gate). The
   // separate AI re-extraction below has its own entitlement gate.
-  if (!user || !(await userManagesSeries(meeting.series_id, user.id))) {
+  if (!user || !(await userManagesSeries(meeting.серия_id, user.id))) {
     return NextResponse.json(
       { error: "Только владельцы и ведущие серии могут изменять спикеров.", request_id: requestId },
       { status: 403 }

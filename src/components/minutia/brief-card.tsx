@@ -10,10 +10,10 @@ import { Send, Copy, Check } from "lucide-react";
 import { isDateOverdue } from "@/lib/date-utils";
 
 interface BriefCardProps {
-  seriesId: string;
-  seriesName: string;
+  серияId: string;
+  серияName: string;
   nextMeetingDate?: Date;
-  pendingIssues: Issue[];
+  в ожиданииIssues: Issue[];
 }
 
 function formatTimeUntil(date: Date): string {
@@ -41,12 +41,12 @@ function formatDate(date: Date): string {
 
 
 function generateBriefText(
-  seriesName: string,
-  pendingIssues: Issue[],
+  серияName: string,
+  в ожиданииIssues: Issue[],
   nextMeetingDate?: Date
 ): string {
   const lines: string[] = [];
-  lines.push(`Pre-Meeting Brief: ${seriesName}`);
+  lines.push(`Pre-Meeting Brief: ${серияName}`);
   lines.push("");
 
   if (nextMeetingDate) {
@@ -55,16 +55,16 @@ function generateBriefText(
       month: "long",
       day: "numeric",
     });
-    lines.push(`Next meeting: ${dateStr}`);
+    lines.push(`Следующая встреча: ${dateStr}`);
     lines.push("");
   }
 
-  if (pendingIssues.length === 0) {
+  if (в ожиданииIssues.length === 0) {
     lines.push("Нет активных задач. Всё чисто!");
   } else {
-    lines.push(`${pendingIssues.length} item${pendingIssues.length === 1 ? "" : "s"} pending:`);
+    lines.push(`${в ожиданииIssues.length} item${в ожиданииIssues.length === 1 ? "" : "s"} в ожидании:`);
     lines.push("");
-    for (const issue of pendingIssues) {
+    for (const issue of в ожиданииIssues) {
       const parts: string[] = [`- ${issue.title}`];
       if (issue.owner_name) parts.push(`(${issue.owner_name})`);
       if (issue.due_date) {
@@ -81,10 +81,10 @@ function generateBriefText(
 }
 
 export function BriefCard({
-  seriesId,
-  seriesName,
+  серияId,
+  серияName,
   nextMeetingDate,
-  pendingIssues,
+  в ожиданииIssues,
 }: BriefCardProps) {
   const [copied, setCopied] = React.useState(false);
   const [sending, setSending] = React.useState(false);
@@ -92,15 +92,15 @@ export function BriefCard({
   const [notice, setNotice] = React.useState<string | null>(null);
 
   const briefText = React.useMemo(
-    () => generateBriefText(seriesName, pendingIssues, nextMeetingDate),
-    [seriesName, pendingIssues, nextMeetingDate]
+    () => generateBriefText(серияName, в ожиданииIssues, nextMeetingDate),
+    [серияName, в ожиданииIssues, nextMeetingDate]
   );
 
   async function handleEmailBrief() {
     setSending(true);
     setNotice(null);
     try {
-      const res = await fetch(`/api/series/${seriesId}/brief`, { method: "POST" });
+      const res = await fetch(`/api/серия/${серияId}/brief`, { method: "POST" });
       const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
@@ -127,7 +127,7 @@ export function BriefCard({
   async function handleCopyBrief() {
     let text = briefText;
     try {
-      const res = await fetch(`/api/series/${seriesId}/brief?dry=1`, { method: "POST" });
+      const res = await fetch(`/api/серия/${серияId}/brief?dry=1`, { method: "POST" });
       if (res.ok) {
         const { guestUrl } = await res.json();
         if (guestUrl) text = `${briefText}\n\nSee the live log: ${guestUrl}`;
@@ -175,13 +175,13 @@ export function BriefCard({
 
         {/* Series name */}
         <h3 className="font-display font-medium text-ink text-lg mb-4">
-          {seriesName}
+          {серияName}
         </h3>
 
         {/* Pending issues list */}
-        {pendingIssues.length > 0 ? (
+        {в ожиданииIssues.length > 0 ? (
           <ul className="space-y-2" role="list">
-            {pendingIssues.map((issue) => (
+            {в ожиданииIssues.map((issue) => (
               <li
                 key={issue.id}
                 className="flex items-center justify-between text-sm"

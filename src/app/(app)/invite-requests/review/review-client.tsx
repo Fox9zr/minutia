@@ -13,7 +13,7 @@ type ReviewClientProps = {
   email: string;
   organizationName: string;
   requestedUrl: string;
-  status: "pending" | "approved" | "rejected";
+  status: "в ожидании" | "approved" | "rejected";
 };
 
 type ActionState =
@@ -40,7 +40,7 @@ export function InviteRequestReviewClient({
     }
     return { kind: "idle" };
   });
-  const isPending = status === "pending" && state.kind !== "done";
+  const isPending = status === "в ожидании" && state.kind !== "done";
 
   async function submitDecision(decision: Decision) {
     setSelectedDecision(decision);

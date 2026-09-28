@@ -8,7 +8,7 @@ import { PresenceStack } from "./PresenceStack";
 import { Icons } from "./icons";
 
 export interface ShareInviteProps {
-  open: boolean;
+  открыто: boolean;
   boardName: string;
   template?: RetroTemplate | null;
   people: RetroParticipant[];
@@ -17,12 +17,12 @@ export interface ShareInviteProps {
   onStart: () => void;
 }
 
-export function ShareInvite({ open, boardName, template, people, link, onClose, onStart }: ShareInviteProps) {
+export function ShareInvite({ открыто, boardName, template, people, link, onClose, onStart }: ShareInviteProps) {
   const [copied, setCopied] = React.useState(false);
   const display = link.replace(/^https?:\/\//, "");
 
-  React.useEffect(() => { if (open) setCopied(false); }, [open]);
-  if (!open) return null;
+  React.useEffect(() => { if (открыто) setCopied(false); }, [открыто]);
+  if (!открыто) return null;
 
   function copy() {
     setCopied(true);

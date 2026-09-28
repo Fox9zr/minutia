@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
 
   const ownerId = admin.id;
 
-  const { data: series, error: seriesError } = await supabase
-    .from("meeting_series")
+  const { data: серия, error: серияError } = await supabase
+    .from("meeting_серия")
     .insert({
       owner_id: ownerId,
       name: "Еженедельная синхронизация с подрядчиками",
@@ -57,8 +57,8 @@ export async function POST(request: NextRequest) {
     .select()
     .single();
 
-  if (seriesError || !series) {
-    return NextResponse.json({ error: seriesError?.message || "Не удалось создать серию" }, { status: 500 });
+  if (серияError || !серия) {
+    return NextResponse.json({ error: серияError?.message || "Не удалось создать серию" }, { status: 500 });
   }
 
   const today = new Date();
@@ -68,9 +68,9 @@ export async function POST(request: NextRequest) {
   const { data: meeting, error: meetingError } = await supabase
     .from("meetings")
     .insert({
-      series_id: series.id,
+      серия_id: серия.id,
       sequence_number: 1,
-      title: "Weekly Vendor Sync #1",
+      title: "Еженедельно Vendor Sync #1",
       date: lastWeek.toISOString(),
       status: "completed",
       attendees: ["alice@partner.co", "bob@vendor.io"],
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     {
       title: "Учетные данные API еще не предоставлены",
       category: "blocker" as const,
-      status: "open" as const,
+      status: "открыто" as const,
       priority: "high" as const,
       owner_name: "alice@partner.co",
       description: "Поставщик не предоставил staging API ключи. Блокирует интеграционное тестирование.",
@@ -112,7 +112,7 @@ export async function POST(request: NextRequest) {
     {
       title: "Ожидает проверки безопасности",
       category: "risk" as const,
-      status: "pending" as const,
+      status: "в ожидании" as const,
       priority: "high" as const,
       owner_name: "alice@partner.co",
       description: "Команда безопасности поставщика еще не начала проверку.",
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
     {
       title: "Еженедельный e-mail со статусом для заинтересованных сторон",
       category: "action" as const,
-      status: "open" as const,
+      status: "открыто" as const,
       priority: "low" as const,
       owner_name: "Unassigned",
       description: "Отправлять краткий отчет управляющему комитету после каждой синхронизации.",
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
 
   const issueInserts = demoIssues.map((issue) => ({
     raised_in_meeting_id: meeting.id,
-    series_id: series.id,
+    серия_id: серия.id,
     title: issue.title,
     description: issue.description,
     category: issue.category,
@@ -147,7 +147,7 @@ export async function POST(request: NextRequest) {
   }
 
   return NextResponse.json({
-    series_id: series.id,
+    серия_id: серия.id,
     meeting_id: meeting.id,
     issues_created: demoIssues.length,
   });

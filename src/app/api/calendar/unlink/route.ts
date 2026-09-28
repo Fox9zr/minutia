@@ -8,15 +8,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
-  const { seriesId } = await request.json();
-  if (!seriesId) {
-    return NextResponse.json({ error: "seriesId required" }, { status: 400 });
+  const { серияId } = await request.json();
+  if (!серияId) {
+    return NextResponse.json({ error: "серияId required" }, { status: 400 });
   }
 
   const { error } = await supabase
-    .from("meeting_series")
+    .from("meeting_серия")
     .update({ gcal_calendar_id: null, gcal_sync_enabled: false })
-    .eq("id", seriesId);
+    .eq("id", серияId);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });

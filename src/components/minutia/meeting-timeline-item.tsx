@@ -9,7 +9,7 @@ import Link from "next/link";
 
 interface MeetingTimelineItemProps {
   meeting: Meeting;
-  seriesId: string;
+  серияId: string;
   sequence: number;
   itemsRaised?: number;
   itemsResolved?: number;
@@ -43,7 +43,7 @@ const statusBadgeMap: Record<string, { label: string; className: string }> = {
 
 export function MeetingTimelineItem({
   meeting,
-  seriesId,
+  серияId,
   sequence,
   itemsRaised = 0,
   itemsResolved = 0,
@@ -76,7 +76,7 @@ export function MeetingTimelineItem({
 
       {/* Content */}
       <Link
-        href={`/series/${seriesId}/meetings/${meeting.id}`}
+        href={`/серия/${серияId}/meetings/${meeting.id}`}
         className="flex-1 pb-6 group"
       >
         <div className="flex items-center gap-2 mb-0.5">

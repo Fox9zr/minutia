@@ -14,14 +14,14 @@ function clamp(text: string, max: number): string {
 
 export function buildSummaryPrompt(input: {
   title: string;
-  seriesName: string;
+  серияName: string;
   attendees: string[];
   transcript: string;
 }): string {
   return [
     "Составьте итоги этой встречи.",
     "",
-    `Series: ${clamp(input.seriesName, 200)}`,
+    `Series: ${clamp(input.серияName, 200)}`,
     `Meeting: ${clamp(input.title, 200)}`,
     `Attendees: ${clamp(input.attendees.join(", ") || "Unknown", 500)}`,
     "",

@@ -19,7 +19,7 @@ export default function ResetPasswordPage() {
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [formState, setFormState] = useState<FormState>("idle");
   const [message, setMessage] = useState("");
-  const [openingLink, setOpeningLink] = useState(true);
+  const [открытоingLink, setOpeningLink] = useState(true);
 
   const passwordsMatch = password === passwordConfirm;
   const canSubmit = password.length >= 8 && passwordsMatch;
@@ -27,7 +27,7 @@ export default function ResetPasswordPage() {
   useEffect(() => {
     let cancelled = false;
 
-    async function openRecoverySession() {
+    async function открытоRecoverySession() {
       try {
         const supabase = createClient();
         const url = new URL(window.location.href);
@@ -73,7 +73,7 @@ export default function ResetPasswordPage() {
       }
     }
 
-    openRecoverySession();
+    открытоRecoverySession();
 
     return () => {
       cancelled = true;
@@ -130,7 +130,7 @@ export default function ResetPasswordPage() {
               <Link href="/login">Назад к Sign in</Link>
             </Button>
           </div>
-        ) : openingLink ? (
+        ) : открытоingLink ? (
           <div className="rounded-[14px] border border-rule bg-paper px-4 py-4">
             <p className="font-sans text-sm text-ink-3">Открытие ссылки для сброса</p>
           </div>

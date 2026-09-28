@@ -41,7 +41,7 @@ export function MemberCombobox({
   className,
   disabled,
 }: MemberComboboxProps) {
-  const [open, setOpen] = React.useState(false);
+  const [открыто, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState("");
   const { data: members = [] } = useOrgMembers();
 
@@ -68,7 +68,7 @@ export function MemberCombobox({
   );
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover открыто={открыто} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           type="button"

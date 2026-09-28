@@ -185,7 +185,7 @@ export default async function DownloadPage() {
             Minutia
           </Link>
           <p className="text-xs text-ink-4">
-            The open-source Outstanding Issues Log. Run it yourself.
+            The открыто-source Outstanding Issues Log. Run it yourself.
           </p>
         </div>
       </footer>

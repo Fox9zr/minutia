@@ -262,14 +262,14 @@ export default function AdminSettingsPage() {
     setAiTestMessage("");
 
     const provider =
-      (form.ai_provider as "openai-compatible" | "anthropic" | null) ??
-      "openai-compatible";
+      (form.ai_provider as "открытоai-compatible" | "anthropic" | null) ??
+      "открытоai-compatible";
 
     const res = await fetch("/api/admin/ai-test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        provider: provider || "openai-compatible",
+        provider: provider || "открытоai-compatible",
         baseUrl: form.ai_base_url,
         apiKey: aiKey,
         model: form.ai_model,
@@ -310,9 +310,9 @@ export default function AdminSettingsPage() {
   }
 
   const activeProvider =
-    (form.ai_provider as "openai-compatible" | "anthropic" | null) ??
-    "openai-compatible";
-  const visibleAiFields = aiFormFields(activeProvider || "openai-compatible");
+    (form.ai_provider as "открытоai-compatible" | "anthropic" | null) ??
+    "открытоai-compatible";
+  const visibleAiFields = aiFormFields(activeProvider || "открытоai-compatible");
   const diarizationConfigured = form.diarization_configured === "true";
 
   const showFeatureFlags =
@@ -457,12 +457,12 @@ export default function AdminSettingsPage() {
                   <Button
                     type="button"
                     size="sm"
-                    variant={activeProvider === "openai-compatible" ? "outline" : "ghost"}
+                    variant={activeProvider === "открытоai-compatible" ? "outline" : "ghost"}
                     className={cn(
-                      activeProvider === "openai-compatible" &&
+                      activeProvider === "открытоai-compatible" &&
                         "border-rule-strong bg-paper-2 text-ink"
                     )}
-                    onClick={() => setKey("ai_provider", "openai-compatible")}
+                    onClick={() => setKey("ai_provider", "открытоai-compatible")}
                   >
                     OpenAI-compatible
                   </Button>
@@ -487,7 +487,7 @@ export default function AdminSettingsPage() {
                   <Label htmlFor="ai_base_url">Base URL</Label>
                   <Input
                     id="ai_base_url"
-                    placeholder="https://openrouter.ai/api/v1"
+                    placeholder="https://открытоrouter.ai/api/v1"
                     value={field(form, "ai_base_url")}
                     onChange={(e) => setKey("ai_base_url", e.target.value)}
                   />

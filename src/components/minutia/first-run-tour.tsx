@@ -45,8 +45,8 @@ const TOUR_STEPS: TourStep[] = [
   {
     title: "Серии — это комнаты встреч",
     body: "Открывайте повторяющиеся серии встреч отсюда. Каждая включает свои встречи, задачи и решения.",
-    target: "[data-tour='series-nav']",
-    route: "/series",
+    target: "[data-tour='серия-nav']",
+    route: "/серия",
   },
 ];
 
@@ -112,16 +112,16 @@ export function FirstRunTour({ userId }: { userId: string }) {
     () => getStoredState(userId),
     () => null
   );
-  const [open, setOpen] = React.useState(false);
+  const [открыто, setOpen] = React.useState(false);
   const [stepIndex, setStepIndex] = React.useState(0);
   const [targetRect, setTargetRect] = React.useState<DOMRect | null>(null);
   const [targetInLowerHalf, setTargetInLowerHalf] = React.useState(false);
 
   const step = TOUR_STEPS[stepIndex];
-  const showPrompt = hydrated && stored === null && !open && isDashboard(pathname);
+  const showPrompt = hydrated && stored === null && !открыто && isDashboard(pathname);
 
   React.useLayoutEffect(() => {
-    if (!open || !step) return;
+    if (!открыто || !step) return;
 
     function syncTarget() {
       const rect = findVisibleTargetRect(step.target);
@@ -139,7 +139,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
       window.removeEventListener("resize", syncTarget);
       window.removeEventListener("scroll", syncTarget, true);
     };
-  }, [open, step]);
+  }, [открыто, step]);
 
   const dismiss = React.useCallback((value: TourState) => {
     setStoredState(userId, value);
@@ -147,13 +147,13 @@ export function FirstRunTour({ userId }: { userId: string }) {
   }, [userId]);
 
   React.useEffect(() => {
-    if (!open) return;
+    if (!открыто) return;
     function handleEscape(event: KeyboardEvent) {
       if (event.key === "Escape") dismiss("dismissed");
     }
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
-  }, [dismiss, open]);
+  }, [dismiss, открыто]);
 
   function startTour() {
     setStepIndex(0);
@@ -194,7 +194,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
                   We recommend you start the tour first.
                 </p>
                 <p className="mt-1 text-xs leading-5 text-ink-3">
-                  It shows where dashboard panels, issues, series, meetings, and shortcuts live before your first real meeting.
+                  It shows where dashboard panels, issues, серия, meetings, and shortcuts live before your first real meeting.
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button variant="accent"
@@ -220,7 +220,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
       </AnimatePresence>
 
       <AnimatePresence>
-        {open && step && (
+        {открыто && step && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

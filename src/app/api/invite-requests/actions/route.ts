@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
   }
 
   const inviteRequest = loaded.request;
-  if (inviteRequest.status !== "pending") {
+  if (inviteRequest.status !== "в ожидании") {
     return NextResponse.json(
       { error: `Request already ${inviteRequest.status}`, status: inviteRequest.status },
       { status: 409 }
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
         decided_at: decidedAt,
       })
       .eq("id", inviteRequest.id)
-      .eq("status", "pending");
+      .eq("status", "в ожидании");
 
     if (error) {
       return NextResponse.json({ error: error.message }, { status: 500 });
@@ -155,7 +155,7 @@ export async function POST(request: NextRequest) {
           organization_id: admin.organizationId,
           email,
           role: "member",
-          status: "pending",
+          status: "в ожидании",
           invited_by: user.id,
           accepted_by: null,
           accepted_at: null,
@@ -204,7 +204,7 @@ export async function POST(request: NextRequest) {
       decided_at: decidedAt,
     })
     .eq("id", inviteRequest.id)
-    .eq("status", "pending");
+    .eq("status", "в ожидании");
 
   if (requestUpdateError) {
     return NextResponse.json({ error: requestUpdateError.message }, { status: 500 });

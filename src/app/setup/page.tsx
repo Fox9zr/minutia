@@ -832,8 +832,8 @@ function StepAi({
   onNext: () => void;
   onSkip: () => void;
 }) {
-  const [provider, setProvider] = React.useState<"openai-compatible" | "anthropic">("openai-compatible");
-  const [baseUrl, setBaseUrl] = React.useState("https://openrouter.ai/api/v1");
+  const [provider, setProvider] = React.useState<"открытоai-compatible" | "anthropic">("открытоai-compatible");
+  const [baseUrl, setBaseUrl] = React.useState("https://открытоrouter.ai/api/v1");
   const [apiKey, setApiKey] = React.useState("");
   const [model, setModel] = React.useState("");
   const [saving, setSaving] = React.useState(false);
@@ -879,7 +879,7 @@ function StepAi({
         <div className="space-y-1.5">
           <span className="text-xs text-ink-3 font-medium">Провайдер</span>
           <div className="flex gap-2">
-            {(["openai-compatible", "anthropic"] as const).map((p) => (
+            {(["открытоai-compatible", "anthropic"] as const).map((p) => (
               <button
                 key={p}
                 type="button"
@@ -891,13 +891,13 @@ function StepAi({
                     : "border-rule bg-transparent text-ink-3 hover:border-ink-4"
                 )}
               >
-                {p === "openai-compatible" ? "OpenAI-compatible" : "Anthropic"}
+                {p === "открытоai-compatible" ? "OpenAI-compatible" : "Anthropic"}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Base URL (openai-compatible only) */}
+        {/* Base URL (открытоai-compatible only) */}
         {showBaseUrl && (
           <div className="space-y-1.5">
             <label htmlFor="ai-base-url" className="text-xs text-ink-3 font-medium">Base URL</label>
@@ -905,7 +905,7 @@ function StepAi({
               id="ai-base-url"
               value={baseUrl}
               onChange={(e) => setBaseUrl(e.target.value)}
-              placeholder="https://openrouter.ai/api/v1"
+              placeholder="https://открытоrouter.ai/api/v1"
               className="h-10 rounded-xl"
             />
           </div>
@@ -1018,7 +1018,7 @@ function StepReady({
         <div>
           <p className="text-sm font-medium text-ink">Заполнить демо-данными</p>
           <p className="text-xs text-ink-3 mt-0.5">
-            Create a sample meeting series with 5 issues to explore the interface.
+            Create a sample meeting серия with 5 issues to explore the interface.
           </p>
         </div>
       </label>

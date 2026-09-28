@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasAiConfigured } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
 import { generateMeetingSuggestions } from "@/lib/ai/suggestions";
-import { userManagesSeries } from "@/lib/series/manage-access";
+import { userManagesSeries } from "@/lib/серия/manage-access";
 
 const requestSchema = z.object({
   mode: z.enum(["generate"]).default("generate"),
@@ -81,15 +81,15 @@ export async function POST(
   } = await supabase.auth.getUser();
   const { data: meeting } = await supabase
     .from("meetings")
-    .select("series_id")
+    .select("серия_id")
     .eq("id", meetingId)
     .single();
   if (!meeting) {
     return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
-  // Generation deletes and replaces pending suggestions and spends an AI call,
-  // so restrict it to those who manage the series (mirrors the accept route).
-  if (!user || !(await userManagesSeries(meeting.series_id, user.id))) {
+  // Generation deletes and replaces в ожидании suggestions and spends an AI call,
+  // so restrict it to those who manage the серия (mirrors the accept route).
+  if (!user || !(await userManagesSeries(meeting.серия_id, user.id))) {
     return NextResponse.json(
       { error: "Только владельцы и ведущие серии могут генерировать предложения ИИ.", request_id: requestId },
       { status: 403 }
@@ -97,7 +97,7 @@ export async function POST(
   }
 
   // MIN-121: context-aware extraction lives in the shared generator so the
-  // transcribe pipeline can reuse it. The series history is what lets the model
+  // transcribe pipeline can reuse it. The серия history is what lets the model
   // deduplicate, detect resolutions, and flag contradictions.
   const outcome = await generateMeetingSuggestions(supabase, meetingId);
   if (!outcome.ok) {

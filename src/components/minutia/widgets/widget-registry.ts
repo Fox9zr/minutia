@@ -29,7 +29,7 @@ export const WIDGET_REGISTRY: WidgetMeta[] = [
     group: "pulse",
   },
   {
-    type: "series",
+    type: "серия",
     name: "Ваши серии встреч",
     description: "Список серий с количеством открытых вопросов",
     span: 1,
@@ -57,7 +57,7 @@ export const WIDGET_REGISTRY: WidgetMeta[] = [
     group: "pulse",
   },
   {
-    type: "series-health",
+    type: "серия-health",
     name: "Состояние серии",
     description: "Распределение статусов по сериям с долей закрытия",
     span: 2,

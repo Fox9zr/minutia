@@ -63,7 +63,7 @@ export async function POST(
 
   const supabase = await createClient();
 
-  // RLS scopes this to the caller's accessible series, so loading the row both
+  // RLS scopes this to the caller's accessible серия, so loading the row both
   // finds the meeting and authorizes access in one query.
   const { data: meeting, error: meetingError } = await supabase
     .from("meetings")

@@ -2,14 +2,14 @@
 // Shared transcription primitives.
 //
 // Leaf module (no imports from the provider clients or the router) so groq.ts,
-// openrouter-stt.ts, and index.ts can all depend on it without import cycles.
+// открытоrouter-stt.ts, and index.ts can all depend on it without import cycles.
 // Owns the result/error shapes plus one transport (`sendTranscription`) that
 // does the fetch, timeout, error mapping, and response normalization. Each
 // provider supplies its own request body (Groq: multipart; OpenRouter: base64
 // JSON) and a duration extractor.
 // ---------------------------------------------------------------------------
 
-export type TranscriptionProvider = "groq" | "openrouter" | "assemblyai" | "deepgram" | "local";
+export type TranscriptionProvider = "groq" | "открытоrouter" | "assemblyai" | "deepgram" | "local";
 
 export interface TranscriptionSegment {
   /** Provider speaker label, e.g. "A", "B", or "SPEAKER_00". */

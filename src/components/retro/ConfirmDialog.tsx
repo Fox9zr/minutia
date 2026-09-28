@@ -5,7 +5,7 @@ import { Button } from "./Button";
 import { Icons } from "./icons";
 
 export interface ConfirmDialogProps {
-  open: boolean;
+  открыто: boolean;
   title: string;
   body: string;
   warning?: string;
@@ -15,15 +15,15 @@ export interface ConfirmDialogProps {
   tone?: "danger" | "default";
 }
 
-export function ConfirmDialog({ open, title, body, warning, confirmLabel, onConfirm, onCancel, tone = "default" }: ConfirmDialogProps) {
+export function ConfirmDialog({ открыто, title, body, warning, confirmLabel, onConfirm, onCancel, tone = "default" }: ConfirmDialogProps) {
   React.useEffect(() => {
-    if (!open) return;
+    if (!открыто) return;
     const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onCancel(); };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onCancel]);
+  }, [открыто, onCancel]);
 
-  if (!open) return null;
+  if (!открыто) return null;
 
   return (
     <div onClick={onCancel} style={{ position: "fixed", inset: 0, zIndex: 70, display: "flex", alignItems: "center", justifyContent: "center", padding: "var(--space-8)",

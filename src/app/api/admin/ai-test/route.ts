@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { requireAdmin } from "@/lib/supabase/admin-auth";
 import { rejectCrossOrigin } from "@/lib/request-origin";
 import { validateAiBaseUrl } from "@/lib/ai/validate-url";
-import { callOpenAiCompatible } from "@/lib/ai/providers/openai-compatible";
+import { callOpenAiCompatible } from "@/lib/ai/providers/открытоai-compatible";
 import { callAnthropic } from "@/lib/ai/providers/anthropic";
 import { getInstanceConfigMap } from "@/lib/instance-config";
 
@@ -31,9 +31,9 @@ export async function POST(request: NextRequest) {
 
   const { provider, baseUrl, apiKey: bodyApiKey, model } = body as Record<string, unknown>;
 
-  if (provider !== "openai-compatible" && provider !== "anthropic") {
+  if (provider !== "открытоai-compatible" && provider !== "anthropic") {
     return NextResponse.json(
-      { ok: false, error: 'provider must be "openai-compatible" or "anthropic"' },
+      { ok: false, error: 'provider must be "открытоai-compatible" or "anthropic"' },
       { status: 400 }
     );
   }
@@ -57,9 +57,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ ok: false, error: "model is required" }, { status: 400 });
   }
 
-  if (provider === "openai-compatible") {
+  if (provider === "открытоai-compatible") {
     if (!baseUrl || typeof baseUrl !== "string" || baseUrl.trim() === "") {
-      return NextResponse.json({ ok: false, error: "baseUrl is required for openai-compatible" }, { status: 400 });
+      return NextResponse.json({ ok: false, error: "baseUrl is required for открытоai-compatible" }, { status: 400 });
     }
 
     const urlResult = validateAiBaseUrl(baseUrl);

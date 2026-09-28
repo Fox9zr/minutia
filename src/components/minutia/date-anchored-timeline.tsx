@@ -19,7 +19,7 @@ interface TimelineMeeting extends Meeting {
 
 interface DateAnchoredTimelineProps {
   meetings: TimelineMeeting[];
-  seriesId: string;
+  серияId: string;
 }
 
 function isSameDay(a: Date, b: Date): boolean {
@@ -51,13 +51,13 @@ const ISSUE_PREVIEW_LIMIT = 2;
 
 function MeetingSection({
   meeting,
-  seriesId,
+  серияId,
   index,
   isFuture,
   scrollTargetRef,
 }: {
   meeting: TimelineMeeting;
-  seriesId: string;
+  серияId: string;
   index: number;
   isFuture: boolean;
   scrollTargetRef?: React.RefObject<HTMLDivElement | null>;
@@ -69,7 +69,7 @@ function MeetingSection({
   const resolvedCount = meeting.issues.filter(
     (i) => i.status === "resolved"
   ).length;
-  const openCount = issueCount - resolvedCount;
+  const открытоCount = issueCount - resolvedCount;
 
   const topIssue = meeting.issues[0];
 
@@ -230,7 +230,7 @@ function MeetingSection({
 
               {/* Link to full meeting */}
               <Link
-                href={`/series/${seriesId}/meetings/${meeting.id}`}
+                href={`/серия/${серияId}/meetings/${meeting.id}`}
                 className="inline-flex items-center gap-1 text-xs text-accent hover:underline"
               >
                 Open meeting details
@@ -248,7 +248,7 @@ const INITIAL_DISPLAY_COUNT = 5;
 
 export function DateAnchoredTimeline({
   meetings,
-  seriesId,
+  серияId,
 }: DateAnchoredTimelineProps) {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -350,7 +350,7 @@ export function DateAnchoredTimeline({
               <div data-meeting-date={meeting.date}>
                 <MeetingSection
                   meeting={meeting}
-                  seriesId={seriesId}
+                  серияId={серияId}
                   index={i}
                   isFuture={isFuture}
                 />
@@ -366,7 +366,7 @@ export function DateAnchoredTimeline({
           onClick={() => setShowAll(true)}
           className="mt-3 ml-10 text-xs text-accent hover:underline"
         >
-          View all {sorted.length} meetings
+          Показать все {sorted.length} meetings
         </button>
       )}
     </div>

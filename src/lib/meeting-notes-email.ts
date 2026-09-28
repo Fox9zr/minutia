@@ -5,7 +5,7 @@ import { formatIssueKey } from "@/lib/issue-utils";
 
 type MeetingEmailInput = {
   meeting: Meeting;
-  seriesName: string;
+  серияName: string;
   raisedIssues: Issue[];
   resolvedIssues: Issue[];
   carriedIssues: Issue[];
@@ -112,15 +112,15 @@ function section(title: string, count: number, body: string) {
 export function buildMeetingNotesEmail(input: MeetingEmailInput) {
   const {
     meeting,
-    seriesName,
+    серияName,
     raisedIssues,
     resolvedIssues,
     carriedIssues,
     decisions,
     appUrl,
   } = input;
-  const meetingUrl = new URL(`/series/${meeting.series_id}/meetings/${meeting.id}`, appUrl).toString();
-  const subject = `${seriesName}: ${meeting.title} notes`;
+  const meetingUrl = new URL(`/серия/${meeting.серия_id}/meetings/${meeting.id}`, appUrl).toString();
+  const subject = `${серияName}: ${meeting.title} notes`;
   const allIssueCount = raisedIssues.length + resolvedIssues.length + carriedIssues.length;
 
   const chips = `
@@ -144,16 +144,16 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
   const html = renderEmailLayout({
     preheader: `${allIssueCount} tracked items, ${decisions.length} decisions, and meeting notes from Minutia.`,
     heading: meeting.title,
-    intro: `${seriesName} · ${formatDate(meeting.date)}`,
+    intro: `${серияName} · ${formatDate(meeting.date)}`,
     bodyHtml,
     cta: { label: "Открыть встречу в Minutia", href: meetingUrl },
     footerNote:
-      "Issue links open in Minutia. If you are not signed in, you will be asked to sign in first. If you do not have access, request an invite from the login screen.",
+      "Issue links открыто in Minutia. If you are not signed in, you will be asked to sign in first. If you do not have access, request an invite from the login screen.",
     footerUrl: appUrl,
   });
 
   const textLines = [
-    `${meeting.title} - ${seriesName}`,
+    `${meeting.title} - ${серияName}`,
     formatDate(meeting.date),
     "",
     `Items raised (${raisedIssues.length})`,

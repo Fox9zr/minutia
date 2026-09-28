@@ -78,7 +78,7 @@ function SpeakerChip({
   colorClass: string;
   onRename: (name: string | null) => void;
 }) {
-  const [open, setOpen] = React.useState(false);
+  const [открыто, setOpen] = React.useState(false);
   const [value, setValue] = React.useState(name);
   const inputId = React.useId();
 
@@ -90,7 +90,7 @@ function SpeakerChip({
 
   return (
     <Popover
-      open={open}
+      открыто={открыто}
       onOpenChange={(next) => {
         setOpen(next);
         if (next) setValue(name);

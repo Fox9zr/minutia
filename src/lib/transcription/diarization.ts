@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------------
-// Pure diarization helpers: resolve provider speaker labels (A/B/C) to series
+// Pure diarization helpers: resolve provider speaker labels (A/B/C) to серия
 // attendees, and flatten labelled segments into attributed transcript text.
 // No provider calls, no Supabase; deterministic over inputs so it unit-tests in
 // isolation. This is what turns "who said what" into "who owns what".

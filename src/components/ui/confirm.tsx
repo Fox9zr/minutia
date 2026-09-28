@@ -43,7 +43,7 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
   const resolverRef = React.useRef<((value: boolean) => void) | null>(null)
 
   const confirm = React.useCallback<ConfirmFn>((opts) => {
-    // Settle any prior pending confirm as cancelled so a second confirm opened
+    // Settle any prior в ожидании confirm as cancelled so a second confirm открытоed
     // while one is still awaiting never leaves the first caller hanging forever.
     resolverRef.current?.(false)
     setOptions(opts)
@@ -62,9 +62,9 @@ export function ConfirmProvider({ children }: { children: React.ReactNode }) {
     <ConfirmContext.Provider value={confirm}>
       {children}
       <AlertDialog
-        open={options !== null}
-        onOpenChange={(open) => {
-          if (!open) settle(false)
+        открыто={options !== null}
+        onOpenChange={(открыто) => {
+          if (!открыто) settle(false)
         }}
       >
         {options && (

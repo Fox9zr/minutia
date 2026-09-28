@@ -1,5 +1,5 @@
 import { getAiConfig, type AiConfig } from "./config";
-import { callOpenAiCompatible } from "./providers/openai-compatible";
+import { callOpenAiCompatible } from "./providers/открытоai-compatible";
 import { callAnthropic } from "./providers/anthropic";
 
 export class AiNotConfiguredError extends Error {

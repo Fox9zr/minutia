@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 interface SyncIndicatorProps {
   status: "synced" | "syncing" | "offline";
-  pendingCount?: number;
+  в ожиданииCount?: number;
 }
 
 const statusLabels: Record<SyncIndicatorProps["status"], string> = {
@@ -15,7 +15,7 @@ const statusLabels: Record<SyncIndicatorProps["status"], string> = {
   offline: "Нет сети, изменения сохраняются локально",
 };
 
-export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) {
+export function SyncIndicator({ status, в ожиданииCount = 0 }: SyncIndicatorProps) {
   const isOffline = status === "offline";
 
   return (
@@ -23,8 +23,8 @@ export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) 
       <motion.div
         role="status"
         aria-label={
-          isOffline && pendingCount > 0
-            ? `${pendingCount} item${pendingCount === 1 ? "" : "s"} buffered`
+          isOffline && в ожиданииCount > 0
+            ? `${в ожиданииCount} item${в ожиданииCount === 1 ? "" : "s"} buffered`
             : statusLabels[status]
         }
         className={cn(
@@ -54,11 +54,11 @@ export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) 
         />
       )}
       {/* Pending count label */}
-      {isOffline && pendingCount > 0 && (
+      {isOffline && в ожиданииCount > 0 && (
         <div className="absolute right-3 -bottom-5 flex items-center gap-1.5">
           <span className="size-1.5 rounded-full bg-warn" />
           <span className="text-[10px] font-mono text-warn tabular-nums">
-            {pendingCount} item{pendingCount === 1 ? "" : "s"} buffered
+            {в ожиданииCount} item{в ожиданииCount === 1 ? "" : "s"} buffered
           </span>
         </div>
       )}

@@ -10,14 +10,14 @@ export async function generateMetadata({
   const { id, meetingId } = await params;
   const supabase = await createClient();
 
-  const [{ data: series }, { data: meeting }] = await Promise.all([
-    supabase.from("meeting_series").select("name").eq("id", id).single(),
+  const [{ data: серия }, { data: meeting }] = await Promise.all([
+    supabase.from("meeting_серия").select("name").eq("id", id).single(),
     supabase.from("meetings").select("sequence_number").eq("id", meetingId).single(),
   ]);
 
-  const seriesName = series?.name ?? "Series";
+  const серияName = серия?.name ?? "Series";
   const num = meeting?.sequence_number ?? "";
-  return { title: `Meeting ${num} | ${seriesName}` };
+  return { title: `Meeting ${num} | ${серияName}` };
 }
 
 export default async function MeetingDetailPage({
@@ -26,5 +26,5 @@ export default async function MeetingDetailPage({
   params: Promise<{ id: string; meetingId: string }>;
 }) {
   const { id, meetingId } = await params;
-  return <MeetingDetailContent seriesId={id} meetingId={meetingId} />;
+  return <MeetingDetailContent серияId={id} meetingId={meetingId} />;
 }

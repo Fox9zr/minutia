@@ -3,9 +3,9 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-серия";
 import { EmptyState } from "@/components/minutia/empty-state";
-import { CreateSeriesDialog } from "@/components/minutia/create-series-dialog";
+import { CreateSeriesDialog } from "@/components/minutia/create-серия-dialog";
 import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -29,7 +29,7 @@ function formatDate(date: Date | string): string {
 }
 
 export default function SeriesListPage() {
-  const { data: seriesList, isLoading } = useSeries();
+  const { data: серияList, isLoading } = useSeries();
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [activeSeriesId, setActiveSeriesId] = React.useState<string | null>(
     null
@@ -53,7 +53,7 @@ export default function SeriesListPage() {
             onClick={() => setDialogOpen(true)}
           >
             <Plus className="size-4" data-icon="inline-start" />
-            Create series
+            Create серия
           </Button>
         </div>
 
@@ -75,19 +75,19 @@ export default function SeriesListPage() {
         )}
 
         {/* Empty state */}
-        {mounted && !isLoading && seriesList && seriesList.length === 0 && (
+        {mounted && !isLoading && серияList && серияList.length === 0 && (
           <EmptyState
-            variant="no-series"
+            variant="no-серия"
             onAction={() => setDialogOpen(true)}
           />
         )}
 
         {/* Series grid */}
-        {mounted && !isLoading && seriesList && seriesList.length > 0 && (
+        {mounted && !isLoading && серияList && серияList.length > 0 && (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {seriesList.map((series, i) => (
+            {серияList.map((серия, i) => (
               <motion.div
-                key={series.id}
+                key={серия.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{
@@ -95,19 +95,19 @@ export default function SeriesListPage() {
                   delay: i * 0.06,
                   ease: [0.2, 0.8, 0.2, 1],
                 }}
-                onHoverStart={() => setActiveSeriesId(series.id)}
+                onHoverStart={() => setActiveSeriesId(серия.id)}
                 onHoverEnd={() =>
                   setActiveSeriesId((current) =>
-                    current === series.id ? null : current
+                    current === серия.id ? null : current
                   )
                 }
               >
                 <Link
-                  href={`/series/${series.id}`}
-                  onFocus={() => setActiveSeriesId(series.id)}
+                  href={`/серия/${серия.id}`}
+                  onFocus={() => setActiveSeriesId(серия.id)}
                   onBlur={() =>
                     setActiveSeriesId((current) =>
-                      current === series.id ? null : current
+                      current === серия.id ? null : current
                     )
                   }
                   className="group relative flex h-44 flex-col overflow-visible bg-card rounded-md p-5 shadow-[var(--shadow-raised)] hover:shadow-[var(--shadow-raised-hover)] focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-paper outline-none transition-shadow duration-[var(--duration-base)]"
@@ -116,65 +116,65 @@ export default function SeriesListPage() {
                     {/* Name + cadence */}
                     <div className="flex items-start justify-between gap-2 mb-2">
                       <h2 className="font-display font-medium text-ink text-base leading-5 group-hover:text-accent group-focus:text-accent transition-colors line-clamp-2">
-                        {series.name}
+                        {серия.name}
                       </h2>
                       <Badge
                         variant="secondary"
                         className="shrink-0 gap-1 text-[10px]"
                       >
-                        <MinutiaCadenceIcon cadence={series.cadence} className="size-3 text-ink" />
-                        {CADENCE_LABELS[series.cadence]}
+                        <MinutiaCadenceIcon cadence={серия.cadence} className="size-3 text-ink" />
+                        {CADENCE_LABELS[серия.cadence]}
                       </Badge>
                     </div>
 
                     <div className="h-10 mb-3">
-                      {series.description && (
+                      {серия.description && (
                         <p className="text-sm leading-5 text-ink-2 line-clamp-2">
-                          {series.description}
+                          {серия.description}
                         </p>
                       )}
                     </div>
 
                     {/* Footer meta */}
                     <div className="mt-auto flex min-h-5 items-center gap-3 text-xs text-ink-3">
-                      {series.open_issues_count > 0 && (
+                      {серия.открыто_issues_count > 0 && (
                         <span
                           className={cn(
                             "font-medium",
-                            series.open_issues_count > 5
+                            серия.открыто_issues_count > 5
                               ? "text-accent"
                               : "text-ink-3"
                           )}
                         >
-                          {series.open_issues_count} open{" "}
-                          {series.open_issues_count === 1 ? "issue" : "issues"}
+                          {серия.открыто_issues_count} открыто{" "}
+                          {серия.открыто_issues_count === 1 ? "issue" : "issues"}
                         </span>
                       )}
                       <span className="font-mono text-ink-4">
-                        Updated {formatDate(series.updated_at)}
+                        Updated {formatDate(серия.updated_at)}
                       </span>
                     </div>
                   </div>
 
                   <AnimatePresence>
-                    {activeSeriesId === series.id && (
+                    {activeSeriesId === серия.id && (
                       <motion.div
-                        data-testid="series-card-detail-panel"
+                        data-testid="серия-card-detail-panel"
                         className="pointer-events-none absolute left-3 right-3 top-[calc(100%-0.5rem)] z-20 rounded-md bg-card px-3 py-2.5 shadow-xl"
                         {...detailPanelMotion}
                       >
                         <p className="font-display text-sm font-medium leading-5 text-ink">
-                          {series.name}
+                          {серия.name}
                         </p>
-                        {series.description && (
+                        {серия.description && (
                           <p className="mt-1 text-xs leading-5 text-ink-2">
-                            {series.description}
+                            {серия.description}
                           </p>
                         )}
                         <div className="mt-2 flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-ink-4">
-                          <span>{CADENCE_LABELS[series.cadence]}</span>
+                          <span>{CADENCE_LABELS[серия.cadence]}</span>
                           <span aria-hidden="true">/</span>
-                          <span>Updated {formatDate(series.updated_at)}</span>
+                          <span>Updated {formatDate(серия.updated_at)}</span>
                         </div>
                       </motion.div>
                     )}
@@ -186,7 +186,7 @@ export default function SeriesListPage() {
         )}
       </div>
 
-      <CreateSeriesDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <CreateSeriesDialog открыто={dialogOpen} onOpenChange={setDialogOpen} />
     </div>
   );
 }

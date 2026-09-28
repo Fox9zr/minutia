@@ -2,19 +2,19 @@
 
 import { create } from "zustand";
 
-type GroupBy = "series" | "owner" | "priority" | "due" | "none";
+type GroupBy = "серия" | "owner" | "priority" | "due" | "none";
 type SortBy = "priority" | "recency" | "age" | "due";
 
 interface UIState {
   // Command palette
   commandPaletteOpen: boolean;
-  openCommandPalette: () => void;
+  открытоCommandPalette: () => void;
   closeCommandPalette: () => void;
   toggleCommandPalette: () => void;
 
   // Quick add dialog (global "N" shortcut + board FAB)
   quickAddDialogOpen: boolean;
-  openQuickAddDialog: () => void;
+  открытоQuickAddDialog: () => void;
   closeQuickAddDialog: () => void;
 
   // OIL Board filters
@@ -36,7 +36,7 @@ interface UIState {
   // Calendar sidebar (right panel)
   calendarSidebarOpen: boolean;
   toggleCalendarSidebar: () => void;
-  setCalendarSidebarOpen: (open: boolean) => void;
+  setCalendarSidebarOpen: (открыто: boolean) => void;
   selectedDate: Date;
   setSelectedDate: (date: Date) => void;
 }
@@ -44,14 +44,14 @@ interface UIState {
 export const useUIStore = create<UIState>((set) => ({
   // Command palette
   commandPaletteOpen: false,
-  openCommandPalette: () => set({ commandPaletteOpen: true }),
+  открытоCommandPalette: () => set({ commandPaletteOpen: true }),
   closeCommandPalette: () => set({ commandPaletteOpen: false }),
   toggleCommandPalette: () =>
     set((state) => ({ commandPaletteOpen: !state.commandPaletteOpen })),
 
   // Quick add dialog
   quickAddDialogOpen: false,
-  openQuickAddDialog: () => set({ quickAddDialogOpen: true }),
+  открытоQuickAddDialog: () => set({ quickAddDialogOpen: true }),
   closeQuickAddDialog: () => set({ quickAddDialogOpen: false }),
 
   // OIL Board filters
@@ -79,9 +79,9 @@ export const useUIStore = create<UIState>((set) => ({
       try { localStorage.setItem("minutia:calendar-sidebar", String(next)); } catch {}
       return { calendarSidebarOpen: next };
     }),
-  setCalendarSidebarOpen: (open) => {
-    try { localStorage.setItem("minutia:calendar-sidebar", String(open)); } catch {}
-    set({ calendarSidebarOpen: open });
+  setCalendarSidebarOpen: (открыто) => {
+    try { localStorage.setItem("minutia:calendar-sidebar", String(открыто)); } catch {}
+    set({ calendarSidebarOpen: открыто });
   },
   selectedDate: new Date(),
   setSelectedDate: (date) => set({ selectedDate: date }),

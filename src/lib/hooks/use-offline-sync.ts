@@ -19,13 +19,13 @@ export function useOfflineSync() {
   const [isOnline, setIsOnline] = React.useState(
     typeof navigator !== "undefined" ? navigator.onLine : true
   );
-  const [pendingCount, setPendingCount] = React.useState(0);
+  const [в ожиданииCount, setPendingCount] = React.useState(0);
   const [syncStatus, setSyncStatus] = React.useState<SyncStatus>(
     typeof navigator !== "undefined" && !navigator.onLine ? "offline" : "synced"
   );
   const flushingRef = React.useRef(false);
 
-  // Refresh pending count from IndexedDB
+  // Refresh в ожидании count from IndexedDB
   const refreshCount = React.useCallback(async () => {
     try {
       const count = await getPendingCount();
@@ -36,7 +36,7 @@ export function useOfflineSync() {
     }
   }, []);
 
-  // Flush all pending items to Supabase
+  // Flush all в ожидании items to Supabase
   const flush = React.useCallback(async () => {
     if (flushingRef.current) return;
     flushingRef.current = true;
@@ -64,7 +64,7 @@ export function useOfflineSync() {
             const { error } = await supabase.from("decisions").insert({
               title: item.title,
               meeting_id: item.meeting_id,
-              series_id: item.series_id,
+              серия_id: item.серия_id,
             });
             if (error) throw error;
           } else {
@@ -73,8 +73,8 @@ export function useOfflineSync() {
               category: item.category ?? "action",
               priority: (item.priority ?? "medium") as string,
               raised_in_meeting_id: item.meeting_id,
-              series_id: item.series_id,
-              status: "open" as IssueStatus,
+              серия_id: item.серия_id,
+              status: "открыто" as IssueStatus,
               source: "manual",
               owner_user_id: user.id,
             });
@@ -82,7 +82,7 @@ export function useOfflineSync() {
           }
 
           await removePendingItem(item.id);
-          affectedSeries.add(item.series_id);
+          affectedSeries.add(item.серия_id);
           affectedMeetings.add(item.meeting_id);
         } catch {
           // If a single item fails, stop flushing; we will retry on next online event
@@ -90,7 +90,7 @@ export function useOfflineSync() {
         }
       }
 
-      // Invalidate caches for all affected series/meetings
+      // Invalidate caches for all affected серия/meetings
       if (affectedSeries.size > 0 || affectedMeetings.size > 0) {
         queryClient.invalidateQueries({ queryKey: issueKeys.all });
         for (const sid of affectedSeries) {
@@ -137,5 +137,5 @@ export function useOfflineSync() {
     };
   }, [flush, refreshCount]);
 
-  return { isOnline, pendingCount, syncStatus, refreshCount, flush };
+  return { isOnline, в ожиданииCount, syncStatus, refreshCount, flush };
 }

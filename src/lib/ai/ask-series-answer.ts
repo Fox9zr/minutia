@@ -24,7 +24,7 @@ const providerAnswerSchema = z.object({
   unsupported: z.boolean().default(false),
 });
 
-const openRouterTextSchema = z
+const открытоRouterTextSchema = z
   .object({
     choices: z.array(
       z.object({
@@ -71,7 +71,7 @@ export function stripJsonFences(text: string) {
 }
 
 export function getTextFromOpenRouter(data: unknown) {
-  const parsed = openRouterTextSchema.safeParse(data);
+  const parsed = открытоRouterTextSchema.safeParse(data);
   if (!parsed.success) return "";
 
   const content = parsed.data.choices[0].message.content;
@@ -101,7 +101,7 @@ function citationLabel(citation: Pick<AskSeriesCitation, "type" | "title" | "mee
 
 function resolveCitation(input: {
   citation: ProviderCitation;
-  seriesId: string;
+  серияId: string;
   meetings: Map<string, SourceSummary>;
   issues: Map<string, SourceSummary>;
   decisions: Map<string, SourceSummary>;
@@ -143,7 +143,7 @@ function resolveCitation(input: {
     meeting_title,
     href: relativeHref.startsWith("/issues")
       ? relativeHref
-      : `/series/${input.seriesId}/${relativeHref}`,
+      : `/серия/${input.серияId}/${relativeHref}`,
     label: citationLabel({ type: inferredType, title, meeting_title }),
   };
 
@@ -152,7 +152,7 @@ function resolveCitation(input: {
 
 export function parseAskSeriesAnswer(input: {
   providerData: unknown;
-  seriesId: string;
+  серияId: string;
   meetings: SourceSummary[];
   issues: SourceSummary[];
   decisions: SourceSummary[];
@@ -169,7 +169,7 @@ export function parseAskSeriesAnswer(input: {
         ? [
             resolveCitation({
               citation: result.data,
-              seriesId: input.seriesId,
+              серияId: input.серияId,
               meetings,
               issues,
               decisions,

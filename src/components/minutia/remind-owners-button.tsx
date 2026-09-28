@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Bell, BellRing, Check, Loader2 } from "lucide-react";
 
 interface RemindOwnersButtonProps {
-  seriesId: string;
+  серияId: string;
 }
 
 type State = "idle" | "sending" | "done" | "error";
 
-export function RemindOwnersButton({ seriesId }: RemindOwnersButtonProps) {
+export function RemindOwnersButton({ серияId }: RemindOwnersButtonProps) {
   const [state, setState] = React.useState<State>("idle");
   const [message, setMessage] = React.useState<string>("");
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout>>(null);
@@ -37,7 +37,7 @@ export function RemindOwnersButton({ seriesId }: RemindOwnersButtonProps) {
     setMessage("");
 
     try {
-      const res = await fetch(`/api/series/${seriesId}/remind`, {
+      const res = await fetch(`/api/серия/${серияId}/remind`, {
         method: "POST",
       });
       const data = await res.json();

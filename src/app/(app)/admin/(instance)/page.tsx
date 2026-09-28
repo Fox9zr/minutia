@@ -7,9 +7,9 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 type Overview = {
   users: number;
-  series: number;
+  серия: number;
   meetings: number;
-  openIssues: number;
+  открытоIssues: number;
   instanceName: string;
   version: string;
   deploymentMode: string;
@@ -23,9 +23,9 @@ async function fetchOverview(): Promise<Overview> {
 
 const KPIS = [
   { key: "users", label: "Пользователи" },
-  { key: "series", label: "Серия" },
+  { key: "серия", label: "Серия" },
   { key: "meetings", label: "Встречи" },
-  { key: "openIssues", label: "Открытые вопросы" },
+  { key: "открытоIssues", label: "Открытые вопросы" },
 ] as const;
 
 export default function AdminOverviewPage() {

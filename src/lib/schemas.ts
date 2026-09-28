@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 const issueCategoryEnum = z.enum(["action", "decision", "info", "risk", "blocker"]);
-const issueStatusEnum = z.enum(["open", "in_progress", "pending", "resolved", "dropped"]);
+const issueStatusEnum = z.enum(["открыто", "in_progress", "в ожидании", "resolved", "dropped"]);
 const priorityEnum = z.enum(["low", "medium", "high", "critical"]);
 const cadenceEnum = z.enum(["daily", "weekly", "biweekly", "monthly", "adhoc"]);
 const sharePermissionEnum = z.enum(["view", "comment"]);
-const shareResourceTypeEnum = z.enum(["meeting", "series", "issue"]);
+const shareResourceTypeEnum = z.enum(["meeting", "серия", "issue"]);
 const themeEnum = z.enum(["light", "dark", "system"]);
 
 export const createSeriesSchema = z.object({
@@ -16,7 +16,7 @@ export const createSeriesSchema = z.object({
 });
 
 export const createMeetingSchema = z.object({
-  series_id: z.string().uuid(),
+  серия_id: z.string().uuid(),
   title: z.string().min(1).max(200),
   date: z.iso.datetime(),
   attendees: z.array(z.string()),

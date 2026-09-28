@@ -11,7 +11,7 @@ import {
   useSeriesRealtime,
   useUpdateSeries,
   useDeleteSeries,
-} from "@/lib/hooks/use-series";
+} from "@/lib/hooks/use-серия";
 import {
   useMeetings,
   useStartOrJoinMeeting,
@@ -67,7 +67,7 @@ const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 interface SeriesDetailContentProps {
-  seriesId: string;
+  серияId: string;
 }
 
 type AskSeriesCitation = {
@@ -88,11 +88,11 @@ type AskSeriesAnswer = {
   prompt_version: string;
 };
 
-export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
+export function SeriesDetailContent({ серияId }: SeriesDetailContentProps) {
   const router = useRouter();
-  const validSeriesId = UUID_PATTERN.test(seriesId);
-  const querySeriesId = validSeriesId ? seriesId : "";
-  const { data: series, isLoading: seriesLoading } = useSeriesDetail(seriesId);
+  const validSeriesId = UUID_PATTERN.test(серияId);
+  const querySeriesId = validSeriesId ? серияId : "";
+  const { data: серия, isLoading: серияLoading } = useSeriesDetail(серияId);
   const { data: meetings } = useMeetings(querySeriesId);
   const { data: issues } = useIssues(querySeriesId, validSeriesId);
   const { data: decisions } = useDecisions(undefined, querySeriesId, validSeriesId);
@@ -111,9 +111,9 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
   const { data: aiAccess } = useAiAccess();
   const hasAccess = aiAccess?.hasAccess === true;
 
-  // Filter open issues (not resolved/dropped), in manual board order so an
+  // Filter открыто issues (not resolved/dropped), in manual board order so an
   // optimistic dashboard reorder reflects here immediately.
-  const openIssues = React.useMemo(
+  const открытоIssues = React.useMemo(
     () =>
       (issues ?? [])
         .filter((issue) => issue.status !== "resolved" && issue.status !== "dropped")
@@ -138,7 +138,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
     participantRole === "owner" || participantRole === "facilitator";
 
   const showBrief =
-    openIssues.length > 0 ||
+    открытоIssues.length > 0 ||
     (nextMeeting &&
       new Date(nextMeeting.date).getTime() - Date.now() < 24 * 60 * 60 * 1000);
 
@@ -155,11 +155,11 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
   }, [sortedMeetings, issues, decisions]);
 
   async function handleStartMeeting() {
-    if (!series) return;
+    if (!серия) return;
     setStartingMeeting(true);
     try {
-      const meeting = await startOrJoinMeeting.mutateAsync(seriesId);
-      router.push(`/series/${seriesId}/meetings/${meeting.id}`);
+      const meeting = await startOrJoinMeeting.mutateAsync(серияId);
+      router.push(`/серия/${серияId}/meetings/${meeting.id}`);
     } finally {
       setStartingMeeting(false);
     }
@@ -172,7 +172,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
     setAskError(null);
     setAskingSeries(true);
     try {
-      const response = await fetch(`/api/series/${seriesId}/ask`, {
+      const response = await fetch(`/api/серия/${серияId}/ask`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question }),
@@ -190,7 +190,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
     }
   }
 
-  if (seriesLoading) {
+  if (серияLoading) {
     return (
       <div className="min-h-full bg-paper">
         <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
@@ -204,7 +204,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
     );
   }
 
-  if (!series) {
+  if (!серия) {
     return (
       <div className="min-h-full bg-paper flex items-center justify-center">
         <p className="text-sm text-ink-3">Серия не найдена.</p>
@@ -219,24 +219,24 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
         <div className="mb-6">
           <div className="flex items-start gap-3">
             <Link
-              href="/series"
+              href="/серия"
               className="text-ink-3 hover:text-ink transition-colors mt-1"
             >
               <ArrowLeft className="size-5" />
             </Link>
             <div className="flex-1 min-w-0">
               <h1 className="font-display text-2xl font-semibold text-ink truncate">
-                {series.name}
+                {серия.name}
               </h1>
-              {series.description && (
-                <p className="text-sm text-ink-2 mt-1 hidden sm:block">{series.description}</p>
+              {серия.description && (
+                <p className="text-sm text-ink-2 mt-1 hidden sm:block">{серия.description}</p>
               )}
             </div>
             <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-              <ShareButton resource_type="series" resource_id={seriesId} />
+              <ShareButton resource_type="серия" resource_id={серияId} />
               {canManageSeries && (
                 <>
-                  <RemindOwnersButton seriesId={seriesId} />
+                  <RemindOwnersButton серияId={серияId} />
                   <Button
                     variant="ghost"
                     size="icon"
@@ -273,8 +273,8 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
               </Button>
             </div>
           </div>
-          {series.description && (
-            <p className="text-sm text-ink-2 mt-2 sm:hidden pl-8">{series.description}</p>
+          {серия.description && (
+            <p className="text-sm text-ink-2 mt-2 sm:hidden pl-8">{серия.description}</p>
           )}
         </div>
 
@@ -282,10 +282,10 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
         {showBrief && (
           <div className="mb-8">
             <BriefCard
-              seriesId={seriesId}
-              seriesName={series.name}
+              серияId={серияId}
+              серияName={серия.name}
               nextMeetingDate={nextMeeting ? new Date(nextMeeting.date) : undefined}
-              pendingIssues={openIssues.slice(0, 5)}
+              в ожиданииIssues={открытоIssues.slice(0, 5)}
             />
           </div>
         )}
@@ -294,10 +294,10 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
           <div className="mb-3 flex items-start justify-between gap-3">
             <div>
               <h2 className="font-display text-lg font-medium text-ink">
-                Ask this series
+                Ask this серия
               </h2>
               <p className="mt-1 text-xs text-ink-3">
-                Query this series only. Answers cite the meeting memory that supports them.
+                Query this серия only. Answers cite the meeting memory that supports them.
               </p>
             </div>
             <Sparkles className="mt-1 size-4 shrink-0 text-accent" />
@@ -328,7 +328,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
               ) : (
                 <Sparkles className="size-3.5" />
               )}
-              Ask series
+              Ask серия
             </Button>
           </div>
 
@@ -393,19 +393,19 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
           {timelineMeetings.length > 0 && (
             <DateAnchoredTimeline
               meetings={timelineMeetings}
-              seriesId={seriesId}
+              серияId={серияId}
             />
           )}
         </section>
 
         {/* Open issues */}
-        {openIssues.length > 0 && (
+        {открытоIssues.length > 0 && (
           <section>
             <h2 className="font-display text-lg font-medium text-ink mb-4">
-              Open issues ({openIssues.length})
+              Open issues ({открытоIssues.length})
             </h2>
             <div className="space-y-3">
-              {openIssues.map((issue) => (
+              {открытоIssues.map((issue) => (
                 <IssueCard key={issue.id} issue={issue} />
               ))}
             </div>
@@ -415,17 +415,17 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
 
       {/* Settings dialog */}
       <SeriesSettingsDialog
-        open={settingsOpen}
+        открыто={settingsOpen}
         onOpenChange={setSettingsOpen}
-        series={series}
+        серия={серия}
       />
 
       {/* CSV import dialog */}
       {sortedMeetings[0] && (
         <CsvImportDialog
-          open={importOpen}
+          открыто={importOpen}
           onOpenChange={setImportOpen}
-          seriesId={seriesId}
+          серияId={серияId}
           meetingId={sortedMeetings[0].id}
         />
       )}
@@ -438,13 +438,13 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
 // ---------------------------------------------------------------------------
 
 function SeriesSettingsDialog({
-  open,
+  открыто,
   onOpenChange,
-  series,
+  серия,
 }: {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
-  series: { id: string; name: string; description: string | null; cadence: Cadence; default_attendees: string[]; gcal_calendar_id: string | null; gcal_sync_enabled: boolean };
+  открыто: boolean;
+  onOpenChange: (открыто: boolean) => void;
+  серия: { id: string; name: string; description: string | null; cadence: Cadence; default_attendees: string[]; gcal_calendar_id: string | null; gcal_sync_enabled: boolean };
 }) {
   const router = useRouter();
   const confirm = useConfirm();
@@ -464,17 +464,17 @@ function SeriesSettingsDialog({
   } = useForm<CreateSeriesInput>({
     resolver: zodResolver(createSeriesSchema as any),
     values: {
-      name: series.name,
-      description: series.description ?? "",
-      cadence: series.cadence,
-      default_attendees: series.default_attendees ?? [],
+      name: серия.name,
+      description: серия.description ?? "",
+      cadence: серия.cadence,
+      default_attendees: серия.default_attendees ?? [],
     },
   });
 
   const selectedCadence = watch("cadence");
 
   async function onSubmit(data: CreateSeriesInput) {
-    await updateSeries.mutateAsync({ id: series.id, ...data });
+    await updateSeries.mutateAsync({ id: серия.id, ...data });
     onOpenChange(false);
   }
 
@@ -488,13 +488,13 @@ function SeriesSettingsDialog({
       }))
     )
       return;
-    deleteSeries.mutate(series.id, {
-      onSuccess: () => router.push("/series"),
+    deleteSeries.mutate(серия.id, {
+      onSuccess: () => router.push("/серия"),
     });
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog открыто={открыто} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="font-display">Настройки серии</DialogTitle>
@@ -557,7 +557,7 @@ function SeriesSettingsDialog({
             <Label htmlFor="edit-attendees">Участники по умолчанию</Label>
             <Input
               id="edit-attendees"
-              defaultValue={(series.default_attendees ?? []).join(", ")}
+              defaultValue={(серия.default_attendees ?? []).join(", ")}
               onChange={(e) => {
                 const attendees = e.target.value
                   .split(",")
@@ -577,18 +577,18 @@ function SeriesSettingsDialog({
             </Label>
             {!gcalStatus?.connected ? (
               <p className="text-xs text-ink-3">
-                <a href="/settings" className="text-accent hover:underline">Подключить Google Calendar</a> in Settings to link a calendar to this series.
+                <a href="/settings" className="text-accent hover:underline">Подключить Google Calendar</a> in Settings to link a calendar to this серия.
               </p>
-            ) : series.gcal_calendar_id && series.gcal_sync_enabled ? (
+            ) : серия.gcal_calendar_id && серия.gcal_sync_enabled ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-ink-2 truncate flex-1">
-                  {calendarList?.find((c) => c.id === series.gcal_calendar_id)?.summary ?? series.gcal_calendar_id}
+                  {calendarList?.find((c) => c.id === серия.gcal_calendar_id)?.summary ?? серия.gcal_calendar_id}
                 </span>
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => unlinkCalendar.mutate(series.id)}
+                  onClick={() => unlinkCalendar.mutate(серия.id)}
                   disabled={unlinkCalendar.isPending}
                 >
                   <X className="size-3.5" />
@@ -598,7 +598,7 @@ function SeriesSettingsDialog({
             ) : (
               <Select
                 onValueChange={(value) => {
-                  linkCalendar.mutate({ seriesId: series.id, calendarId: value });
+                  linkCalendar.mutate({ серияId: серия.id, calendarId: value });
                 }}
               >
                 <SelectTrigger className="w-full">
@@ -638,10 +638,10 @@ function SeriesSettingsDialog({
             disabled={deleteSeries.isPending}
             loading={deleteSeries.isPending}
           >
-            Delete series
+            Delete серия
           </Button>
           <p className="text-[10px] text-ink-4">
-            Permanently deletes this series and all its meetings, issues, and decisions.
+            Permanently deletes this серия and all its meetings, issues, and decisions.
           </p>
         </div>
       </DialogContent>

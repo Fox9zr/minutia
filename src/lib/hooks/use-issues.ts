@@ -9,7 +9,7 @@ import {
 import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { isFeatureGatingEnabled } from "@/lib/feature-access";
-import { isPendingDelete, clearPendingDelete } from "@/lib/pending-delete";
+import { isPendingDelete, clearPendingDelete } from "@/lib/в ожидании-delete";
 import type {
   Issue,
   IssueWithUpdates,
@@ -23,8 +23,8 @@ import type { CreateIssueInput } from "@/lib/schemas";
 // ---------------------------------------------------------------------------
 export const issueKeys = {
   all: ["issues"] as const,
-  list: (seriesId?: string) =>
-    seriesId ? (["issues", seriesId] as const) : (["issues"] as const),
+  list: (серияId?: string) =>
+    серияId ? (["issues", серияId] as const) : (["issues"] as const),
   detail: (id: string) => ["issues", "detail", id] as const,
 };
 
@@ -67,19 +67,19 @@ function updateCachedIssueLists(
 }
 
 // ---------------------------------------------------------------------------
-// useIssues - list issues, optionally filtered by series
+// useIssues - list issues, optionally filtered by серия
 // ---------------------------------------------------------------------------
-export function useIssues(seriesId?: string, enabled = true) {
+export function useIssues(серияId?: string, enabled = true) {
   const supabase = createClient();
 
   return useQuery<Issue[]>({
-    queryKey: issueKeys.list(seriesId),
+    queryKey: issueKeys.list(серияId),
     enabled,
     queryFn: async () => {
       let query = supabase.from("issues").select("*, issue_updates(count)");
-      query = seriesId
+      query = серияId
         ? query
-            .eq("series_id", seriesId)
+            .eq("серия_id", серияId)
             .order("sort_order", { ascending: true })
             .order("created_at", { ascending: false })
         : query.order("created_at", { ascending: false });
@@ -89,7 +89,7 @@ export function useIssues(seriesId?: string, enabled = true) {
       return (data ?? [])
         // Hide issues in the grace-window delete state so the 2s meeting poll
         // (which refetches this query) cannot resurrect a row the user just
-        // deleted while its Undo toast is still up. See src/lib/pending-delete.
+        // deleted while its Undo toast is still up. See src/lib/в ожидании-delete.
         .filter((row: IssueListRow) => !isPendingDelete(row.id))
         .map((row: IssueListRow) => ({
           ...row,
@@ -134,21 +134,21 @@ export async function countActiveIssuesForOrg(
   supabase: ReturnType<typeof createClient>,
   organizationId: string
 ): Promise<number | null> {
-  // Fetch series IDs belonging to the org.
-  const { data: seriesRows, error: seriesError } = await supabase
-    .from("meeting_series")
+  // Fetch серия IDs belonging to the org.
+  const { data: серияRows, error: серияError } = await supabase
+    .from("meeting_серия")
     .select("id")
     .eq("organization_id", organizationId);
 
-  if (seriesError) return null;
-  const seriesIds = (seriesRows ?? []).map((s) => s.id as string);
-  if (seriesIds.length === 0) return 0;
+  if (серияError) return null;
+  const серияIds = (серияRows ?? []).map((s) => s.id as string);
+  if (серияIds.length === 0) return 0;
 
   const { count, error: countError } = await supabase
     .from("issues")
     .select("id", { count: "exact", head: true })
-    .in("series_id", seriesIds)
-    .in("status", ["open", "in_progress", "pending"]);
+    .in("серия_id", серияIds)
+    .in("status", ["открыто", "in_progress", "в ожидании"]);
 
   if (countError) return null;
   return count ?? 0;
@@ -162,7 +162,7 @@ export function useCreateIssue() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: CreateIssueInput & { meeting_id: string; series_id: string }) => {
+    mutationFn: async (input: CreateIssueInput & { meeting_id: string; серия_id: string }) => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -196,8 +196,8 @@ export function useCreateIssue() {
           owner_name: input.owner_name,
           due_date: input.due_date,
           raised_in_meeting_id: input.meeting_id,
-          series_id: input.series_id,
-          status: "open" as IssueStatus,
+          серия_id: input.серия_id,
+          status: "открыто" as IssueStatus,
           source: "manual",
           owner_user_id: input.owner_name ? null : user.id,
         })
@@ -210,7 +210,7 @@ export function useCreateIssue() {
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: issueKeys.all });
       queryClient.invalidateQueries({
-        queryKey: issueKeys.list(variables.series_id),
+        queryKey: issueKeys.list(variables.серия_id),
       });
       queryClient.invalidateQueries({
         queryKey: ["meetings", "detail", variables.meeting_id],
@@ -223,16 +223,16 @@ export function useCreateIssue() {
 // useUpdateIssueStatus - optimistic update + creates IssueUpdate record
 // ---------------------------------------------------------------------------
 const STATUS_LABEL: Record<string, string> = {
-  open: "open",
+  открыто: "открыто",
   in_progress: "in progress",
-  pending: "pending",
+  в ожидании: "в ожидании",
   resolved: "resolved",
   dropped: "dropped",
 };
 
 type UpdateIssueStatusVars = {
   issueId: string;
-  seriesId: string;
+  серияId: string;
   oldStatus: IssueStatus;
   newStatus: IssueStatus;
   note?: string;
@@ -357,7 +357,7 @@ export function useUpdateIssueStatus() {
             onClick: () =>
               mutateRef.current?.({
                 issueId: variables.issueId,
-                seriesId: variables.seriesId,
+                серияId: variables.серияId,
                 oldStatus: variables.newStatus,
                 newStatus: variables.oldStatus,
                 meetingId: variables.meetingId,
@@ -475,14 +475,14 @@ export function useUpdateIssue() {
 }
 
 // ---------------------------------------------------------------------------
-// useReorderIssues - persist drag-to-reorder within a series (issues.sort_order)
+// useReorderIssues - persist drag-to-reorder within a серия (issues.sort_order)
 // ---------------------------------------------------------------------------
 export function useReorderIssues() {
   const supabase = createClient();
   const queryClient = useQueryClient();
-  return useMutation<void, Error, { seriesId: string; orderedIds: string[] }, { previousIssueLists: IssueListSnapshot }>({
-    mutationFn: async ({ seriesId, orderedIds }) => {
-      const { error } = await supabase.rpc("reorder_issues", { p_series_id: seriesId, p_ordered_ids: orderedIds });
+  return useMutation<void, Error, { серияId: string; orderedIds: string[] }, { previousIssueLists: IssueListSnapshot }>({
+    mutationFn: async ({ серияId, orderedIds }) => {
+      const { error } = await supabase.rpc("reorder_issues", { p_серия_id: серияId, p_ordered_ids: orderedIds });
       if (error) throw error;
     },
     onMutate: async ({ orderedIds }) => {
@@ -493,9 +493,9 @@ export function useReorderIssues() {
       return { previousIssueLists };
     },
     onError: (_e, _v, ctx) => { if (ctx) restoreIssueListSnapshots(queryClient, ctx.previousIssueLists); },
-    onSettled: (_d, _e, { seriesId }) => {
+    onSettled: (_d, _e, { серияId }) => {
       queryClient.invalidateQueries({ queryKey: issueKeys.all });
-      queryClient.invalidateQueries({ queryKey: issueKeys.list(seriesId) });
+      queryClient.invalidateQueries({ queryKey: issueKeys.list(серияId) });
     },
     meta: { errorMessage: "Не удалось сохранить новый порядок." },
   });
@@ -726,7 +726,7 @@ export function useDeleteIssue() {
 
       if (error) throw error;
     },
-    // The UI optimistically hides the row and parks its id in the pending-delete
+    // The UI optimistically hides the row and parks its id in the в ожидании-delete
     // registry (grace window). Whether the server delete succeeds or fails, clear
     // the id so the fetch-filter stops hiding it: on success the row is already
     // gone; on error the row honestly returns and the global error toast fires.

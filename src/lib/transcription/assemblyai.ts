@@ -2,7 +2,7 @@
 // AssemblyAI diarizing STT client (cloud diarization primary).
 //
 // Async job model: upload -> create transcript with speaker_labels -> poll.
-// speakers_expected is fed from the known series roster size, a real accuracy
+// speakers_expected is fed from the known серия roster size, a real accuracy
 // lever. Utterance times are milliseconds; we normalize to seconds. No chunking:
 // diarization needs the whole recording in one label space.
 // ---------------------------------------------------------------------------

@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Check, ChevronDown } from "lucide-react";
 import { useIssues, useUpdateIssueStatus } from "@/lib/hooks/use-issues";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-серия";
 import { useProfile } from "@/lib/hooks/use-profile";
 import { PRIORITY_CONFIG } from "@/lib/constants";
 import { EmptyState } from "@/components/minutia";
@@ -47,7 +47,7 @@ function Section({
   defaultOpen = true,
   children,
 }: SectionProps) {
-  const [open, setOpen] = React.useState(defaultOpen);
+  const [открыто, setOpen] = React.useState(defaultOpen);
 
   return (
     <div>
@@ -58,7 +58,7 @@ function Section({
       >
         <ChevronDown
           className={`size-3.5 text-ink-3 transition-transform duration-200 ${
-            open ? "" : "-rotate-90"
+            открыто ? "" : "-rotate-90"
           }`}
         />
         <h2 className="text-xs font-mono font-medium uppercase tracking-wider text-ink-3">
@@ -68,7 +68,7 @@ function Section({
       </button>
 
       <AnimatePresence initial={false}>
-        {open && (
+        {открыто && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
@@ -90,13 +90,13 @@ function Section({
 
 function ActionRow({
   issue,
-  seriesName,
+  серияName,
   done,
   index,
   onComplete,
 }: {
   issue: Issue;
-  seriesName?: string;
+  серияName?: string;
   done: boolean;
   index: number;
   onComplete: (issue: Issue, opts: { onError: () => void }) => void;
@@ -151,9 +151,9 @@ function ActionRow({
 
       <div className="flex shrink-0 items-center gap-2.5 text-xs">
         <IssueKey issue={issue} className="h-5 px-1.5 text-[10px]" />
-        {seriesName && (
+        {серияName && (
           <span className="hidden max-w-[140px] truncate text-ink-4 sm:inline">
-            {seriesName}
+            {серияName}
           </span>
         )}
         {issue.due_date && (
@@ -195,18 +195,18 @@ function ActionsSkeleton() {
 
 export default function MyActionsPage() {
   const { data: issues, isLoading: issuesLoading } = useIssues();
-  const { data: seriesList, isLoading: seriesLoading } = useSeries();
+  const { data: серияList, isLoading: серияLoading } = useSeries();
   const { data: profile, isLoading: profileLoading } = useProfile();
   const updateStatus = useUpdateIssueStatus();
 
-  // Build series name map
-  const seriesMap = React.useMemo(() => {
+  // Build серия name map
+  const серияMap = React.useMemo(() => {
     const map = new Map<string, string>();
-    for (const s of seriesList ?? []) {
+    for (const s of серияList ?? []) {
       map.set(s.id, s.name);
     }
     return map;
-  }, [seriesList]);
+  }, [серияList]);
 
   // Filter issues assigned to the current user
   const myIssues = React.useMemo(() => {
@@ -215,35 +215,35 @@ export default function MyActionsPage() {
   }, [issues, profile]);
 
   // Group into sections
-  const { needsAttention, pending, completed } = React.useMemo(() => {
+  const { needsAttention, в ожидании, completed } = React.useMemo(() => {
     const needsAttention: Issue[] = [];
-    const pending: Issue[] = [];
+    const в ожидании: Issue[] = [];
     const completed: Issue[] = [];
 
     for (const issue of myIssues) {
       if (issue.status === "resolved" || issue.status === "dropped") {
         completed.push(issue);
-      } else if (issue.status === "pending") {
-        pending.push(issue);
+      } else if (issue.status === "в ожидании") {
+        в ожидании.push(issue);
       } else {
-        // open + in_progress
+        // открыто + in_progress
         needsAttention.push(issue);
       }
     }
 
     needsAttention.sort(sortByPriorityThenDue);
-    pending.sort(sortByPriorityThenDue);
+    в ожидании.sort(sortByPriorityThenDue);
     completed.sort(
       (a, b) =>
         new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime(),
     );
 
-    return { needsAttention, pending, completed };
+    return { needsAttention, в ожидании, completed };
   }, [myIssues]);
 
   // Counts for summary line
-  const openCount = needsAttention.length;
-  const pendingCount = pending.length;
+  const открытоCount = needsAttention.length;
+  const в ожиданииCount = в ожидании.length;
   const overdueCount = React.useMemo(
     () => myIssues.filter(isOverdue).length,
     [myIssues],
@@ -254,7 +254,7 @@ export default function MyActionsPage() {
     updateStatus.mutate(
       {
         issueId: issue.id,
-        seriesId: issue.series_id,
+        серияId: issue.серия_id,
         oldStatus: issue.status,
         newStatus: "resolved",
       },
@@ -262,7 +262,7 @@ export default function MyActionsPage() {
     );
   }
 
-  const isLoading = issuesLoading || seriesLoading || profileLoading;
+  const isLoading = issuesLoading || серияLoading || profileLoading;
   const isEmpty = !isLoading && myIssues.length === 0;
 
   function renderActionRow(issue: Issue, globalIndex: number, done: boolean) {
@@ -270,7 +270,7 @@ export default function MyActionsPage() {
       <ActionRow
         key={issue.id}
         issue={issue}
-        seriesName={seriesMap.get(issue.series_id)}
+        серияName={серияMap.get(issue.серия_id)}
         done={done}
         index={globalIndex}
         onComplete={handleComplete}
@@ -288,16 +288,16 @@ export default function MyActionsPage() {
           </h1>
           {!isLoading && myIssues.length > 0 && (
             <p className="mt-1.5 text-sm text-ink-2">
-              {openCount > 0 && <span>{openCount} OPEN</span>}
-              {pendingCount > 0 && (
+              {открытоCount > 0 && <span>{открытоCount} OPEN</span>}
+              {в ожиданииCount > 0 && (
                 <span>
-                  {openCount > 0 ? " · " : ""}
-                  {pendingCount} PENDING
+                  {открытоCount > 0 ? " · " : ""}
+                  {в ожиданииCount} PENDING
                 </span>
               )}
               {overdueCount > 0 && (
                 <span className="text-accent">
-                  {openCount > 0 || pendingCount > 0 ? " · " : ""}
+                  {открытоCount > 0 || в ожиданииCount > 0 ? " · " : ""}
                   {overdueCount} OVERDUE
                 </span>
               )}
@@ -334,14 +334,14 @@ export default function MyActionsPage() {
             )}
 
             {/* Pending */}
-            {pending.length > 0 && (
+            {в ожидании.length > 0 && (
               <Section
                 title="В ожидании"
-                count={pending.length}
+                count={в ожидании.length}
                 defaultOpen={true}
               >
                 <div className="space-y-0.5">
-                  {pending.map((issue, index) =>
+                  {в ожидании.map((issue, index) =>
                     renderActionRow(issue, needsAttention.length + index, false),
                   )}
                 </div>
@@ -359,7 +359,7 @@ export default function MyActionsPage() {
                   {completed.map((issue, index) =>
                     renderActionRow(
                       issue,
-                      needsAttention.length + pending.length + index,
+                      needsAttention.length + в ожидании.length + index,
                       true,
                     ),
                   )}

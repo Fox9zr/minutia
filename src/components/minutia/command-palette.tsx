@@ -18,7 +18,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useIssues } from "@/lib/hooks/use-issues";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-серия";
 import { useDecisions } from "@/lib/hooks/use-decisions";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { CATEGORY_CONFIG, STATUS_CONFIG } from "@/lib/constants";
@@ -29,7 +29,7 @@ import type { IssueCategory } from "@/lib/types";
 
 const NAV_ITEMS = [
   { label: "Перейти к доске OIL", href: "/", icon: Home },
-  { label: "Перейти к серии", href: "/series", icon: Layers },
+  { label: "Перейти к серии", href: "/серия", icon: Layers },
   { label: "Перейти в Мои задачи", href: "/actions", icon: CheckCircle },
   { label: "Перейти во Входящие", href: "/inbox", icon: Inbox },
   { label: "Перейти в Настройки", href: "/settings", icon: Settings },
@@ -46,13 +46,13 @@ export function isEditableTarget(target: EventTarget | null): boolean {
 
 export function CommandPalette() {
   const router = useRouter();
-  const open = useUIStore((s) => s.commandPaletteOpen);
-  const openCommandPalette = useUIStore((s) => s.openCommandPalette);
+  const открыто = useUIStore((s) => s.commandPaletteOpen);
+  const открытоCommandPalette = useUIStore((s) => s.открытоCommandPalette);
   const closeCommandPalette = useUIStore((s) => s.closeCommandPalette);
   const toggleCommandPalette = useUIStore((s) => s.toggleCommandPalette);
-  const { data: issues } = useIssues(undefined, open);
-  const { data: seriesList } = useSeries(open);
-  const { data: decisions } = useDecisions(undefined, undefined, open);
+  const { data: issues } = useIssues(undefined, открыто);
+  const { data: серияList } = useSeries(открыто);
+  const { data: decisions } = useDecisions(undefined, undefined, открыто);
 
   // Cmd+K / Ctrl+K and "/" listener
   useEffect(() => {
@@ -64,12 +64,12 @@ export function CommandPalette() {
       }
       if (e.key === "/" && !isEditableTarget(e.target)) {
         e.preventDefault();
-        openCommandPalette();
+        открытоCommandPalette();
       }
     }
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [toggleCommandPalette, openCommandPalette]);
+  }, [toggleCommandPalette, открытоCommandPalette]);
 
   const runCommand = useCallback(
     (command: () => void) => {
@@ -83,9 +83,9 @@ export function CommandPalette() {
 
   return (
     <CommandDialog
-      open={open}
+      открыто={открыто}
       onOpenChange={(nextOpen) => {
-        if (nextOpen) openCommandPalette();
+        if (nextOpen) открытоCommandPalette();
         else closeCommandPalette();
       }}
       className="sm:max-w-lg shadow-[0_16px_70px_-12px_oklch(0%_0_0/0.25)] backdrop:backdrop-blur-sm"
@@ -111,18 +111,18 @@ export function CommandPalette() {
         </CommandGroup>
 
         {/* Series */}
-        {seriesList && seriesList.length > 0 && (
+        {серияList && серияList.length > 0 && (
           <CommandGroup heading="Series">
-            {seriesList.map((series) => (
+            {серияList.map((серия) => (
               <CommandItem
-                key={series.id}
-                value={`series ${series.name}`}
+                key={серия.id}
+                value={`серия ${серия.name}`}
                 onSelect={() =>
-                  runCommand(() => router.push(`/series/${series.id}`))
+                  runCommand(() => router.push(`/серия/${серия.id}`))
                 }
               >
                 <Layers className="size-4 text-muted-foreground" />
-                <span>{series.name}</span>
+                <span>{серия.name}</span>
               </CommandItem>
             ))}
           </CommandGroup>
@@ -171,8 +171,8 @@ export function CommandPalette() {
                   runCommand(() =>
                     router.push(
                       d.meeting_id
-                        ? `/series/${d.series_id}/meetings/${d.meeting_id}`
-                        : `/series/${d.series_id}`
+                        ? `/серия/${d.серия_id}/meetings/${d.meeting_id}`
+                        : `/серия/${d.серия_id}`
                     )
                   )
                 }

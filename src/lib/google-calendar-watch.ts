@@ -82,7 +82,7 @@ export async function createOrRenewCalendarWatchChannel({
   const tokenHash = hashCalendarChannelToken(channelToken);
   const requestedExpirationAt = new Date(Date.now() + ttlSeconds * 1000).toISOString();
 
-  const { data: pending, error: insertError } = await supabase
+  const { data: в ожидании, error: insertError } = await supabase
     .from("google_calendar_watch_channels")
     .insert({
       user_id: userId,
@@ -118,7 +118,7 @@ export async function createOrRenewCalendarWatchChannel({
         last_renewed_at: new Date().toISOString(),
         error_message: null,
       })
-      .eq("id", pending.id)
+      .eq("id", в ожидании.id)
       .select("id, channel_id, resource_id, resource_uri, expiration_at, status")
       .single<{
         id: string;
@@ -145,7 +145,7 @@ export async function createOrRenewCalendarWatchChannel({
         status: "failed",
         error_message: err instanceof Error ? err.message : "Сбой отслеживания календаря",
       })
-      .eq("id", pending.id);
+      .eq("id", в ожидании.id);
     throw err;
   }
 }

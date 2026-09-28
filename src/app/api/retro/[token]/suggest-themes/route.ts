@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { callAi } from "@/lib/ai/call";
 import { hasAiConfigured } from "@/lib/ai/config";
-import { getTextFromOpenRouter } from "@/lib/ai/ask-series-answer";
+import { getTextFromOpenRouter } from "@/lib/ai/ask-серия-answer";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { getInstanceConfigMap } from "@/lib/instance-config";
 import { isFeatureGatingEnabled } from "@/lib/feature-access";

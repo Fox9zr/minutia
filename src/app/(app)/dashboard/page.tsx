@@ -37,7 +37,7 @@ import {
   useUpdateIssueStatus,
   useReorderIssues,
 } from "@/lib/hooks/use-issues";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-серия";
 import { useAllMeetings } from "@/lib/hooks/use-meetings";
 import { useDecisions } from "@/lib/hooks/use-decisions";
 import { CADENCE_LABELS, STATUS_CONFIG, PRIORITY_CONFIG } from "@/lib/constants";
@@ -69,7 +69,7 @@ import { WidgetCanvas } from "@/components/minutia/widgets/widget-canvas";
 import { AddWidgetButton } from "@/components/minutia/widgets/add-widget";
 import { UpgradeConfirmation } from "@/components/minutia/upgrade-confirmation";
 import { StaleItemsWidget } from "@/components/minutia/widgets/stale-items-widget";
-import { SeriesHealthWidget } from "@/components/minutia/widgets/series-health-widget";
+import { SeriesHealthWidget } from "@/components/minutia/widgets/серия-health-widget";
 import { MeetingTriageWidget } from "@/components/minutia/widgets/meeting-triage-widget";
 import { WorkloadWidget } from "@/components/minutia/widgets/workload-widget";
 import { useCalendarEvents } from "@/lib/hooks/use-google-calendar";
@@ -176,26 +176,26 @@ function highlightMatch(text: string, query: string): React.ReactNode {
 function HeroWidget({
   id,
   widgetIndex,
-  openCount,
-  pendingCount,
+  открытоCount,
+  в ожиданииCount,
   overdueCount,
-  seriesCount,
+  серияCount,
   meetings,
 }: {
   id: string;
   widgetIndex: number;
-  openCount: number;
-  pendingCount: number;
+  открытоCount: number;
+  в ожиданииCount: number;
   overdueCount: number;
-  seriesCount: number;
-  meetings: { id: string; title: string; sequence_number: number; series_id: string; date: Date; issues_raised: number; issues_resolved: number }[];
+  серияCount: number;
+  meetings: { id: string; title: string; sequence_number: number; серия_id: string; date: Date; issues_raised: number; issues_resolved: number }[];
 }) {
   const recentMeetings = meetings.slice(-8);
   const maxIssues = Math.max(1, ...recentMeetings.map((m) => m.issues_raised + m.issues_resolved));
-  const avgLife = openCount > 0
+  const avgLife = открытоCount > 0
     ? Math.round(
         (meetings ?? []).reduce((acc, m) => acc + m.issues_raised, 0) /
-          Math.max(1, openCount)
+          Math.max(1, открытоCount)
       )
     : 0;
 
@@ -206,19 +206,19 @@ function HeroWidget({
       </p>
       <div className="flex flex-wrap items-baseline gap-x-4 gap-y-2 mb-2">
         <NumberFlow
-          value={openCount}
+          value={открытоCount}
           className="font-display text-5xl font-bold text-ink tabular-nums leading-none"
         />
         <div>
           <h2 className="font-display text-lg font-semibold text-ink leading-tight">
-            Open items across your series
+            Открытые поручения по вашим сериям
           </h2>
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2 mt-1">
-        <span>{openCount} open</span>
+        <span>{открытоCount} открыто</span>
         <span className="text-ink-4">·</span>
-        <span>{pendingCount} pending</span>
+        <span>{в ожиданииCount} в ожидании</span>
         {overdueCount > 0 && (
           <>
             <span className="text-ink-4">·</span>
@@ -226,18 +226,18 @@ function HeroWidget({
           </>
         )}
         <span className="text-ink-4">·</span>
-        <span>{seriesCount} series</span>
+        <span>{серияCount} серия</span>
       </div>
 
       {recentMeetings.length > 0 && (
         <div className="mt-6 pt-5 border-t border-rule">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
             <p className="text-xs text-ink-3">
-              Issues across last {recentMeetings.length} meetings
+              Поручения по последним {recentMeetings.length} встречам
             </p>
             {avgLife > 0 && (
               <p className="text-xs text-ink-4">
-                avg life <span className="font-semibold text-ink-2">{avgLife} days</span>
+                ср. срок жизни <span className="font-semibold text-ink-2">{avgLife} дн.</span>
               </p>
             )}
           </div>
@@ -295,21 +295,21 @@ function HeroWidget({
 }
 
 // ---------------------------------------------------------------------------
-// Next meeting widget
+// Следующая встреча widget
 // ---------------------------------------------------------------------------
 
 function NextMeetingWidget({
   id,
   widgetIndex,
-  seriesList,
+  серияList,
   calendarEvents,
 }: {
   id: string;
   widgetIndex: number;
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  серияList: (MeetingSeries & { открыто_issues_count: number })[];
   calendarEvents?: GoogleCalendarEvent[];
 }) {
-  const nextSeries = seriesList[0];
+  const nextSeries = серияList[0];
   if (!nextSeries) return null;
 
   const nextEvent = calendarEvents?.[0];
@@ -324,7 +324,7 @@ function NextMeetingWidget({
       <div className="flex items-center gap-2 mb-4">
         <span className="inline-flex items-center gap-1.5 text-xs font-medium text-accent">
           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
-          Next meeting
+          Следующая встреча
         </span>
       </div>
       <h3 className="font-display text-lg font-semibold text-ink mb-1 break-words">
@@ -350,15 +350,15 @@ function NextMeetingWidget({
           {CADENCE_LABELS[nextSeries.cadence]}
         </p>
       )}
-      {nextSeries.open_issues_count > 0 && (
+      {nextSeries.открыто_issues_count > 0 && (
         <p className="text-sm text-ink-2 mb-5">
-          <span className="text-accent font-medium"><span className="font-mono">{nextSeries.open_issues_count}</span> items pending</span> from last meeting.
+          <span className="text-accent font-medium"><span className="font-mono">{nextSeries.открыто_issues_count}</span> items в ожидании</span> from last meeting.
         </p>
       )}
       <div className="flex items-center gap-3">
-        <Link href={`/series/${nextSeries.id}`} className="w-full">
+        <Link href={`/серия/${nextSeries.id}`} className="w-full">
           <Button variant="accent" className="w-full h-10">
-            Open series
+            Open серия
             <ArrowRight className="size-3.5 ml-1.5" />
           </Button>
         </Link>
@@ -375,22 +375,22 @@ function OutstandingWidget({
   id,
   widgetIndex,
   issues,
-  seriesMap,
-  seriesList,
+  серияMap,
+  серияList,
   onStatusChange,
 }: {
   id: string;
   widgetIndex: number;
   issues: Issue[];
-  seriesMap: Map<string, MeetingSeries & { open_issues_count: number }>;
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
-  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
+  серияMap: Map<string, MeetingSeries & { открыто_issues_count: number }>;
+  серияList: (MeetingSeries & { открыто_issues_count: number })[];
+  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) => void;
 }) {
   const router = useRouter();
   const groupBy = useUIStore((s) => s.groupBy);
   const setGroupBy = useUIStore((s) => s.setGroupBy);
-  const bySeries = groupBy === "series";
-  const [filter, setFilter] = React.useState<"all" | "open" | "pending" | "overdue">("all");
+  const bySeries = groupBy === "серия";
+  const [filter, setFilter] = React.useState<"all" | "открыто" | "в ожидании" | "overdue">("all");
   const [focusedIdx, setFocusedIdx] = React.useState(-1);
   const [expandedSeries, setExpandedSeries] = React.useState<Set<string>>(new Set());
   const [ownerFilter, setOwnerFilter] = React.useState<{ key: string; label: string } | null>(null);
@@ -406,8 +406,8 @@ function OutstandingWidget({
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
-  // Reordering rewrites positions within a series, so it is only offered in the
-  // by-series view on the full, unfiltered set (a filtered subset would rewrite
+  // Reordering rewrites positions within a серия, so it is only offered in the
+  // by-серия view on the full, unfiltered set (a filtered subset would rewrite
   // hidden rows' positions).
   const dragEnabled = bySeries && filter === "all" && !ownerFilter && !query;
 
@@ -417,11 +417,11 @@ function OutstandingWidget({
     return map;
   }, [issues]);
 
-  const openIssues = issues.filter(isOpen);
+  const открытоIssues = issues.filter(isOpen);
 
-  const filtered = openIssues.filter((issue) => {
-    if (filter === "open" && issue.status !== "open") return false;
-    if (filter === "pending" && issue.status !== "pending") return false;
+  const filtered = открытоIssues.filter((issue) => {
+    if (filter === "открыто" && issue.status !== "открыто") return false;
+    if (filter === "в ожидании" && issue.status !== "в ожидании") return false;
     if (filter === "overdue" && !isOverdue(issue)) return false;
     if (ownerFilter && ownerKeyOf(issue) !== ownerFilter.key) return false;
     if (deferredQuery && !matchesQuery(issue, deferredQuery)) return false;
@@ -430,23 +430,23 @@ function OutstandingWidget({
 
   const grouped = new Map<string, Issue[]>();
   for (const issue of filtered) {
-    const existing = grouped.get(issue.series_id) ?? [];
+    const existing = grouped.get(issue.серия_id) ?? [];
     existing.push(issue);
-    grouped.set(issue.series_id, existing);
+    grouped.set(issue.серия_id, existing);
   }
 
   const flatIssues = React.useMemo(() => {
     if (!bySeries) return filtered.slice().sort(outstandingListSort);
     const result: Issue[] = [];
-    for (const series of seriesList) {
-      const seriesIssues = (grouped.get(series.id) ?? []).slice().sort(byManualOrder);
-      const visible = expandedSeries.has(series.id)
-        ? seriesIssues
-        : seriesIssues.slice(0, PREVIEW_COUNT);
+    for (const серия of серияList) {
+      const серияIssues = (grouped.get(серия.id) ?? []).slice().sort(byManualOrder);
+      const visible = expandedSeries.has(серия.id)
+        ? серияIssues
+        : серияIssues.slice(0, PREVIEW_COUNT);
       result.push(...visible);
     }
     return result;
-  }, [filtered, seriesList, expandedSeries, bySeries]);
+  }, [filtered, серияList, expandedSeries, bySeries]);
 
   React.useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -503,16 +503,16 @@ function OutstandingWidget({
       setActiveId(null);
       return;
     }
-    const seriesId = issueById.get(String(active.id))?.series_id;
-    if (!seriesId) {
+    const серияId = issueById.get(String(active.id))?.серия_id;
+    if (!серияId) {
       setActiveId(null);
       return;
     }
-    const fullIds = (grouped.get(seriesId) ?? []).slice().sort(byManualOrder).map((i) => i.id);
+    const fullIds = (grouped.get(серияId) ?? []).slice().sort(byManualOrder).map((i) => i.id);
     const from = fullIds.indexOf(String(active.id));
     const to = fullIds.indexOf(String(over.id));
     if (from !== -1 && to !== -1) {
-      reorder.mutate({ seriesId, orderedIds: arrayMove(fullIds, from, to) });
+      reorder.mutate({ серияId, orderedIds: arrayMove(fullIds, from, to) });
     }
     setActiveId(null);
   }
@@ -524,9 +524,9 @@ function OutstandingWidget({
     },
     onDragOver({ active, over }) {
       if (!over) return undefined;
-      const seriesId = issueById.get(String(active.id))?.series_id;
-      if (!seriesId) return undefined;
-      const fullIds = (grouped.get(seriesId) ?? []).slice().sort(byManualOrder).map((i) => i.id);
+      const серияId = issueById.get(String(active.id))?.серия_id;
+      if (!серияId) return undefined;
+      const fullIds = (grouped.get(серияId) ?? []).slice().sort(byManualOrder).map((i) => i.id);
       const index = fullIds.indexOf(String(over.id));
       if (index === -1) return undefined;
       return `Issue moved to position ${index + 1} of ${fullIds.length}.`;
@@ -543,17 +543,17 @@ function OutstandingWidget({
 
   const filters = [
     { key: "all" as const, label: "All" },
-    { key: "open" as const, label: "Открыть" },
-    { key: "pending" as const, label: "В ожидании" },
+    { key: "открыто" as const, label: "Открыть" },
+    { key: "в ожидании" as const, label: "В ожидании" },
     { key: "overdue" as const, label: "Просрочено" },
   ];
 
   const viewModes = [
     { key: "none" as const, label: "Список" },
-    { key: "series" as const, label: "По сериям" },
+    { key: "серия" as const, label: "По сериям" },
   ];
 
-  const emptyGroupCount = seriesList.filter(
+  const emptyGroupCount = серияList.filter(
     (s) => (grouped.get(s.id)?.length ?? 0) === 0
   ).length;
 
@@ -596,7 +596,7 @@ function OutstandingWidget({
               className="inline-flex shrink-0 items-center rounded-full bg-paper-2 p-0.5"
             >
               {viewModes.map((m) => {
-                const active = (groupBy === "series") === (m.key === "series");
+                const active = (groupBy === "серия") === (m.key === "серия");
                 return (
                   <button
                     key={m.key}
@@ -669,7 +669,7 @@ function OutstandingWidget({
           )}
         </AnimatePresence>
 
-        {openIssues.length === 0 ? (
+        {открытоIssues.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
             <p className="text-[13px] text-ink-2">Нет невыполненных задач. Все спокойно.</p>
             <div className="mt-3 flex gap-1 text-ink-4" aria-hidden="true">
@@ -696,30 +696,30 @@ function OutstandingWidget({
           </div>
         ) : bySeries ? (
           <div className="divide-y divide-rule">
-            {seriesList.map((series) => {
-              const seriesIssues = (grouped.get(series.id) ?? []).slice().sort(byManualOrder);
-              if (seriesIssues.length === 0) return null;
+            {серияList.map((серия) => {
+              const серияIssues = (grouped.get(серия.id) ?? []).slice().sort(byManualOrder);
+              if (серияIssues.length === 0) return null;
 
-              const isExpanded = expandedSeries.has(series.id);
-              const visible = isExpanded ? seriesIssues : seriesIssues.slice(0, PREVIEW_COUNT);
-              const hiddenCount = seriesIssues.length - PREVIEW_COUNT;
-              const groupSortedIds = seriesIssues.map((i) => i.id);
+              const isExpanded = expandedSeries.has(серия.id);
+              const visible = isExpanded ? серияIssues : серияIssues.slice(0, PREVIEW_COUNT);
+              const hiddenCount = серияIssues.length - PREVIEW_COUNT;
+              const groupSortedIds = серияIssues.map((i) => i.id);
 
               return (
-                <div key={series.id} className="py-5 first:pt-0 last:pb-0">
+                <div key={серия.id} className="py-5 first:pt-0 last:pb-0">
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 mb-3">
-                    <MinutiaCadenceIcon cadence={series.cadence} className="size-4 shrink-0 text-ink" />
+                    <MinutiaCadenceIcon cadence={серия.cadence} className="size-4 shrink-0 text-ink" />
                     <Link
-                      href={`/series/${series.id}`}
+                      href={`/серия/${серия.id}`}
                       className="text-sm font-semibold text-ink hover:text-accent transition-colors"
                     >
-                      {series.name}
+                      {серия.name}
                     </Link>
                     <span className="inline-flex items-center gap-1 text-xs text-ink-4">
-                      {CADENCE_LABELS[series.cadence]}
+                      {CADENCE_LABELS[серия.cadence]}
                     </span>
                     <span className="ml-auto text-xs text-ink-4 tabular-nums">
-                      {seriesIssues.length} item{seriesIssues.length !== 1 ? "s" : ""}
+                      {серияIssues.length} item{серияIssues.length !== 1 ? "s" : ""}
                     </span>
                   </div>
 
@@ -748,7 +748,7 @@ function OutstandingWidget({
                           type="button"
                           onClick={() => setExpandedSeries((prev) => {
                             const next = new Set(prev);
-                            next.add(series.id);
+                            next.add(серия.id);
                             return next;
                           })}
                           className="text-xs font-medium text-ink-3 hover:text-accent transition-colors cursor-pointer"
@@ -757,10 +757,10 @@ function OutstandingWidget({
                         </button>
                         <span className="text-ink-4">·</span>
                         <Link
-                          href={`/series/${series.id}`}
+                          href={`/серия/${серия.id}`}
                           className="text-xs font-medium text-ink-3 hover:text-accent transition-colors"
                         >
-                          View series
+                          View серия
                         </Link>
                       </div>
                     )}
@@ -769,7 +769,7 @@ function OutstandingWidget({
                         type="button"
                         onClick={() => setExpandedSeries((prev) => {
                           const next = new Set(prev);
-                          next.delete(series.id);
+                          next.delete(серия.id);
                           return next;
                         })}
                         className="text-xs font-medium text-ink-3 hover:text-accent transition-colors pl-3 pt-1 cursor-pointer"
@@ -783,7 +783,7 @@ function OutstandingWidget({
             })}
             {emptyGroupCount > 0 && (
               <p className="pt-4 text-xs text-ink-4">
-                {emptyGroupCount} series with nothing outstanding
+                {emptyGroupCount} серия with nothing outstanding
               </p>
             )}
           </div>
@@ -834,7 +834,7 @@ function IssueRow({
   issue: Issue;
   index: number;
   focused?: boolean;
-  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
+  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) => void;
   draggable: boolean;
   highlightQuery: string;
   activeOwnerKey: string | null;
@@ -897,7 +897,7 @@ function IssueRow({
           <div data-testid="issue-status-lane" className="flex justify-start sm:w-[132px] sm:justify-end">
             <StatusChip
               status={issue.status}
-              onChange={(newStatus) => onStatusChange(issue.id, issue.status, newStatus, issue.series_id)}
+              onChange={(newStatus) => onStatusChange(issue.id, issue.status, newStatus, issue.серия_id)}
             />
           </div>
           <div data-testid="issue-assignee-lane" className="hidden size-6 items-center justify-center justify-self-center sm:flex">
@@ -946,12 +946,12 @@ function IssueRow({
 // ---------------------------------------------------------------------------
 
 function AgeWidget({ id, widgetIndex, issues }: { id: string; widgetIndex: number; issues: Issue[] }) {
-  const openIssues = issues.filter(isOpen);
+  const открытоIssues = issues.filter(isOpen);
   const buckets = new Map<string, number>();
   const order = ["0–7d", "8–14d", "15–30d", "30d+"];
   for (const key of order) buckets.set(key, 0);
 
-  for (const issue of openIssues) {
+  for (const issue of открытоIssues) {
     const age = daysBetween(issue.created_at, new Date());
     const group = ageGroup(age);
     buckets.set(group, (buckets.get(group) ?? 0) + 1);
@@ -966,8 +966,8 @@ function AgeWidget({ id, widgetIndex, issues }: { id: string; widgetIndex: numbe
     }
   };
 
-  const maxAge = openIssues.length > 0
-    ? Math.max(...openIssues.map((i) => daysBetween(i.created_at, new Date())))
+  const maxAge = открытоIssues.length > 0
+    ? Math.max(...открытоIssues.map((i) => daysBetween(i.created_at, new Date())))
     : 0;
 
   return (
@@ -1007,12 +1007,12 @@ function DecisionsWidget({
   id,
   widgetIndex,
   decisions,
-  seriesMap,
+  серияMap,
 }: {
   id: string;
   widgetIndex: number;
   decisions: Decision[];
-  seriesMap: Map<string, MeetingSeries & { open_issues_count: number }>;
+  серияMap: Map<string, MeetingSeries & { открыто_issues_count: number }>;
 }) {
   const recent = decisions.slice(0, 5);
 
@@ -1026,7 +1026,7 @@ function DecisionsWidget({
       ) : (
         <div className="space-y-1">
           {recent.map((d) => {
-            const series = seriesMap.get(d.series_id);
+            const серия = серияMap.get(d.серия_id);
             return (
               <div
                 key={d.id}
@@ -1035,8 +1035,8 @@ function DecisionsWidget({
                 <span className="text-accent text-xs mt-0.5 shrink-0">&#9670;</span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-ink truncate">{d.title}</p>
-                  {series && (
-                    <p className="text-[11px] text-ink-4 mt-0.5">{series.name}</p>
+                  {серия && (
+                    <p className="text-[11px] text-ink-4 mt-0.5">{серия.name}</p>
                   )}
                 </div>
               </div>
@@ -1053,49 +1053,49 @@ function DecisionsWidget({
 // ---------------------------------------------------------------------------
 
 // Cap the quick list so the widget stays inside its canvas slot; the overflow
-// is reachable via "+N more" -> the full /series page (never an inline expand,
+// is reachable via "+N more" -> the full /серия page (never an inline expand,
 // which would re-grow the card).
 const SERIES_PREVIEW_LIMIT = 5;
 
 function SeriesWidget({
   id,
   widgetIndex,
-  seriesList,
+  серияList,
 }: {
   id: string;
   widgetIndex: number;
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  серияList: (MeetingSeries & { открыто_issues_count: number })[];
 }) {
   return (
     <WidgetShell id={id} index={widgetIndex}>
       <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
         <h3 className="font-display text-base font-semibold text-ink">Ваши серии встреч</h3>
-        <Link href="/series" className="text-xs text-ink-3 hover:text-accent transition-colors">
-          View all
+        <Link href="/серия" className="text-xs text-ink-3 hover:text-accent transition-colors">
+          Показать все
         </Link>
       </div>
       <div className="space-y-1">
-        {seriesList.slice(0, SERIES_PREVIEW_LIMIT).map((series) => (
+        {серияList.slice(0, SERIES_PREVIEW_LIMIT).map((серия) => (
           <Link
-            key={series.id}
-            href={`/series/${series.id}`}
+            key={серия.id}
+            href={`/серия/${серия.id}`}
             className="flex items-center gap-3 rounded-lg px-3 py-2.5 hover:bg-paper-2 transition-colors group min-w-0"
           >
             <Calendar className="size-4 text-ink-4 group-hover:text-accent transition-colors" />
-            <span className="flex-1 min-w-0 text-sm text-ink transition-colors break-words">{series.name}</span>
-            {series.open_issues_count > 0 && (
+            <span className="flex-1 min-w-0 text-sm text-ink transition-colors break-words">{серия.name}</span>
+            {серия.открыто_issues_count > 0 && (
               <span className="text-xs text-accent font-medium tabular-nums">
-                {series.open_issues_count} open
+                {серия.открыто_issues_count} открыто
               </span>
             )}
           </Link>
         ))}
-        {seriesList.length > SERIES_PREVIEW_LIMIT && (
+        {серияList.length > SERIES_PREVIEW_LIMIT && (
           <Link
-            href="/series"
+            href="/серия"
             className="block rounded-lg px-3 py-2 text-xs text-ink-4 hover:text-accent transition-colors"
           >
-            +{seriesList.length - SERIES_PREVIEW_LIMIT} more
+            +{серияList.length - SERIES_PREVIEW_LIMIT} more
           </Link>
         )}
       </div>
@@ -1131,7 +1131,7 @@ function ItemUsageCounter() {
 }
 
 function QuickAddButton() {
-  const openQuickAddDialog = useUIStore((s) => s.openQuickAddDialog);
+  const открытоQuickAddDialog = useUIStore((s) => s.открытоQuickAddDialog);
   const { data: issueLimit } = useIssueLimit();
   const atLimit = issueLimit?.atLimit ?? false;
 
@@ -1145,7 +1145,7 @@ function QuickAddButton() {
         type="button"
         data-tour="quick-add"
         aria-label="Быстро добавить задачу"
-        onClick={() => openQuickAddDialog()}
+        onClick={() => открытоQuickAddDialog()}
         className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-[calc(1.5rem+env(safe-area-inset-right))] z-50 flex items-center justify-center size-12 rounded-full bg-accent text-white shadow-lg transition-colors hover:bg-accent-hover"
         whileTap={{ scale: 0.9 }}
       >
@@ -1182,12 +1182,12 @@ function WidgetRenderer({
   widgetType,
   widgetIndex,
   issues,
-  seriesList,
-  seriesMap,
+  серияList,
+  серияMap,
   meetings,
   decisions,
-  openCount,
-  pendingCount,
+  открытоCount,
+  в ожиданииCount,
   overdueCount,
   onStatusChange,
   calendarEvents,
@@ -1196,14 +1196,14 @@ function WidgetRenderer({
   widgetType: string;
   widgetIndex: number;
   issues: Issue[];
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
-  seriesMap: Map<string, MeetingSeries & { open_issues_count: number }>;
+  серияList: (MeetingSeries & { открыто_issues_count: number })[];
+  серияMap: Map<string, MeetingSeries & { открыто_issues_count: number }>;
   meetings: (any & { issues_raised: number; issues_resolved: number })[];
   decisions: Decision[];
-  openCount: number;
-  pendingCount: number;
+  открытоCount: number;
+  в ожиданииCount: number;
   overdueCount: number;
-  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
+  onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) => void;
   calendarEvents?: GoogleCalendarEvent[];
 }) {
   switch (widgetType) {
@@ -1212,10 +1212,10 @@ function WidgetRenderer({
         <HeroWidget
           id={widgetId}
           widgetIndex={widgetIndex}
-          openCount={openCount}
-          pendingCount={pendingCount}
+          открытоCount={открытоCount}
+          в ожиданииCount={в ожиданииCount}
           overdueCount={overdueCount}
-          seriesCount={seriesList.length}
+          серияCount={серияList.length}
           meetings={meetings}
         />
       );
@@ -1224,7 +1224,7 @@ function WidgetRenderer({
         <NextMeetingWidget
           id={widgetId}
           widgetIndex={widgetIndex}
-          seriesList={seriesList}
+          серияList={серияList}
           calendarEvents={calendarEvents}
         />
       );
@@ -1234,17 +1234,17 @@ function WidgetRenderer({
           id={widgetId}
           widgetIndex={widgetIndex}
           issues={issues}
-          seriesMap={seriesMap}
-          seriesList={seriesList}
+          серияMap={серияMap}
+          серияList={серияList}
           onStatusChange={onStatusChange}
         />
       );
-    case "series":
+    case "серия":
       return (
         <SeriesWidget
           id={widgetId}
           widgetIndex={widgetIndex}
-          seriesList={seriesList}
+          серияList={серияList}
         />
       );
     case "decisions":
@@ -1253,7 +1253,7 @@ function WidgetRenderer({
           id={widgetId}
           widgetIndex={widgetIndex}
           decisions={decisions}
-          seriesMap={seriesMap}
+          серияMap={серияMap}
         />
       );
     case "age":
@@ -1272,13 +1272,13 @@ function WidgetRenderer({
           issues={issues}
         />
       );
-    case "series-health":
+    case "серия-health":
       return (
         <SeriesHealthWidget
           id={widgetId}
           index={widgetIndex}
           issues={issues}
-          seriesList={seriesList}
+          серияList={серияList}
         />
       );
     case "meeting-triage":
@@ -1288,7 +1288,7 @@ function WidgetRenderer({
           index={widgetIndex}
           issues={issues}
           meetings={meetings}
-          seriesList={seriesList}
+          серияList={серияList}
           onStatusChange={onStatusChange}
         />
       );
@@ -1298,7 +1298,7 @@ function WidgetRenderer({
           id={widgetId}
           index={widgetIndex}
           issues={issues}
-          seriesList={seriesList}
+          серияList={серияList}
           onStatusChange={onStatusChange}
         />
       );
@@ -1314,29 +1314,29 @@ function WidgetRenderer({
 export default function Dashboard() {
   const router = useRouter();
   const { data: issues, isLoading: issuesLoading } = useIssues();
-  const { data: seriesList, isLoading: seriesLoading } = useSeries();
+  const { data: серияList, isLoading: серияLoading } = useSeries();
   const { data: meetings, isLoading: meetingsLoading } = useAllMeetings();
   const { data: allDecisions } = useDecisions(undefined, undefined, true, 5);
   const updateStatus = useUpdateIssueStatus();
   const widgets = useWidgetStore((s) => s.widgets);
 
-  const firstSeriesId = seriesList?.[0]?.gcal_sync_enabled ? seriesList[0].id : undefined;
+  const firstSeriesId = серияList?.[0]?.gcal_sync_enabled ? серияList[0].id : undefined;
   const { data: calendarEvents } = useCalendarEvents(firstSeriesId);
 
-  const isLoading = issuesLoading || seriesLoading || meetingsLoading;
+  const isLoading = issuesLoading || серияLoading || meetingsLoading;
 
-  const seriesMap = React.useMemo(() => {
-    const map = new Map<string, MeetingSeries & { open_issues_count: number }>();
-    for (const s of seriesList ?? []) map.set(s.id, s);
+  const серияMap = React.useMemo(() => {
+    const map = new Map<string, MeetingSeries & { открыто_issues_count: number }>();
+    for (const s of серияList ?? []) map.set(s.id, s);
     return map;
-  }, [seriesList]);
+  }, [серияList]);
 
-  const openCount = React.useMemo(
-    () => (issues ?? []).filter((i) => i.status === "open").length,
+  const открытоCount = React.useMemo(
+    () => (issues ?? []).filter((i) => i.status === "открыто").length,
     [issues]
   );
-  const pendingCount = React.useMemo(
-    () => (issues ?? []).filter((i) => i.status === "pending").length,
+  const в ожиданииCount = React.useMemo(
+    () => (issues ?? []).filter((i) => i.status === "в ожидании").length,
     [issues]
   );
   const overdueCount = React.useMemo(
@@ -1344,25 +1344,25 @@ export default function Dashboard() {
     [issues]
   );
 
-  function handleStatusChange(issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) {
-    updateStatus.mutate({ issueId, seriesId, oldStatus, newStatus });
+  function handleStatusChange(issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, серияId: string) {
+    updateStatus.mutate({ issueId, серияId, oldStatus, newStatus });
   }
 
   const sharedProps = {
     issues: issues ?? [],
-    seriesList: seriesList ?? [],
-    seriesMap,
+    серияList: серияList ?? [],
+    серияMap,
     meetings: meetings ?? [],
     decisions: allDecisions ?? [],
-    openCount,
-    pendingCount,
+    открытоCount,
+    в ожиданииCount,
     overdueCount,
     onStatusChange: handleStatusChange,
     calendarEvents: calendarEvents ?? undefined,
   };
 
   const widgetIds = React.useMemo(() => widgets.map((w) => w.id), [widgets]);
-  const isFirstRun = !isLoading && (seriesList?.length ?? 0) === 0 && (issues?.length ?? 0) === 0;
+  const isFirstRun = !isLoading && (серияList?.length ?? 0) === 0 && (issues?.length ?? 0) === 0;
 
   return (
     <div className="min-h-screen bg-paper" data-tour="oil-board">
@@ -1373,7 +1373,7 @@ export default function Dashboard() {
             <div>
               <h1 className="font-display text-2xl font-semibold text-ink">Доска OIL</h1>
               <p className="mt-1 text-sm text-ink-3">
-                Outstanding Issues Log. Everything still open across your meetings.
+                Журнал незакрытых вопросов. Всё открытое по вашим встречам в одном месте.
               </p>
             </div>
             <AddWidgetButton />
@@ -1388,14 +1388,14 @@ export default function Dashboard() {
             </EmptyMedia>
             <EmptyTitle>Ведение записей начинается с первой встречи.</EmptyTitle>
             <EmptyDescription>
-              Create a series to start tracking outstanding issues across your
+              Create a серия to start tracking outstanding issues across your
               recurring meetings.
             </EmptyDescription>
             <EmptyContent>
               <Button variant="accent"
-                onClick={() => router.push("/series")}
+                onClick={() => router.push("/серия")}
               >
-                Create your first series
+                Create your first серия
               </Button>
             </EmptyContent>
           </Empty>

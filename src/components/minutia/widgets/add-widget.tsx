@@ -15,12 +15,12 @@ const GROUP_LABELS: Record<string, string> = {
 };
 
 export function AddWidgetButton() {
-  const [open, setOpen] = React.useState(false);
+  const [открыто, setOpen] = React.useState(false);
   const { widgets, addWidget, resetToDefault } = useWidgetStore();
   const ref = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    if (!open) return;
+    if (!открыто) return;
     function handleClickOutside(e: MouseEvent) {
       if (ref.current && !ref.current.contains(e.target as Node)) {
         setOpen(false);
@@ -35,7 +35,7 @@ export function AddWidgetButton() {
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [open]);
+  }, [открыто]);
 
   const activeTypes = new Set(widgets.map((w) => w.type));
 
@@ -62,12 +62,12 @@ export function AddWidgetButton() {
           )}
         >
           <Plus className="size-3.5" />
-          Add widget
+          Добавить виджет
         </button>
       </HintTooltip>
 
       <AnimatePresence>
-        {open && (
+        {открыто && (
           <motion.div
             initial={{ opacity: 0, y: 8, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

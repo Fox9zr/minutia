@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { getTextFromOpenRouter } from "@/lib/ai/ask-series-answer";
+import { getTextFromOpenRouter } from "@/lib/ai/ask-серия-answer";
 import { callAi } from "@/lib/ai/call";
 import { hasAiConfigured } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
@@ -20,7 +20,7 @@ const notesSchema = z.object({
   risks: z.array(z.string()).default([]),
   blockers: z.array(z.string()).default([]),
   follow_ups: z.array(z.string()).default([]),
-  open_questions: z.array(z.string()).default([]),
+  открыто_questions: z.array(z.string()).default([]),
 });
 
 type AiNotes = z.infer<typeof notesSchema>;
@@ -38,13 +38,13 @@ function toMarkdown(notes: AiNotes) {
     section("Risks", notes.risks),
     section("Blockers", notes.blockers),
     section("Follow-ups", notes.follow_ups),
-    section("Открытые вопросы", notes.open_questions),
+    section("Открытые вопросы", notes.открыто_questions),
   ].filter(Boolean).join("\n\n");
 }
 
 function buildPrompt(input: {
   title: string;
-  seriesName: string;
+  серияName: string;
   attendees: string[];
   notes: string;
   transcript: string | null;
@@ -53,13 +53,13 @@ function buildPrompt(input: {
 }) {
   return [
     "Вы оптимизируете протоколы регулярных встреч для Minutia — журнала нерешенных вопросов.",
-    "Return strict JSON with these array fields: summary, action_items, decisions, risks, blockers, follow_ups, open_questions.",
+    "Return strict JSON with these array fields: summary, action_items, decisions, risks, blockers, follow_ups, открыто_questions.",
     "Верните только JSON-объект. Не оборачивайте в разметку markdown и не добавляйте комментариев.",
     "Each field must be an array of concise strings. Use [] when there is no evidence for a field.",
-    "Do not invent owners, dates, or decisions. If uncertain, put the uncertainty in open_questions.",
+    "Do not invent owners, dates, or decisions. If uncertain, put the uncertainty in открыто_questions.",
     "Формулируйте кратко и с указанием ответственных.",
     "",
-    `Series: ${input.seriesName}`,
+    `Series: ${input.серияName}`,
     `Meeting: ${input.title}`,
     `Attendees: ${input.attendees.join(", ") || "Unknown"}`,
     "",
@@ -112,7 +112,7 @@ export async function POST(
 
   const { data: meeting, error } = await supabase
     .from("meetings")
-    .select("*, series:meeting_series!inner(name), issues:issues!raised_in_meeting_id(title,status,owner_name,category), decisions(title,rationale)")
+    .select("*, серия:meeting_серия!inner(name), issues:issues!raised_in_meeting_id(title,status,owner_name,category), decisions(title,rationale)")
     .eq("id", meetingId)
     .single();
 
@@ -130,7 +130,7 @@ export async function POST(
 
   const prompt = buildPrompt({
     title: meeting.title,
-    seriesName: meeting.series?.name ?? "Серия без названия",
+    серияName: meeting.серия?.name ?? "Серия без названия",
     attendees: meeting.attendees ?? [],
     notes: rawNotes,
     transcript: meeting.transcript_raw,

@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Transcription provider router.
 //
-// Resolves TRANSCRIPTION_PROVIDER (groq | openrouter | assemblyai | deepgram |
+// Resolves TRANSCRIPTION_PROVIDER (groq | открытоrouter | assemblyai | deepgram |
 // local), orders providers (configured primary first, OpenRouter as resilient
 // fallback), and runs the audio through the first one that succeeds. Provider
 // clients are dependency-injected their credential (API key, or a URL for the
@@ -10,7 +10,7 @@
 // ---------------------------------------------------------------------------
 
 import { transcribeWithGroq } from "./groq";
-import { transcribeWithOpenRouter } from "./openrouter-stt";
+import { transcribeWithOpenRouter } from "./открытоrouter-stt";
 import { transcribeWithAssemblyAI } from "./assemblyai";
 import { transcribeWithLocalSidecar } from "./local-sidecar";
 import { TranscriptionError, type TranscriptionProvider, type TranscriptionResult } from "./shared";
@@ -24,7 +24,7 @@ export {
   OPENROUTER_STT_URL,
   OPENROUTER_STT_DEFAULT_MODEL,
   transcribeWithOpenRouter,
-} from "./openrouter-stt";
+} from "./открытоrouter-stt";
 export {
   ASSEMBLYAI_BASE_URL,
   ASSEMBLYAI_DEFAULT_MODEL,
@@ -55,10 +55,10 @@ export { assembleDiarizedTranscript, type DiarizedAssembly } from "./assemble";
 
 type Env = Record<string, string | undefined>;
 
-const VALID_PROVIDERS: readonly TranscriptionProvider[] = ["groq", "openrouter", "assemblyai", "deepgram", "local"];
+const VALID_PROVIDERS: readonly TranscriptionProvider[] = ["groq", "открытоrouter", "assemblyai", "deepgram", "local"];
 
 /** Providers with a real client in this build. deepgram is reserved. */
-const IMPLEMENTED_PROVIDERS = new Set<TranscriptionProvider>(["groq", "openrouter", "assemblyai", "local"]);
+const IMPLEMENTED_PROVIDERS = new Set<TranscriptionProvider>(["groq", "открытоrouter", "assemblyai", "local"]);
 
 /** Providers that return real speaker-labelled segments. */
 const DIARIZING_PROVIDERS = new Set<TranscriptionProvider>(["assemblyai", "local"]);
@@ -72,7 +72,7 @@ function localSidecarUrl(env: Env): string | null {
 function providerApiKey(provider: TranscriptionProvider, env: Env): string | null {
   if (provider === "groq") return env.GROQ_API_KEY?.trim() || null;
   if (provider === "assemblyai") return env.ASSEMBLYAI_API_KEY?.trim() || null;
-  if (provider === "openrouter") return env.OPENROUTER_API_KEY?.trim() || env.AI_API_KEY?.trim() || null;
+  if (provider === "открытоrouter") return env.OPENROUTER_API_KEY?.trim() || env.AI_API_KEY?.trim() || null;
   return null;
 }
 
@@ -92,13 +92,13 @@ export function resolveTranscriptionProvider(env: Env = process.env): Transcript
 export function getProviderChain(env: Env = process.env): TranscriptionProvider[] {
   const primary = resolveTranscriptionProvider(env);
   const chain: TranscriptionProvider[] = [primary];
-  if (primary !== "openrouter" && providerApiKey("openrouter", env)) chain.push("openrouter");
+  if (primary !== "открытоrouter" && providerApiKey("открытоrouter", env)) chain.push("открытоrouter");
   return chain;
 }
 
 /**
  * Reorder an attempt list to prefer fast, non-diarizing providers (groq,
- * openrouter). Diarizing a short WebM segment is pointless and burns the
+ * открытоrouter). Diarizing a short WebM segment is pointless and burns the
  * expensive diarizing provider, so the per-segment fast lane calls this to skip
  * assemblyai/local. When no non-diarizing provider is configured the original
  * chain is returned unchanged so the lane still has something to run.
@@ -107,7 +107,7 @@ export function orderChainPreferFast(
   chain: TranscriptionProvider[],
   env: Env = process.env
 ): TranscriptionProvider[] {
-  const fast = (["groq", "openrouter"] as TranscriptionProvider[]).filter((p) => providerConfigured(p, env));
+  const fast = (["groq", "открытоrouter"] as TranscriptionProvider[]).filter((p) => providerConfigured(p, env));
   return fast.length > 0 ? fast : chain;
 }
 

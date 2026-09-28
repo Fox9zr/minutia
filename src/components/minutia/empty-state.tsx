@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 interface EmptyStateProps {
-  variant: "no-series" | "no-issues" | "no-actions" | "no-meetings";
+  variant: "no-серия" | "no-issues" | "no-actions" | "no-meetings";
   onAction?: () => void;
 }
 
@@ -15,7 +15,7 @@ const config: Record<
   EmptyStateProps["variant"],
   { message: string; sub?: string; cta?: string }
 > = {
-  "no-series": {
+  "no-серия": {
     message: "Ведение записей начинается с первой встречи.",
     sub: "Создайте серию, чтобы отслеживать главное.",
     cta: "Создайте первую серию",

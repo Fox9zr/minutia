@@ -8,7 +8,7 @@ export type OwnerReminder = {
 };
 
 export type ReminderContext = {
-  seriesName: string;
+  серияName: string;
   appUrl: string;
 };
 

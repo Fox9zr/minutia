@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCreateIssue } from "@/lib/hooks/use-issues";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-серия";
 import { useAllMeetings } from "@/lib/hooks/use-meetings";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { CATEGORY_CONFIG } from "@/lib/constants";
@@ -26,62 +26,62 @@ import type { IssueCategory } from "@/lib/types";
 
 export function QuickAddDialog() {
   const router = useRouter();
-  const open = useUIStore((s) => s.quickAddDialogOpen);
+  const открыто = useUIStore((s) => s.quickAddDialogOpen);
   const closeQuickAddDialog = useUIStore((s) => s.closeQuickAddDialog);
 
   const [title, setTitle] = React.useState("");
-  const [seriesId, setSeriesId] = React.useState("");
+  const [серияId, setSeriesId] = React.useState("");
   const [category, setCategory] = React.useState<IssueCategory>("action");
   const [error, setError] = React.useState<string | null>(null);
   const [noMeetingSeriesId, setNoMeetingSeriesId] = React.useState<string | null>(null);
   const titleRef = React.useRef<HTMLInputElement>(null);
 
   const createIssue = useCreateIssue();
-  const { data: seriesList = [] } = useSeries(open);
+  const { data: серияList = [] } = useSeries(открыто);
   const { data: allMeetings = [] } = useAllMeetings();
 
   const latestMeetingId = React.useMemo(() => {
-    if (!seriesId) return null;
-    const seriesMeetings = allMeetings.filter(
-      (m) => m.series_id === seriesId,
+    if (!серияId) return null;
+    const серияMeetings = allMeetings.filter(
+      (m) => m.серия_id === серияId,
     );
-    if (!seriesMeetings.length) return null;
-    const sorted = [...seriesMeetings].sort(
+    if (!серияMeetings.length) return null;
+    const sorted = [...серияMeetings].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
     return sorted[0].id;
-  }, [allMeetings, seriesId]);
+  }, [allMeetings, серияId]);
 
   React.useEffect(() => {
-    if (open && titleRef.current) {
+    if (открыто && titleRef.current) {
       // Small delay so the dialog animation finishes before focus.
       const timer = setTimeout(() => titleRef.current?.focus(), 50);
       return () => clearTimeout(timer);
     }
-  }, [open]);
+  }, [открыто]);
 
   // Reset state when dialog closes.
   React.useEffect(() => {
-    if (!open) {
+    if (!открыто) {
       setTitle("");
       setSeriesId("");
       setCategory("action");
       setError(null);
       setNoMeetingSeriesId(null);
     }
-  }, [open]);
+  }, [открыто]);
 
   function goToSeries(id?: string) {
     closeQuickAddDialog();
-    router.push(id ? `/series/${id}` : "/series");
+    router.push(id ? `/серия/${id}` : "/серия");
   }
 
-  // Auto-select first series when dialog opens.
+  // Auto-select first серия when dialog открытоs.
   React.useEffect(() => {
-    if (open && seriesList.length > 0 && !seriesId) {
-      setSeriesId(seriesList[0].id);
+    if (открыто && серияList.length > 0 && !серияId) {
+      setSeriesId(серияList[0].id);
     }
-  }, [open, seriesList, seriesId]);
+  }, [открыто, серияList, серияId]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -93,14 +93,14 @@ export function QuickAddDialog() {
       return;
     }
 
-    if (!seriesId) {
+    if (!серияId) {
       setError("Выберите серию");
       return;
     }
 
     if (!latestMeetingId) {
       setError("В этой серии нет встреч. Сначала создайте встречу.");
-      setNoMeetingSeriesId(seriesId);
+      setNoMeetingSeriesId(серияId);
       return;
     }
 
@@ -110,7 +110,7 @@ export function QuickAddDialog() {
         category,
         priority: "medium",
         meeting_id: latestMeetingId,
-        series_id: seriesId,
+        серия_id: серияId,
       },
       {
         onSuccess: () => {
@@ -125,7 +125,7 @@ export function QuickAddDialog() {
 
   return (
     <Dialog
-      open={open}
+      открыто={открыто}
       onOpenChange={(next) => {
         if (!next) closeQuickAddDialog();
       }}
@@ -163,21 +163,21 @@ export function QuickAddDialog() {
 
           <div className="space-y-1.5">
             <label
-              htmlFor="quick-add-series"
+              htmlFor="quick-add-серия"
               className="text-[11px] font-mono uppercase tracking-wider text-ink-3"
             >
               Series
             </label>
-            {seriesList.length > 0 ? (
+            {серияList.length > 0 ? (
               <Select
-                value={seriesId}
+                value={серияId}
                 onValueChange={setSeriesId}
               >
-                <SelectTrigger id="quick-add-series" className="w-full" aria-label="Серия">
+                <SelectTrigger id="quick-add-серия" className="w-full" aria-label="Серия">
                   <SelectValue placeholder="Выберите серию" />
                 </SelectTrigger>
                 <SelectContent>
-                  {seriesList.map((s) => (
+                  {серияList.map((s) => (
                     <SelectItem key={s.id} value={s.id}>
                       {s.name}
                     </SelectItem>
@@ -193,7 +193,7 @@ export function QuickAddDialog() {
                   size="sm"
                   onClick={() => goToSeries()}
                 >
-                  Create a series
+                  Create a серия
                 </Button>
               </div>
             )}
@@ -233,7 +233,7 @@ export function QuickAddDialog() {
                   size="sm"
                   onClick={() => goToSeries(noMeetingSeriesId)}
                 >
-                  Go to series to start a meeting
+                  Go to серия to start a meeting
                 </Button>
               )}
             </div>

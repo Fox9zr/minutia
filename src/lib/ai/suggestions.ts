@@ -1,6 +1,6 @@
 import { z } from "zod";
 import type { createClient } from "@/lib/supabase/server";
-import { getTextFromOpenRouter } from "./ask-series-answer";
+import { getTextFromOpenRouter } from "./ask-серия-answer";
 import { callAi } from "./call";
 import {
   buildSeriesContext,
@@ -13,14 +13,14 @@ import {
 //
 // Shared by the suggestions route (manual "Проверить предложения ИИ") and the
 // transcribe route (auto-trigger when a recording finishes). It feeds the model
-// the whole series history so it can deduplicate, detect resolutions, follow up
+// the whole серия history so it can deduplicate, detect resolutions, follow up
 // on prior items, and flag contradictions, then enforces referential integrity
 // before anything is written.
 
 export const SUGGESTIONS_PROMPT_VERSION = "ai-suggestions-v2-context";
 
 const SYSTEM_PROMPT =
-  "You extract accountable meeting follow-ups using the full history of a recurring meeting series. Return valid JSON only.";
+  "You extract accountable meeting follow-ups using the full history of a recurring meeting серия. Return valid JSON only.";
 
 const suggestionSchema = z.object({
   type: z.enum(["new_item", "status_update", "duplicate_warning"]).default("new_item"),
@@ -35,7 +35,7 @@ const suggestionSchema = z.object({
   // referential-integrity pass below is the real gate.
   related_issue_number: z.number().int().nullable().default(null),
   suggested_status: z
-    .enum(["open", "in_progress", "pending", "resolved", "dropped"])
+    .enum(["открыто", "in_progress", "в ожидании", "resolved", "dropped"])
     .nullable()
     .default(null),
 });
@@ -63,15 +63,15 @@ const CATEGORY_GUIDE = [
 
 export function buildContextAwarePrompt(input: {
   title: string;
-  seriesName: string;
+  серияName: string;
   attendees: string[];
   notes: string;
   transcript: string | null;
   contextBlock: string;
 }) {
   return [
-    "You extract reviewable accountability suggestions for Minutia, an Outstanding Issues Log (OIL) for a recurring meeting series.",
-    "Unlike a one-off meeting summarizer, you are given the full living state of this series below: the open OIL items, recent decisions, and recent status changes. Reason over that history; it is the whole point.",
+    "You extract reviewable accountability suggestions for Minutia, an Outstanding Issues Log (OIL) for a recurring meeting серия.",
+    "Unlike a one-off meeting summarizer, you are given the full living state of this серия below: the открыто OIL items, recent decisions, and recent status changes. Reason over that history; it is the whole point.",
     "A facilitator reviews every suggestion before it enters the permanent record, so omitting a weak item is always better than inventing one.",
     "",
     "ВЫХОДНОЙ КОНТРАКТ",
@@ -82,8 +82,8 @@ export function buildContextAwarePrompt(input: {
     "Каждый объект предложения должен содержать именно эти поля:",
     "- type: one of new_item, status_update, duplicate_warning.",
     "    new_item = a genuinely new item not already tracked in the OIL below.",
-    "    status_update = this meeting moved an EXISTING open OIL item forward; set related_issue_number and suggested_status.",
-    "    duplicate_warning = this meeting raised something an EXISTING open OIL item already covers; set related_issue_number and do not also create a new_item for it.",
+    "    status_update = this meeting moved an EXISTING открыто OIL item forward; set related_issue_number and suggested_status.",
+    "    duplicate_warning = this meeting raised something an EXISTING открыто OIL item already covers; set related_issue_number and do not also create a new_item for it.",
     CATEGORY_GUIDE,
     "- title: concise imperative summary, max 120 characters, no trailing punctuation.",
     '- details: one or two sentences of supporting context, or "" if none.',
@@ -92,11 +92,11 @@ export function buildContextAwarePrompt(input: {
     "- confidence: 0 to 1. Use 0.9+ when explicitly stated and owned, 0.5 to 0.8 when implied, and omit any item you would score below 0.4.",
     "- source_excerpt: a verbatim quote copied from the notes or transcript that supports this item. Do not paraphrase. Keep it under 160 characters.",
     "- related_issue_number: the OIL item number this references (e.g. 45 for OIL-45). Required for status_update and duplicate_warning. Use null for a new_item.",
-    "- suggested_status: for a status_update only, the item's new status (open, in_progress, pending, resolved, dropped). Use null otherwise.",
+    "- suggested_status: for a status_update only, the item's new status (открыто, in_progress, в ожидании, resolved, dropped). Use null otherwise.",
     "",
     "КОНТЕКСТНЫЕ ПРАВИЛА (ключевое отличие Minutia):",
-    "1. Deduplicate: if the discussion raises something an open OIL item already covers, emit a duplicate_warning referencing that item, not a parallel new_item.",
-    "2. Detect resolution: if a decision or update resolves or advances an open item, especially an open risk or blocker, emit a status_update with the new status, not a new_item.",
+    "1. Deduplicate: if the discussion raises something an открыто OIL item already covers, emit a duplicate_warning referencing that item, not a parallel new_item.",
+    "2. Detect resolution: if a decision or update resolves or advances an открыто item, especially an открыто risk or blocker, emit a status_update with the new status, not a new_item.",
     "3. Follow up: a new development on a prior item is a status_update on that item, not a fresh item.",
     "4. Flag contradictions: if the discussion contradicts a past decision, surface it as a risk new_item and name the prior decision in details.",
     "5. Only emit a new_item for something genuinely not represented in the OIL below.",
@@ -107,7 +107,7 @@ export function buildContextAwarePrompt(input: {
     "",
     formatSeriesContextHeading(input.contextBlock),
     "",
-    `Series: ${clamp(input.seriesName, 200)}`,
+    `Series: ${clamp(input.серияName, 200)}`,
     `Meeting: ${clamp(input.title, 200)}`,
     `Attendees: ${clamp(input.attendees.join(", ") || "Unknown", 500)}`,
     "",
@@ -129,7 +129,7 @@ export type GenerateOutcome =
 
 /**
  * Generate context-aware suggestions for a meeting and persist them, replacing
- * any pending ones. Returns a structured outcome so the suggestions route can
+ * any в ожидании ones. Returns a structured outcome so the suggestions route can
  * map it to an HTTP status while the transcribe route can treat a failure as
  * non-fatal (the transcript is already saved).
  */
@@ -139,7 +139,7 @@ export async function generateMeetingSuggestions(
 ): Promise<GenerateOutcome> {
   const { data: meeting, error } = await supabase
     .from("meetings")
-    .select("*, series:meeting_series!inner(name)")
+    .select("*, серия:meeting_серия!inner(name)")
     .eq("id", meetingId)
     .single();
 
@@ -154,12 +154,12 @@ export async function generateMeetingSuggestions(
 
   const context = await buildSeriesContext(
     supabase as unknown as SeriesContextClient,
-    meeting.series_id
+    meeting.серия_id
   );
 
   const prompt = buildContextAwarePrompt({
     title: meeting.title,
-    seriesName: meeting.series?.name ?? "Серия без названия",
+    серияName: meeting.серия?.name ?? "Серия без названия",
     attendees: meeting.attendees ?? [],
     notes: rawNotes,
     transcript: meeting.transcript_raw,
@@ -181,13 +181,13 @@ export async function generateMeetingSuggestions(
     return { ok: false, status: 502, error: "Провайдер ИИ вернул некорректные предложения." };
   }
 
-  const normalized = normalizeSuggestions(parsed.suggestions, context.openIssues);
+  const normalized = normalizeSuggestions(parsed.suggestions, context.открытоIssues);
 
   const { error: deleteError } = await supabase
     .from("meeting_ai_suggestions")
     .delete()
     .eq("meeting_id", meetingId)
-    .eq("status", "pending");
+    .eq("status", "в ожидании");
   if (deleteError) {
     return { ok: false, status: 500, error: "Не удалось обновить предложения ИИ." };
   }
@@ -198,7 +198,7 @@ export async function generateMeetingSuggestions(
 
   const rows = normalized.map((suggestion) => ({
     meeting_id: meetingId,
-    series_id: meeting.series_id,
+    серия_id: meeting.серия_id,
     type: suggestion.type,
     category: suggestion.category,
     title: suggestion.title,
