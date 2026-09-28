@@ -191,7 +191,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-ink">
-                  We recommend you start the tour first.
+                  Рекомендуем сначала пройти короткий обзор.
                 </p>
                 <p className="mt-1 text-xs leading-5 text-ink-3">
                   It shows where dashboard panels, issues, series, meetings, and shortcuts live before your first real meeting.
@@ -201,7 +201,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
                     size="sm"
                     onClick={startTour}
                   >
-                    Start tour
+                    Начать обзор
                     <ArrowRight className="size-3.5" />
                   </Button>
                   <Button
@@ -210,7 +210,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
                     onClick={() => dismiss("dismissed")}
                     className="text-ink-3 hover:text-ink"
                   >
-                    Skip tour
+                    Пропустить
                   </Button>
                 </div>
               </div>

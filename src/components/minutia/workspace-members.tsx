@@ -376,7 +376,7 @@ export function WorkspaceMembers() {
                     onClick={copyInviteLink}
                   >
                     {linkCopied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-                    {linkCopied ? "Copied" : "Copy"}
+                    {linkCopied ? "Скопировано" : "Копировать"}
                   </Button>
                 </div>
               </div>

@@ -226,7 +226,7 @@ function HeroWidget({
           </>
         )}
         <span className="text-ink-4">·</span>
-        <span>{seriesCount} серия(й)</span>
+        <span>{seriesCount} {seriesCount % 10 === 1 && seriesCount % 100 !== 11 ? "серия" : [2,3,4].includes(seriesCount % 10) && ![12,13,14].includes(seriesCount % 100) ? "серии" : "серий"}</span>
       </div>
 
       {recentMeetings.length > 0 && (

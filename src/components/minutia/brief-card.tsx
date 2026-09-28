@@ -46,7 +46,7 @@ function generateBriefText(
   nextMeetingDate?: Date
 ): string {
   const lines: string[] = [];
-  lines.push(`Pre-Meeting Brief: ${seriesName}`);
+  lines.push(`Брифинг перед встречей: ${seriesName}`);
   lines.push("");
 
   if (nextMeetingDate) {
@@ -232,7 +232,7 @@ export function BriefCard({
             data-testid="send-brief-btn"
           >
             <Send className="size-3.5" data-icon="inline-start" />
-            {sending ? "Sending..." : "Отправить сводку по эл. почте"}
+            {sending ? "Отправка..." : "Отправить сводку по эл. почте"}
           </Button>
           <Button
             variant={emailUnavailable ? "accent" : "ghost"}
@@ -252,7 +252,7 @@ export function BriefCard({
                   className="inline-flex items-center gap-1"
                 >
                   <Check className="size-3.5 text-success" />
-                  Copied
+                  Скопировано
                 </motion.span>
               ) : (
                 <motion.span
@@ -264,7 +264,7 @@ export function BriefCard({
                   className="inline-flex items-center gap-1"
                 >
                   <Copy className="size-3.5" />
-                  Copy
+                  Копировать
                 </motion.span>
               )}
             </AnimatePresence>

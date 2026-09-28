@@ -148,7 +148,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
         {seriesList && seriesList.length > 0 && (
           <SidebarGroup className="px-3 mt-4">
             <SidebarGroupLabel className="h-auto px-3 mb-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-ink-4">
-              Series
+              Серии встреч
             </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu className="gap-0.5">
