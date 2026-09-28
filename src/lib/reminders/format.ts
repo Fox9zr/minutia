@@ -25,7 +25,7 @@ function totalIssues(owners: OwnerReminder[]): number {
 // a flat list. Reads naturally for both the per-owner email and the full digest.
 function leadLine(owners: OwnerReminder[], ctx: ReminderContext): string {
   const n = totalIssues(owners);
-  const noun = n === 1 ? "поручение" : "поручений";
+  const noun = n % 10 === 1 && n % 100 !== 11 ? "поручение" : [2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100) ? "поручения" : "поручений";
   return `Ожидает ваших действий: ${n} ${noun} по серии «${ctx.seriesName}»:`;
 }
 
