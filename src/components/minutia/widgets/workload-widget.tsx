@@ -196,7 +196,7 @@ export function WorkloadWidget({
                       const over = isOverdue(issue);
                       return (
                         <span className={cn("text-xs font-mono tabular-nums shrink-0", over ? "text-accent font-medium" : "text-ink-4")}>
-                          {over ? `Overdue ${Math.abs(Math.round((new Date(issue.due_date).getTime() - Date.now()) / 86400000))}d` : `Due ${new Date(issue.due_date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}`}
+                          {over ? `Overdue ${Math.abs(Math.round((new Date(issue.due_date).getTime() - Date.now()) / 86400000))}d` : `Due ${new Date(issue.due_date).toLocaleDateString("ru-RU", { month: "short", day: "numeric" })}`}
                         </span>
                       );
                     })()}

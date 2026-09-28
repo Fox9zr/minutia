@@ -53,7 +53,7 @@ async function getGuestSharePayload(
 }
 
 function formatDate(date: string | Date): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     weekday: "long",
     month: "long",
     day: "numeric",
@@ -62,7 +62,7 @@ function formatDate(date: string | Date): string {
 }
 
 function formatShortDate(date: string | Date): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     month: "short",
     day: "numeric",
     year: "numeric",

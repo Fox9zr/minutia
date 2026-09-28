@@ -31,7 +31,7 @@ const PRIORITY_RANK: Record<Priority, number> = {
 const MAX_ALSO = 5;
 
 function formatMeetingDate(date: Date | string): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     timeZone: "UTC",
     weekday: "short",
     month: "short",

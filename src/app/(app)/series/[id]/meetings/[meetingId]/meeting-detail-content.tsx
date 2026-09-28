@@ -98,7 +98,7 @@ function dateInputValue(date: Date | string | null | undefined) {
 }
 
 function formatMeetingDate(date: Date | string): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     weekday: "long",
     month: "long",
     day: "numeric",

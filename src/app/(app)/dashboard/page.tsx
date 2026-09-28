@@ -105,7 +105,7 @@ function formatRelativeDue(date: Date | string): { label: string; overdue: boole
 }
 
 function formatWeekday(date: Date | string): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     weekday: "long",
     month: "short",
     day: "numeric",
@@ -216,17 +216,17 @@ function HeroWidget({
         </div>
       </div>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-ink-2 mt-1">
-        <span>{openCount} open</span>
+        <span>{openCount} открыто</span>
         <span className="text-ink-4">·</span>
-        <span>{pendingCount} pending</span>
+        <span>{pendingCount} в ожидании</span>
         {overdueCount > 0 && (
           <>
             <span className="text-ink-4">·</span>
-            <span className="text-accent font-medium">{overdueCount} overdue</span>
+            <span className="text-accent font-medium">{overdueCount} просрочено</span>
           </>
         )}
         <span className="text-ink-4">·</span>
-        <span>{seriesCount} series</span>
+        <span>{seriesCount} серий</span>
       </div>
 
       {recentMeetings.length > 0 && (
@@ -237,7 +237,7 @@ function HeroWidget({
             </p>
             {avgLife > 0 && (
               <p className="text-xs text-ink-4">
-                avg life <span className="font-semibold text-ink-2">{avgLife} days</span>
+                ср. срок <span className="font-semibold text-ink-2">{avgLife} дн.</span>
               </p>
             )}
           </div>
@@ -333,10 +333,10 @@ function NextMeetingWidget({
       {eventTime ? (
         <div className="mb-4">
           <p className="text-sm font-medium text-ink-2">
-            {eventTime.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
+            {eventTime.toLocaleDateString("ru-RU", { weekday: "short", month: "short", day: "numeric" })}
             {nextEvent?.start?.dateTime && (
               <span className="text-ink-3">
-                {" "}at {eventTime.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}
+                {" "}at {eventTime.toLocaleTimeString("ru-RU", { hour: "numeric", minute: "2-digit" })}
               </span>
             )}
           </p>

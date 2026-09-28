@@ -15,7 +15,7 @@ export function toLocalISODate(date: Date): string {
 }
 
 export function formatShortDate(date: Date | string): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     month: "short",
     day: "numeric",
   });

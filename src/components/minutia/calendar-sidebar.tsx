@@ -186,7 +186,7 @@ function DayAgenda({
     isSameDay(new Date(event.startAt), date)
   );
 
-  const formattedDate = date.toLocaleDateString("en-US", {
+  const formattedDate = date.toLocaleDateString("ru-RU", {
     weekday: "long",
     month: "short",
     day: "numeric",
@@ -208,7 +208,7 @@ function DayAgenda({
         <div className="space-y-1.5">
           {dayCalendarEvents.map((event) => {
             const time = new Date(event.startAt);
-            const timeStr = time.toLocaleTimeString("en-US", {
+            const timeStr = time.toLocaleTimeString("ru-RU", {
               hour: "numeric",
               minute: "2-digit",
             });
@@ -274,7 +274,7 @@ function DayAgenda({
         <div className="space-y-1.5">
           {dayMeetings.map((meeting) => {
             const time = new Date(meeting.date);
-            const timeStr = time.toLocaleTimeString("en-US", {
+            const timeStr = time.toLocaleTimeString("ru-RU", {
               hour: "numeric",
               minute: "2-digit",
             });
@@ -376,16 +376,16 @@ function CalendarContent({
 function formatEventRange(event: GoogleCalendarAgendaItem) {
   const start = new Date(event.startAt);
   const end = new Date(event.endAt);
-  const date = start.toLocaleDateString("en-US", {
+  const date = start.toLocaleDateString("ru-RU", {
     weekday: "short",
     month: "short",
     day: "numeric",
   });
-  const startTime = start.toLocaleTimeString("en-US", {
+  const startTime = start.toLocaleTimeString("ru-RU", {
     hour: "numeric",
     minute: "2-digit",
   });
-  const endTime = end.toLocaleTimeString("en-US", {
+  const endTime = end.toLocaleTimeString("ru-RU", {
     hour: "numeric",
     minute: "2-digit",
   });

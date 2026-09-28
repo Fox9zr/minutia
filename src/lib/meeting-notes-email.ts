@@ -23,7 +23,7 @@ const brand = {
 };
 
 function formatDate(date: Date | string) {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     weekday: "short",
     month: "short",
     day: "numeric",

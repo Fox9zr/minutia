@@ -224,7 +224,7 @@ function TriageRow({
         const overdue = diff < 0;
         const label = overdue
           ? `Overdue ${Math.abs(diff)}d`
-          : `Due ${due.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+          : `Due ${due.toLocaleDateString("ru-RU", { month: "short", day: "numeric" })}`;
         return (
           <span className={cn("text-xs font-mono tabular-nums shrink-0", overdue ? "text-accent font-medium" : "text-ink-4")}>
             {label}

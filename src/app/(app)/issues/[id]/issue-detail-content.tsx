@@ -65,7 +65,7 @@ const priorityDotColor: Record<Priority, string> = {
 // ---------------------------------------------------------------------------
 
 function formatDate(date: Date | string): string {
-  return new Date(date).toLocaleDateString("en-US", {
+  return new Date(date).toLocaleDateString("ru-RU", {
     month: "short",
     day: "numeric",
     year: "numeric",

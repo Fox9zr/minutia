@@ -31,7 +31,7 @@ function isSameDay(a: Date, b: Date): boolean {
 }
 
 function formatDateHeader(date: Date): string {
-  return date.toLocaleDateString("en-US", {
+  return date.toLocaleDateString("ru-RU", {
     weekday: "short",
     month: "short",
     day: "numeric",
@@ -39,7 +39,7 @@ function formatDateHeader(date: Date): string {
 }
 
 function formatTime(date: Date): string {
-  return date.toLocaleTimeString("en-US", {
+  return date.toLocaleTimeString("ru-RU", {
     hour: "numeric",
     minute: "2-digit",
   });
