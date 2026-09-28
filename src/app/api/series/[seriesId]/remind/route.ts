@@ -134,10 +134,18 @@ export async function POST(
 
     if (channel === "email") {
       for (const owner of owners) {
-        if (!owner.ownerEmail) continue;
+        // Daiko demo fallback: derive demo email from owner name when no account exists
+        const demoEmail = owner.ownerEmail || (owner.ownerName ? owner.ownerName
+          .toLowerCase()
+          .replace(/[^a-zа-яё ]/gi, '')
+          .trim()
+          .split(/\s+/)
+          .slice(0, 2)
+          .join('.') + '@demo.tps.by' : null);
+        if (!demoEmail) continue;
         const email = formatOwnerEmail(owner, ctx);
         await sendMail({
-          to: owner.ownerEmail,
+          to: demoEmail,
           subject: email.subject,
           text: email.text,
           html: email.html,
