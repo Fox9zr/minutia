@@ -15,7 +15,7 @@ export const CADENCE_LABELS: Record<Cadence, string> = {
 };
 
 export const STATUS_CONFIG: Record<IssueStatus, { label: string; color: string }> = {
-  open: { label: "Открыть", color: "ink" },
+  open: { label: "Открыто", color: "ink" },
   in_progress: { label: "В работе", color: "accent" },
   pending: { label: "В ожидании", color: "warn" },
   resolved: { label: "Решено", color: "success" },

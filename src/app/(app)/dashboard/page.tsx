@@ -990,7 +990,7 @@ function AgeWidget({ id, widgetIndex, issues }: { id: string; widgetIndex: numbe
             </div>
             <div className="flex items-center gap-3">
               <span className="font-display text-base font-semibold text-ink tabular-nums">{buckets.get(key)}</span>
-              <span className="text-xs text-ink-4 w-10 text-right">item{buckets.get(key) !== 1 ? "s" : ""}</span>
+              <span className="text-xs text-ink-4 w-10 text-right">шт.</span>
             </div>
           </div>
         ))}
