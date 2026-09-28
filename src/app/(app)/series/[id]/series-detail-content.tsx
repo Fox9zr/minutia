@@ -21,7 +21,7 @@ import { useDecisions } from "@/lib/hooks/use-decisions";
 import { BriefCard } from "@/components/minutia/brief-card";
 import { EmptyState } from "@/components/minutia/empty-state";
 import { IssueCard } from "@/components/minutia/issue-card";
-import { DateAnchoredTimeline } from "@/components/minutia/date-anchored-timeline";
+import { DateAnchoredХронология } from "@/components/minutia/date-anchored-timeline";
 import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -294,7 +294,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
           <div className="mb-3 flex items-start justify-between gap-3">
             <div>
               <h2 className="font-display text-lg font-medium text-ink">
-                Ask this series
+                Спросить по серии
               </h2>
               <p className="mt-1 text-xs text-ink-3">
                 Query this series only. Answers cite the meeting memory that supports them.
@@ -328,7 +328,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
               ) : (
                 <Sparkles className="size-3.5" />
               )}
-              Ask series
+              Спросить
             </Button>
           </div>
 

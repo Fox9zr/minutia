@@ -81,7 +81,7 @@ function formatISODate(date: Date | string): string {
 
 function sourceBadgeLabel(source: string): string {
   const map: Record<string, string> = {
-    manual: "Manual",
+    manual: "Вручную",
     transcript: "Transcript",
     email: "Email",
     api: "API",
@@ -475,7 +475,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
           {/* Due date */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Due</span>
+            <span className="text-ink-3 w-20 shrink-0">Срок</span>
             <Popover open={dueOpen} onOpenChange={setDueOpen}>
               <PopoverTrigger asChild>
                 <Button
