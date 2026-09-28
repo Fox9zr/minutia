@@ -417,9 +417,9 @@ function CarriedIssueCard({
             transition={{ duration: 0.12 }}
             className="flex items-center gap-1 shrink-0"
           >
-            <ActionButton letter="R" label="Resolve" onClick={() => handleActionClick("resolved")} />
-            <ActionButton letter="P" label="Progress" onClick={() => handleActionClick("in_progress")} />
-            <ActionButton letter="X" label="Drop" onClick={() => handleActionClick("dropped")} />
+            <ActionButton letter="R" label="Решить" onClick={() => handleActionClick("resolved")} />
+            <ActionButton letter="P" label="Прогресс" onClick={() => handleActionClick("in_progress")} />
+            <ActionButton letter="X" label="Исключить" onClick={() => handleActionClick("dropped")} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -814,7 +814,7 @@ export function MeetingDetailContent({
   if (!meeting) {
     return (
       <div className="min-h-full bg-paper flex items-center justify-center">
-        <p className="text-sm text-ink-3">Meeting not found.</p>
+        <p className="text-sm text-ink-3">Встреча не найдена.</p>
       </div>
     );
   }
@@ -966,8 +966,8 @@ export function MeetingDetailContent({
 
   async function handleEndMeeting() {
     if (!(await confirm({
-      title: "End meeting?",
-      description: "Notes become read-only for everyone once the meeting ends.",
+      title: "Завершить встречу?",
+      description: "После завершения встречи заметки становятся доступны только для чтения.",
       confirmLabel: "End meeting",
     }))) return;
     await handleStopRecording();
@@ -1369,7 +1369,7 @@ export function MeetingDetailContent({
                     >
                       <span className="text-accent text-xs">&#9670;</span>
                       <span className="flex-1 text-sm text-ink">{d.title}</span>
-                      <span className="text-[10px] text-ink-4 font-medium uppercase tracking-wider">Decision</span>
+                      <span className="text-[10px] text-ink-4 font-medium uppercase tracking-wider">Решение</span>
                     </div>
                   ))}
                 </div>
@@ -1391,7 +1391,7 @@ export function MeetingDetailContent({
               <Textarea
                 value={notes}
                 onChange={(e) => handleNotesChange(e.target.value)}
-                placeholder="Type meeting notes here..."
+                placeholder="Введите заметки к встрече..."
                 className="min-h-[300px] bg-card border-rule text-sm font-sans leading-relaxed resize-y"
               />
               <div className="mt-4 pt-4 border-t border-rule">
@@ -1473,7 +1473,7 @@ export function MeetingDetailContent({
           </div>
 
           {agendaDrafts.length > 0 && (
-            <section className="mb-6 space-y-3" aria-label="Drafted agenda items">
+            <section className="mb-6 space-y-3" aria-label="Черновики пунктов повестки">
               <CalendarDraftNotice count={agendaDrafts.length} />
               <InlineTaskList
                 issues={agendaDrafts}
@@ -1549,7 +1549,7 @@ export function MeetingDetailContent({
           <Link
             href={`/series/${seriesId}`}
             className="text-ink-3 transition-colors hover:text-ink"
-            aria-label="Back to series"
+            aria-label="Назад к серии"
           >
             <ArrowLeft className="size-5" />
           </Link>
@@ -1627,7 +1627,7 @@ export function MeetingDetailContent({
         )}
 
         {canManageMeeting && (
-        <section className="mb-8" aria-label="AI accountability review">
+        <section className="mb-8" aria-label="AI-контроль исполнения">
           <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-card px-4 py-3 shadow-[var(--shadow-raised)]">
             <div>
               <h2 className="font-display text-base font-medium text-ink">
@@ -1668,12 +1668,12 @@ export function MeetingDetailContent({
           {suggestionsOpen && (
             <div
               role="region"
-              aria-label="AI suggestions"
+              aria-label="Рекомендации AI"
               className="mt-3 rounded-lg border border-rule bg-paper"
             >
               <div className="flex items-center justify-between gap-3 border-b border-rule px-4 py-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-ink">AI suggestions</h3>
+                  <h3 className="text-sm font-semibold text-ink">Рекомендации AI</h3>
                   <p className="mt-1 text-xs text-ink-3">
                     Review each item before it enters the permanent record.
                   </p>
@@ -1704,7 +1704,7 @@ export function MeetingDetailContent({
 
               {!loadingSuggestions && aiSuggestions.length === 0 && (
                 <div className="flex flex-col items-start gap-3 px-4 py-5 text-sm text-ink-3">
-                  <p>No AI suggestions yet for this meeting.</p>
+                  <p>Для этой встречи пока нет предложений от AI.</p>
                   <Button variant="accent"
                     type="button"
                     size="sm"
@@ -1757,7 +1757,7 @@ export function MeetingDetailContent({
                         ) : (
                           <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_10rem_9rem]">
                             <input
-                              aria-label="Suggestion title"
+                              aria-label="Предлагаемое название"
                               value={suggestion.title}
                               disabled={isReviewed}
                               onChange={(event) =>
@@ -1766,17 +1766,17 @@ export function MeetingDetailContent({
                               className="min-w-0 rounded-md border border-rule bg-card px-3 py-2 text-sm text-ink disabled:bg-paper-2 disabled:text-ink-3"
                             />
                             <input
-                              aria-label="Suggestion owner"
+                              aria-label="Предлагаемый ответственный"
                               value={suggestion.owner_name ?? ""}
                               disabled={isReviewed}
                               onChange={(event) =>
                                 updateSuggestionDraft(suggestion.id, { owner_name: event.target.value })
                               }
-                              placeholder="Owner"
+                              placeholder="Ответственный"
                               className="min-w-0 rounded-md border border-rule bg-card px-3 py-2 text-sm text-ink disabled:bg-paper-2 disabled:text-ink-3"
                             />
                             <input
-                              aria-label="Suggestion due date"
+                              aria-label="Предлагаемый срок"
                               type="date"
                               value={dateInputValue(suggestion.due_date)}
                               disabled={isReviewed}
@@ -1849,10 +1849,10 @@ export function MeetingDetailContent({
         )}
 
         <div className="mb-10">
-          <SectionHeading number={logNumber} title="Tracked in the log" />
+          <SectionHeading number={logNumber} title="Зафиксировано в журнале" />
           <div className="space-y-6">
-            <section aria-label="Items raised">
-              <LogGroupLabel label="Items raised" count={raisedInThisMeeting.length} />
+            <section aria-label="Поднятые вопросы">
+              <LogGroupLabel label="Поднятые вопросы" count={raisedInThisMeeting.length} />
               <InlineTaskList
                 issues={raisedInThisMeeting}
                 attendees={meeting.attendees ?? series?.default_attendees ?? []}
@@ -1864,8 +1864,8 @@ export function MeetingDetailContent({
             </section>
 
             {doneThisMeeting.length > 0 && (
-              <section aria-label="Resolved this meeting">
-                <LogGroupLabel label="Resolved this meeting" count={doneThisMeeting.length} />
+              <section aria-label="Решено на этой встрече">
+                <LogGroupLabel label="Решено на этой встрече" count={doneThisMeeting.length} />
                 <InlineTaskList
                   issues={doneThisMeeting}
                   attendees={meeting.attendees ?? series?.default_attendees ?? []}
@@ -1877,8 +1877,8 @@ export function MeetingDetailContent({
             )}
 
             {meetingDecisions.length > 0 && (
-              <section aria-label="Decisions">
-                <LogGroupLabel label="Decisions" count={meetingDecisions.length} />
+              <section aria-label="Решения">
+                <LogGroupLabel label="Решения" count={meetingDecisions.length} />
                 <div className="space-y-3">
                   {meetingDecisions.map((decision) => (
                     <DecisionCard key={decision.id} decision={decision} />
@@ -1928,7 +1928,7 @@ export function MeetingDetailContent({
           <Textarea
             value={notes}
             onChange={(e) => handleNotesChange(e.target.value)}
-            placeholder="Meeting notes..."
+            placeholder="Заметки со встречи..."
             className="min-h-[120px] font-sans text-sm"
           />
         </section>
@@ -1944,7 +1944,7 @@ export function MeetingDetailContent({
                 {transcriptNumber}
               </span>
             )}
-            <span className="font-display text-xl font-semibold text-ink">Transcript</span>
+            <span className="font-display text-xl font-semibold text-ink">Стенограмма</span>
             {!hasDiarizedTranscript && transcript.trim() && (
               <span className="font-mono text-[11px] tabular-nums text-ink-4">
                 {transcript.length} chars
@@ -1974,7 +1974,7 @@ export function MeetingDetailContent({
               <Textarea
                 value={transcript}
                 onChange={(e) => handleTranscriptChange(e.target.value)}
-                placeholder="Paste transcript..."
+                placeholder="Вставить расшифровку..."
                 className="mt-3 min-h-[160px] font-sans text-sm"
               />
             )
@@ -2002,7 +2002,7 @@ export function MeetingDetailContent({
           <section
             role="dialog"
             aria-modal="true"
-            aria-label="AI notes preview"
+            aria-label="Предпросмотр заметок AI"
             className="mx-auto flex max-h-[calc(100vh-3rem)] max-w-5xl flex-col overflow-hidden rounded-lg border border-rule bg-paper shadow-2xl"
           >
             <div className="flex items-start justify-between gap-4 border-b border-rule px-5 py-4">
@@ -2021,7 +2021,7 @@ export function MeetingDetailContent({
                 type="button"
                 onClick={() => setAiPreview(null)}
                 className="flex size-9 shrink-0 items-center justify-center rounded-full text-ink-4 transition-colors hover:bg-paper-2 hover:text-ink"
-                aria-label="Close AI notes preview"
+                aria-label="Закрыть предпросмотр заметок AI"
               >
                 <X className="size-4" />
               </button>
@@ -2030,7 +2030,7 @@ export function MeetingDetailContent({
             <div className="grid min-h-0 flex-1 gap-0 overflow-hidden md:grid-cols-2">
               <div className="min-h-0 border-b border-rule md:border-b-0 md:border-r">
                 <div className="border-b border-rule px-5 py-3">
-                  <h4 className="text-sm font-semibold text-ink">Raw notes</h4>
+                  <h4 className="text-sm font-semibold text-ink">Черновые заметки</h4>
                 </div>
                 <pre className="h-full overflow-auto whitespace-pre-wrap px-5 py-4 text-sm leading-6 text-ink-2">
                   {meeting.raw_notes_markdown || notes || "No raw notes captured."}
@@ -2039,7 +2039,7 @@ export function MeetingDetailContent({
               <div className="min-h-0 bg-paper-2/40">
                 <div className="flex items-center justify-between gap-3 border-b border-rule px-5 py-3">
                   <div>
-                    <h4 className="text-sm font-semibold text-ink">Structured record</h4>
+                    <h4 className="text-sm font-semibold text-ink">Структурированная запись</h4>
                     <p className="mt-0.5 text-xs text-ink-4">
                       {structuredAiPreviewCount} suggested {structuredAiPreviewCount === 1 ? "entry" : "entries"}
                     </p>
@@ -2052,47 +2052,47 @@ export function MeetingDetailContent({
                   <div className="space-y-3">
                     {structuredAiPreviewCount === 0 && (
                       <div className="rounded-lg border border-dashed border-rule bg-card px-4 py-8 text-center">
-                        <p className="text-sm font-medium text-ink">No structured notes generated.</p>
+                        <p className="text-sm font-medium text-ink">Структурированные заметки не сформированы.</p>
                         <p className="mt-1 text-xs text-ink-4">
                           Add more raw notes, then try enhancing again.
                         </p>
                       </div>
                     )}
                     <AiNotesSection
-                      title="Summary"
+                      title="Итоги"
                       items={structuredAiPreview.summary}
                       icon={FileText}
                     />
                     <AiNotesSection
-                      title="Action items"
+                      title="Поручения"
                       items={structuredAiPreview.action_items}
                       icon={CheckSquare}
                       tone="good"
                     />
                     <AiNotesSection
-                      title="Decisions"
+                      title="Решения"
                       items={structuredAiPreview.decisions}
                       icon={Gavel}
                     />
                     <AiNotesSection
-                      title="Risks"
+                      title="Риски"
                       items={structuredAiPreview.risks}
                       icon={AlertTriangle}
                       tone="warn"
                     />
                     <AiNotesSection
-                      title="Blockers"
+                      title="Блокеры"
                       items={structuredAiPreview.blockers}
                       icon={Ban}
                       tone="warn"
                     />
                     <AiNotesSection
-                      title="Follow-ups"
+                      title="Дальнейшие действия"
                       items={structuredAiPreview.follow_ups}
                       icon={RotateCcw}
                     />
                     <AiNotesSection
-                      title="Open questions"
+                      title="Открытые вопросы"
                       items={structuredAiPreview.open_questions}
                       icon={HelpCircle}
                     />

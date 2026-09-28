@@ -74,7 +74,7 @@ export function RemindOwnersButton({ seriesId }: RemindOwnersButtonProps) {
         onClick={handleClick}
         disabled={state === "sending"}
         className="h-9"
-        aria-label="Remind owners"
+        aria-label="Напомнить ответственным"
       >
         {state === "sending" ? (
           <Loader2 className="size-4 animate-spin" data-icon="inline-start" />
@@ -85,7 +85,7 @@ export function RemindOwnersButton({ seriesId }: RemindOwnersButtonProps) {
         ) : (
           <Bell className="size-4" data-icon="inline-start" />
         )}
-        <span className="hidden sm:inline">Remind owners</span>
+        <span className="hidden sm:inline">Напомнить ответственным</span>
       </Button>
       {message && (
         <span

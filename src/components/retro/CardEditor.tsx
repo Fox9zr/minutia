@@ -71,9 +71,9 @@ export function CardEditor({ open, mode, colTitle, initialText, initialColor, on
           <Button variant="primary" onClick={save} disabled={!text.trim()} iconLeft={mode === "edit" ? <Icons.Check size={18} /> : <Icons.Plus size={18} />}>
             {mode === "edit" ? "Save card" : "Add card"}
           </Button>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>Отмена</Button>
           {mode === "edit" && onDelete && (
-            <Button variant="ghost" onClick={onDelete} style={{ marginLeft: "auto", color: "var(--danger)" }}>Delete</Button>
+            <Button variant="ghost" onClick={onDelete} style={{ marginLeft: "auto", color: "var(--danger)" }}>Удалить</Button>
           )}
         </div>
         <div style={{ marginTop: 10, fontFamily: "var(--font-mono)", fontSize: 11, color: "var(--studio-ink-3)" }}>⌘↵ to save · esc to cancel</div>

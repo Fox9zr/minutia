@@ -106,10 +106,10 @@ export async function POST(request: NextRequest) {
       html: `
         <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#171717;">
           <p style="margin:0 0 18px;color:#d4572a;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">minutia</p>
-          <h1 style="margin:0 0 12px;font-size:24px;line-height:30px;">Reset your password</h1>
-          <p style="margin:0 0 20px;color:#6b665f;font-size:14px;line-height:22px;">Use this secure link to choose a new Minutia password.</p>
-          <a href="${escapedResetUrl}" style="display:inline-block;border-radius:10px;background:#d4572a;color:#fff;padding:10px 14px;text-decoration:none;font-size:14px;font-weight:700;">Reset password</a>
-          <p style="margin:20px 0 0;color:#6b665f;font-size:12px;line-height:18px;">If you did not request this, you can ignore this email.</p>
+          <h1 style="margin:0 0 12px;font-size:24px;line-height:30px;">Сброс пароля</h1>
+          <p style="margin:0 0 20px;color:#6b665f;font-size:14px;line-height:22px;">Используйте эту безопасную ссылку для смены пароля в Minutia.</p>
+          <a href="${escapedResetUrl}" style="display:inline-block;border-radius:10px;background:#d4572a;color:#fff;padding:10px 14px;text-decoration:none;font-size:14px;font-weight:700;">Сбросить пароль</a>
+          <p style="margin:20px 0 0;color:#6b665f;font-size:12px;line-height:18px;">Если вы не отправляли запрос, проигнорируйте это e-mail сообщение.</p>
           <p style="margin:14px 0 0;color:#6b665f;font-size:12px;line-height:18px;word-break:break-all;">${escapedResetUrl}</p>
         </div>
       `,

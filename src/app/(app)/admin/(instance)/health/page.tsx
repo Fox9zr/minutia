@@ -25,9 +25,9 @@ const DOT: Record<ServiceStatus, string> = {
 };
 
 const OVERALL: Record<HealthReport["overall"], { dot: string; label: string }> = {
-  ok: { dot: "bg-accent", label: "All systems operational" },
-  degraded: { dot: "bg-amber-500", label: "Degraded: some services need attention" },
-  down: { dot: "bg-danger", label: "Down: a critical service is failing" },
+  ok: { dot: "bg-accent", label: "Все системы работают штатно" },
+  degraded: { dot: "bg-amber-500", label: "Снижение производительности: требуется внимание к службам" },
+  down: { dot: "bg-danger", label: "Сбой: критическая служба недоступна" },
 };
 
 export default function AdminHealthPage() {

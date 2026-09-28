@@ -72,7 +72,7 @@ export function RecordingIndicator({
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             transition={{ duration: 0.15 }}
-            aria-label="Record meeting audio"
+            aria-label="Записать аудио встречи"
             className="inline-flex items-center gap-2 rounded-full border border-rule bg-card px-3 py-1.5 text-xs font-medium text-ink transition-colors hover:border-rule-strong hover:bg-paper-2"
           >
             <Mic className="size-3.5 text-red-500" />
@@ -100,7 +100,7 @@ export function RecordingIndicator({
             </span>
 
             <span
-              aria-label="Recording time"
+              aria-label="Время записи"
               className="text-xs font-mono tabular-nums text-ink"
             >
               {formatRecordingDuration(durationSeconds)}
@@ -110,7 +110,7 @@ export function RecordingIndicator({
               <button
                 type="button"
                 onClick={onPause}
-                aria-label="Pause recording"
+                aria-label="Приостановить запись"
                 className="text-ink-3 transition-colors hover:text-ink"
               >
                 <Pause className="size-3.5" />
@@ -120,7 +120,7 @@ export function RecordingIndicator({
               <button
                 type="button"
                 onClick={onResume}
-                aria-label="Resume recording"
+                aria-label="Возобновить запись"
                 className="text-ink-3 transition-colors hover:text-ink"
               >
                 <Play className="size-3.5" />
@@ -130,7 +130,7 @@ export function RecordingIndicator({
             <button
               type="button"
               onClick={onStop}
-              aria-label="Stop recording"
+              aria-label="Остановить запись"
               className="text-red-500 transition-colors hover:text-red-600"
             >
               <Square className="size-3.5 fill-current" />

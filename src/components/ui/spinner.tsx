@@ -7,7 +7,7 @@ function Spinner({ className, ...props }: React.ComponentProps<typeof Loader2>) 
     <Loader2
       data-slot="spinner"
       role="status"
-      aria-label="Loading"
+      aria-label="Загрузка"
       className={cn("size-4 animate-spin", className)}
       {...props}
     />

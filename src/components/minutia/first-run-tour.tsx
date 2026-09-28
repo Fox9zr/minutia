@@ -19,31 +19,31 @@ type TourStep = {
 
 const TOUR_STEPS: TourStep[] = [
   {
-    title: "Your OIL Board",
+    title: "Ваша доска OIL",
     body: "This is the control room for open work, pending decisions, and series health.",
     target: "[data-tour='oil-board']",
     route: "/",
   },
   {
-    title: "Add widgets",
+    title: "Добавить виджеты",
     body: "Customize the dashboard with meeting, health, and workload panels.",
     target: "[data-tour='add-widget']",
     route: "/",
   },
   {
-    title: "Quick add issues",
+    title: "Быстро добавить задачи",
     body: "Use the floating plus or press N to capture an issue without leaving the board.",
     target: "[data-tour='quick-add']",
     route: "/",
   },
   {
-    title: "Search and shortcuts",
+    title: "Поиск и горячие клавиши",
     body: "Use Command K to jump anywhere. Press ? whenever you want the full shortcut map.",
     target: "[data-tour='command-palette']",
     route: "/",
   },
   {
-    title: "Series are meeting rooms",
+    title: "Серии — это комнаты встреч",
     body: "Open recurring meeting series from here. Each one owns its meetings, issues, and decisions.",
     target: "[data-tour='series-nav']",
     route: "/series",
@@ -257,7 +257,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
                   type="button"
                   onClick={() => dismiss("dismissed")}
                   className="flex size-7 items-center justify-center rounded-full text-ink-4 transition-colors hover:bg-paper-2 hover:text-ink"
-                  aria-label="Close tour"
+                  aria-label="Закрыть обучение"
                 >
                   <X className="size-3.5" />
                 </button>

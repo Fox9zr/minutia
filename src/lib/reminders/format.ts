@@ -73,7 +73,7 @@ function renderHtml(owners: OwnerReminder[], ctx: ReminderContext): string {
     heading: `Open items in ${ctx.seriesName}`,
     intro: leadLine(owners, ctx),
     bodyHtml: sections,
-    cta: { label: "Open in Minutia", href: ctx.appUrl },
+    cta: { label: "Открыть в Minutia", href: ctx.appUrl },
     footerUrl: ctx.appUrl,
   });
 }

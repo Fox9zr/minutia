@@ -91,10 +91,10 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
     : 0;
 
   const navItems = [
-    { label: "Outstanding", href: "/", icon: CircleDot, count: outstandingCount },
-    { label: "Series", href: "/series", icon: SquareStack, count: 0 },
-    { label: "My actions", href: "/actions", icon: CheckSquare, count: myActionsCount },
-    { label: "Inbox", href: "/inbox", icon: Bell, count: unreadCount ?? 0 },
+    { label: "К исполнению", href: "/", icon: CircleDot, count: outstandingCount },
+    { label: "Серия", href: "/series", icon: SquareStack, count: 0 },
+    { label: "Мои поручения", href: "/actions", icon: CheckSquare, count: myActionsCount },
+    { label: "Входящие", href: "/inbox", icon: Bell, count: unreadCount ?? 0 },
   ] as const;
 
   return (
@@ -107,7 +107,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
       </SidebarHeader>
 
       <SidebarContent>
-        <nav aria-label="Main navigation">
+        <nav aria-label="Основная навигация">
         <SidebarGroup className="px-3">
           <SidebarGroupContent>
             <SidebarMenu className="gap-0.5">
@@ -205,7 +205,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
               >
                 <Link href="/admin">
                   <ShieldCheck className="size-4" />
-                  <span>Admin</span>
+                  <span>Администратор</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -222,7 +222,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
             >
               <Link href="/settings">
                 <Settings className="size-4" />
-                <span>Settings</span>
+                <span>Настройки</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -248,7 +248,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
               className="text-ink-3 hover:text-ink"
             >
               <LogOut className="size-4" />
-              <span className="sr-only">Sign out</span>
+              <span className="sr-only">Выйти</span>
             </Button>
           </form>
         </div>

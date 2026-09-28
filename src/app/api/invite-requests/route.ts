@@ -195,9 +195,9 @@ export async function POST(request: NextRequest) {
                         <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e8e2d8;border-radius:14px;background:#fbfaf7;">
                           <tr>
                             <td style="padding:16px;">
-                              <p style="margin:0;color:#6b665f;font-size:11px;line-height:16px;text-transform:uppercase;letter-spacing:.08em;">Requester</p>
+                              <p style="margin:0;color:#6b665f;font-size:11px;line-height:16px;text-transform:uppercase;letter-spacing:.08em;">Инициатор</p>
                               <p style="margin:5px 0 14px;color:#171717;font-size:16px;line-height:22px;font-weight:700;">${escapeHtml(requestedEmail)}</p>
-                              <p style="margin:0;color:#6b665f;font-size:11px;line-height:16px;text-transform:uppercase;letter-spacing:.08em;">Requested page</p>
+                              <p style="margin:0;color:#6b665f;font-size:11px;line-height:16px;text-transform:uppercase;letter-spacing:.08em;">Запрошенная страница</p>
                               <a href="${requestedUrl}" style="display:block;margin-top:5px;color:#d4572a;font-size:13px;line-height:20px;text-decoration:underline;">${escapeHtml(requestedUrl)}</a>
                             </td>
                           </tr>
@@ -209,10 +209,10 @@ export async function POST(request: NextRequest) {
                         <table role="presentation" cellpadding="0" cellspacing="0">
                           <tr>
                             <td style="padding:0 10px 10px 0;">
-                              <a href="${approveUrl}" style="display:inline-block;border-radius:12px;background:#171717;color:#ffffff;font-size:14px;font-weight:750;line-height:20px;padding:12px 18px;text-decoration:none;">Approve request</a>
+                              <a href="${approveUrl}" style="display:inline-block;border-radius:12px;background:#171717;color:#ffffff;font-size:14px;font-weight:750;line-height:20px;padding:12px 18px;text-decoration:none;">Согласовать запрос</a>
                             </td>
                             <td style="padding:0 0 10px 0;">
-                              <a href="${rejectUrl}" style="display:inline-block;border-radius:12px;border:1px solid #d8d0c3;color:#6b665f;font-size:14px;font-weight:750;line-height:20px;padding:11px 17px;text-decoration:none;">Reject request</a>
+                              <a href="${rejectUrl}" style="display:inline-block;border-radius:12px;border:1px solid #d8d0c3;color:#6b665f;font-size:14px;font-weight:750;line-height:20px;padding:11px 17px;text-decoration:none;">Отклонить запрос</a>
                             </td>
                           </tr>
                         </table>

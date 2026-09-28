@@ -55,7 +55,7 @@ export function TimelineNode({
         {isResolved ? (
           <div
             className="flex items-center justify-center size-3.5 rounded-full bg-success shrink-0"
-            aria-label="Resolved"
+            aria-label="Решено"
           >
             <Check className="size-2.5 text-white" strokeWidth={3} />
           </div>

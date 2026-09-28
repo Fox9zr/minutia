@@ -4,7 +4,7 @@ import { resolveAdminAccess } from "@/lib/supabase/admin-access";
 import { AdminNav } from "@/components/minutia/admin-nav";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: "Администратор",
 };
 
 export default async function AdminLayout({

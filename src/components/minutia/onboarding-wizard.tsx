@@ -311,7 +311,7 @@ function StepWelcome({
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
           onInput={(e) => onNameChange(e.currentTarget.value)}
-          placeholder="Your name"
+          placeholder="Ваше имя"
           autoFocus
           onKeyDown={(e) => {
             if (e.key === "Enter" && name.trim()) onNext();
@@ -383,7 +383,7 @@ function StepCreateSeries({
       </div>
 
       <div className="space-y-2">
-        <Label className="text-ink-2">How often?</Label>
+        <Label className="text-ink-2">Периодичность</Label>
         <div className="flex flex-wrap gap-1.5">
           {CADENCES.map((c) => (
             <button
@@ -415,7 +415,7 @@ function StepCreateSeries({
           placeholder="alice@co.com, bob@co.com"
           className="h-11 rounded-xl"
         />
-        <p className="text-[10px] text-ink-4">Comma-separated emails</p>
+        <p className="text-[10px] text-ink-4">Email через запятую</p>
       </div>
 
       <div className="flex gap-3">
@@ -445,21 +445,21 @@ function StepCreateSeries({
 
 const features = [
   {
-    title: "OIL Board",
+    title: "Доска OIL",
     desc: "Your dashboard for all outstanding issues across every series.",
     shortcut: "J/K",
   },
   {
-    title: "Live Capture",
+    title: "Запись в реальном времени",
     desc: "Start a meeting and raise issues in real-time with type prefixes.",
     shortcut: "N",
   },
   {
-    title: "Pre-Meeting Brief",
+    title: "Бриф перед встречей",
     desc: "Auto-generated summary of pending items before your next meeting.",
   },
   {
-    title: "Keyboard First",
+    title: "Управление с клавиатуры",
     desc: "Navigate, update status, and add items without touching the mouse.",
     shortcut: "?",
   },

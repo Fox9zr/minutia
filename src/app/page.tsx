@@ -3,31 +3,31 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Minutia: the open-source Outstanding Issues Log",
+  title: "Minutia: реестр нерешенных вопросов с открытым исходным кодом",
   description:
     "Stop losing track of meeting outcomes. Minutia is the open-source Outstanding Issues Log for recurring meetings.",
 };
 
 const features = [
   {
-    title: "Live capture",
+    title: "Запись в реальном времени",
     description:
-      "Capture issues, decisions, and action items as they happen — during the meeting, not after.",
+      "Фиксируйте вопросы, решения и поручения в ходе встречи, а не после нее.",
   },
   {
-    title: "OIL board",
+    title: "Доска OIL",
     description:
-      "A single board of outstanding issues across all your recurring meeting series.",
+      "Единая доска нерешенных вопросов по всем сериям регулярных встреч.",
   },
   {
-    title: "AI summaries",
+    title: "Итоги от AI",
     description:
-      "Auto-generated meeting summaries and smart triage so nothing falls through the cracks.",
+      "Автоматические итоги встреч и умная сортировка задач, чтобы ничего не упустить.",
   },
   {
-    title: "Decisions log",
+    title: "Журнал решений",
     description:
-      "A durable, searchable log of every decision your team makes in recurring meetings.",
+      "Надежный журнал с поиском по всем решениям команды на регулярных встречах.",
   },
 ];
 

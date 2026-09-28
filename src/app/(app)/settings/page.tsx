@@ -24,9 +24,9 @@ import {
 } from "@/lib/hooks/use-google-calendar";
 
 const themeOptions = [
-  { value: "light", label: "Light", icon: Sun },
-  { value: "dark", label: "Dark", icon: Moon },
-  { value: "system", label: "System", icon: Monitor },
+  { value: "light", label: "Светлая", icon: Sun },
+  { value: "dark", label: "Темная", icon: Moon },
+  { value: "system", label: "Система", icon: Monitor },
 ] as const;
 
 export default function SettingsPage() {
@@ -58,7 +58,7 @@ export default function SettingsPage() {
   if (isLoading) {
     return (
       <div className="flex flex-1 flex-col items-center justify-center p-4">
-        <p className="text-sm text-ink-3">Loading settings...</p>
+        <p className="text-sm text-ink-3">Загрузка настроек...</p>
       </div>
     );
   }
@@ -69,16 +69,16 @@ export default function SettingsPage() {
         {/* Profile */}
         <Card>
           <CardHeader>
-            <CardTitle>Profile</CardTitle>
-            <CardDescription>Your display name and account details.</CardDescription>
+            <CardTitle>Профиль</CardTitle>
+            <CardDescription>Отображаемое имя и данные учетной записи.</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="name">Display name</Label>
+                <Label htmlFor="name">Отображаемое имя</Label>
                 <Input
                   id="name"
-                  placeholder="Your name"
+                  placeholder="Ваше имя"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -104,7 +104,7 @@ export default function SettingsPage() {
               </Button>
 
               {updateProfile.isSuccess && (
-                <p className="text-xs text-success">Profile updated.</p>
+                <p className="text-xs text-success">Профиль обновлен.</p>
               )}
             </form>
           </CardContent>
@@ -113,7 +113,7 @@ export default function SettingsPage() {
         {/* Appearance */}
         <Card>
           <CardHeader>
-            <CardTitle>Appearance</CardTitle>
+            <CardTitle>Оформление</CardTitle>
             <CardDescription>
               Choose how Minutia looks for you.
             </CardDescription>
@@ -143,7 +143,7 @@ export default function SettingsPage() {
         {/* Connected accounts */}
         <Card>
           <CardHeader>
-            <CardTitle>Connected accounts</CardTitle>
+            <CardTitle>Подключенные аккаунты</CardTitle>
             <CardDescription>
               Link external services to enhance your workflow.
             </CardDescription>
@@ -184,11 +184,11 @@ export default function SettingsPage() {
                 </Button>
               ) : gcalStatus?.connected ? (
                 <Button variant="outline" size="sm" asChild>
-                  <a href="/api/auth/google">Reconnect</a>
+                  <a href="/api/auth/google">Переподключиться</a>
                 </Button>
               ) : (
                 <Button variant="outline" size="sm" asChild>
-                  <a href="/api/auth/google">Connect</a>
+                  <a href="/api/auth/google">Подключить</a>
                 </Button>
               )}
             </div>
@@ -198,7 +198,7 @@ export default function SettingsPage() {
         {/* Export */}
         <Card>
           <CardHeader>
-            <CardTitle>Export data</CardTitle>
+            <CardTitle>Экспорт данных</CardTitle>
             <CardDescription>
               Download all your issues as CSV or JSON.
             </CardDescription>

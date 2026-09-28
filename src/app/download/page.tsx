@@ -10,7 +10,7 @@ import {
 } from "@/lib/desktop-download";
 
 export const metadata: Metadata = {
-  title: "Minutia for Mac",
+  title: "Minutia для Mac",
   description:
     "Record your meetings from the menu bar. No bot joins the call. Recaps land in Minutia seconds after you hit stop.",
 };
@@ -19,19 +19,19 @@ export const revalidate = 300;
 
 const steps = [
   {
-    title: "Install and sign in",
+    title: "Установить и выполнить Sign in",
     description:
-      "Download the app and sign in with your Minutia account. It lives in the menu bar, out of your way.",
+      "Скачайте приложение и выполните Sign in под своим аккаунтом Minutia. Оно работает в строке меню и не мешает работе.",
   },
   {
-    title: "Record from the menu bar",
+    title: "Запись из строки меню",
     description:
-      "Start a recording yourself, or let meeting detection prompt you the moment a call begins.",
+      "Запустите запись вручную или дождитесь уведомления в начале звонка.",
   },
   {
-    title: "Stop and get the recap",
+    title: "Остановить и подвести итоги",
     description:
-      "Hit stop and the recap opens in Minutia seconds later, complete with action items.",
+      "Нажмите «Стоп», и через пару секунд в Minutia откроется протокол с поручениями.",
   },
 ];
 

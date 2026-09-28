@@ -66,7 +66,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
         {!sealed ? (
           <div style={{ textAlign: "center" }}>
             {isFacilitator ? (
-              <Button variant="primary" size="lg" onClick={onSeal} iconLeft={<Icons.CheckCircle size={20} />}>Seal these decisions</Button>
+              <Button variant="primary" size="lg" onClick={onSeal} iconLeft={<Icons.CheckCircle size={20} />}>Зафиксировать эти решения</Button>
             ) : (
               <p style={{ fontFamily: "var(--font-sans)", fontSize: 14.5, color: "var(--studio-ink-3)", margin: 0 }}>
                 Waiting for the facilitator to seal the retro&hellip;
@@ -132,7 +132,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
         <ConfirmDialog
           open={confirmEnd}
           tone="danger"
-          title="End this retro?"
+          title="Завершить ретроспективу?"
           body="This ends the retro for everyone. The board becomes read-only and live editing stops. This can't be undone."
           warning={savedSeriesId ? undefined : "You exported markdown but didn't save to Minutia, so this board still expires in 30 days."}
           confirmLabel="End retro"

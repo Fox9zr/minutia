@@ -52,7 +52,7 @@ export default async function InviteRequestReviewPage({ searchParams }: PageProp
   if (!token) {
     return (
       <ErrorState
-        title="Request link missing"
+        title="Ссылка на запрос отсутствует"
         body="Open the approve or reject button from the invite request email."
       />
     );
@@ -71,7 +71,7 @@ export default async function InviteRequestReviewPage({ searchParams }: PageProp
   if ("error" in loaded) {
     return (
       <ErrorState
-        title="Request unavailable"
+        title="Запрос недоступен"
         body={loaded.error ?? "This invite request link is not available."}
       />
     );
@@ -82,7 +82,7 @@ export default async function InviteRequestReviewPage({ searchParams }: PageProp
     loaded.request.organization_id
   );
   if (!admin.authorized) {
-    return <ErrorState title="Admin access required" body={admin.error} />;
+    return <ErrorState title="Требуются права администратора" body={admin.error} />;
   }
 
   return (

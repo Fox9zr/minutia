@@ -47,7 +47,7 @@ export function StaleItemsWidget({
 
       {oldest && (
         <div className="border-t border-rule pt-3">
-          <p className="text-[11px] text-ink-4 mb-1">Oldest stale item</p>
+          <p className="text-[11px] text-ink-4 mb-1">Самый давний зависший элемент</p>
           <PrefetchIssueLink
             issueId={oldest.id}
             className="text-sm font-medium text-ink hover:text-accent transition-colors"
@@ -61,7 +61,7 @@ export function StaleItemsWidget({
       )}
 
       {staleItems.length === 0 && (
-        <p className="text-xs text-ink-3">All items have recent activity.</p>
+        <p className="text-xs text-ink-3">По всем пунктам есть недавняя активность.</p>
       )}
     </WidgetShell>
   );

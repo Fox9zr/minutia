@@ -208,7 +208,7 @@ export function BriefCard({
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-ink-3">No pending issues.</p>
+          <p className="text-sm text-ink-3">Нет задач на рассмотрении.</p>
         )}
 
         {/* Notice */}

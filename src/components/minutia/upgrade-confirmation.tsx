@@ -126,7 +126,7 @@ export function UpgradeConfirmation() {
         <div className="relative flex items-start gap-3 rounded-xl border border-rule bg-paper px-4 py-3.5 shadow-lg">
           <button
             type="button"
-            aria-label="Dismiss"
+            aria-label="Скрыть"
             onClick={() => setDismissed(true)}
             className="absolute right-2.5 top-2.5 flex items-center justify-center rounded-md p-1 text-ink-4 transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-paper"
           >

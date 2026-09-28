@@ -147,7 +147,7 @@ export function FlowingSummary({
   const provenance = formatProvenance({ firstWordMs, totalMs });
 
   return (
-    <section className="mb-10" aria-label="Meeting recap" data-recap-section>
+    <section className="mb-10" aria-label="Итоги встречи" data-recap-section>
       <div className="mb-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <span className="size-2 rounded-full bg-accent" aria-hidden="true" />
@@ -208,7 +208,7 @@ export function FlowingSummary({
           data-recap-provenance
         >
           <Check className="size-3 text-success" aria-hidden="true" />
-          <span className="text-ink-3">Summary ready</span>
+          <span className="text-ink-3">Итоги готовы</span>
           {model && (
             <>
               <span aria-hidden="true">·</span>

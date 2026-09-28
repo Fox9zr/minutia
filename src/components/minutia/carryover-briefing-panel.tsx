@@ -61,7 +61,7 @@ export function CarryoverBriefingPanel({
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Sparkles className="size-4 text-accent" />
-          <h2 className="font-display text-base font-medium text-ink">Carry-over briefing</h2>
+          <h2 className="font-display text-base font-medium text-ink">Сводка по перенесенным задачам</h2>
         </div>
         {!briefing && (
           <Button size="sm" variant="outline" onClick={handleGenerate} disabled={loading}>

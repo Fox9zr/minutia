@@ -127,12 +127,12 @@ export default function ResetPasswordPage() {
             </div>
             <p className="font-sans text-sm text-ink-3">{message}</p>
             <Button asChild className="h-10 w-full rounded-[12px] bg-accent font-sans font-medium text-white hover:bg-accent-hover">
-              <Link href="/login">Back to sign in</Link>
+              <Link href="/login">Назад к Sign in</Link>
             </Button>
           </div>
         ) : openingLink ? (
           <div className="rounded-[14px] border border-rule bg-paper px-4 py-4">
-            <p className="font-sans text-sm text-ink-3">Opening reset link</p>
+            <p className="font-sans text-sm text-ink-3">Открытие ссылки для сброса</p>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -143,7 +143,7 @@ export default function ResetPasswordPage() {
               <Input
                 id="new-password"
                 type="password"
-                placeholder="Minimum 8 characters"
+                placeholder="Минимум 8 символов"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
@@ -160,7 +160,7 @@ export default function ResetPasswordPage() {
               <Input
                 id="new-password-confirm"
                 type="password"
-                placeholder="Repeat password"
+                placeholder="Повторите пароль"
                 value={passwordConfirm}
                 onChange={(e) => setPasswordConfirm(e.target.value)}
                 required

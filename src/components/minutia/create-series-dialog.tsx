@@ -75,7 +75,7 @@ export function CreateSeriesDialog({
       <DialogContent className="sm:max-w-lg p-0" showCloseButton>
         <div className="px-8 pt-8 pb-2">
           <DialogHeader className="space-y-1.5 mb-0">
-            <DialogTitle className="font-display text-xl">Create series</DialogTitle>
+            <DialogTitle className="font-display text-xl">Создать серию</DialogTitle>
             <DialogDescription className="text-sm text-ink-3">
               A series groups your recurring meetings together.
             </DialogDescription>
@@ -85,7 +85,7 @@ export function CreateSeriesDialog({
         <form onSubmit={handleSubmit(onSubmit)} className="px-8 pb-8 space-y-6">
           {/* Name */}
           <div className="space-y-2">
-            <Label htmlFor="series-name" className="text-sm font-semibold text-ink">Name</Label>
+            <Label htmlFor="series-name" className="text-sm font-semibold text-ink">Название</Label>
             <Input
               id="series-name"
               placeholder="e.g. Weekly Standup"
@@ -100,10 +100,10 @@ export function CreateSeriesDialog({
 
           {/* Description */}
           <div className="space-y-2">
-            <Label htmlFor="series-description" className="text-sm font-semibold text-ink">Description</Label>
+            <Label htmlFor="series-description" className="text-sm font-semibold text-ink">Описание</Label>
             <Textarea
               id="series-description"
-              placeholder="Optional description"
+              placeholder="Необязательное описание"
               {...register("description")}
               className="min-h-[100px]"
             />
@@ -111,11 +111,11 @@ export function CreateSeriesDialog({
 
           {/* Cadence */}
           <div className="space-y-2.5">
-            <Label className="text-sm font-semibold text-ink">Cadence</Label>
+            <Label className="text-sm font-semibold text-ink">Периодичность</Label>
             <RadioGroup
               value={selectedCadence}
               onValueChange={(value) => setValue("cadence", value as Cadence)}
-              aria-label="Cadence"
+              aria-label="Периодичность"
               className="flex flex-wrap gap-1 rounded-full bg-paper-2 p-1"
             >
               {CADENCES.map((cadence) => (
@@ -147,14 +147,14 @@ export function CreateSeriesDialog({
 
           {/* Default attendees */}
           <div className="space-y-2">
-            <Label htmlFor="series-attendees" className="text-sm font-semibold text-ink">Default attendees</Label>
+            <Label htmlFor="series-attendees" className="text-sm font-semibold text-ink">Участники по умолчанию</Label>
             <Input
               id="series-attendees"
               placeholder="email@example.com, another@example.com"
               onChange={handleAttendeesChange}
               className="h-11"
             />
-            <p className="text-xs text-ink-4">Comma-separated emails</p>
+            <p className="text-xs text-ink-4">Email через запятую</p>
           </div>
 
           <div className="border-t border-rule pt-6 flex justify-end">

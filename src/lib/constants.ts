@@ -15,27 +15,27 @@ export const CADENCE_LABELS: Record<Cadence, string> = {
 };
 
 export const STATUS_CONFIG: Record<IssueStatus, { label: string; color: string }> = {
-  open: { label: "Open", color: "ink" },
-  in_progress: { label: "In Progress", color: "accent" },
-  pending: { label: "Pending", color: "warn" },
-  resolved: { label: "Resolved", color: "success" },
-  dropped: { label: "Dropped", color: "ink-3" },
+  open: { label: "Открыть", color: "ink" },
+  in_progress: { label: "В работе", color: "accent" },
+  pending: { label: "В ожидании", color: "warn" },
+  resolved: { label: "Решено", color: "success" },
+  dropped: { label: "Исключено", color: "ink-3" },
 };
 
 export const CATEGORY_CONFIG: Record<
   IssueCategory,
   { label: string; glyph: string; shortcut: string }
 > = {
-  action: { label: "Action", glyph: "●", shortcut: "a" },
-  decision: { label: "Decision", glyph: "◆", shortcut: "d" },
-  info: { label: "Info", glyph: "ℹ", shortcut: "i" },
-  risk: { label: "Risk", glyph: "▲", shortcut: "r" },
-  blocker: { label: "Blocker", glyph: "■", shortcut: "b" },
+  action: { label: "Действие", glyph: "●", shortcut: "a" },
+  decision: { label: "Решение", glyph: "◆", shortcut: "d" },
+  info: { label: "Информация", glyph: "ℹ", shortcut: "i" },
+  risk: { label: "Риск", glyph: "▲", shortcut: "r" },
+  blocker: { label: "Блокер", glyph: "■", shortcut: "b" },
 };
 
 export const PRIORITY_CONFIG: Record<Priority, { label: string; order: number }> = {
-  critical: { label: "Critical", order: 0 },
-  high: { label: "High", order: 1 },
-  medium: { label: "Medium", order: 2 },
+  critical: { label: "Критический", order: 0 },
+  high: { label: "Высокий", order: 1 },
+  medium: { label: "Средний", order: 2 },
   low: { label: "Low", order: 3 },
 };

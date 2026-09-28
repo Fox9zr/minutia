@@ -40,7 +40,7 @@ export function Tag({ children, onRemove = null, color = null, style = {}, ...re
       {onRemove && (
         <button
           type="button"
-          aria-label="Remove"
+          aria-label="Удалить"
           onClick={onRemove}
           style={{
             display: "inline-flex",

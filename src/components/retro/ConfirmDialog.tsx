@@ -39,7 +39,7 @@ export function ConfirmDialog({ open, title, body, warning, confirmLabel, onConf
         )}
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 22 }}>
           <Button variant={tone === "danger" ? "danger" : "primary"} onClick={onConfirm}>{confirmLabel}</Button>
-          <Button variant="ghost" onClick={onCancel}>Cancel</Button>
+          <Button variant="ghost" onClick={onCancel}>Отмена</Button>
         </div>
       </div>
     </div>

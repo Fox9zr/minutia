@@ -353,7 +353,7 @@ export function useUpdateIssueStatus() {
       if (!variables.isUndo) {
         toast(`Marked ${STATUS_LABEL[variables.newStatus] ?? variables.newStatus}`, {
           action: {
-            label: "Undo",
+            label: "Отменить",
             onClick: () =>
               mutateRef.current?.({
                 issueId: variables.issueId,

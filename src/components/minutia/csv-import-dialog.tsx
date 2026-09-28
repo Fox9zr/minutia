@@ -30,13 +30,13 @@ import type { IssueCategory, IssueStatus, Priority } from "@/lib/types";
 // ---------------------------------------------------------------------------
 
 const MAPPABLE_FIELDS = [
-  { key: "title", label: "Title", required: true },
-  { key: "description", label: "Description" },
-  { key: "category", label: "Category" },
-  { key: "status", label: "Status" },
-  { key: "priority", label: "Priority" },
-  { key: "owner_name", label: "Owner" },
-  { key: "due_date", label: "Due date" },
+  { key: "title", label: "Название", required: true },
+  { key: "description", label: "Описание" },
+  { key: "category", label: "Категория" },
+  { key: "status", label: "Статус" },
+  { key: "priority", label: "Приоритет" },
+  { key: "owner_name", label: "Ответственный" },
+  { key: "due_date", label: "Срок выполнения" },
 ] as const;
 
 type FieldKey = (typeof MAPPABLE_FIELDS)[number]["key"];
@@ -347,7 +347,7 @@ export function CsvImportDialog({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="skip">Skip</SelectItem>
+                    <SelectItem value="skip">Пропустить</SelectItem>
                     {MAPPABLE_FIELDS.map((f) => (
                       <SelectItem key={f.key} value={f.key}>
                         {f.label}

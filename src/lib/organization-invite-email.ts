@@ -60,7 +60,7 @@ function buildEmailHtml({
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:22px 0 0;border-collapse:separate;border-spacing:0;border:1px solid #eadfce;border-radius:14px;background:#fbf7ef;">
                       <tr>
                         <td style="padding:14px 16px;">
-                          <p style="margin:0;color:#8a7962;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">Access level</p>
+                          <p style="margin:0;color:#8a7962;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">Уровень доступа</p>
                           <p style="margin:5px 0 0;color:#171717;font-size:14px;font-weight:700;text-transform:capitalize;">Organization ${safeRole}</p>
                         </td>
                       </tr>
@@ -72,7 +72,7 @@ function buildEmailHtml({
                   </td>
                 </tr>
               </table>
-              <p style="margin:16px 0 0;color:#8a857d;font-size:11px;line-height:18px;">If the button does not work, paste this link into your browser:<br><span style="word-break:break-all;">${safeButtonUrl}</span></p>
+              <p style="margin:16px 0 0;color:#8a857d;font-size:11px;line-height:18px;">Если кнопка не работает, вставьте этот URL в браузер:<br><span style="word-break:break-all;">${safeButtonUrl}</span></p>
             </td>
           </tr>
         </table>

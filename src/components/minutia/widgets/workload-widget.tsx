@@ -69,7 +69,7 @@ export function WorkloadWidget({
   return (
     <WidgetShell id={id} index={index}>
       <div className="flex flex-wrap items-start justify-between gap-2 mb-1">
-        <h3 className="font-display text-lg font-semibold text-ink">Workload</h3>
+        <h3 className="font-display text-lg font-semibold text-ink">Нагрузка</h3>
         <div className="flex flex-wrap items-center gap-1" role="tablist">
           {(["owner", "series", "overdue"] as const).map((v) => (
             <button

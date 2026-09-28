@@ -321,7 +321,7 @@ export default function MyActionsPage() {
             {/* Needs Attention */}
             {needsAttention.length > 0 && (
               <Section
-                title="Needs attention"
+                title="Требует внимания"
                 count={needsAttention.length}
                 defaultOpen={true}
               >
@@ -336,7 +336,7 @@ export default function MyActionsPage() {
             {/* Pending */}
             {pending.length > 0 && (
               <Section
-                title="Pending"
+                title="В ожидании"
                 count={pending.length}
                 defaultOpen={true}
               >
@@ -351,7 +351,7 @@ export default function MyActionsPage() {
             {/* Completed (collapsed by default) */}
             {completed.length > 0 && (
               <Section
-                title="Completed"
+                title="Завершено"
                 count={completed.length}
                 defaultOpen={false}
               >

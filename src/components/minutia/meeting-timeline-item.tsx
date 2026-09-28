@@ -28,11 +28,11 @@ function formatMeetingDate(date: Date): string {
 
 const statusBadgeMap: Record<string, { label: string; className: string }> = {
   live: {
-    label: "LIVE",
+    label: "В эфире",
     className: "bg-accent text-white",
   },
   upcoming: {
-    label: "Upcoming",
+    label: "Предстоящие",
     className: "bg-paper-3 text-ink-3",
   },
   completed: {

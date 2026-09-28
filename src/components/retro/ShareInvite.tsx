@@ -61,8 +61,8 @@ export function ShareInvite({ open, boardName, template, people, link, onClose, 
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <Button variant="primary" size="lg" onClick={onStart} iconRight={<Icons.ArrowRight size={18} />}>Start the retro</Button>
-          <button type="button" onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: 14, color: "var(--studio-ink-3)" }}>Later</button>
+          <Button variant="primary" size="lg" onClick={onStart} iconRight={<Icons.ArrowRight size={18} />}>Начать ретроспективу</Button>
+          <button type="button" onClick={onClose} style={{ background: "transparent", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: 14, color: "var(--studio-ink-3)" }}>Позже</button>
         </div>
       </div>
     </div>

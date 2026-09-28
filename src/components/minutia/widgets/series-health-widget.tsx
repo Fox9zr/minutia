@@ -50,7 +50,7 @@ export function SeriesHealthWidget({
         <h3 className="font-display text-lg font-semibold text-ink">
           Series health
         </h3>
-        <span className="text-[11px] text-ink-4">Status distribution</span>
+        <span className="text-[11px] text-ink-4">Распределение по статусам</span>
       </div>
 
       <div className="space-y-5">
@@ -105,15 +105,15 @@ export function SeriesHealthWidget({
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4 pt-3 border-t border-rule">
         <div className="flex items-center gap-1.5">
           <span className="size-2 rounded-sm bg-accent" />
-          <span className="text-[10px] text-ink-4">Open</span>
+          <span className="text-[10px] text-ink-4">Открыть</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="size-2 rounded-sm bg-warn" />
-          <span className="text-[10px] text-ink-4">In Progress / Pending</span>
+          <span className="text-[10px] text-ink-4">В работе / В ожидании</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="size-2 rounded-sm bg-success" />
-          <span className="text-[10px] text-ink-4">Resolved</span>
+          <span className="text-[10px] text-ink-4">Решено</span>
         </div>
       </div>
     </WidgetShell>

@@ -16,7 +16,7 @@ export function buildCallbackUrl(nextPath: string) {
 
 export function LoadingDots() {
   return (
-    <span className="flex items-center gap-0.5" aria-label="Loading">
+    <span className="flex items-center gap-0.5" aria-label="Загрузка">
       {[0, 1, 2].map((i) => (
         <motion.span
           key={i}

@@ -122,7 +122,7 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
       sectionHtml("Also on the log", also, "Nothing else open.");
 
     const cta = {
-      label: "See the live log",
+      label: "Открыть журнал событий",
       href: `${guestUrl}?you=${encodeURIComponent(email)}`,
     };
 

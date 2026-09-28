@@ -153,7 +153,7 @@ function AcceptInviteForm() {
           <div className="rounded-[14px] border border-rule bg-paper px-4 py-4">
             <div className="flex items-center gap-3">
               <LoadingDots />
-              <p className="font-sans text-sm text-ink-3">Opening invite</p>
+              <p className="font-sans text-sm text-ink-3">Открытие приглашения</p>
             </div>
           </div>
         ) : state === "error" ? (
@@ -206,7 +206,7 @@ function AcceptInviteForm() {
                 minLength={8}
                 required
                 autoComplete="new-password"
-                placeholder="Minimum 8 characters"
+                placeholder="Минимум 8 символов"
                 className="h-10 rounded-[12px] border-rule bg-paper font-sans text-ink placeholder:text-ink-4 focus-visible:border-accent focus-visible:ring-accent/30"
               />
             </div>
@@ -223,12 +223,12 @@ function AcceptInviteForm() {
                 minLength={8}
                 required
                 autoComplete="new-password"
-                placeholder="Repeat password"
+                placeholder="Повторите пароль"
                 aria-invalid={!passwordsMatch}
                 className="h-10 rounded-[12px] border-rule bg-paper font-sans text-ink placeholder:text-ink-4 focus-visible:border-accent focus-visible:ring-accent/30"
               />
               {!passwordsMatch && (
-                <p className="font-sans text-xs text-danger">Passwords must match.</p>
+                <p className="font-sans text-xs text-danger">Пароли должны совпадать.</p>
               )}
             </div>
 
@@ -277,7 +277,7 @@ function getSafeNext(value: string | null) {
 
 function LoadingDots() {
   return (
-    <span className="flex items-center gap-0.5" aria-label="Loading">
+    <span className="flex items-center gap-0.5" aria-label="Загрузка">
       {[0, 1, 2].map((index) => (
         <motion.span
           key={index}

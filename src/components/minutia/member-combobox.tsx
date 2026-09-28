@@ -75,7 +75,7 @@ export function MemberCombobox({
           variant="ghost"
           size="sm"
           disabled={disabled}
-          aria-label="Assign owner"
+          aria-label="Назначить ответственного"
           className={cn("justify-start gap-1.5 font-normal", className)}
         >
           {ownerName ? (
@@ -84,14 +84,14 @@ export function MemberCombobox({
               <span className="truncate">{ownerName}</span>
             </>
           ) : (
-            <span className="text-ink-4">Unassigned</span>
+            <span className="text-ink-4">Не назначено</span>
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-64 p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Search people..."
+            placeholder="Поиск сотрудников..."
             value={query}
             onValueChange={setQuery}
           />

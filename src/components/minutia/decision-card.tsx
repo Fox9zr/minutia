@@ -30,7 +30,7 @@ export function DecisionCard({ decision, compact, className }: DecisionCardProps
     <article className={cn("rounded-lg border border-rule bg-card px-4 py-3.5 shadow-[var(--shadow-raised)]", className)}>
       <div className="flex items-center gap-2">
         <DecisionMark />
-        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink-3">Decision</span>
+        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-ink-3">Решение</span>
       </div>
       <p className="mt-2 text-sm font-medium leading-snug text-ink">{decision.title}</p>
       {decision.rationale && (

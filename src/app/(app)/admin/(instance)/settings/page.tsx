@@ -322,12 +322,12 @@ export default function AdminSettingsPage() {
     <div className="space-y-5">
       <Card>
         <CardHeader>
-          <CardTitle>Instance identity</CardTitle>
-          <CardDescription>How this Minutia instance presents itself.</CardDescription>
+          <CardTitle>Идентификатор инстанса</CardTitle>
+          <CardDescription>Идентификация данного инстанса Minutia.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="instance_name">Instance name</Label>
+            <Label htmlFor="instance_name">Имя инстанса</Label>
             <Input
               id="instance_name"
               placeholder="Minutia"
@@ -341,7 +341,7 @@ export default function AdminSettingsPage() {
       {caps.upgradePrompt && isManagedCloud() && (
         <Card>
           <CardHeader>
-            <CardTitle>Upgrade</CardTitle>
+            <CardTitle>Повысить тариф</CardTitle>
             <CardDescription>
               Unlock AI and higher limits for your team.
             </CardDescription>
@@ -373,7 +373,7 @@ export default function AdminSettingsPage() {
           <CardContent className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="smtp_host">SMTP host</Label>
+                <Label htmlFor="smtp_host">Хост SMTP</Label>
                 <Input
                   id="smtp_host"
                   placeholder="smtp.example.com"
@@ -382,7 +382,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="smtp_port">SMTP port</Label>
+                <Label htmlFor="smtp_port">Порт SMTP</Label>
                 <Input
                   id="smtp_port"
                   placeholder="587"
@@ -392,7 +392,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="smtp_user">SMTP username</Label>
+                <Label htmlFor="smtp_user">Имя пользователя SMTP</Label>
                 <Input
                   id="smtp_user"
                   placeholder="apikey"
@@ -401,7 +401,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="smtp_pass">SMTP password</Label>
+                <Label htmlFor="smtp_pass">Пароль SMTP</Label>
                 <Input
                   id="smtp_pass"
                   type="password"
@@ -411,7 +411,7 @@ export default function AdminSettingsPage() {
                 />
               </div>
               <div className="flex flex-col gap-1.5 sm:col-span-2">
-                <Label htmlFor="smtp_from">From address</Label>
+                <Label htmlFor="smtp_from">Адрес отправителя</Label>
                 <Input
                   id="smtp_from"
                   type="email"
@@ -452,7 +452,7 @@ export default function AdminSettingsPage() {
           <CardContent className="space-y-4">
             {visibleAiFields.includes("provider") && (
               <div className="flex flex-col gap-1.5">
-                <Label>Provider</Label>
+                <Label>Провайдер</Label>
                 <div className="flex gap-2">
                   <Button
                     type="button"
@@ -507,7 +507,7 @@ export default function AdminSettingsPage() {
               </div>
               {visibleAiFields.includes("model") && (
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="ai_model">Model</Label>
+                  <Label htmlFor="ai_model">Модель</Label>
                   <Input
                     id="ai_model"
                     placeholder={
@@ -574,7 +574,7 @@ export default function AdminSettingsPage() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <div className="space-y-0.5">
-                    <p className="text-sm font-medium text-ink">Free retro boards</p>
+                    <p className="text-sm font-medium text-ink">Бесплатные ретро-доски</p>
                     <p className="text-xs text-ink-3">
                       Opens a public, no-login retrospective board at /retro on this instance.
                     </p>
@@ -613,7 +613,7 @@ export default function AdminSettingsPage() {
                 )}
                 {caps.reminderWebhook && (
                   <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="reminder_webhook_url">Reminder webhook URL</Label>
+                    <Label htmlFor="reminder_webhook_url">URL webhook напоминания</Label>
                     <Input
                       id="reminder_webhook_url"
                       placeholder="https://example.com/webhooks/minutia"
@@ -638,7 +638,7 @@ export default function AdminSettingsPage() {
                   prompt stays informational, with no button.
                 </p>
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="ai_notice_url">AI prompt link</Label>
+                  <Label htmlFor="ai_notice_url">Ссылка на AI prompt</Label>
                   <Input
                     id="ai_notice_url"
                     placeholder="https://example.com/enable-ai"
@@ -647,7 +647,7 @@ export default function AdminSettingsPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="capacity_notice_url">Capacity prompt link</Label>
+                  <Label htmlFor="capacity_notice_url">Ссылка на Capacity prompt</Label>
                   <Input
                     id="capacity_notice_url"
                     placeholder="https://example.com/more-space"
@@ -663,12 +663,12 @@ export default function AdminSettingsPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Recording</CardTitle>
-          <CardDescription>How long raw meeting recordings are kept.</CardDescription>
+          <CardTitle>Запись</CardTitle>
+          <CardDescription>Срок хранения исходных записей встреч.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-1.5">
-            <Label htmlFor="audio_retention">Audio retention</Label>
+            <Label htmlFor="audio_retention">Срок хранения аудио</Label>
             <Select
               value={audioRetention}
               onValueChange={(v) => handleRetentionChange(v as AudioRetention)}
@@ -681,7 +681,7 @@ export default function AdminSettingsPage() {
                 <SelectItem value="discard_after_transcript">
                   Discard audio after transcription (recommended)
                 </SelectItem>
-                <SelectItem value="keep_forever">Keep audio forever</SelectItem>
+                <SelectItem value="keep_forever">Хранить аудио бессрочно</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-ink-3">

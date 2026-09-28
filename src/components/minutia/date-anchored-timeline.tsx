@@ -225,7 +225,7 @@ function MeetingSection({
 
               {/* Empty state */}
               {meeting.issues.length === 0 && meeting.decisions.length === 0 && (
-                <p className="text-xs text-ink-4 italic">No items recorded</p>
+                <p className="text-xs text-ink-4 italic">Записи отсутствуют</p>
               )}
 
               {/* Link to full meeting */}

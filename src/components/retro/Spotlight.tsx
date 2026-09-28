@@ -34,7 +34,7 @@ export function Spotlight({ themes, index, setIndex }: SpotlightProps) {
         background: "color-mix(in oklab, var(--studio-void) 72%, transparent)", backdropFilter: "blur(7px)", WebkitBackdropFilter: "blur(7px)" }}>
         <div style={{ textAlign: "center", maxWidth: 360 }}>
           <div style={{ display: "inline-flex", color: "var(--studio-ink-3)", marginBottom: 14 }}><Icons.Sparkles size={30} /></div>
-          <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", color: "var(--studio-ink)", marginBottom: 6 }}>Nothing voted up yet</div>
+          <div style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", color: "var(--studio-ink)", marginBottom: 6 }}>Пока нет голосов</div>
           <div style={{ fontFamily: "var(--font-sans)", fontSize: 14.5, color: "var(--studio-ink-2)", lineHeight: 1.5 }}>Head back to Vote and give the themes a few dots, the top ones spotlight here, one at a time.</div>
         </div>
       </div>
@@ -69,7 +69,7 @@ export function Spotlight({ themes, index, setIndex }: SpotlightProps) {
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-        <button type="button" aria-label="Previous theme" disabled={index === 0} onClick={() => setIndex(index - 1)}
+        <button type="button" aria-label="Предыдущая тема" disabled={index === 0} onClick={() => setIndex(index - 1)}
           style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, borderRadius: "50%", cursor: index === 0 ? "default" : "pointer",
             background: "var(--studio-raised)", border: "1px solid var(--studio-line-2)", color: "var(--studio-ink)", opacity: index === 0 ? 0.35 : 1 }}>
           <span style={{ transform: "rotate(180deg)", display: "inline-flex" }}><Icons.ArrowRight size={18} /></span>
@@ -80,7 +80,7 @@ export function Spotlight({ themes, index, setIndex }: SpotlightProps) {
               background: i === index ? "var(--accent)" : "var(--studio-line-2)", transition: "all var(--dur-base) var(--ease-out)" }} />
           ))}
         </div>
-        <button type="button" aria-label="Next theme" disabled={index === themes.length - 1} onClick={() => setIndex(index + 1)}
+        <button type="button" aria-label="Следующая тема" disabled={index === themes.length - 1} onClick={() => setIndex(index + 1)}
           style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 44, height: 44, borderRadius: "50%", cursor: index === themes.length - 1 ? "default" : "pointer",
             background: "var(--accent)", border: "none", color: "#1a1815", opacity: index === themes.length - 1 ? 0.35 : 1 }}>
           <Icons.ArrowRight size={18} />

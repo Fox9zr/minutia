@@ -140,7 +140,7 @@ export function StatusChip({ status, onChange, readonly }: StatusChipProps) {
               transition={{ duration: 0.18, ease: [0.2, 0.8, 0.2, 1] }}
               className="flex items-center gap-1 overflow-hidden"
               role="listbox"
-              aria-label="Select status"
+              aria-label="Выберите статус"
             >
               {otherStatuses.map((s, i) => {
                 const sConfig = STATUS_CONFIG[s];

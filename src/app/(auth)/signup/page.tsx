@@ -177,7 +177,7 @@ function SignUpForm() {
                 <Input
                   id="name"
                   type="text"
-                  placeholder="Ada Lovelace"
+                  placeholder="Ада Лавлейс"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   autoComplete="name"
@@ -206,7 +206,7 @@ function SignUpForm() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Minimum 8 characters"
+                  placeholder="Минимум 8 символов"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

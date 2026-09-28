@@ -102,7 +102,7 @@ function MiniCalendar({
             size="icon"
             className="size-7"
             onClick={onPrevMonth}
-            aria-label="Previous month"
+            aria-label="Предыдущий месяц"
           >
             <ChevronLeft className="size-3.5" />
           </Button>
@@ -111,7 +111,7 @@ function MiniCalendar({
             size="icon"
             className="size-7"
             onClick={onNextMonth}
-            aria-label="Next month"
+            aria-label="Следующий месяц"
           >
             <ChevronRight className="size-3.5" />
           </Button>
@@ -202,7 +202,7 @@ function DayAgenda({
       {calendarConnected && agendaLoading ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Calendar className="size-8 text-ink-4/50 mb-2" />
-          <p className="text-sm text-ink-3">Syncing agenda...</p>
+          <p className="text-sm text-ink-3">Синхронизация повестки...</p>
         </div>
       ) : hasCalendarEvents ? (
         <div className="space-y-1.5">
@@ -263,12 +263,12 @@ function DayAgenda({
       ) : calendarConnected ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Calendar className="size-8 text-ink-4/50 mb-2" />
-          <p className="text-sm text-ink-3">No calendar meetings</p>
+          <p className="text-sm text-ink-3">В календаре нет встреч</p>
         </div>
       ) : dayMeetings.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-8 text-center">
           <Calendar className="size-8 text-ink-4/50 mb-2" />
-          <p className="text-sm text-ink-3">No meetings</p>
+          <p className="text-sm text-ink-3">Нет встреч</p>
         </div>
       ) : (
         <div className="space-y-1.5">
@@ -459,7 +459,7 @@ function CalendarEventDetail({
             <div className="flex items-start gap-2">
               <Video className="mt-0.5 size-4 text-ink-4" />
               <span className="min-w-0">
-                <span className="block">Google Meet link available</span>
+                <span className="block">Доступна ссылка Google Meet</span>
                 <a
                   href={event.meetingUrl}
                   target="_blank"
@@ -664,11 +664,11 @@ export function CalendarSidebar() {
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: [0.2, 0.8, 0.2, 1] }}
             className="hidden md:flex flex-col border-l border-rule bg-paper overflow-hidden flex-shrink-0"
-            aria-label="Calendar sidebar"
+            aria-label="Боковая панель календаря"
           >
             <div className="flex h-12 shrink-0 items-center gap-2 border-b border-rule px-4">
               <Calendar className="size-4 text-accent" />
-              <h2 className="text-sm font-semibold text-ink">Calendar</h2>
+              <h2 className="text-sm font-semibold text-ink">Календарь</h2>
             </div>
 
             {content}

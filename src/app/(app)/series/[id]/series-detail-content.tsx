@@ -207,7 +207,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
   if (!series) {
     return (
       <div className="min-h-full bg-paper flex items-center justify-center">
-        <p className="text-sm text-ink-3">Series not found.</p>
+        <p className="text-sm text-ink-3">Серия не найдена.</p>
       </div>
     );
   }
@@ -241,7 +241,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => setImportOpen(true)}
-                    aria-label="Import CSV"
+                    aria-label="Импорт CSV"
                     className="hidden sm:inline-flex"
                   >
                     <Upload className="size-4" />
@@ -250,7 +250,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                     variant="ghost"
                     size="icon"
                     onClick={() => setSettingsOpen(true)}
-                    aria-label="Series settings"
+                    aria-label="Настройки серии"
                   >
                     <Settings className="size-4" />
                   </Button>
@@ -305,7 +305,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
 
           <div className="flex flex-col gap-2 sm:flex-row">
             <Textarea
-              aria-label="Ask this series question"
+              aria-label="Задать вопрос по этой серии"
               value={askQuestion}
               onChange={(event) => setAskQuestion(event.target.value)}
               onKeyDown={(event) => {
@@ -314,7 +314,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                   void handleAskSeries();
                 }
               }}
-              placeholder="Ask about decisions, owners, stale risks, or follow-ups..."
+              placeholder="Спросите о решениях, ответственных, рисках или поручениях..."
               className="min-h-[72px] flex-1 text-sm"
             />
             <Button variant="accent"
@@ -345,7 +345,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
           {askAnswer && (
             <div
               role="region"
-              aria-label="Series answer"
+              aria-label="Ответ по серии"
               className={cn(
                 "mt-4 rounded-md border px-4 py-3",
                 askAnswer.unsupported
@@ -353,7 +353,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                   : "border-rule bg-paper"
               )}
             >
-              <h3 className="mb-2 text-sm font-semibold text-ink">Series answer</h3>
+              <h3 className="mb-2 text-sm font-semibold text-ink">Ответ по серии</h3>
               <p className="whitespace-pre-wrap text-sm leading-6 text-ink-2">
                 {askAnswer.answer || "The source context does not prove the answer."}
               </p>
@@ -481,8 +481,8 @@ function SeriesSettingsDialog({
   async function handleDeleteSeries() {
     if (
       !(await confirm({
-        title: "Delete this series?",
-        description: "All its meetings, issues, and decisions are permanently deleted.",
+        title: "Удалить эту серию?",
+        description: "Все связанные встречи, задачи и решения удаляются безвозвратно.",
         confirmLabel: "Delete series",
         danger: true,
       }))
@@ -497,12 +497,12 @@ function SeriesSettingsDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-display">Series settings</DialogTitle>
+          <DialogTitle className="font-display">Настройки серии</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="edit-name">Name</Label>
+            <Label htmlFor="edit-name">Название</Label>
             <Input id="edit-name" {...register("name")} aria-invalid={!!errors.name} />
             {errors.name && (
               <p className="text-xs text-danger">{errors.name.message}</p>
@@ -510,7 +510,7 @@ function SeriesSettingsDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="edit-description">Description</Label>
+            <Label htmlFor="edit-description">Описание</Label>
             <Textarea
               id="edit-description"
               {...register("description")}
@@ -519,11 +519,11 @@ function SeriesSettingsDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label>Cadence</Label>
+            <Label>Периодичность</Label>
             <RadioGroup
               value={selectedCadence}
               onValueChange={(value) => setValue("cadence", value as Cadence)}
-              aria-label="Cadence"
+              aria-label="Периодичность"
               className="flex flex-wrap gap-1 rounded-full bg-paper-2 p-1"
             >
               {CADENCES.map((cadence) => (
@@ -554,7 +554,7 @@ function SeriesSettingsDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="edit-attendees">Default attendees</Label>
+            <Label htmlFor="edit-attendees">Участники по умолчанию</Label>
             <Input
               id="edit-attendees"
               defaultValue={(series.default_attendees ?? []).join(", ")}
@@ -566,7 +566,7 @@ function SeriesSettingsDialog({
                 setValue("default_attendees", attendees);
               }}
             />
-            <p className="text-[10px] text-ink-4">Comma-separated emails</p>
+            <p className="text-[10px] text-ink-4">Email через запятую</p>
           </div>
 
           {/* Google Calendar */}
@@ -577,7 +577,7 @@ function SeriesSettingsDialog({
             </Label>
             {!gcalStatus?.connected ? (
               <p className="text-xs text-ink-3">
-                <a href="/settings" className="text-accent hover:underline">Connect Google Calendar</a> in Settings to link a calendar to this series.
+                <a href="/settings" className="text-accent hover:underline">Подключить Google Calendar</a> in Settings to link a calendar to this series.
               </p>
             ) : series.gcal_calendar_id && series.gcal_sync_enabled ? (
               <div className="flex items-center gap-2">
@@ -602,7 +602,7 @@ function SeriesSettingsDialog({
                 }}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a calendar" />
+                  <SelectValue placeholder="Выберите календарь" />
                 </SelectTrigger>
                 <SelectContent>
                   {(calendarList ?? []).map((cal) => (
@@ -629,7 +629,7 @@ function SeriesSettingsDialog({
         </form>
 
         <div className="mt-2 space-y-2 border-t border-rule pt-4">
-          <p className="text-xs font-medium text-ink-3">Danger zone</p>
+          <p className="text-xs font-medium text-ink-3">Опасная зона</p>
           <Button
             type="button"
             variant="destructive"

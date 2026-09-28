@@ -246,7 +246,7 @@ function InlineTaskItem({
           >
             <Command shouldFilter={false}>
               <CommandInput
-                placeholder="Search people..."
+                placeholder="Поиск сотрудников..."
                 value={mentionFilter}
                 onValueChange={setMentionFilter}
                 autoFocus
@@ -339,7 +339,7 @@ function InlineTaskItem({
       <PrefetchIssueLink
         issueId={issue.id}
         className="shrink-0 flex items-center justify-center size-6 rounded-full text-ink-4 hover:text-accent hover:bg-paper-3 transition-colors opacity-0 group-hover:opacity-100"
-        aria-label="Open issue detail"
+        aria-label="Детали вопроса"
       >
         <ExternalLink className="size-3" />
       </PrefetchIssueLink>
@@ -347,7 +347,7 @@ function InlineTaskItem({
       {/* Draft badge for calendar auto-drafted items */}
       {issue.source === "calendar_auto_draft" && (
         <span
-          title="Auto-drafted from a calendar event"
+          title="Создано автоматически из события календаря"
           className="text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0 bg-accent/10 text-accent"
         >
           Draft
@@ -384,7 +384,7 @@ function InlineTaskItem({
           type="button"
           onClick={() => setMentionOpen(true)}
           className="text-xs text-ink-4 hover:text-ink-2 transition-colors shrink-0 opacity-0 group-hover:opacity-100"
-          aria-label="Assign"
+          aria-label="Назначить"
         >
           @
         </button>
@@ -477,7 +477,7 @@ export function InlineTaskList({
                 onBlur={() => {
                   if (!newTitle.trim()) setAddingItem(false);
                 }}
-                placeholder="Type item title, press Enter..."
+                placeholder="Введите название и нажмите Enter..."
                 className="flex-1 bg-transparent text-sm text-ink outline-none placeholder:text-ink-4"
               />
               <div className="relative" ref={(el) => {

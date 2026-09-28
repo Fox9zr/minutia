@@ -46,7 +46,7 @@ export function CompanionInstallPrompt({
       <button
         type="button"
         onClick={dismiss}
-        aria-label="Dismiss companion app prompt"
+        aria-label="Скрыть уведомление о приложении"
         className="inline-flex size-8 items-center justify-center rounded-lg text-ink-4 hover:bg-paper-2 hover:text-ink-2"
       >
         <X className="size-4" />

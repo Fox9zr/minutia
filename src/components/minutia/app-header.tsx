@@ -45,14 +45,14 @@ export function AppHeader() {
   const title = resolveTitle(pathname);
 
   return (
-    <header aria-label="Page header" className="flex h-12 shrink-0 items-center gap-2 border-b border-rule bg-paper px-4">
+    <header aria-label="Заголовок страницы" className="flex h-12 shrink-0 items-center gap-2 border-b border-rule bg-paper px-4">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mx-1 h-4" />
       <h1 className="text-sm font-medium font-display text-ink">{title}</h1>
 
       <div className="flex-1" />
 
-      <HintTooltip label="Search pages, series, issues, and decisions with Command K.">
+      <HintTooltip label="Поиск страниц, серий, задач и решений с помощью Command K.">
         <Button
           variant="ghost"
           size="sm"
@@ -61,14 +61,14 @@ export function AppHeader() {
           className="hidden gap-1.5 text-ink-3 hover:text-ink sm:flex"
         >
           <Search className="size-3.5" />
-          <span className="text-xs">Search</span>
+          <span className="text-xs">Поиск</span>
           <kbd className="pointer-events-none ml-1 inline-flex h-5 select-none items-center gap-0.5 rounded border border-rule bg-paper-2 px-1.5 font-mono text-[10px] font-medium text-ink-3">
             <span className="text-xs">&#8984;</span>K
           </kbd>
         </Button>
       </HintTooltip>
 
-      <HintTooltip label="Search pages, series, issues, and decisions.">
+      <HintTooltip label="Поиск страниц, серий, задач и решений.">
         <Button
           variant="ghost"
           size="icon-sm"
@@ -77,7 +77,7 @@ export function AppHeader() {
           className="text-ink-3 hover:text-ink sm:hidden"
         >
           <Search className="size-4" />
-          <span className="sr-only">Search</span>
+          <span className="sr-only">Поиск</span>
         </Button>
       </HintTooltip>
 
@@ -99,13 +99,13 @@ export function AppHeader() {
       </HintTooltip>
 
       {/* Mobile: calendar icon */}
-      <HintTooltip label="Open the calendar agenda.">
+      <HintTooltip label="Открыть повестку календаря.">
         <Button
           variant="ghost"
           size="icon-sm"
           className="text-ink-3 hover:text-ink md:hidden"
           onClick={toggleCalendarSidebar}
-          aria-label="Open calendar"
+          aria-label="Открыть календарь"
         >
           <Calendar className="size-4" />
         </Button>

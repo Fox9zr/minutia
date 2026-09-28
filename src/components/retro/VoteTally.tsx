@@ -26,7 +26,7 @@ export function VoteTally({
       {onVote && (
         <button
           type="button"
-          aria-label="Vote"
+          aria-label="Голосовать"
           onClick={onVote}
           style={{
             display: "inline-flex", alignItems: "center", justifyContent: "center",

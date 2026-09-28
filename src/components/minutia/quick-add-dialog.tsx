@@ -151,8 +151,8 @@ export function QuickAddDialog() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="What needs to be tracked?"
-              aria-label="Issue title"
+              placeholder="Что необходимо отслеживать?"
+              aria-label="Тема вопроса"
               onKeyDown={(e) => {
                 if (e.key === "Escape") {
                   closeQuickAddDialog();
@@ -173,8 +173,8 @@ export function QuickAddDialog() {
                 value={seriesId}
                 onValueChange={setSeriesId}
               >
-                <SelectTrigger id="quick-add-series" className="w-full" aria-label="Series">
-                  <SelectValue placeholder="Select a series" />
+                <SelectTrigger id="quick-add-series" className="w-full" aria-label="Серия">
+                  <SelectValue placeholder="Выберите серию" />
                 </SelectTrigger>
                 <SelectContent>
                   {seriesList.map((s) => (
@@ -186,7 +186,7 @@ export function QuickAddDialog() {
               </Select>
             ) : (
               <div className="flex items-center justify-between gap-3 rounded-md border border-dashed border-border px-3 py-2.5">
-                <p className="text-sm text-ink-3">No series yet.</p>
+                <p className="text-sm text-ink-3">Серии пока не созданы.</p>
                 <Button
                   type="button"
                   variant="outline"
@@ -210,7 +210,7 @@ export function QuickAddDialog() {
               value={category}
               onValueChange={(v) => setCategory(v as IssueCategory)}
             >
-              <SelectTrigger id="quick-add-category" className="w-full" aria-label="Category">
+              <SelectTrigger id="quick-add-category" className="w-full" aria-label="Категория">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

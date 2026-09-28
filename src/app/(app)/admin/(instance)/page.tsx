@@ -22,10 +22,10 @@ async function fetchOverview(): Promise<Overview> {
 }
 
 const KPIS = [
-  { key: "users", label: "Users" },
-  { key: "series", label: "Series" },
-  { key: "meetings", label: "Meetings" },
-  { key: "openIssues", label: "Open issues" },
+  { key: "users", label: "Пользователи" },
+  { key: "series", label: "Серия" },
+  { key: "meetings", label: "Встречи" },
+  { key: "openIssues", label: "Открытые вопросы" },
 ] as const;
 
 export default function AdminOverviewPage() {

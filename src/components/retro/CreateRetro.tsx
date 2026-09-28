@@ -32,18 +32,18 @@ export function CreateRetro({ open, initialName, templates, onClose, onCreate }:
             <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--accent)", boxShadow: "var(--glow-accent)" }} />
             New retro
           </div>
-          <button type="button" onClick={onClose} aria-label="Close" style={{ background: "transparent", border: "none", color: "var(--studio-ink-3)", cursor: "pointer", fontSize: 22, lineHeight: 1 }}>×</button>
+          <button type="button" onClick={onClose} aria-label="Закрыть" style={{ background: "transparent", border: "none", color: "var(--studio-ink-3)", cursor: "pointer", fontSize: 22, lineHeight: 1 }}>×</button>
         </div>
 
-        <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem,4vw,2.75rem)", fontWeight: 600, color: "var(--studio-ink)", margin: "0 0 6px", letterSpacing: "-0.015em" }}>Start a retro</h1>
-        <p style={{ fontFamily: "var(--font-sans)", fontSize: 15.5, color: "var(--studio-ink-2)", margin: "0 0 28px" }}>No login. You&apos;ll get a share link the moment you create it.</p>
+        <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem,4vw,2.75rem)", fontWeight: 600, color: "var(--studio-ink)", margin: "0 0 6px", letterSpacing: "-0.015em" }}>Начать ретроспективу</h1>
+        <p style={{ fontFamily: "var(--font-sans)", fontSize: 15.5, color: "var(--studio-ink-2)", margin: "0 0 28px" }}>Вход не требуется. Вы получите ссылку сразу после создания.</p>
 
         {/* Name */}
-        <label style={{ display: "block", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)", marginBottom: 8 }}>Name this retro</label>
+        <label style={{ display: "block", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)", marginBottom: 8 }}>Название ретроспективы</label>
         <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Platform squad, Sprint 24" size="lg" style={{ marginBottom: 28 }} />
 
         {/* Template */}
-        <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)", marginBottom: 10 }}>Template</div>
+        <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)", marginBottom: 10 }}>Шаблон</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 28 }}>
           {templates.map((t) => {
             const active = tpl === t.id;
@@ -72,7 +72,7 @@ export function CreateRetro({ open, initialName, templates, onClose, onCreate }:
           <Button variant="primary" size="lg" onClick={() => onCreate({ name: name.trim() || "Untitled retro", template: templates.find((t) => t.id === tpl) ?? templates[0] })} iconLeft={<Icons.Link size={18} />}>
             Create &amp; get link
           </Button>
-          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button variant="ghost" onClick={onClose}>Отмена</Button>
         </div>
       </div>
     </div>

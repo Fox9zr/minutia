@@ -248,7 +248,7 @@ function MeetingShareView({
       {/* Meta */}
       <div className="mb-6">
         <div className="flex items-center gap-2 text-xs text-ink-3">
-          <span>Shared</span>
+          <span>Общий доступ</span>
           <ViewOnlyBadge />
         </div>
         <div className="mt-3">
@@ -283,9 +283,9 @@ function MeetingShareView({
 
       {/* Items Raised */}
       <section className="mb-8">
-        <SectionHeading count={issues.length}>Items raised</SectionHeading>
+        <SectionHeading count={issues.length}>Поднятые вопросы</SectionHeading>
         {issues.length === 0 ? (
-          <p className="mt-3 text-sm text-ink-3">No items were captured.</p>
+          <p className="mt-3 text-sm text-ink-3">Данные не зафиксированы.</p>
         ) : (
           <div className="mt-4 space-y-3">
             {issues.map((issue) => (
@@ -298,7 +298,7 @@ function MeetingShareView({
       {/* Decisions */}
       {decisions.length > 0 && (
         <section className="mb-8">
-          <SectionHeading count={decisions.length}>Decisions</SectionHeading>
+          <SectionHeading count={decisions.length}>Решения</SectionHeading>
           <div className="mt-4 space-y-3">
             {decisions.map((decision) => (
               <div
@@ -393,7 +393,7 @@ function SeriesShareView({
       {/* Meta */}
       <div className="mb-6">
         <div className="flex items-center gap-2 text-xs text-ink-3">
-          <span>Shared</span>
+          <span>Общий доступ</span>
           <ViewOnlyBadge />
         </div>
         <h1 className="font-display text-2xl font-semibold text-ink mt-3">
@@ -409,7 +409,7 @@ function SeriesShareView({
       {/* Your pending items (guest deep-link) */}
       {youEmail && (
         <section className="mb-8 rounded-lg border border-accent/30 bg-accent-soft/40 p-4 sm:p-5">
-          <SectionHeading count={myItems.length}>Your pending items</SectionHeading>
+          <SectionHeading count={myItems.length}>Ваши задачи в ожидании</SectionHeading>
           {myItems.length === 0 ? (
             <p className="mt-3 text-sm text-ink-3">
               Nothing is waiting on you right now. Nice.
@@ -426,9 +426,9 @@ function SeriesShareView({
 
       {/* Open Issues */}
       <section className="mb-8">
-        <SectionHeading count={openIssuesCount}>Open issues</SectionHeading>
+        <SectionHeading count={openIssuesCount}>Открытые вопросы</SectionHeading>
         {openIssues.length === 0 ? (
-          <p className="mt-3 text-sm text-ink-3">No open issues.</p>
+          <p className="mt-3 text-sm text-ink-3">Нет открытых задач.</p>
         ) : (
           <div className="mt-4 space-y-2">
             {openIssues.map((issue) => (
@@ -444,7 +444,7 @@ function SeriesShareView({
           Recent meetings
         </SectionHeading>
         {recentMeetings.length === 0 ? (
-          <p className="mt-3 text-sm text-ink-3">No meetings yet.</p>
+          <p className="mt-3 text-sm text-ink-3">Встреч пока нет.</p>
         ) : (
           <div className="mt-4 space-y-2">
             {recentMeetings.map((meeting) => (
@@ -491,7 +491,7 @@ function IssueShareView({
       {/* Meta */}
       <div className="mb-6">
         <div className="flex items-center gap-2 text-xs text-ink-3">
-          <span>Shared</span>
+          <span>Общий доступ</span>
           <ViewOnlyBadge />
         </div>
         <IssueKey issue={issue} className="mt-3" />
@@ -537,7 +537,7 @@ function IssueShareView({
       {/* Timeline */}
       {sortedUpdates.length > 0 && (
         <section>
-          <SectionHeading>Timeline</SectionHeading>
+          <SectionHeading>Хронология</SectionHeading>
           <div className="mt-4 space-y-0">
             {sortedUpdates.map((update, i) => {
               const isLast = i === sortedUpdates.length - 1;
@@ -737,8 +737,8 @@ export default async function GuestSharePage({
   if (shareError || !payload) {
     return (
       <ErrorView
-        title="Invalid share link"
-        description="This share link is invalid or has been removed."
+        title="Недействительная ссылка общего доступа"
+        description="Ссылка недействительна или удалена."
       />
     );
   }
@@ -748,8 +748,8 @@ export default async function GuestSharePage({
   if (payload.expired) {
     return (
       <ErrorView
-        title="Share link expired"
-        description="This share link has expired."
+        title="Срок действия ссылки истек"
+        description="Срок действия ссылки истек."
       />
     );
   }
@@ -759,8 +759,8 @@ export default async function GuestSharePage({
     if (!payload.meeting) {
       return (
         <ErrorView
-          title="Meeting not found"
-          description="The shared meeting could not be found."
+          title="Встреча не найдена"
+          description="Встреча по ссылке не найдена."
         />
       );
     }
@@ -781,8 +781,8 @@ export default async function GuestSharePage({
     if (!payload.series) {
       return (
         <ErrorView
-          title="Series not found"
-          description="The shared series could not be found."
+          title="Серия не найдена"
+          description="Серия по ссылке не найдена."
         />
       );
     }
@@ -803,8 +803,8 @@ export default async function GuestSharePage({
     if (!payload.issue) {
       return (
         <ErrorView
-          title="Issue not found"
-          description="The shared issue could not be found."
+          title="Задача не найдена"
+          description="Вопрос по ссылке не найден."
         />
       );
     }
@@ -821,8 +821,8 @@ export default async function GuestSharePage({
   // Fallback for unknown resource types
   return (
     <ErrorView
-      title="Unknown share type"
-      description="This share link references an unsupported resource type."
+      title="Неизвестный тип общего доступа"
+      description="Ссылка указывает на неподдерживаемый тип ресурса."
     />
   );
 }

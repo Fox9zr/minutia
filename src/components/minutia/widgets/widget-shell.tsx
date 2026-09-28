@@ -65,13 +65,13 @@ export function WidgetShell({
             "group-hover:opacity-100 group-hover:pointer-events-auto group-focus-within:opacity-100 group-focus-within:pointer-events-auto"
           )}
         >
-          <HintTooltip label="Drag to reorder this widget.">
+          <HintTooltip label="Перетащите для изменения порядка виджета.">
             <button
               type="button"
               {...attributes}
               {...listeners}
               className="widget-drag-handle flex items-center justify-center size-6 rounded-full bg-paper-2 text-ink-4 hover:text-ink hover:bg-paper-3 transition-colors cursor-grab active:cursor-grabbing touch-none"
-              aria-label="Drag to reorder"
+              aria-label="Перетащите для изменения порядка"
             >
               <GripVertical className="size-3" />
             </button>
@@ -88,12 +88,12 @@ export function WidgetShell({
               </button>
             </HintTooltip>
           )}
-          <HintTooltip label="Remove this widget from the dashboard.">
+          <HintTooltip label="Удалить этот виджет с дашборда.">
             <button
               type="button"
               onClick={handleRemove}
               className="flex items-center justify-center size-6 rounded-full bg-paper-2 text-ink-4 hover:text-ink hover:bg-paper-3 transition-colors cursor-pointer"
-              aria-label="Remove widget"
+              aria-label="Удалить виджет"
             >
               <X className="size-3" />
             </button>

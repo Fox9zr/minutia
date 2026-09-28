@@ -85,7 +85,7 @@ export function SendMeetingNotesButton({ meetingId, attendees }: Props) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
-          <DialogTitle>Send meeting notes</DialogTitle>
+          <DialogTitle>Отправить протокол встречи</DialogTitle>
           <DialogDescription>
             Recipients get a branded recap with direct issue links back into Minutia.
           </DialogDescription>

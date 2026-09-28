@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     .insert({
       owner_id: ownerId,
       name: "Weekly Vendor Sync",
-      description: "Sample meeting series with demo issues to explore Minutia.",
+      description: "Пример серии встреч с демо-задачами для ознакомления с Minutia.",
       cadence: "weekly",
       default_attendees: ["alice@partner.co", "bob@vendor.io"],
     })
@@ -86,44 +86,44 @@ export async function POST(request: NextRequest) {
 
   const demoIssues = [
     {
-      title: "API credentials not shared yet",
+      title: "Учетные данные API еще не предоставлены",
       category: "blocker" as const,
       status: "open" as const,
       priority: "high" as const,
       owner_name: "alice@partner.co",
-      description: "Vendor has not provided staging API keys. Blocking integration testing.",
+      description: "Поставщик не предоставил staging API ключи. Блокирует интеграционное тестирование.",
     },
     {
-      title: "Data format spec needs review",
+      title: "Спецификация формата данных требует проверки",
       category: "action" as const,
       status: "in_progress" as const,
       priority: "medium" as const,
       owner_name: "bob@vendor.io",
-      description: "Draft spec shared, awaiting final review by both teams.",
+      description: "Черновик спецификации отправлен, ожидает согласования обеими командами.",
     },
     {
-      title: "Go-live date confirmed for Q3",
+      title: "Запуск подтвержден на 3 кв.",
       category: "decision" as const,
       status: "resolved" as const,
       priority: "medium" as const,
       owner_name: "Unassigned",
-      description: "Both parties agreed on Q3 launch window.",
+      description: "Обе стороны согласовали окно запуска в 3 кв.",
     },
     {
-      title: "Security review pending",
+      title: "Ожидает проверки безопасности",
       category: "risk" as const,
       status: "pending" as const,
       priority: "high" as const,
       owner_name: "alice@partner.co",
-      description: "Vendor security team has not started their review.",
+      description: "Команда безопасности поставщика еще не начала проверку.",
     },
     {
-      title: "Weekly status email to stakeholders",
+      title: "Еженедельный e-mail со статусом для заинтересованных сторон",
       category: "action" as const,
       status: "open" as const,
       priority: "low" as const,
       owner_name: "Unassigned",
-      description: "Send a brief update to the steering committee after each sync.",
+      description: "Отправлять краткий отчет управляющему комитету после каждой синхронизации.",
     },
   ];
 

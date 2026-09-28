@@ -51,7 +51,7 @@ export function AddWidgetButton() {
 
   return (
     <div ref={ref} className="relative">
-      <HintTooltip label="Add widgets to customize your dashboard.">
+      <HintTooltip label="Добавьте виджеты для настройки дашборда.">
         <button
           type="button"
           data-tour="add-widget"
@@ -76,7 +76,7 @@ export function AddWidgetButton() {
             className="absolute top-full left-0 mt-2 z-50 w-80 rounded-xl border border-rule bg-card p-4 shadow-xl"
           >
             <div className="flex items-center justify-between mb-3">
-              <p className="text-sm font-semibold text-ink">Widgets</p>
+              <p className="text-sm font-semibold text-ink">Виджеты</p>
               <button
                 type="button"
                 onClick={() => {

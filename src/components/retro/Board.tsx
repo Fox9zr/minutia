@@ -32,7 +32,7 @@ function EmptyColumn() {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, padding: "26px 14px", textAlign: "center",
       borderRadius: "var(--r-card)", border: "1px dashed var(--studio-line)", color: "var(--studio-ink-3)" }}>
       <Icons.EyeOff size={18} />
-      <span style={{ fontFamily: "var(--font-sans)", fontSize: 12.5 }}>Nothing here this time</span>
+      <span style={{ fontFamily: "var(--font-sans)", fontSize: 12.5 }}>На этот раз здесь ничего нет</span>
     </div>
   );
 }
@@ -86,11 +86,11 @@ export function Board({ columns, phase, revealedSet, revealComplete, votes, onVo
       <aside style={{ width: 268, flex: "0 0 268px", background: "var(--studio-surface)", borderRight: "1px solid var(--studio-line)", padding: "var(--space-5) var(--space-4)", overflowY: "auto" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
           <Icons.Clock size={15} style={{ color: openCarry.length ? "var(--warn)" : "var(--success)" }} />
-          <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-2)" }}>Still open</span>
+          <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-2)" }}>Не закрыто</span>
           <Badge tone={openCarry.length ? "warn" : "success"} style={{ marginLeft: "auto" }}>{openCarry.length}</Badge>
         </div>
         {carry.length === 0 ? (
-          <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Nothing carried over" body="A clean slate, first retro for this series, or last time you closed it all out." />
+          <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Нет перенесенных задач" body="A clean slate, first retro for this series, or last time you closed it all out." />
         ) : openCarry.length === 0 ? (
           <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Nothing's open" body="That's a good sign. Everything from last time got closed." tone="success" />
         ) : (
@@ -112,14 +112,14 @@ export function Board({ columns, phase, revealedSet, revealComplete, votes, onVo
         {isReflect && (
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, padding: "10px 14px", borderRadius: "var(--r-control)", background: "var(--accent-soft)", border: "1px solid color-mix(in oklab, var(--accent) 30%, transparent)", maxWidth: "fit-content" }}>
             <Icons.EyeOff size={16} style={{ color: "var(--accent-bright)" }} />
-            <span style={{ fontFamily: "var(--font-sans)", fontSize: 13.5, color: "var(--studio-ink)" }}>Writing privately. Your cards are hidden from everyone until the reveal.</span>
+            <span style={{ fontFamily: "var(--font-sans)", fontSize: 13.5, color: "var(--studio-ink)" }}>Приватный ввод. Ваши карточки скрыты ото всех до открытия.</span>
           </div>
         )}
         {isReveal && (
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18, padding: "10px 14px", borderRadius: "var(--r-control)", background: "var(--accent-soft)", border: "1px solid color-mix(in oklab, var(--accent) 45%, transparent)", boxShadow: "var(--glow-accent)", maxWidth: "fit-content" }}>
             <Icons.Sparkles size={16} style={{ color: "var(--accent-bright)" }} />
             <span style={{ fontFamily: "var(--font-sans)", fontSize: 13.5, color: "var(--studio-ink)" }}>
-              <b style={{ fontFamily: "var(--font-serif)", fontWeight: 600 }}>The reveal.</b> Every card, all at once. Group what belongs together, then dot-vote what matters most.
+              <b style={{ fontFamily: "var(--font-serif)", fontWeight: 600 }}>Показ результатов.</b> Every card, all at once. Group what belongs together, then dot-vote what matters most.
             </span>
             <span style={{ marginLeft: 6, fontFamily: "var(--font-mono)", fontSize: 12, fontVariantNumeric: "tabular-nums", color: "var(--accent-bright)" }}>{revealedSet.size}/{cards.length}</span>
           </div>

@@ -98,7 +98,7 @@ export function MeetingTriageWidget({
         <div>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
             <span className="size-2.5 rounded-sm bg-accent" />
-            <span className="text-sm font-semibold text-ink">Carried</span>
+            <span className="text-sm font-semibold text-ink">Перенесено</span>
             <span className="text-xs font-mono text-accent">{carried.length}</span>
             <span className="ml-auto text-[11px] text-ink-4">
               Open for 2+ consecutive meetings
@@ -129,7 +129,7 @@ export function MeetingTriageWidget({
         <div>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
             <span className="size-2.5 rounded-sm bg-success" />
-            <span className="text-sm font-semibold text-ink">New since last</span>
+            <span className="text-sm font-semibold text-ink">Новые с прошлой встречи</span>
             <span className="text-xs font-mono text-success">{newSinceLast.length}</span>
             {lastMeeting && (
               <span className="ml-auto text-[11px] text-ink-4">
@@ -139,7 +139,7 @@ export function MeetingTriageWidget({
           </div>
           <div className="space-y-1">
             {newSinceLast.length === 0 ? (
-              <p className="text-xs text-ink-4 pl-3">No new items since last meeting</p>
+              <p className="text-xs text-ink-4 pl-3">Нет новых элементов с прошлой встречи</p>
             ) : (
               newSinceLast.slice(0, 5).map((issue) => (
                 <TriageRow key={issue.id} issue={issue} onStatusChange={onStatusChange} />
@@ -157,7 +157,7 @@ export function MeetingTriageWidget({
         <div>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mb-3">
             <span className="size-2.5 rounded-sm bg-ink-4" />
-            <span className="text-sm font-semibold text-ink">Stuck</span>
+            <span className="text-sm font-semibold text-ink">Заблокировано</span>
             <span className="text-xs font-mono text-ink-4">{stuck.length}</span>
             <span className="ml-auto text-[11px] text-ink-4">
               No status change or updates since last meeting
@@ -165,7 +165,7 @@ export function MeetingTriageWidget({
           </div>
           <div className="space-y-1">
             {stuck.length === 0 ? (
-              <p className="text-xs text-ink-4 pl-3">Nothing stuck. Nice.</p>
+              <p className="text-xs text-ink-4 pl-3">Нет зависших задач. Отлично.</p>
             ) : (
               stuck.slice(0, 5).map((issue) => (
                 <TriageRow

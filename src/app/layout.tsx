@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Minutia",
     description:
-      "The open-source Outstanding Issues Log for recurring meetings.",
+      "Open-source реестр открытых вопросов для регулярных встреч.",
     type: "website",
   },
   other: {

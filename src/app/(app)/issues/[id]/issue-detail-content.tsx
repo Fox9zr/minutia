@@ -326,7 +326,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
   if (!issue || isError) {
     return (
       <div className="min-h-full bg-paper flex flex-col items-center justify-center gap-4">
-        <p className="text-sm text-ink-3">Issue not found.</p>
+        <p className="text-sm text-ink-3">Задача не найдена.</p>
         <Link
           href="/"
           className="text-sm text-ink-2 hover:text-ink transition-colors underline underline-offset-2"
@@ -408,7 +408,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
     toast("Issue deleted", {
       duration: 5000,
       action: {
-        label: "Undo",
+        label: "Отменить",
         onClick: () => {
           if (undoPendingDelete(id)) {
             queryClient.invalidateQueries({ queryKey: issueKeys.all });
@@ -443,7 +443,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           onSave={(v) => handleFieldSave("title", v)}
           className="font-display text-xl font-semibold text-ink block mb-3"
           as="h1"
-          placeholder="Issue title"
+          placeholder="Тема вопроса"
         />
 
         {/* Badges row */}
@@ -460,7 +460,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
         <div className="space-y-2 mb-6">
           {/* Owner */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Owner</span>
+            <span className="text-ink-3 w-20 shrink-0">Ответственный</span>
             <MemberCombobox
               ownerName={issue.owner_name}
               onAssign={(payload) =>
@@ -481,7 +481,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                 <Button
                   variant="ghost"
                   size="sm"
-                  aria-label="Due date"
+                  aria-label="Срок выполнения"
                   className={cn(
                     "h-7 justify-start px-2 text-left font-mono text-xs font-normal hover:bg-paper-3 focus-visible:ring-1 focus-visible:ring-accent",
                     !issue.due_date && "text-ink-4"
@@ -516,11 +516,11 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
           {/* Priority */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Priority</span>
+            <span className="text-ink-3 w-20 shrink-0">Приоритет</span>
             <Select value={issue.priority} onValueChange={handlePriorityChange}>
               <SelectTrigger
                 size="sm"
-                aria-label="Priority"
+                aria-label="Приоритет"
                 className="h-7 w-auto gap-1.5 border-transparent bg-transparent px-1.5 py-0.5 text-sm text-ink hover:border-rule focus:border-ink-3 focus-visible:ring-1 focus-visible:ring-accent"
               >
                 <SelectValue />
@@ -541,7 +541,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
           {/* Source */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Source</span>
+            <span className="text-ink-3 w-20 shrink-0">Источник</span>
             <span className="text-xs bg-paper-2 text-ink-2 px-2 py-0.5 rounded-full">
               {sourceBadgeLabel(issue.source)}
             </span>
@@ -550,7 +550,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           {/* Raised in meeting */}
           {raisedIn && (
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-ink-3 w-20 shrink-0">Raised in</span>
+              <span className="text-ink-3 w-20 shrink-0">Создано в</span>
               <Link
                 href={`/series/${issue.series_id}/meetings/${raisedIn.id}`}
                 className="text-sm text-ink hover:text-accent transition-colors underline underline-offset-2"
@@ -563,14 +563,14 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           {/* Duration and meetings touched */}
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2">
-              <span className="text-ink-3 w-20 shrink-0">Duration</span>
+              <span className="text-ink-3 w-20 shrink-0">Длительность</span>
               <span className="text-xs font-mono text-ink-2">
                 {durationDays} day{durationDays !== 1 ? "s" : ""}
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Touched</span>
+            <span className="text-ink-3 w-20 shrink-0">С изменениями</span>
             <span className="text-xs font-mono text-ink-2">
               {meetingsTouched} meeting{meetingsTouched !== 1 ? "s" : ""}
             </span>
@@ -587,7 +587,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             onSave={(v) => handleFieldSave("description", v)}
             className="text-sm text-ink-2 leading-relaxed"
             as="p"
-            placeholder="No description. Click to add one."
+            placeholder="Нет описания. Нажмите, чтобы добавить."
             multiline
           />
         </div>
@@ -766,7 +766,7 @@ function TimelineUpdateNode({
       {isResolved ? (
         <div
           className="absolute left-0 top-[2px] flex items-center justify-center size-[14px] rounded-full bg-success shadow-[0_0_0_4px_var(--paper)]"
-          aria-label="Resolved"
+          aria-label="Решено"
         >
           <Check className="size-2.5 text-white" strokeWidth={3} />
         </div>

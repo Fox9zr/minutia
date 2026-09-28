@@ -94,7 +94,7 @@ export function CaptureInput({ onSubmit, onCancel }: CaptureInputProps) {
               "py-2 px-0 outline-none",
               "focus:border-b-ink transition-colors"
             )}
-            aria-label="Capture input"
+            aria-label="Ввод данных"
           />
         </div>
 
@@ -102,7 +102,7 @@ export function CaptureInput({ onSubmit, onCancel }: CaptureInputProps) {
         <div
           className="flex items-center gap-1 pb-2"
           role="radiogroup"
-          aria-label="Issue category"
+          aria-label="Категория задачи"
         >
           {ISSUE_CATEGORIES.map((cat) => {
             const config = CATEGORY_CONFIG[cat];

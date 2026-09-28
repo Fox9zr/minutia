@@ -35,7 +35,7 @@ export function RetroSummary({ boardName, columns, cards, votes, actions, savedS
 
         {actions.length > 0 && (
           <section style={{ marginBottom: 40 }}>
-            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.4rem", fontWeight: 600, color: "var(--studio-ink)", margin: "0 0 16px" }}>Action items</h2>
+            <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "1.4rem", fontWeight: 600, color: "var(--studio-ink)", margin: "0 0 16px" }}>Поручения</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {actions.map((a) => (
                 <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "16px 18px", background: "var(--studio-raised)", borderRadius: "var(--r-panel)", border: "1px solid color-mix(in oklab, var(--accent) 35%, transparent)", boxShadow: "var(--glow-accent)" }}>
@@ -68,7 +68,7 @@ export function RetroSummary({ boardName, columns, cards, votes, actions, savedS
                       </RetroCard>
                     ))}
                     {items.length === 0 && (
-                      <span style={{ fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--studio-ink-3)", padding: "8px 2px" }}>Nothing here.</span>
+                      <span style={{ fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--studio-ink-3)", padding: "8px 2px" }}>Здесь ничего нет.</span>
                     )}
                   </div>
                 </div>
@@ -83,7 +83,7 @@ export function RetroSummary({ boardName, columns, cards, votes, actions, savedS
               Open the series &rarr;
             </Link>
           )}
-          <Button variant="ghost" onClick={onExport} iconLeft={<Icons.Download size={17} />}>Export markdown</Button>
+          <Button variant="ghost" onClick={onExport} iconLeft={<Icons.Download size={17} />}>Экспорт в Markdown</Button>
         </div>
       </div>
     </div>

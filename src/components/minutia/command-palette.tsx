@@ -28,11 +28,11 @@ import { MinutiaCategoryIcon } from "@/components/minutia/minutia-icons";
 import type { IssueCategory } from "@/lib/types";
 
 const NAV_ITEMS = [
-  { label: "Go to OIL Board", href: "/", icon: Home },
-  { label: "Go to Series", href: "/series", icon: Layers },
-  { label: "Go to My Actions", href: "/actions", icon: CheckCircle },
-  { label: "Go to Inbox", href: "/inbox", icon: Inbox },
-  { label: "Go to Settings", href: "/settings", icon: Settings },
+  { label: "Перейти к доске OIL", href: "/", icon: Home },
+  { label: "Перейти к серии", href: "/series", icon: Layers },
+  { label: "Перейти в Мои задачи", href: "/actions", icon: CheckCircle },
+  { label: "Перейти во Входящие", href: "/inbox", icon: Inbox },
+  { label: "Перейти в Настройки", href: "/settings", icon: Settings },
 ] as const;
 
 export function isEditableTarget(target: EventTarget | null): boolean {
@@ -90,9 +90,9 @@ export function CommandPalette() {
       }}
       className="sm:max-w-lg shadow-[0_16px_70px_-12px_oklch(0%_0_0/0.25)] backdrop:backdrop-blur-sm"
     >
-      <CommandInput placeholder="Search pages, series, issues..." />
+      <CommandInput placeholder="Поиск страниц, серий, задач..." />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>Ничего не найдено.</CommandEmpty>
 
         {/* Navigation */}
         <CommandGroup heading="Navigation">
@@ -188,9 +188,9 @@ export function CommandPalette() {
         )}
       </CommandList>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-rule px-3 py-2 text-[11px] text-ink-4">
-        <PaletteHint keys={["↑", "↓"]} label="Navigate" />
-        <PaletteHint keys={["↵"]} label="Open" />
-        <PaletteHint keys={["Esc"]} label="Close" />
+        <PaletteHint keys={["↑", "↓"]} label="Перейти" />
+        <PaletteHint keys={["↵"]} label="Открыть" />
+        <PaletteHint keys={["Esc"]} label="Закрыть" />
       </div>
     </CommandDialog>
   );

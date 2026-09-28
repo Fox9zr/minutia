@@ -223,7 +223,7 @@ export function WorkspaceMembers() {
     const email = memberEmail(member);
     if (
       !(await confirm({
-        title: "Remove member?",
+        title: "Удалить участника?",
         description: `${email} will lose access to this workspace.`,
         confirmLabel: "Remove",
         danger: true,
@@ -259,7 +259,7 @@ export function WorkspaceMembers() {
   async function handleRevokeInvitation(invitationId: string, email: string) {
     if (
       !(await confirm({
-        title: "Revoke invitation?",
+        title: "Отозвать приглашение?",
         description: `The invite for ${email} will no longer work.`,
         confirmLabel: "Revoke",
         danger: true,
@@ -299,7 +299,7 @@ export function WorkspaceMembers() {
       <CardHeader className="gap-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-1.5">
-            <CardTitle id="workspace-access-title">Workspace access</CardTitle>
+            <CardTitle id="workspace-access-title">Доступ к рабочему пространству</CardTitle>
             <CardDescription>
               Invite teammates into {orgAdmin.organization.name}.
             </CardDescription>
@@ -321,7 +321,7 @@ export function WorkspaceMembers() {
           <>
             <form onSubmit={handleInvite} className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_9rem_auto] sm:items-end">
               <div className="space-y-1.5">
-                <Label htmlFor="invite-email">Invite by email</Label>
+                <Label htmlFor="invite-email">Пригласить по e-mail</Label>
                 <Input
                   id="invite-email"
                   type="email"
@@ -331,17 +331,17 @@ export function WorkspaceMembers() {
                 />
               </div>
               <div className="space-y-1.5">
-                <Label>Role</Label>
+                <Label>Роль</Label>
                 <Select
                   value={inviteRole}
                   onValueChange={(value) => setInviteRole(value as "member" | "admin")}
                 >
-                  <SelectTrigger aria-label="Invitation role" className="w-full">
+                  <SelectTrigger aria-label="Роль при приглашении" className="w-full">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="member">Member</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="member">Участник</SelectItem>
+                    <SelectItem value="admin">Администратор</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -363,7 +363,7 @@ export function WorkspaceMembers() {
                 <div className="flex items-center gap-2">
                   <Input
                     readOnly
-                    aria-label="Invite link"
+                    aria-label="Ссылка-приглашение"
                     value={inviteLink}
                     onFocus={(e) => e.currentTarget.select()}
                     className="font-mono text-xs"
@@ -394,7 +394,7 @@ export function WorkspaceMembers() {
                   This workspace is solo right now. Upgrade to invite teammates and assign work across your meetings.
                 </p>
                 {upgradeError && (
-                  <p className="text-xs text-danger">Could not start the upgrade. Please try again.</p>
+                  <p className="text-xs text-danger">Не удалось запустить обновление. Повторите попытку.</p>
                 )}
               </div>
             </div>
@@ -419,7 +419,7 @@ export function WorkspaceMembers() {
             <h3 id="workspace-members-title" className="text-sm font-medium text-ink">
               Members
             </h3>
-            <span className="text-xs text-ink-3">Role</span>
+            <span className="text-xs text-ink-3">Роль</span>
           </div>
           <div className="divide-y divide-rule rounded-lg border border-rule">
             {orgAdmin.members.map((member) => {
@@ -452,8 +452,8 @@ export function WorkspaceMembers() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="member">Member</SelectItem>
-                      <SelectItem value="admin">Admin</SelectItem>
+                      <SelectItem value="member">Участник</SelectItem>
+                      <SelectItem value="admin">Администратор</SelectItem>
                     </SelectContent>
                   </Select>
                   <Button
@@ -482,7 +482,7 @@ export function WorkspaceMembers() {
             <h3 id="workspace-invitations-title" className="text-sm font-medium text-ink">
               Pending invitations
             </h3>
-            <span className="text-xs text-ink-3">Status</span>
+            <span className="text-xs text-ink-3">Статус</span>
           </div>
           <div className="divide-y divide-rule rounded-lg border border-rule">
             {orgAdmin.invitations
@@ -509,7 +509,7 @@ export function WorkspaceMembers() {
                 </div>
               ))}
             {orgAdmin.invitations.filter((invite) => invite.status === "pending").length === 0 && (
-              <div className="p-3 text-sm text-ink-3">No pending invitations.</div>
+              <div className="p-3 text-sm text-ink-3">Нет приглашений на рассмотрении.</div>
             )}
           </div>
         </section>
@@ -518,7 +518,7 @@ export function WorkspaceMembers() {
       <Dialog open={pendingInvite} onOpenChange={(open) => { if (!open) setPendingInvite(false); }}>
         <DialogContent showCloseButton={false}>
           <DialogHeader>
-            <DialogTitle>Add a seat?</DialogTitle>
+            <DialogTitle>Добавить лицензию?</DialogTitle>
             <DialogDescription>
               Adding a member adds a seat to your subscription and updates your bill.
             </DialogDescription>

@@ -44,7 +44,7 @@ export function SuggestionContextBadge({
   if (type === "new_item") {
     return (
       <span
-        aria-label="New item"
+        aria-label="Новый пункт"
         className={cn(PILL_BASE, "bg-accent-soft text-accent ring-accent/20", className)}
       >
         <Sparkles className="size-3 shrink-0" aria-hidden="true" />
@@ -59,7 +59,7 @@ export function SuggestionContextBadge({
     const content = (
       <>
         <Copy className="size-3 shrink-0" aria-hidden="true" />
-        <span>Duplicate of</span>
+        <span>Дубликат</span>
         <span className="font-mono tracking-normal">{key}</span>
       </>
     );
@@ -84,7 +84,7 @@ export function SuggestionContextBadge({
   const content = (
     <>
       <ArrowUpRight className="size-3 shrink-0" aria-hidden="true" />
-      <span>Updates</span>
+      <span>Обновления</span>
       <span className="font-mono tracking-normal">{key}</span>
       {suggestedStatus && (
         <span className="opacity-80">&rarr; {STATUS_CONFIG[suggestedStatus].label}</span>

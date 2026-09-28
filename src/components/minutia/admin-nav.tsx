@@ -5,10 +5,10 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const ADMIN_TABS = [
-  { label: "Overview", href: "/admin", instanceOnly: true },
-  { label: "Settings", href: "/admin/settings", instanceOnly: true },
-  { label: "Users", href: "/admin/users", instanceOnly: false },
-  { label: "Health", href: "/admin/health", instanceOnly: true },
+  { label: "Обзор", href: "/admin", instanceOnly: true },
+  { label: "Настройки", href: "/admin/settings", instanceOnly: true },
+  { label: "Пользователи", href: "/admin/users", instanceOnly: false },
+  { label: "Состояние системы", href: "/admin/health", instanceOnly: true },
 ] as const;
 
 export function AdminNav({ instanceAdmin }: { instanceAdmin: boolean }) {
@@ -17,7 +17,7 @@ export function AdminNav({ instanceAdmin }: { instanceAdmin: boolean }) {
 
   return (
     <nav
-      aria-label="Admin sections"
+      aria-label="Разделы администрирования"
       className="flex items-center gap-1 border-b border-rule"
     >
       {tabs.map((tab) => {

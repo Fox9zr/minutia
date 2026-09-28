@@ -93,16 +93,16 @@ export function InviteRequestReviewClient({
           <div className="flex items-start gap-3">
             <Mail className="mt-0.5 size-4 text-ink-3" />
             <div>
-              <p className="text-xs uppercase tracking-[0.08em] text-ink-3">Requester</p>
+              <p className="text-xs uppercase tracking-[0.08em] text-ink-3">Инициатор</p>
               <p className="mt-1 font-medium text-ink">{email}</p>
             </div>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.08em] text-ink-3">Workspace</p>
+            <p className="text-xs uppercase tracking-[0.08em] text-ink-3">Рабочее пространство</p>
             <p className="mt-1 font-medium text-ink">{organizationName}</p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.08em] text-ink-3">Requested page</p>
+            <p className="text-xs uppercase tracking-[0.08em] text-ink-3">Запрошенная страница</p>
             <a
               href={requestedUrl}
               className="mt-1 block break-all text-sm font-medium text-accent underline underline-offset-4"
@@ -125,7 +125,7 @@ export function InviteRequestReviewClient({
             )}
           >
             <Check className="mb-3 size-4" />
-            <span className="block text-sm font-semibold">Approve</span>
+            <span className="block text-sm font-semibold">Согласовать</span>
             <span className="mt-1 block text-xs leading-5 opacity-75">
               Send an invite and add them as a member.
             </span>
@@ -142,7 +142,7 @@ export function InviteRequestReviewClient({
             )}
           >
             <X className="mb-3 size-4" />
-            <span className="block text-sm font-semibold">Reject</span>
+            <span className="block text-sm font-semibold">Отклонить</span>
             <span className="mt-1 block text-xs leading-5 opacity-75">
               Close the request without sending an invite.
             </span>

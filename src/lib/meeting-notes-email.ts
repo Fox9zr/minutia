@@ -37,7 +37,7 @@ function issueUrl(appUrl: string, issueId: string) {
 
 function issueRows(issues: Issue[], appUrl: string) {
   if (issues.length === 0) {
-    return `<p style="margin:0;color:${brand.muted};font-size:14px;line-height:22px;">No items in this section.</p>`;
+    return `<p style="margin:0;color:${brand.muted};font-size:14px;line-height:22px;">В этом разделе нет элементов.</p>`;
   }
 
   return issues
@@ -60,7 +60,7 @@ function issueRows(issues: Issue[], appUrl: string) {
             <p style="margin:8px 0 0;color:${brand.muted};font-size:11px;line-height:16px;text-transform:uppercase;letter-spacing:.06em;">${escapeHtml(meta.join(" · "))}</p>
           </td>
           <td style="padding:14px 0 14px 16px;border-top:1px solid ${brand.rule};text-align:right;white-space:nowrap;">
-            <a href="${url}" style="display:inline-block;border:1px solid ${brand.rule};border-radius:999px;color:${brand.accent};font-size:12px;font-weight:650;line-height:18px;padding:7px 12px;text-decoration:none;">Open issue</a>
+            <a href="${url}" style="display:inline-block;border:1px solid ${brand.rule};border-radius:999px;color:${brand.accent};font-size:12px;font-weight:650;line-height:18px;padding:7px 12px;text-decoration:none;">Открыть вопрос</a>
           </td>
         </tr>
       `;
@@ -70,7 +70,7 @@ function issueRows(issues: Issue[], appUrl: string) {
 
 function decisionRows(decisions: Decision[]) {
   if (decisions.length === 0) {
-    return `<p style="margin:0;color:${brand.muted};font-size:14px;line-height:22px;">No decisions logged.</p>`;
+    return `<p style="margin:0;color:${brand.muted};font-size:14px;line-height:22px;">Решения не зафиксированы.</p>`;
   }
 
   return decisions
@@ -89,7 +89,7 @@ function decisionRows(decisions: Decision[]) {
 function notesBlock(notes: string) {
   const trimmed = notes.trim();
   if (!trimmed) {
-    return `<p style="margin:0;color:${brand.muted};font-size:14px;line-height:22px;">No freeform notes captured.</p>`;
+    return `<p style="margin:0;color:${brand.muted};font-size:14px;line-height:22px;">Заметки в свободной форме не зафиксированы.</p>`;
   }
 
   return trimmed
@@ -146,7 +146,7 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
     heading: meeting.title,
     intro: `${seriesName} · ${formatDate(meeting.date)}`,
     bodyHtml,
-    cta: { label: "Open meeting in Minutia", href: meetingUrl },
+    cta: { label: "Открыть встречу в Minutia", href: meetingUrl },
     footerNote:
       "Issue links open in Minutia. If you are not signed in, you will be asked to sign in first. If you do not have access, request an invite from the login screen.",
     footerUrl: appUrl,

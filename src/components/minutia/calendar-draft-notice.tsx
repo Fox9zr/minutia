@@ -30,7 +30,7 @@ export function CalendarDraftNotice({ count }: { count: number }) {
           <button
             type="button"
             onClick={() => setDismissed(true)}
-            aria-label="Dismiss"
+            aria-label="Скрыть"
             className="shrink-0 text-ink-4 hover:text-ink-2 transition-colors"
           >
             <X className="size-4" />

@@ -98,8 +98,8 @@ function formatRelativeDue(date: Date | string): { label: string; overdue: boole
     const absDays = Math.abs(diffDays);
     return { label: `Overdue by ${absDays}d`, overdue: true };
   }
-  if (diffDays === 0) return { label: "Due today", overdue: false };
-  if (diffDays === 1) return { label: "Due tomorrow", overdue: false };
+  if (diffDays === 0) return { label: "Срок сегодня", overdue: false };
+  if (diffDays === 1) return { label: "Срок завтра", overdue: false };
   if (diffDays <= 7) return { label: `Due in ${diffDays}d`, overdue: false };
   return { label: `Due ${formatShortDate(date)}`, overdue: false };
 }
@@ -281,11 +281,11 @@ function HeroWidget({
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-3">
             <div className="flex items-center gap-1.5">
               <span className="size-2 rounded-sm bg-ink/20" />
-              <span className="text-[10px] text-ink-4">Raised</span>
+              <span className="text-[10px] text-ink-4">Создано</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="size-2 rounded-sm bg-success/80" />
-              <span className="text-[10px] text-ink-4">Resolved</span>
+              <span className="text-[10px] text-ink-4">Решено</span>
             </div>
           </div>
         </div>
@@ -543,14 +543,14 @@ function OutstandingWidget({
 
   const filters = [
     { key: "all" as const, label: "All" },
-    { key: "open" as const, label: "Open" },
-    { key: "pending" as const, label: "Pending" },
-    { key: "overdue" as const, label: "Overdue" },
+    { key: "open" as const, label: "Открыть" },
+    { key: "pending" as const, label: "В ожидании" },
+    { key: "overdue" as const, label: "Просрочено" },
   ];
 
   const viewModes = [
-    { key: "none" as const, label: "List" },
-    { key: "series" as const, label: "By series" },
+    { key: "none" as const, label: "Список" },
+    { key: "series" as const, label: "По сериям" },
   ];
 
   const emptyGroupCount = seriesList.filter(
@@ -568,9 +568,9 @@ function OutstandingWidget({
         accessibility={{ announcements }}
       >
         <div className="flex flex-wrap items-start justify-between gap-2 mb-3">
-          <h3 className="font-display text-lg font-semibold text-ink">Outstanding items</h3>
+          <h3 className="font-display text-lg font-semibold text-ink">Невыполненные задачи</h3>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="Filter outstanding items">
+            <div className="flex items-center gap-1 overflow-x-auto" role="tablist" aria-label="Фильтр нерешенных вопросов">
               {filters.map((f) => (
                 <button
                   key={f.key}
@@ -592,7 +592,7 @@ function OutstandingWidget({
             </div>
             <div
               role="group"
-              aria-label="Group outstanding items"
+              aria-label="Группировать нерешенные вопросы"
               className="inline-flex shrink-0 items-center rounded-full bg-paper-2 p-0.5"
             >
               {viewModes.map((m) => {
@@ -628,7 +628,7 @@ function OutstandingWidget({
             }
           }}
           placeholder="Filter issues… /"
-          aria-label="Filter issues"
+          aria-label="Фильтр задач"
           className="mb-2 w-full max-w-[240px] rounded-md border border-rule bg-paper px-2.5 py-1.5 text-xs text-ink placeholder:text-ink-4 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-paper"
         />
         <AnimatePresence>
@@ -646,7 +646,7 @@ function OutstandingWidget({
                   Owner: {ownerFilter.label}
                   <button
                     type="button"
-                    aria-label="Remove owner filter"
+                    aria-label="Сбросить фильтр по ответственному"
                     onClick={() => setOwnerFilter(null)}
                     className="ml-0.5 text-ink-4 hover:text-ink"
                   >
@@ -671,7 +671,7 @@ function OutstandingWidget({
 
         {openIssues.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <p className="text-[13px] text-ink-2">Nothing outstanding. Enjoy the quiet.</p>
+            <p className="text-[13px] text-ink-2">Нет невыполненных задач. Все спокойно.</p>
             <div className="mt-3 flex gap-1 text-ink-4" aria-hidden="true">
               {"— · — · — · — · —".split("").map((c, i) => (
                 <span key={i} className="font-display text-xs">{c}</span>
@@ -680,7 +680,7 @@ function OutstandingWidget({
           </div>
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-            <p className="text-[13px] text-ink-2">No issues match.</p>
+            <p className="text-[13px] text-ink-2">Подходящих вопросов не найдено.</p>
             <Button
               type="button"
               variant="ghost"
@@ -973,7 +973,7 @@ function AgeWidget({ id, widgetIndex, issues }: { id: string; widgetIndex: numbe
   return (
     <WidgetShell id={id} index={widgetIndex}>
       <div className="flex flex-wrap items-start justify-between gap-2 mb-4">
-        <h3 className="font-display text-base font-semibold text-ink">Age of open items</h3>
+        <h3 className="font-display text-base font-semibold text-ink">Срок открытых вопросов</h3>
         <span className="text-[11px] text-ink-4">oldest first</span>
       </div>
       {maxAge > 0 && (
@@ -1022,7 +1022,7 @@ function DecisionsWidget({
         Recent decisions
       </h3>
       {recent.length === 0 ? (
-        <p className="text-xs text-ink-3">No decisions recorded yet.</p>
+        <p className="text-xs text-ink-3">Решения пока не записаны.</p>
       ) : (
         <div className="space-y-1">
           {recent.map((d) => {
@@ -1069,7 +1069,7 @@ function SeriesWidget({
   return (
     <WidgetShell id={id} index={widgetIndex}>
       <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-        <h3 className="font-display text-base font-semibold text-ink">Your series</h3>
+        <h3 className="font-display text-base font-semibold text-ink">Ваши серии встреч</h3>
         <Link href="/series" className="text-xs text-ink-3 hover:text-accent transition-colors">
           View all
         </Link>
@@ -1140,11 +1140,11 @@ function QuickAddButton() {
   if (atLimit) return <CapacityNudge limit={ITEM_LIMIT} />;
 
   return (
-    <HintTooltip label="Quick add an issue from anywhere on the board. Shortcut: N.">
+    <HintTooltip label="Быстрое добавление вопроса из любого места доски. Горячая клавиша: N.">
       <motion.button
         type="button"
         data-tour="quick-add"
-        aria-label="Quick add issue"
+        aria-label="Быстро добавить задачу"
         onClick={() => openQuickAddDialog()}
         className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom))] right-[calc(1.5rem+env(safe-area-inset-right))] z-50 flex items-center justify-center size-12 rounded-full bg-accent text-white shadow-lg transition-colors hover:bg-accent-hover"
         whileTap={{ scale: 0.9 }}
@@ -1371,7 +1371,7 @@ export default function Dashboard() {
         {!isFirstRun && (
           <div className="flex items-start justify-between gap-4 mb-6">
             <div>
-              <h1 className="font-display text-2xl font-semibold text-ink">OIL Board</h1>
+              <h1 className="font-display text-2xl font-semibold text-ink">Доска OIL</h1>
               <p className="mt-1 text-sm text-ink-3">
                 Outstanding Issues Log. Everything still open across your meetings.
               </p>
@@ -1386,7 +1386,7 @@ export default function Dashboard() {
             <EmptyMedia>
               <Layers />
             </EmptyMedia>
-            <EmptyTitle>Every good log starts with one meeting.</EmptyTitle>
+            <EmptyTitle>Ведение записей начинается с первой встречи.</EmptyTitle>
             <EmptyDescription>
               Create a series to start tracking outstanding issues across your
               recurring meetings.

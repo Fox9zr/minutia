@@ -137,7 +137,7 @@ export async function POST(
       .from("meeting_series")
       .insert({
         name: (body.name || board.name).slice(0, 120),
-        description: "Created from a Minutia Retro",
+        description: "Создано из ретроспективы Minutia",
         owner_id: user.id,
         organization_id: profile?.current_organization_id ?? null,
       })
@@ -160,7 +160,7 @@ export async function POST(
     .insert({
       series_id: seriesId,
       sequence_number: (count ?? 0) + 1,
-      title: "Retrospective",
+      title: "Ретроспектива",
       status: "completed",
     })
     .select("id")

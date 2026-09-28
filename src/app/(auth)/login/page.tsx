@@ -316,7 +316,7 @@ function LoginForm() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Minimum 8 characters"
+                  placeholder="Минимум 8 символов"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

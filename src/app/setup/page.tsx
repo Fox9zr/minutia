@@ -26,11 +26,11 @@ import { aiFormFields } from "@/lib/ai/form";
 const TOTAL_STEPS = 5;
 
 const stepMeta = [
-  { label: "Environment", icon: Server },
-  { label: "Admin Account", icon: ShieldCheck },
-  { label: "Configure", icon: Settings2 },
+  { label: "Окружение", icon: Server },
+  { label: "Учетная запись администратора", icon: ShieldCheck },
+  { label: "Настроить", icon: Settings2 },
   { label: "AI", icon: Sparkles },
-  { label: "Ready", icon: Rocket },
+  { label: "Готово", icon: Rocket },
 ];
 
 const variants = {
@@ -436,7 +436,7 @@ function StepEnvironment({
       {loading && (
         <div className="flex items-center justify-center py-8">
           <Loader2 className="size-5 animate-spin text-ink-3" />
-          <span className="ml-2 text-sm text-ink-3">Checking services...</span>
+          <span className="ml-2 text-sm text-ink-3">Проверка служб...</span>
         </div>
       )}
 
@@ -454,12 +454,12 @@ function StepEnvironment({
           <CheckRow label="JWT Secret" ok={envCheck.env.jwt_secret === "ok"} detail={envCheck.env.jwt_secret === "weak" ? "Too short (min 32 chars)" : undefined} />
           <CheckRow label="Anon Key" ok={envCheck.env.anon_key === "ok"} />
           <CheckRow label="Service Role Key" ok={envCheck.env.service_role_key === "ok"} />
-          <CheckRow label="Database" ok={envCheck.db.connected} detail={envCheck.db.connected ? `${envCheck.db.latency_ms}ms` : "Unreachable"} icon={Database} />
+          <CheckRow label="База данных" ok={envCheck.db.connected} detail={envCheck.db.connected ? `${envCheck.db.latency_ms}ms` : "Unreachable"} icon={Database} />
           <CheckRow label="Auth Service" ok={envCheck.services.auth === "healthy"} icon={ShieldCheck} />
           <CheckRow label="REST API" ok={envCheck.services.rest === "healthy"} icon={Server} />
 
           <div className="border-t border-rule pt-2 mt-3">
-            <p className="text-[11px] text-ink-4 mb-1">Optional services</p>
+            <p className="text-[11px] text-ink-4 mb-1">Дополнительные сервисы</p>
             <div className="flex flex-wrap gap-3">
               <OptionalBadge label="SMTP" configured={envCheck.env.smtp_configured} />
               <OptionalBadge label="AI" configured={envCheck.env.ai_configured} />
@@ -589,18 +589,18 @@ function StepCreateAdmin({
           className="flex flex-col items-center justify-center py-8 gap-3"
         >
           <CheckCircle2 className="size-10 text-success" />
-          <p className="text-sm font-medium text-ink">Admin account created</p>
+          <p className="text-sm font-medium text-ink">Учетная запись администратора создана</p>
         </motion.div>
       ) : (
         <>
           <div className="space-y-3">
             <div className="space-y-1.5">
-              <Label htmlFor="admin-name" className="text-ink-2">Display name</Label>
+              <Label htmlFor="admin-name" className="text-ink-2">Отображаемое имя</Label>
               <Input
                 id="admin-name"
                 value={name}
                 onChange={(e) => onNameChange(e.target.value)}
-                placeholder="Your name"
+                placeholder="Ваше имя"
                 autoFocus
                 className="h-10 rounded-xl"
               />
@@ -619,29 +619,29 @@ function StepCreateAdmin({
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="admin-password" className="text-ink-2">Password</Label>
+              <Label htmlFor="admin-password" className="text-ink-2">Пароль</Label>
               <Input
                 id="admin-password"
                 type="password"
                 value={password}
                 onChange={(e) => onPasswordChange(e.target.value)}
-                placeholder="Min 8 characters"
+                placeholder="Мин. 8 символов"
                 className="h-10 rounded-xl"
               />
             </div>
 
             <div className="space-y-1.5">
-              <Label htmlFor="admin-password-confirm" className="text-ink-2">Confirm password</Label>
+              <Label htmlFor="admin-password-confirm" className="text-ink-2">Подтверждение пароля</Label>
               <Input
                 id="admin-password-confirm"
                 type="password"
                 value={passwordConfirm}
                 onChange={(e) => onPasswordConfirmChange(e.target.value)}
-                placeholder="Repeat password"
+                placeholder="Повторите пароль"
                 className="h-10 rounded-xl"
               />
               {passwordConfirm && !passwordsMatch && (
-                <p className="text-xs text-danger">Passwords do not match</p>
+                <p className="text-xs text-danger">Пароли не совпадают</p>
               )}
             </div>
           </div>
@@ -730,7 +730,7 @@ function StepConfigure({
 
       <div className="space-y-3">
         <div className="space-y-1.5">
-          <Label htmlFor="instance-name" className="text-ink-2">Instance name</Label>
+          <Label htmlFor="instance-name" className="text-ink-2">Имя инстанса</Label>
           <Input
             id="instance-name"
             value={instanceName}
@@ -744,24 +744,24 @@ function StepConfigure({
           <div className="flex items-center gap-2 mb-2">
             <Mail className="size-4 text-ink-3" />
             <span className="text-sm font-medium text-ink">Email (SMTP)</span>
-            <span className="text-[10px] text-ink-4 ml-auto">Optional</span>
+            <span className="text-[10px] text-ink-4 ml-auto">Необязательно</span>
           </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-1">
-              <Label htmlFor="smtp-host" className="text-xs text-ink-3">Host</Label>
+              <Label htmlFor="smtp-host" className="text-xs text-ink-3">Организатор</Label>
               <Input id="smtp-host" value={smtpHost} onChange={(e) => onSmtpHostChange(e.target.value)} placeholder="smtp.gmail.com" className="h-9 rounded-lg text-sm" />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="smtp-port" className="text-xs text-ink-3">Port</Label>
+              <Label htmlFor="smtp-port" className="text-xs text-ink-3">Порт</Label>
               <Input id="smtp-port" value={smtpPort} onChange={(e) => onSmtpPortChange(e.target.value)} placeholder="587" className="h-9 rounded-lg text-sm" />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="smtp-user" className="text-xs text-ink-3">Username</Label>
+              <Label htmlFor="smtp-user" className="text-xs text-ink-3">Имя пользователя</Label>
               <Input id="smtp-user" value={smtpUser} onChange={(e) => onSmtpUserChange(e.target.value)} placeholder="user@gmail.com" className="h-9 rounded-lg text-sm" />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="smtp-pass" className="text-xs text-ink-3">Password</Label>
-              <Input id="smtp-pass" type="password" value={smtpPass} onChange={(e) => onSmtpPassChange(e.target.value)} placeholder="App password" className="h-9 rounded-lg text-sm" />
+              <Label htmlFor="smtp-pass" className="text-xs text-ink-3">Пароль</Label>
+              <Input id="smtp-pass" type="password" value={smtpPass} onChange={(e) => onSmtpPassChange(e.target.value)} placeholder="Пароль приложения" className="h-9 rounded-lg text-sm" />
             </div>
           </div>
 
@@ -877,7 +877,7 @@ function StepAi({
       <div className="space-y-4">
         {/* Provider selector */}
         <div className="space-y-1.5">
-          <span className="text-xs text-ink-3 font-medium">Provider</span>
+          <span className="text-xs text-ink-3 font-medium">Провайдер</span>
           <div className="flex gap-2">
             {(["openai-compatible", "anthropic"] as const).map((p) => (
               <button
@@ -926,7 +926,7 @@ function StepAi({
 
         {/* Model */}
         <div className="space-y-1.5">
-          <label htmlFor="ai-model" className="text-xs text-ink-3 font-medium">Model</label>
+          <label htmlFor="ai-model" className="text-xs text-ink-3 font-medium">Модель</label>
           <Input
             id="ai-model"
             value={model}
@@ -1016,7 +1016,7 @@ function StepReady({
           className="mt-0.5 size-4 rounded border-rule text-accent focus:ring-accent"
         />
         <div>
-          <p className="text-sm font-medium text-ink">Seed demo data</p>
+          <p className="text-sm font-medium text-ink">Заполнить демо-данными</p>
           <p className="text-xs text-ink-3 mt-0.5">
             Create a sample meeting series with 5 issues to explore the interface.
           </p>
