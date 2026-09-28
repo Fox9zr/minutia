@@ -33,7 +33,7 @@ export async function requireAdmin(request?: NextRequest): Promise<AuthResult> {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { authorized: false, status: 401, error: "Not authenticated" };
+    return { authorized: false, status: 401, error: "Не авторизован" };
   }
 
   const { data: profile } = await serviceClient
@@ -43,7 +43,7 @@ export async function requireAdmin(request?: NextRequest): Promise<AuthResult> {
     .single();
 
   if (profile?.role !== "admin") {
-    return { authorized: false, status: 403, error: "Admin access required" };
+    return { authorized: false, status: 403, error: "Требуются права администратора" };
   }
 
   return { authorized: true, userId: user.id };

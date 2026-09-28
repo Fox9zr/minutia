@@ -20,18 +20,18 @@ const GUEST_LOGIN_ERROR_MESSAGE =
   "Guest login is unavailable because the local test user is missing or out of sync. Run `supabase db reset` to reseed test@example.com.";
 
 const LOGIN_FOOTER_PHRASES = [
-  "Own your meeting memory.",
-  "Control every note, action, and decision.",
-  "Keep meeting history portable.",
-  "Inspect the source. Run it on your terms.",
-  "Build on open source meeting memory.",
-  "Host the workflow where your team works.",
-  "Turn recurring meetings into durable context.",
-  "Keep decisions and follow-ups in one system.",
-  "Run the meeting memory layer yourself.",
-  "Make every meeting leave a useful trail.",
-  "Own the path from transcript to action.",
-  "Self-host your team's meeting brain.",
+  "Управляйте памятью ваших встреч.",
+  "Контролируйте каждую заметку, поручение и решение.",
+  "Сохраняйте переносимость истории встреч.",
+  "Изучайте исходный код. Запускайте на своих условиях.",
+  "Работает на базе открытой базы знаний встреч.",
+  "Разверните рабочие процессы там, где работает команда.",
+  "Превращайте регулярные встречи в долговременный контекст.",
+  "Ведите решения и поручения в единой системе.",
+  "Разверните инфраструктуру памяти встреч на своих серверах.",
+  "Фиксируйте результаты каждой встречи.",
+  "Контролируйте путь от стенограммы к действиям.",
+  "Разверните базу знаний встреч команды на собственных серверах.",
 ] as const;
 
 export default function LoginPage() {
@@ -51,7 +51,7 @@ function LoginForm() {
   const [inviteMessage, setInviteMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [sentMessage, setSentMessage] = useState(
-    "We sent a magic link to"
+    "Мы отправили ссылку для входа на"
   );
   const [resetCooldown, setResetCooldown] = useState(0); // seconds remaining
   const footerPhraseRef = useRef<HTMLSpanElement>(null);
@@ -127,7 +127,7 @@ function LoginForm() {
       setFormState("error");
       setErrorMessage(error.message);
     } else {
-      setSentMessage("We sent a magic link to");
+      setSentMessage("Мы отправили ссылку для входа на");
       setFormState("sent");
     }
   }
@@ -151,13 +151,13 @@ function LoginForm() {
       if (res.status === 429) {
         setErrorMessage(
           data.error ||
-            "You've requested too many password resets. Please wait a few minutes before trying again."
+            "Слишком много запросов на сброс пароля. Подождите несколько минут перед следующей попыткой."
         );
       } else {
-        setErrorMessage(data.error || "Failed to send password reset email");
+        setErrorMessage(data.error || "Не удалось отправить письмо для сброса пароля");
       }
     } else {
-      setSentMessage("We sent a password reset link to");
+      setSentMessage("Мы отправили ссылку для сброса пароля на");
       setFormState("sent");
     }
 
@@ -218,12 +218,12 @@ function LoginForm() {
         body: JSON.stringify({ email: email.trim(), next: nextPath }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to request invite");
+      if (!res.ok) throw new Error(data.error || "Не удалось запросить приглашение");
       setInviteState("sent");
-      setInviteMessage("Invite request sent to the Minutia admin.");
+      setInviteMessage("Запрос на приглашение отправлен администратору Minutia.");
     } catch (err) {
       setInviteState("error");
-      setInviteMessage(err instanceof Error ? err.message : "Failed to request invite");
+      setInviteMessage(err instanceof Error ? err.message : "Не удалось запросить приглашение");
     }
   }
 
@@ -310,7 +310,7 @@ function LoginForm() {
                   >
                     {resetCooldown > 0
                       ? `Forgot password? (${resetCooldown}s)`
-                      : "Forgot password?"}
+                      : "Забыли пароль?"}
                   </button>
                 </div>
                 <Input
@@ -409,7 +409,7 @@ function LoginForm() {
                     Signing in
                   </span>
                 ) : (
-                  "Sign in as Guest"
+                  "Войти как гость"
                 )}
               </Button>
             )}
@@ -441,7 +441,7 @@ function LoginForm() {
                     disabled={inviteState === "loading" || !email.trim()}
                     className="h-8 shrink-0 rounded-[10px] border-rule bg-paper text-xs text-ink hover:bg-paper-3"
                   >
-                    {inviteState === "loading" ? "Sending" : "Request invite"}
+                    {inviteState === "loading" ? "Sending" : "Запросить приглашение"}
                   </Button>
                 </div>
                 {inviteMessage && (

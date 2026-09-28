@@ -17,7 +17,7 @@ function requireJsonBody(request: NextRequest) {
   const contentType = request.headers.get("content-type") ?? "";
   return contentType.toLowerCase().includes("application/json")
     ? null
-    : NextResponse.json({ error: "JSON body required" }, { status: 415 });
+    : NextResponse.json({ error: "Требуется тело JSON" }, { status: 415 });
 }
 
 async function hasAnotherAdmin(
@@ -53,7 +53,7 @@ export async function PATCH(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = updateMemberSchema.safeParse(body);
@@ -66,7 +66,7 @@ export async function PATCH(request: NextRequest) {
 
   if (parsed.data.userId === auth.userId) {
     return NextResponse.json(
-      { error: "Admins cannot change their own workspace role" },
+      { error: "Администраторы не могут изменить свою роль в рабочем пространстве" },
       { status: 400 }
     );
   }
@@ -84,20 +84,20 @@ export async function PATCH(request: NextRequest) {
   }
 
   if (!membership) {
-    return NextResponse.json({ error: "Member not found" }, { status: 404 });
+    return NextResponse.json({ error: "Участник не найден" }, { status: 404 });
   }
 
   if (membership.role === "admin" && parsed.data.role === "member") {
     try {
       if (!(await hasAnotherAdmin(auth.organizationId, parsed.data.userId))) {
         return NextResponse.json(
-          { error: "Workspace must keep at least one admin" },
+          { error: "В рабочем пространстве должен оставаться минимум один администратор" },
           { status: 400 }
         );
       }
     } catch (error) {
       return NextResponse.json(
-        { error: error instanceof Error ? error.message : "Failed to validate admins" },
+        { error: error instanceof Error ? error.message : "Не удалось проверить администраторов" },
         { status: 500 }
       );
     }
@@ -134,7 +134,7 @@ export async function DELETE(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = removeMemberSchema.safeParse(body);
@@ -147,7 +147,7 @@ export async function DELETE(request: NextRequest) {
 
   if (parsed.data.userId === auth.userId) {
     return NextResponse.json(
-      { error: "Admins cannot remove themselves" },
+      { error: "Администраторы не могут удалить себя" },
       { status: 400 }
     );
   }
@@ -165,20 +165,20 @@ export async function DELETE(request: NextRequest) {
   }
 
   if (!membership) {
-    return NextResponse.json({ error: "Member not found" }, { status: 404 });
+    return NextResponse.json({ error: "Участник не найден" }, { status: 404 });
   }
 
   if (membership.role === "admin") {
     try {
       if (!(await hasAnotherAdmin(auth.organizationId, parsed.data.userId))) {
         return NextResponse.json(
-          { error: "Workspace must keep at least one admin" },
+          { error: "В рабочем пространстве должен оставаться минимум один администратор" },
           { status: 400 }
         );
       }
     } catch (error) {
       return NextResponse.json(
-        { error: error instanceof Error ? error.message : "Failed to validate admins" },
+        { error: error instanceof Error ? error.message : "Не удалось проверить администраторов" },
         { status: 500 }
       );
     }

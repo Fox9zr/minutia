@@ -53,7 +53,7 @@ export default async function InviteRequestReviewPage({ searchParams }: PageProp
     return (
       <ErrorState
         title="Ссылка на запрос отсутствует"
-        body="Open the approve or reject button from the invite request email."
+        body="Используйте кнопку подтверждения или отклонения в письме с запросом на приглашение."
       />
     );
   }
@@ -72,7 +72,7 @@ export default async function InviteRequestReviewPage({ searchParams }: PageProp
     return (
       <ErrorState
         title="Запрос недоступен"
-        body={loaded.error ?? "This invite request link is not available."}
+        body={loaded.error ?? "Ссылка для приглашения недоступна."}
       />
     );
   }

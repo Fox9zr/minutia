@@ -42,7 +42,7 @@ export function CardEditor({ open, mode, colTitle, initialText, initialColor, on
       <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 460 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
           <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)" }}>
-            {mode === "edit" ? "Edit card" : "Add a card"}
+            {mode === "edit" ? "Редактировать карточку" : "Добавить карточку"}
           </span>
           {colTitle && <span style={{ fontFamily: "var(--font-serif)", fontSize: 18, color: "var(--studio-ink)" }}>· {colTitle}</span>}
         </div>
@@ -52,7 +52,7 @@ export function CardEditor({ open, mode, colTitle, initialText, initialColor, on
           backgroundImage: "radial-gradient(rgba(0,0,0,0.025) 1px, transparent 1px)", backgroundSize: "4px 4px", padding: "var(--space-5)", transition: "background var(--dur-base) var(--ease-out)" }}>
           <textarea ref={ref} value={text} onChange={(e) => setText(e.target.value)} maxLength={180}
             onKeyDown={(e) => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) save(); if (e.key === "Escape") onClose(); }}
-            placeholder="What's on your mind?"
+            placeholder="Что на повестке?"
             style={{ width: "100%", minHeight: 96, resize: "none", border: "none", outline: "none", background: "transparent",
               color: "var(--card-ink)", fontFamily: "var(--font-sans)", fontSize: "1.0625rem", fontWeight: 500, lineHeight: 1.45, boxSizing: "border-box" }} />
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: 10 }}>
@@ -69,7 +69,7 @@ export function CardEditor({ open, mode, colTitle, initialText, initialColor, on
 
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 18 }}>
           <Button variant="primary" onClick={save} disabled={!text.trim()} iconLeft={mode === "edit" ? <Icons.Check size={18} /> : <Icons.Plus size={18} />}>
-            {mode === "edit" ? "Save card" : "Add card"}
+            {mode === "edit" ? "Сохранить карточку" : "Add card"}
           </Button>
           <Button variant="ghost" onClick={onClose}>Отмена</Button>
           {mode === "edit" && onDelete && (

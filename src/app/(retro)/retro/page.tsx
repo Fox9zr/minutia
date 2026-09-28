@@ -1,7 +1,7 @@
 import { CreateClient } from "./CreateClient";
 
 export const metadata = {
-  title: "Minutia Retro, the retro where action items don't die",
+  title: "Minutia Retro: ретроспектива, где поручения не забываются",
   description:
     "Бесплатная онлайн-доска ретроспективы для совместной работы. Проводите, выгружайте, без регистрации.",
 };

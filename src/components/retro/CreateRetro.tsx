@@ -69,7 +69,7 @@ export function CreateRetro({ open, initialName, templates, onClose, onCreate }:
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <Button variant="primary" size="lg" onClick={() => onCreate({ name: name.trim() || "Untitled retro", template: templates.find((t) => t.id === tpl) ?? templates[0] })} iconLeft={<Icons.Link size={18} />}>
+          <Button variant="primary" size="lg" onClick={() => onCreate({ name: name.trim() || "Ретроспектива без названия", template: templates.find((t) => t.id === tpl) ?? templates[0] })} iconLeft={<Icons.Link size={18} />}>
             Create &amp; get link
           </Button>
           <Button variant="ghost" onClick={onClose}>Отмена</Button>

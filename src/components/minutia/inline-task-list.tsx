@@ -198,7 +198,7 @@ function InlineTaskItem({
         type="button"
         onClick={handleCheckboxClick}
         disabled={readOnly}
-        aria-label={isChecked ? "Mark incomplete" : "Mark complete"}
+        aria-label={isChecked ? "Отметить невыполненным" : "Отметить выполненным"}
         className={cn(
           "size-5 rounded border-2 shrink-0 flex items-center justify-center transition-all",
           isChecked
@@ -256,7 +256,7 @@ function InlineTaskItem({
               />
               <CommandList>
                 <CommandEmpty>
-                  {directoryLoading ? "Searching..." : "No people found"}
+                  {directoryLoading ? "Searching..." : "Пользователи не найдены"}
                 </CommandEmpty>
                 {(memberMatches.length > 0 || filteredAttendees.length > 0) && (
                   <CommandGroup>

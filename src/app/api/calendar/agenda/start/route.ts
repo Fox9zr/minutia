@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const { calendarEventId } = await request.json();
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(result);
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to start calendar meeting";
+    const message = err instanceof Error ? err.message : "Не удалось запустить встречу из календаря";
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

@@ -5,7 +5,7 @@ import { AppShell } from "./app-shell";
 
 export const metadata: Metadata = {
   title: {
-    default: "OIL Board",
+    default: "Доска OIL",
     template: "%s | Minutia",
   },
 };

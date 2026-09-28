@@ -326,7 +326,7 @@ export function RetroClient({
       }
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setSaveError(json.error || "Could not save to Minutia.");
+        setSaveError(json.error || "Не удалось сохранить в Minutia.");
         setSaving(false);
         return null;
       }
@@ -334,7 +334,7 @@ export function RetroClient({
       setSaving(false);
       return json.series_id ?? null;
     } catch {
-      setSaveError("Could not reach the server.");
+      setSaveError("Не удалось связаться с сервером.");
       setSaving(false);
       return null;
     }

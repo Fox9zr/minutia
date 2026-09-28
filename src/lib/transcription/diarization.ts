@@ -97,15 +97,15 @@ export function resolveSpeakerMap(
   return { map, proposals };
 }
 
-/** "Speaker A" label for an unmapped provider speaker. */
+/** "Спикер А" label for an unmapped provider speaker. */
 function displayLabel(speaker: string): string {
   return /^[A-Za-z]$/.test(speaker) ? `Speaker ${speaker.toUpperCase()}` : `Speaker ${speaker}`;
 }
 
 /**
- * Render segments as attributed turns ("Name: text"), merging consecutive
+ * Render segments as attributed turns ("Название: текст"), merging consecutive
  * segments from the same speaker into one turn. Unmapped speakers render as
- * "Speaker A". This string becomes transcript_raw, so the existing extractor
+ * "Спикер А". This string becomes transcript_raw, so the existing extractor
  * and every text consumer see attribution for free.
  */
 export function flattenSegments(

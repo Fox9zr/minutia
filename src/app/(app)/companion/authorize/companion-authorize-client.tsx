@@ -33,7 +33,7 @@ export function CompanionAuthorizeClient() {
       const res = await fetch("/api/companion/authorize", { method: "POST" });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        setError(body.error || "Could not authorize the companion app.");
+        setError(body.error || "Не удалось авторизовать приложение-компаньон.");
         setStatus("idle");
         return;
       }
@@ -47,10 +47,10 @@ export function CompanionAuthorizeClient() {
       try {
         window.location.assign(url);
       } catch {
-        // Fall back to the "Open the Minutia app" anchor below.
+        // Fall back to the "Открыть приложение Minutia" anchor below.
       }
     } catch {
-      setError("Could not authorize the companion app.");
+      setError("Не удалось авторизовать приложение-компаньон.");
       setStatus("idle");
     }
   }

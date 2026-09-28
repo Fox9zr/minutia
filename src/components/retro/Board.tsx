@@ -90,9 +90,9 @@ export function Board({ columns, phase, revealedSet, revealComplete, votes, onVo
           <Badge tone={openCarry.length ? "warn" : "success"} style={{ marginLeft: "auto" }}>{openCarry.length}</Badge>
         </div>
         {carry.length === 0 ? (
-          <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Нет перенесенных задач" body="A clean slate, first retro for this series, or last time you closed it all out." />
+          <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Нет перенесенных задач" body="С чистого листа: первое ретро в серии или все предыдущие задачи закрыты." />
         ) : openCarry.length === 0 ? (
-          <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Nothing's open" body="That's a good sign. Everything from last time got closed." tone="success" />
+          <EmptyNote icon={<Icons.CheckCircle size={22} />} title="Нет открытых задач" body="Отличный знак: все предыдущие задачи закрыты." tone="success" />
         ) : (
           <React.Fragment>
             <p style={{ fontFamily: "var(--font-sans)", fontSize: 12.5, lineHeight: 1.4, color: "var(--studio-ink-3)", margin: "0 0 14px" }}>

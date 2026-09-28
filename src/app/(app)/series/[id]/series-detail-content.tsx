@@ -179,12 +179,12 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setAskError(payload.error ?? "Ask this series could not answer.");
+        setAskError(payload.error ?? "Не удалось получить ответ по серии встреч.");
         return;
       }
       setAskAnswer(payload as AskSeriesAnswer);
     } catch {
-      setAskError("Ask this series could not answer.");
+      setAskError("Не удалось получить ответ по серии встреч.");
     } finally {
       setAskingSeries(false);
     }
@@ -267,7 +267,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                   <Play className="size-4" data-icon="inline-start" />
                 )}
                 <span className="hidden sm:inline">
-                  {liveMeeting ? "Join live meeting" : "Start meeting"}
+                  {liveMeeting ? "Присоединиться к встрече" : "Начать встречу"}
                 </span>
                 <span className="sm:hidden">{liveMeeting ? "Join" : "Start"}</span>
               </Button>
@@ -355,7 +355,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
             >
               <h3 className="mb-2 text-sm font-semibold text-ink">Ответ по серии</h3>
               <p className="whitespace-pre-wrap text-sm leading-6 text-ink-2">
-                {askAnswer.answer || "The source context does not prove the answer."}
+                {askAnswer.answer || "Исходный контекст не подтверждает ответ."}
               </p>
 
               {askAnswer.citations.length > 0 && (
@@ -483,7 +483,7 @@ function SeriesSettingsDialog({
       !(await confirm({
         title: "Удалить эту серию?",
         description: "Все связанные встречи, задачи и решения удаляются безвозвратно.",
-        confirmLabel: "Delete series",
+        confirmLabel: "Удалить серию",
         danger: true,
       }))
     )

@@ -439,7 +439,7 @@ function CarriedIssueCard({
             )}
           >
             {justChanged === "resolved" ? "Resolved" :
-             justChanged === "in_progress" ? "In Progress" :
+             justChanged === "in_progress" ? "В работе" :
              justChanged === "dropped" ? "Dropped" : justChanged}
           </motion.span>
         )}
@@ -543,7 +543,7 @@ function SectionHeading({
   );
 }
 
-// A mono-caps eyebrow used for the sub-groups inside "Tracked in the log".
+// A mono-caps eyebrow used for the sub-groups inside "Зафиксировано в журнале".
 function LogGroupLabel({ label, count }: { label: string; count: number }) {
   return (
     <div className="mb-2 flex items-center gap-2">
@@ -596,7 +596,7 @@ export function MeetingDetailContent({
   const { data: seriesIssues } = useIssues(seriesId);
 
   // MIN-121: resolve an OIL number to its issue link so a context badge
-  // ("Updates OIL-45", "Duplicate of OIL-67") can deep-link to the item.
+  // ("Обновляет OIL-45", "Дубликат OIL-67") can deep-link to the item.
   const issueHrefByNumber = React.useMemo(() => {
     const map = new Map<number, string>();
     for (const issue of seriesIssues ?? []) {
@@ -647,7 +647,7 @@ export function MeetingDetailContent({
   const replayRecap = React.useCallback(() => setReplayNonce((n) => n + 1), []);
 
   // Pending suggestions are the ones awaiting review; the count drives the
-  // "Review AI suggestions (N)" badge so the auto-extracted items are visible
+  // "Проверить предложения ИИ (N)" badge so the auto-extracted items are visible
   // without the facilitator having to guess they exist.
   const pendingSuggestionCount = aiSuggestions.filter((s) => s.status === "pending").length;
 
@@ -865,7 +865,7 @@ export function MeetingDetailContent({
             user.deviceCount > 1 ? `${user.name} (${user.deviceCount} devices)` : user.name
           )
           .join(", ")
-      : "Waiting for participants";
+      : "Ожидание участников";
   const structuredAiPreview = aiPreview ? normalizeAiNotesPreview(aiPreview) : emptyAiNotes;
   const structuredAiPreviewCount = Object.values(structuredAiPreview).reduce(
     (total, items) => total + items.length,
@@ -958,7 +958,7 @@ export function MeetingDetailContent({
       }
     } catch {
       // Upload failed; the recording stays buffered in IndexedDB for recovery.
-      toast.error("Couldn't upload the recording, it's saved locally and will retry.");
+      toast.error("Не удалось загрузить запись. Она сохранена локально, попытка повторится.");
     } finally {
       setSavingRecording(false);
     }
@@ -968,7 +968,7 @@ export function MeetingDetailContent({
     if (!(await confirm({
       title: "Завершить встречу?",
       description: "После завершения встречи заметки становятся доступны только для чтения.",
-      confirmLabel: "End meeting",
+      confirmLabel: "Завершить встречу",
     }))) return;
     await handleStopRecording();
     await endMeeting.mutateAsync(meetingId);
@@ -1003,7 +1003,7 @@ export function MeetingDetailContent({
     document.body.appendChild(anchor);
     anchor.click();
     anchor.remove();
-    toast("Asking the companion to record");
+    toast("Запрос записи у ассистента");
   }
 
   function handleTitleChange(issueId: string, title: string) {
@@ -1036,12 +1036,12 @@ export function MeetingDetailContent({
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setAiError(payload.error ?? "AI notes could not be generated.");
+        setAiError(payload.error ?? "Не удалось создать заметки с помощью ИИ.");
         return;
       }
       setAiPreview(payload as AiNotesPreview);
     } catch {
-      setAiError("AI notes could not be generated.");
+      setAiError("Не удалось создать заметки с помощью ИИ.");
     } finally {
       setEnhancingNotes(false);
     }
@@ -1105,12 +1105,12 @@ export function MeetingDetailContent({
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setSuggestionsError(payload.error ?? "AI suggestions could not be generated.");
+        setSuggestionsError(payload.error ?? "Не удалось сформировать предложения ИИ.");
         return;
       }
       setAiSuggestions(payload.suggestions ?? []);
     } catch {
-      setSuggestionsError("AI suggestions could not be generated.");
+      setSuggestionsError("Не удалось сформировать предложения ИИ.");
     } finally {
       setLoadingSuggestions(false);
     }
@@ -1139,7 +1139,7 @@ export function MeetingDetailContent({
       );
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setSuggestionsError(payload.error ?? "AI suggestion could not be reviewed.");
+        setSuggestionsError(payload.error ?? "Не удалось обработать предложение ИИ.");
         return;
       }
       const reviewedSuggestion = payload.suggestion as MeetingAiSuggestion;
@@ -1152,7 +1152,7 @@ export function MeetingDetailContent({
         await refreshTrackedMeetingData();
       }
     } catch {
-      setSuggestionsError("AI suggestion could not be reviewed.");
+      setSuggestionsError("Не удалось обработать предложение ИИ.");
     } finally {
       setReviewingSuggestionId(null);
     }
@@ -1385,7 +1385,7 @@ export function MeetingDetailContent({
                   Freeform notes
                 </h3>
                 <span className="text-[10px] text-ink-4">
-                  {updateNotes.isPending ? "Saving…" : updateNotes.isError ? "Save failed" : "Autosaved"}
+                  {updateNotes.isPending ? "Saving…" : updateNotes.isError ? "Ошибка сохранения" : "Autosaved"}
                 </span>
               </div>
               <Textarea
@@ -1468,7 +1468,7 @@ export function MeetingDetailContent({
               disabled={startOrJoinMeeting.isPending}
             >
               <Play className="size-4" />
-              {liveMeetingInSeries ? "Join live meeting" : "Start meeting"}
+              {liveMeetingInSeries ? "Присоединиться к встрече" : "Начать встречу"}
             </Button>
           </div>
 
@@ -1800,13 +1800,13 @@ export function MeetingDetailContent({
                           <p className="text-xs text-ink-3">
                             {suggestion.status === "accepted" &&
                               (suggestion.type === "status_update"
-                                ? "Applied to the linked item."
-                                : "Accepted into tracked work.")}
+                                ? "Применено к связанному элементу."
+                                : "Принято в работу.")}
                             {suggestion.status === "rejected" && "Dismissed."}
                             {suggestion.status === "pending" &&
                               (suggestion.type === "duplicate_warning"
-                                ? "Review to dismiss, or open the existing item."
-                                : "Pending review.")}
+                                ? "Проверьте, чтобы отклонить, или откройте существующий элемент."
+                                : "Ожидает проверки.")}
                           </p>
                           {suggestion.status === "pending" && (
                             <div className="flex items-center gap-2">
@@ -2033,7 +2033,7 @@ export function MeetingDetailContent({
                   <h4 className="text-sm font-semibold text-ink">Черновые заметки</h4>
                 </div>
                 <pre className="h-full overflow-auto whitespace-pre-wrap px-5 py-4 text-sm leading-6 text-ink-2">
-                  {meeting.raw_notes_markdown || notes || "No raw notes captured."}
+                  {meeting.raw_notes_markdown || notes || "Исходные заметки не найдены."}
                 </pre>
               </div>
               <div className="min-h-0 bg-paper-2/40">

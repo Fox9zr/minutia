@@ -9,10 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import { HintTooltip } from "@/components/minutia/hint-tooltip";
 
 const pageTitles: Record<string, string> = {
-  "/": "OIL Board",
-  "/dashboard": "OIL Board",
+  "/": "Доска OIL",
+  "/dashboard": "Доска OIL",
   "/series": "Series",
-  "/actions": "My Actions",
+  "/actions": "Мои поручения",
   "/inbox": "Inbox",
   "/settings": "Settings",
 };
@@ -82,13 +82,13 @@ export function AppHeader() {
       </HintTooltip>
 
       {/* Desktop: panel toggle */}
-      <HintTooltip label={calendarSidebarOpen ? "Close the calendar agenda." : "Open the calendar agenda."}>
+      <HintTooltip label={calendarSidebarOpen ? "Закрыть повестку календаря." : "Открыть повестку календаря."}>
         <Button
           variant="ghost"
           size="icon"
           className="hidden size-8 text-ink-3 hover:text-ink md:flex"
           onClick={toggleCalendarSidebar}
-          aria-label={calendarSidebarOpen ? "Close calendar" : "Open calendar"}
+          aria-label={calendarSidebarOpen ? "Закрыть календарь" : "Открыть календарь"}
         >
           {calendarSidebarOpen ? (
             <PanelRightClose className="size-4" />

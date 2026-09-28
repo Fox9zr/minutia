@@ -239,10 +239,10 @@ export function CsvImportDialog({
   const importMutation = useMutation({
     mutationFn: async () => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const titleCol = Object.entries(mapping).find(([, v]) => v === "title")?.[0];
-      if (!titleCol) throw new Error("No title column mapped");
+      if (!titleCol) throw new Error("Столбец с названием не сопоставлен");
 
       const issueRows = rows
         .map((row) => {
@@ -267,7 +267,7 @@ export function CsvImportDialog({
         })
         .filter(Boolean);
 
-      if (issueRows.length === 0) throw new Error("No valid rows to import");
+      if (issueRows.length === 0) throw new Error("Нет корректных строк для импорта");
 
       const { error } = await supabase.from("issues").insert(issueRows);
       if (error) throw error;
@@ -285,10 +285,10 @@ export function CsvImportDialog({
       <DialogContent className="sm:max-w-xl max-h-[85vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>
-            {step === "upload" && "Import from CSV"}
-            {step === "map" && "Map columns"}
-            {step === "preview" && "Preview import"}
-            {step === "done" && "Import complete"}
+            {step === "upload" && "Импорт из CSV"}
+            {step === "map" && "Сопоставить столбцы"}
+            {step === "preview" && "Предпросмотр импорта"}
+            {step === "done" && "Импорт завершен"}
           </DialogTitle>
         </DialogHeader>
 
@@ -426,7 +426,7 @@ export function CsvImportDialog({
         {importMutation.isError && (
           <div className="flex items-center gap-2 text-xs text-danger">
             <AlertCircle className="size-3.5 shrink-0" />
-            {importMutation.error?.message ?? "Import failed"}
+            {importMutation.error?.message ?? "Ошибка импорта"}
           </div>
         )}
 

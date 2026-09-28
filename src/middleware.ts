@@ -102,13 +102,13 @@ export async function middleware(request: NextRequest) {
   const ip = getClientIp(request.headers);
 
   if (isSensitiveProbePath(pathname)) {
-    return applySecurityHeaders(new NextResponse("Not Found", { status: 404 }));
+    return applySecurityHeaders(new NextResponse("Не найдено", { status: 404 }));
   }
 
   if (pathname.startsWith("/api/")) {
     const apiRateLimit = process.env.NODE_ENV === "production" ? 100 : 2_000;
     if (isRateLimited(ip, apiRateLimit, 60_000)) {
-      return new NextResponse("Too Many Requests", { status: 429 });
+      return new NextResponse("Слишком много запросов", { status: 429 });
     }
   }
 
@@ -121,7 +121,7 @@ export async function middleware(request: NextRequest) {
     authBudget &&
     isRateLimited(`${authBudget.bucket}:${ip}`, authBudget.limit, 60_000)
   ) {
-    return new NextResponse("Too Many Requests", { status: 429 });
+    return new NextResponse("Слишком много запросов", { status: 429 });
   }
 
   // Setup guard: redirect to /setup if instance hasn't been configured
@@ -216,7 +216,7 @@ export async function middleware(request: NextRequest) {
   if (!user && !isPublicPath) {
     if (pathname.startsWith("/api/")) {
       return applySecurityHeaders(
-        NextResponse.json({ error: "Not authenticated" }, { status: 401 })
+        NextResponse.json({ error: "Не авторизован" }, { status: 401 })
       );
     }
 

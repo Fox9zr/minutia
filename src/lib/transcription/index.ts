@@ -198,7 +198,7 @@ export async function transcribeAudio(
 ): Promise<TranscriptionResult> {
   const env = options.env ?? process.env;
   if (!isTranscriptionConfigured(env)) {
-    throw new TranscriptionError("provider_not_configured", "No transcription provider is configured");
+    throw new TranscriptionError("provider_not_configured", "Сервис транскрибации не настроен");
   }
 
   const chain = options.preferFast ? orderChainPreferFast(getProviderChain(env), env) : getProviderChain(env);
@@ -217,5 +217,5 @@ export async function transcribeAudio(
 
   throw firstError instanceof TranscriptionError
     ? firstError
-    : new TranscriptionError("provider_error", "All transcription providers failed", { cause: firstError });
+    : new TranscriptionError("provider_error", "Сбой всех сервисов транскрибации", { cause: firstError });
 }

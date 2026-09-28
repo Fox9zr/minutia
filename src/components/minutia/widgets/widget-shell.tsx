@@ -77,12 +77,12 @@ export function WidgetShell({
             </button>
           </HintTooltip>
           {canResize && (
-            <HintTooltip label={isWide ? "Make this widget narrow." : "Make this widget wide."}>
+            <HintTooltip label={isWide ? "Сузить виджет." : "Расширить виджет."}>
               <button
                 type="button"
                 onClick={() => toggleSpan(id)}
                 className="flex items-center justify-center size-6 rounded-full bg-paper-2 text-ink-4 hover:text-ink hover:bg-paper-3 transition-colors cursor-pointer"
-                aria-label={isWide ? "Make narrow" : "Make wide"}
+                aria-label={isWide ? "Сузить" : "Расширить"}
               >
                 {isWide ? <Minimize2 className="size-3" /> : <Maximize2 className="size-3" />}
               </button>

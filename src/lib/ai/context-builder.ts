@@ -195,13 +195,13 @@ export function formatSeriesContextForPrompt(context: SeriesContext): string {
     : "  (none)";
 
   return [
-    "OPEN ITEMS ALREADY TRACKED IN THIS SERIES (the OIL board):",
+    "ОТКРЫТЫЕ ПУНКТЫ В ЭТОЙ СЕРИИ (доска OIL):",
     issues,
     "",
-    "RECENT DECISIONS IN THIS SERIES:",
+    "НЕДАВНИЕ РЕШЕНИЯ В ЭТОЙ СЕРИИ:",
     decisions,
     "",
-    "RECENT STATUS CHANGES IN THIS SERIES:",
+    "НЕДАВНИЕ ИЗМЕНЕНИЯ СТАТУСА В ЭТОЙ СЕРИИ:",
     updates,
   ].join("\n");
 }

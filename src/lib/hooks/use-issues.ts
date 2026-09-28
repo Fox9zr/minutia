@@ -124,7 +124,7 @@ export function useIssue(id: string) {
 
 export const ITEM_LIMIT = 25;
 export const ITEM_LIMIT_MESSAGE =
-  "Item limit reached for this account.";
+  "Для этого аккаунта исчерпан лимит элементов.";
 
 /**
  * Returns the count of active issues (status NOT IN resolved, dropped) for the
@@ -166,7 +166,7 @@ export function useCreateIssue() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const { data: profile } = isFeatureGatingEnabled()
         ? await supabase
@@ -497,7 +497,7 @@ export function useReorderIssues() {
       queryClient.invalidateQueries({ queryKey: issueKeys.all });
       queryClient.invalidateQueries({ queryKey: issueKeys.list(seriesId) });
     },
-    meta: { errorMessage: "Couldn't save the new order." },
+    meta: { errorMessage: "Не удалось сохранить новый порядок." },
   });
 }
 
@@ -565,7 +565,7 @@ export function useAssignIssue() {
       queryClient.invalidateQueries({ queryKey: issueKeys.detail(variables.issueId) });
     },
 
-    meta: { errorMessage: "Couldn't update the assignee." },
+    meta: { errorMessage: "Не удалось обновить исполнителя." },
   });
 }
 

@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = schema.safeParse(body);
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
 
   if (inviteRequestError || !inviteRequest) {
     return NextResponse.json(
-      { error: "Failed to create invite request" },
+      { error: "Не удалось создать запрос на приглашение" },
       { status: 500 }
     );
   }
@@ -158,13 +158,13 @@ export async function POST(request: NextRequest) {
   const rejectUrl = reviewUrl(request.url, actionToken, "reject");
   const actionNote = inviteTarget.organizationId
     ? `Approval adds them to ${inviteTarget.organizationName} as a member.`
-    : "Approval uses the workspace you are signed into as an admin.";
+    : "Для согласования используется рабочее пространство, в котором вы авторизованы как администратор.";
 
   try {
     await sendMail({
       to,
       replyTo: requestedEmail,
-      subject: "Minutia invite request",
+      subject: "Запрос на приглашение в Minutia",
       text: [
         `${requestedEmail} requested access to ${inviteTarget.organizationName}.`,
         `Requested page: ${requestedUrl}`,
@@ -173,7 +173,7 @@ export async function POST(request: NextRequest) {
         `Approve request: ${approveUrl}`,
         `Reject request: ${rejectUrl}`,
         "",
-        "Links open a review screen. Nothing changes until an admin confirms.",
+        "Ссылка ведет на экран проверки. Изменения не применятся без подтверждения администратора.",
       ].join("\n"),
       html: `
         <!doctype html>
@@ -229,7 +229,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Failed to send invite request" },
+      { error: err instanceof Error ? err.message : "Не удалось отправить запрос на приглашение" },
       { status: 500 }
     );
   }

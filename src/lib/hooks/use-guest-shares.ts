@@ -19,7 +19,7 @@ export function useCreateGuestShare() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const token = crypto.randomUUID();
 

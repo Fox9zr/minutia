@@ -47,7 +47,7 @@ export function ShareButton({ resource_type, resource_id }: ShareButtonProps) {
       size="icon"
       onClick={handleClick}
       disabled={createShare.isPending}
-      aria-label={copied ? "Link copied" : "Share link"}
+      aria-label={copied ? "Ссылка скопирована" : "Поделиться ссылкой"}
     >
       {createShare.isPending ? (
         <Loader2 className="size-4 animate-spin" />

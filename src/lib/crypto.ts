@@ -57,7 +57,7 @@ export function decryptConfigSecret(value: string): string {
 
   const [iv, tag, ciphertext] = value.slice(CONFIG_SECRET_PREFIX.length).split(":");
   if (!iv || !tag || !ciphertext) {
-    throw new Error("Invalid encrypted config value");
+    throw new Error("Некорректное зашифрованное значение конфигурации");
   }
 
   const decipher = createDecipheriv(ALGORITHM, getConfigSecretKey(), Buffer.from(iv, "base64url"));

@@ -98,12 +98,12 @@ export default function SetupPage() {
       const res = await fetch("/api/setup/check-env", { headers: setupHeaders() });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
-        throw new Error(data?.error || "Health check failed");
+        throw new Error(data?.error || "Проверка работоспособности не пройдена");
       }
       const data = await res.json();
       setEnvCheck(data);
     } catch (err) {
-      setEnvError(err instanceof Error ? err.message : "Failed to check environment");
+      setEnvError(err instanceof Error ? err.message : "Ошибка проверки окружения");
     } finally {
       setEnvLoading(false);
     }
@@ -144,11 +144,11 @@ export default function SetupPage() {
         body: JSON.stringify({ email: adminEmail, password: adminPassword, name: adminName }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to create admin");
+      if (!res.ok) throw new Error(data.error || "Не удалось создать администратора");
       setAdminCreated(true);
       setTimeout(goNext, 600);
     } catch (err) {
-      setAdminError(err instanceof Error ? err.message : "Unknown error");
+      setAdminError(err instanceof Error ? err.message : "Неизвестная ошибка");
     } finally {
       setAdminCreating(false);
     }
@@ -177,7 +177,7 @@ export default function SetupPage() {
       const data = await res.json();
       setSmtpTestResult({ success: data.success, message: data.message || data.error });
     } catch {
-      setSmtpTestResult({ success: false, message: "Request failed" });
+      setSmtpTestResult({ success: false, message: "Ошибка запроса" });
     } finally {
       setSmtpTesting(false);
     }
@@ -451,7 +451,7 @@ function StepEnvironment({
 
       {envCheck && !loading && (
         <div className="space-y-2">
-          <CheckRow label="JWT Secret" ok={envCheck.env.jwt_secret === "ok"} detail={envCheck.env.jwt_secret === "weak" ? "Too short (min 32 chars)" : undefined} />
+          <CheckRow label="JWT Secret" ok={envCheck.env.jwt_secret === "ok"} detail={envCheck.env.jwt_secret === "weak" ? "Слишком коротко (минимум 32 символа)" : undefined} />
           <CheckRow label="Anon Key" ok={envCheck.env.anon_key === "ok"} />
           <CheckRow label="Service Role Key" ok={envCheck.env.service_role_key === "ok"} />
           <CheckRow label="База данных" ok={envCheck.db.connected} detail={envCheck.db.connected ? `${envCheck.db.latency_ms}ms` : "Unreachable"} icon={Database} />
@@ -780,7 +780,7 @@ function StepConfigure({
                     Testing...
                   </>
                 ) : (
-                  "Send test email"
+                  "Отправить тестовое письмо"
                 )}
               </Button>
               {smtpTestResult && (
@@ -1025,9 +1025,9 @@ function StepReady({
 
       <div className="space-y-2">
         {[
-          "Admin account created with full instance access",
-          "Instance settings can be changed anytime from admin panel",
-          "Invite team members after signing in",
+          "Создан аккаунт администратора с полным доступом к системе",
+          "Параметры инстанса можно изменить в любой момент в панели администратора",
+          "Пригласите коллег после входа в систему",
         ].map((text, i) => (
           <motion.div
             key={i}

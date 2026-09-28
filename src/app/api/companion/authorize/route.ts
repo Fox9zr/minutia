@@ -42,7 +42,7 @@ export async function POST() {
     .some((cookie) => cookie.name.includes("-auth-token"));
 
   if (!hasAuthCookie) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const supabase = await createClient();
@@ -51,14 +51,14 @@ export async function POST() {
   } = await supabase.auth.getUser();
 
   if (!user?.email) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   if (isAuthorizeRateLimited(user.id)) {
     return NextResponse.json(
       {
         error:
-          "Too many authorization requests. Please wait a few minutes before trying again.",
+          "Слишком много запросов авторизации. Подождите несколько минут и повторите попытку.",
       },
       { status: 429 }
     );
@@ -72,7 +72,7 @@ export async function POST() {
 
   if (error || !data.properties?.hashed_token) {
     return NextResponse.json(
-      { error: "Failed to authorize the companion app" },
+      { error: "Не удалось авторизовать сопутствующее приложение" },
       { status: 500 }
     );
   }

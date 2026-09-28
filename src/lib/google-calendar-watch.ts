@@ -53,7 +53,7 @@ export function calendarWebhookUrl(requestUrl: string) {
   const url = new URL(configured || absoluteAppUrl(requestUrl, WEBHOOK_PATH));
 
   if (url.protocol !== "https:") {
-    throw new Error("Google Calendar webhook URL must use HTTPS");
+    throw new Error("URL вебхука Google Календаря должен использовать HTTPS");
   }
 
   return url.toString();
@@ -143,7 +143,7 @@ export async function createOrRenewCalendarWatchChannel({
       .from("google_calendar_watch_channels")
       .update({
         status: "failed",
-        error_message: err instanceof Error ? err.message : "Calendar watch failed",
+        error_message: err instanceof Error ? err.message : "Сбой отслеживания календаря",
       })
       .eq("id", pending.id);
     throw err;

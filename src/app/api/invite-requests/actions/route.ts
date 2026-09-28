@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = actionSchema.safeParse(body);
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
 
   const user = await requireUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const loaded = await loadInviteRequestFromToken(parsed.data.token);

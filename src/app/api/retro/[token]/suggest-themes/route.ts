@@ -30,17 +30,17 @@ export async function POST(
 
   const cfg = await getInstanceConfigMap(["retro_enabled"]);
   if (cfg.retro_enabled !== "true") {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ error: "Не найдено" }, { status: 404 });
   }
 
   if (!(await hasAiConfigured())) {
-    return NextResponse.json({ error: "AI theme suggestions are not configured" }, { status: 503 });
+    return NextResponse.json({ error: "Подбор тем с помощью ИИ не настроен" }, { status: 503 });
   }
 
   const now = Date.now();
   const prev = lastCall.get(token) ?? 0;
   if (now - prev < 5000) {
-    return NextResponse.json({ error: "Slow down" }, { status: 429 });
+    return NextResponse.json({ error: "Не спешите" }, { status: 429 });
   }
   lastCall.set(token, now);
 
@@ -51,7 +51,7 @@ export async function POST(
     .eq("token", token)
     .single();
   if (!board) {
-    return NextResponse.json({ error: "Board not found" }, { status: 404 });
+    return NextResponse.json({ error: "Доска не найдена" }, { status: 404 });
   }
 
   if (isFeatureGatingEnabled()) {
@@ -63,13 +63,13 @@ export async function POST(
         .single();
       if (!ownerProfile?.has_full_access) {
         return NextResponse.json(
-          { error: "AI features aren.t enabled for this account.", code: "FEATURE_UNAVAILABLE" },
+          { error: "Функции ИИ отключены для этого аккаунта.", code: "FEATURE_UNAVAILABLE" },
           { status: 403 }
         );
       }
     } else {
       return NextResponse.json(
-        { error: "AI features aren.t enabled for this account.", code: "FEATURE_UNAVAILABLE" },
+        { error: "Функции ИИ отключены для этого аккаунта.", code: "FEATURE_UNAVAILABLE" },
         { status: 403 }
       );
     }
@@ -84,8 +84,8 @@ export async function POST(
   }
 
   const prompt = [
-    "Group these retrospective cards into 0-5 themes of clearly related cards.",
-    "Only group cards that genuinely belong together; leave unrelated cards out.",
+    "Сгруппируйте карточки ретроспективы по темам (до 5 со схожим содержанием).",
+    "Группируйте только связанные карточки; не объединяйте несвязанные.",
     'Return JSON: { "groups": [ { "label": "short theme", "card_ids": ["id", "id"] } ] }.',
     "",
     "Cards:",

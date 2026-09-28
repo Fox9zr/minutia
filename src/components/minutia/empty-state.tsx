@@ -16,21 +16,21 @@ const config: Record<
   { message: string; sub?: string; cta?: string }
 > = {
   "no-series": {
-    message: "Every good log starts with one meeting.",
-    sub: "Create a series to start tracking what matters.",
-    cta: "Create your first series",
+    message: "Ведение записей начинается с первой встречи.",
+    sub: "Создайте серию, чтобы отслеживать главное.",
+    cta: "Создайте первую серию",
   },
   "no-issues": {
-    message: "Nothing outstanding.",
-    sub: "Enjoy the quiet.",
+    message: "Нет невыполненных задач.",
+    sub: "Наслаждайтесь тишиной.",
   },
   "no-actions": {
-    message: "You owe nobody anything right now.",
-    sub: "Keep it that way.",
+    message: "У вас нет текущих задолженностей.",
+    sub: "Оставить без изменений.",
   },
   "no-meetings": {
-    message: "No meetings yet.",
-    sub: "Start your first one above.",
+    message: "Встреч пока нет.",
+    sub: "Создайте первую выше.",
   },
 };
 

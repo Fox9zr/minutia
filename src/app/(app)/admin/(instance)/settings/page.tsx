@@ -147,7 +147,7 @@ export default function AdminSettingsPage() {
     if (Object.keys(changed).length === 0) {
       setSaving(false);
       setSaveState("success");
-      setSaveMessage("No changes to save.");
+      setSaveMessage("Нет изменений для сохранения.");
       return;
     }
 
@@ -161,7 +161,7 @@ export default function AdminSettingsPage() {
 
     if (!res.ok) {
       setSaveState("error");
-      setSaveMessage(data.error || "Failed to save settings.");
+      setSaveMessage(data.error || "Не удалось сохранить настройки.");
       return;
     }
 
@@ -175,7 +175,7 @@ export default function AdminSettingsPage() {
       setAiKeyConfigured(true);
     }
     setSaveState("success");
-    setSaveMessage("Settings saved.");
+    setSaveMessage("Настройки сохранены.");
   }
 
   async function handleRetroToggle() {
@@ -195,10 +195,10 @@ export default function AdminSettingsPage() {
     if (!res.ok) {
       setRetroEnabled(!next);
       setRetroMessageState("error");
-      setRetroMessage(data.error || "Failed to update setting.");
+      setRetroMessage(data.error || "Не удалось обновить настройку.");
     } else {
       setRetroMessageState("success");
-      setRetroMessage(next ? "Retro boards enabled." : "Retro boards disabled.");
+      setRetroMessage(next ? "Доски ретроспективы включены." : "Доски ретроспективы отключены.");
     }
   }
 
@@ -220,13 +220,13 @@ export default function AdminSettingsPage() {
     if (!res.ok) {
       setAudioRetention(previous);
       setRetentionMessageState("error");
-      setRetentionMessage(data.error || "Failed to update setting.");
+      setRetentionMessage(data.error || "Не удалось обновить настройку.");
     } else {
       setRetentionMessageState("success");
       setRetentionMessage(
         next === "discard_after_transcript"
-          ? "Audio will be discarded after transcription."
-          : "Audio will be kept forever."
+          ? "Аудиозапись будет удалена после транскрибации."
+          : "Аудиозапись будет сохранена бессрочно."
       );
     }
   }
@@ -245,17 +245,17 @@ export default function AdminSettingsPage() {
 
     if (!res.ok || !data.success) {
       setTestMessageState("error");
-      setTestMessage(data.error || "Failed to send test email.");
+      setTestMessage(data.error || "Не удалось отправить тестовое письмо.");
       return;
     }
     setTestMessageState("success");
-    setTestMessage(data.message || "Test email sent.");
+    setTestMessage(data.message || "Тестовое письмо отправлено.");
   }
 
   async function handleAiTest() {
     if (!aiKey && !aiKeyConfigured) {
       setAiTestMessageState("error");
-      setAiTestMessage("Enter an API key to test.");
+      setAiTestMessage("Введите ключ API для проверки.");
       return;
     }
     setAiTestState("sending");
@@ -280,11 +280,11 @@ export default function AdminSettingsPage() {
 
     if (!res.ok || !data.ok) {
       setAiTestMessageState("error");
-      setAiTestMessage(data.error || "Connection test failed.");
+      setAiTestMessage(data.error || "Ошибка проверки подключения.");
       return;
     }
     setAiTestMessageState("success");
-    setAiTestMessage("Connection successful.");
+    setAiTestMessage("Подключение успешно.");
   }
 
   async function handleUpgrade() {
@@ -295,7 +295,7 @@ export default function AdminSettingsPage() {
     // On success the browser navigates away; only reset on failure.
     if (!ok) {
       setUpgradeLoading(false);
-      setUpgradeMessage("Upgrades are not available yet.");
+      setUpgradeMessage("Смена тарифа пока недоступна.");
     }
   }
 
@@ -353,7 +353,7 @@ export default function AdminSettingsPage() {
               disabled={upgradeLoading}
               onClick={handleUpgrade}
             >
-              {upgradeLoading ? "Starting..." : "Upgrade to Pro"}
+              {upgradeLoading ? "Starting..." : "Перейти на Pro"}
             </Button>
             {upgradeMessage && (
               <p className="mt-2 text-xs text-ink-3">{upgradeMessage}</p>
@@ -405,7 +405,7 @@ export default function AdminSettingsPage() {
                 <Input
                   id="smtp_pass"
                   type="password"
-                  placeholder={smtpPassConfigured ? "configured (leave blank to keep)" : "Enter a password"}
+                  placeholder={smtpPassConfigured ? "configured (leave blank to keep)" : "Введите пароль"}
                   value={smtpPass}
                   onChange={(e) => setSmtpPass(e.target.value)}
                 />
@@ -429,7 +429,7 @@ export default function AdminSettingsPage() {
                 disabled={testState === "sending"}
                 onClick={handleTestEmail}
               >
-                {testState === "sending" ? "Sending..." : "Send test email"}
+                {testState === "sending" ? "Sending..." : "Отправить тестовое письмо"}
               </Button>
               {testMessage && (
                 <p className={cn("text-xs", testMessageState === "error" ? "text-danger" : "text-success")}>
@@ -499,7 +499,7 @@ export default function AdminSettingsPage() {
                   id="ai_api_key"
                   type="password"
                   placeholder={
-                    aiKeyConfigured ? "configured (leave blank to keep)" : "Enter an API key"
+                    aiKeyConfigured ? "configured (leave blank to keep)" : "Введите ключ API"
                   }
                   value={aiKey}
                   onChange={(e) => setAiKey(e.target.value)}
@@ -544,7 +544,7 @@ export default function AdminSettingsPage() {
                 disabled={aiTestState === "sending"}
                 onClick={handleAiTest}
               >
-                {aiTestState === "sending" ? "Testing..." : "Test connection"}
+                {aiTestState === "sending" ? "Testing..." : "Проверить соединение"}
               </Button>
               {aiTestMessage && (
                 <p
@@ -704,7 +704,7 @@ export default function AdminSettingsPage() {
 
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" size="sm" disabled={saving} onClick={handleSave}>
-          {saving ? "Saving..." : "Save changes"}
+          {saving ? "Saving..." : "Сохранить изменения"}
         </Button>
         {saveMessage && (
           <p className={cn("text-xs", saveState === "error" ? "text-danger" : "text-success")}>

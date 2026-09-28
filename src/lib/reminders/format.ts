@@ -3,7 +3,7 @@ import { renderEmailLayout } from "@/lib/email-layout";
 import type { Issue } from "@/lib/types";
 import type { OwnerReminder, ReminderContext } from "./gather";
 
-export const MINUTIA_BRANDING = "Sent via Minutia";
+export const MINUTIA_BRANDING = "Отправлено через Minutia";
 
 function ownerLabel(owner: OwnerReminder): string {
   return owner.ownerName?.trim() || "Unassigned";

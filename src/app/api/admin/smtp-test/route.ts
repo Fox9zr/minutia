@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
     await transport.sendMail({
       from: `Minutia <${smtp.from}>`,
       to,
-      subject: "Minutia SMTP Test",
+      subject: "Тест SMTP Minutia",
       text: "Your SMTP configuration is working correctly. This is a test email from your Minutia instance.",
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px;">
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       message: `Test email sent to ${to}`,
     });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown SMTP error";
+    const message = err instanceof Error ? err.message : "Неизвестная ошибка SMTP";
     return NextResponse.json(
       { success: false, error: message },
       { status: 500 }

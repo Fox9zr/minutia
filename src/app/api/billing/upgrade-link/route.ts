@@ -10,7 +10,7 @@ export async function POST() {
   const checkoutUrl = process.env.UPGRADE_CHECKOUT_URL;
   // Dormant on OSS self-host: the feature simply does not exist unless configured.
   if (!secret || !checkoutUrl) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ error: "Не найдено" }, { status: 404 });
   }
 
   const supabase = await createClient();
@@ -18,7 +18,7 @@ export async function POST() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const { data: profile, error } = await supabase
@@ -27,7 +27,7 @@ export async function POST() {
     .eq("id", user.id)
     .single<{ current_organization_id: string | null; email: string | null }>();
   if (error || !profile?.current_organization_id) {
-    return NextResponse.json({ error: "Workspace required" }, { status: 409 });
+    return NextResponse.json({ error: "Требуется рабочее пространство" }, { status: 409 });
   }
 
   const { data: org } = await supabase
@@ -39,7 +39,7 @@ export async function POST() {
   const ticket = mintUpgradeTicket({
     userId: user.id,
     organizationId: profile.current_organization_id,
-    organizationName: org?.name ?? "My workspace",
+    organizationName: org?.name ?? "Мое рабочее пространство",
     email: profile.email ?? user.email ?? "",
     secret,
   });
@@ -53,7 +53,7 @@ export async function POST() {
   });
   const url = extractCheckoutUrl(res.ok, await res.json().catch(() => null));
   if (!url) {
-    return NextResponse.json({ error: "Checkout unavailable" }, { status: 502 });
+    return NextResponse.json({ error: "Оформление недоступно" }, { status: 502 });
   }
   return NextResponse.json({ url });
 }

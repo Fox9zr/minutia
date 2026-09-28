@@ -118,7 +118,7 @@ export async function sendTranscription({
     const aborted = error instanceof Error && error.name === "AbortError";
     throw new TranscriptionError(
       aborted ? "timeout" : "provider_error",
-      aborted ? `Transcription timed out after ${timeoutMs}ms` : "Transcription request failed",
+      aborted ? `Transcription timed out after ${timeoutMs}ms` : "Ошибка запроса на транскрипцию",
       { provider, cause: error }
     );
   } finally {
@@ -140,7 +140,7 @@ export async function sendTranscription({
   try {
     data = await response.json();
   } catch (error) {
-    throw new TranscriptionError("provider_error", "Transcription provider returned invalid JSON", {
+    throw new TranscriptionError("provider_error", "Провайдер транскрипции вернул некорректный JSON", {
       provider,
       cause: error,
     });
@@ -148,7 +148,7 @@ export async function sendTranscription({
 
   const record = (data ?? {}) as Record<string, unknown>;
   if (typeof record.text !== "string") {
-    throw new TranscriptionError("provider_error", "Transcription response missing text", { provider });
+    throw new TranscriptionError("provider_error", "В ответе транскрипции отсутствует текст", { provider });
   }
 
   const durationSeconds = getDuration

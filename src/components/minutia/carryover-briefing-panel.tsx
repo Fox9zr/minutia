@@ -45,12 +45,12 @@ export function CarryoverBriefingPanel({
       });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
-        setError(payload.error ?? "Carry-over briefing could not be generated.");
+        setError(payload.error ?? "Не удалось сформировать сводку по перенесенным задачам.");
         return;
       }
       setBriefing(payload as Briefing);
     } catch {
-      setError("Carry-over briefing could not be generated.");
+      setError("Не удалось сформировать сводку по перенесенным задачам.");
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,7 @@ export function CarryoverBriefingPanel({
         {!briefing && (
           <Button size="sm" variant="outline" onClick={handleGenerate} disabled={loading}>
             {loading ? <Loader2 className="size-4 animate-spin" /> : <Sparkles className="size-4" />}
-            {loading ? "Generating" : "Generate briefing"}
+            {loading ? "Generating" : "Сформировать брифинг"}
           </Button>
         )}
       </div>

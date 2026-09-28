@@ -59,7 +59,7 @@ export async function POST(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const { data: series } = await supabase
@@ -69,7 +69,7 @@ export async function POST(
     .single();
 
   if (!series) {
-    return NextResponse.json({ error: "Series not found" }, { status: 404 });
+    return NextResponse.json({ error: "Серия не найдена" }, { status: 404 });
   }
 
   const admin = createServiceRoleClient();
@@ -88,7 +88,7 @@ export async function POST(
 
   if (!canManage) {
     return NextResponse.json(
-      { error: "Only series owners and facilitators can send briefs." },
+      { error: "Только владельцы и ведущие серии могут отправлять брифы." },
       { status: 403 }
     );
   }
@@ -165,7 +165,7 @@ export async function POST(
       sent += 1;
     }
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Failed to send brief";
+    const message = err instanceof Error ? err.message : "Не удалось отправить бриф";
     if (sent === 0 && isEmailUnconfigured(message)) {
       return NextResponse.json({ error: "email_unconfigured", guestUrl }, { status: 409 });
     }

@@ -25,7 +25,7 @@ export async function getValidAccessToken(userId: string): Promise<string> {
     .eq("user_id", userId)
     .single();
 
-  if (error || !data) throw new Error("Google account not connected");
+  if (error || !data) throw new Error("Аккаунт Google не подключен");
 
   const expiry = new Date(data.token_expiry);
   const needsRefresh = expiry.getTime() < Date.now() + 5 * 60 * 1000;
@@ -121,7 +121,7 @@ export type GoogleCalendarWatchResponse = {
 
 export class GoogleCalendarSyncExpiredError extends Error {
   constructor() {
-    super("Google Calendar sync state expired");
+    super("Истек срок действия синхронизации Google Календаря");
     this.name = "GoogleCalendarSyncExpiredError";
   }
 }
@@ -204,7 +204,7 @@ export async function listAgendaEvents({
     showDeleted: "false",
   });
 
-  return fetchCalendarEvents(accessToken, calendarId, params, "Agenda fetch failed");
+  return fetchCalendarEvents(accessToken, calendarId, params, "Не удалось загрузить повестку");
 }
 
 export async function listAgendaEventChanges({
@@ -225,7 +225,7 @@ export async function listAgendaEventChanges({
     showDeleted: "true",
   });
 
-  return fetchCalendarEvents(accessToken, calendarId, params, "Agenda change fetch failed");
+  return fetchCalendarEvents(accessToken, calendarId, params, "Не удалось получить изменения повестки");
 }
 
 export async function watchCalendarEvents({
@@ -264,7 +264,7 @@ export async function watchCalendarEvents({
   if (!res.ok) throw new Error(`Calendar watch failed: ${res.status}`);
   const data = (await res.json()) as Partial<GoogleCalendarWatchResponse>;
   if (!data.id || !data.resourceId || !data.resourceUri) {
-    throw new Error("Calendar watch response missing channel fields");
+    throw new Error("В ответе подписки на календарь отсутствуют поля канала");
   }
 
   return {

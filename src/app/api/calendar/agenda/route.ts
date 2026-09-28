@@ -6,7 +6,7 @@ export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const { data: profile, error: profileError } = await supabase
@@ -16,7 +16,7 @@ export async function GET() {
     .single<{ current_organization_id: string | null }>();
 
   if (profileError || !profile?.current_organization_id) {
-    return NextResponse.json({ error: "Workspace required" }, { status: 409 });
+    return NextResponse.json({ error: "Требуется рабочее пространство" }, { status: 409 });
   }
 
   try {
@@ -27,7 +27,7 @@ export async function GET() {
     });
     return NextResponse.json(agenda);
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Calendar agenda failed";
+    const message = err instanceof Error ? err.message : "Сбой загрузки повестки календаря";
     return NextResponse.json({ error: message }, { status: 400 });
   }
 }

@@ -13,7 +13,7 @@ type HealthReport = {
 
 async function fetchHealth(): Promise<HealthReport> {
   const res = await fetch("/api/admin/health");
-  if (!res.ok) throw new Error("Failed to load health");
+  if (!res.ok) throw new Error("Не удалось загрузить состояние системы");
   return res.json();
 }
 

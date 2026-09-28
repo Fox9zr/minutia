@@ -7,7 +7,7 @@ import { hasAiConfigured } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
 
 const PROMPT_VERSION = "ask-series-v1";
-const SYSTEM_PROMPT = "You answer from cited meeting memory only. Return valid JSON only.";
+const SYSTEM_PROMPT = "Отвечайте только на основе предоставленных материалов встречи. Возвращайте только корректный JSON.";
 
 const requestSchema = z.object({
   question: z.string().trim().min(1).max(1000),
@@ -44,11 +44,11 @@ function buildPrompt(input: {
   }>;
 }) {
   return [
-    "Answer questions about one Minutia recurring meeting series.",
-    "Return strict JSON with answer, citations, and unsupported.",
-    "Citations must reference only source ids present in the provided context.",
+    "Ответы на вопросы по повторяющейся серии встреч Minutia.",
+    "Верните строгий JSON с полями answer, citations и unsupported.",
+    "Ссылки должны указывать только на ID источников из предоставленного контекста.",
     "If the context does not prove the answer, set unsupported true, answer exactly: The source context does not prove the answer., and return no citations.",
-    "Keep answers concise and accountability-focused.",
+    "Формулируйте ответы кратко и с упором на зоны ответственности.",
     "",
     `Question: ${input.question}`,
     "",
@@ -77,7 +77,7 @@ export async function POST(
   try {
     body = requestSchema.parse(await request.json());
   } catch {
-    return NextResponse.json({ error: "Invalid request body", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело запроса", request_id: requestId }, { status: 400 });
   }
 
   const aiDenied = await requireAiAccess();
@@ -93,12 +93,12 @@ export async function POST(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated", request_id: requestId }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован", request_id: requestId }, { status: 401 });
   }
 
   if (!(await hasAiConfigured())) {
     return NextResponse.json(
-      { error: "Ask this series is not configured.", request_id: requestId },
+      { error: "Функция «Спросить о серии» не настроена.", request_id: requestId },
       { status: 503 }
     );
   }
@@ -109,7 +109,7 @@ export async function POST(
     .eq("id", seriesId)
     .single();
   if (seriesError || !series) {
-    return NextResponse.json({ error: "Series not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Серия не найдена", request_id: requestId }, { status: 404 });
   }
 
   const [{ data: meetings, error: meetingsError }, { data: issues, error: issuesError }, { data: decisions, error: decisionsError }] =
@@ -136,7 +136,7 @@ export async function POST(
 
   if (meetingsError || issuesError || decisionsError) {
     return NextResponse.json(
-      { error: "Failed to load series context.", request_id: requestId },
+      { error: "Не удалось загрузить контекст серии.", request_id: requestId },
       { status: 500 }
     );
   }
@@ -155,7 +155,7 @@ export async function POST(
     ({ data: providerData, model } = await callAi({ system: SYSTEM_PROMPT, prompt }));
   } catch {
     return NextResponse.json(
-      { error: "AI provider request failed.", request_id: requestId },
+      { error: "Сбой запроса к провайдеру ИИ.", request_id: requestId },
       { status: 502 }
     );
   }
@@ -182,7 +182,7 @@ export async function POST(
     });
   } catch {
     return NextResponse.json(
-      { error: "AI provider returned an invalid answer.", request_id: requestId },
+      { error: "Провайдер ИИ вернул некорректный ответ.", request_id: requestId },
       { status: 502 }
     );
   }

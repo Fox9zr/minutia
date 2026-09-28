@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
   if (!existingAdmins || existingAdmins.length === 0) {
     return NextResponse.json(
-      { error: "Cannot complete setup without an admin account" },
+      { error: "Невозможно завершить настройку без аккаунта администратора" },
       { status: 400 }
     );
   }

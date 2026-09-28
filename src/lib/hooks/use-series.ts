@@ -39,7 +39,7 @@ export function useSeries(enabled = true) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const { data, error } = await supabase
         .from("meeting_series")
@@ -100,7 +100,7 @@ export function useSeriesParticipantRole(seriesId: string) {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const { data, error } = await supabase
         .from("series_participants")
@@ -173,7 +173,7 @@ export function useCreateSeries() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const { data: profile, error: profileError } = await supabase
         .from("profiles")

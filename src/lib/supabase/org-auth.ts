@@ -12,7 +12,7 @@ export async function requireCurrentOrgAdmin(): Promise<OrgAdminResult> {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return { authorized: false, status: 401, error: "Not authenticated" };
+    return { authorized: false, status: 401, error: "Не авторизован" };
   }
 
   const serviceClient = createServiceRoleClient();
@@ -24,7 +24,7 @@ export async function requireCurrentOrgAdmin(): Promise<OrgAdminResult> {
 
   const organizationId = profile?.current_organization_id;
   if (!organizationId) {
-    return { authorized: false, status: 403, error: "No active organization" };
+    return { authorized: false, status: 403, error: "Нет активной организации" };
   }
 
   const { data: membership } = await serviceClient
@@ -36,7 +36,7 @@ export async function requireCurrentOrgAdmin(): Promise<OrgAdminResult> {
 
   const isInstanceAdmin = profile?.role === "admin";
   if (membership?.role !== "admin" && !isInstanceAdmin) {
-    return { authorized: false, status: 403, error: "Organization admin access required" };
+    return { authorized: false, status: 403, error: "Требуются права администратора организации" };
   }
 
   return { authorized: true, userId: user.id, organizationId };

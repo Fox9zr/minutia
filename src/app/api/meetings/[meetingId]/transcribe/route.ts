@@ -105,12 +105,12 @@ export async function POST(
     .single();
 
   if (meetingError || !meeting) {
-    return NextResponse.json({ error: "Meeting not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
 
   if (!meeting.audio_file_path) {
     return NextResponse.json(
-      { error: "No audio recording found for this meeting.", request_id: requestId },
+      { error: "Аудиозапись этой встречи не найдена.", request_id: requestId },
       { status: 400 }
     );
   }
@@ -119,7 +119,7 @@ export async function POST(
   // config. Stale runs fall through to be reclaimed by the atomic claim below.
   if (meeting.transcription_status === "processing" && isFreshRun(meeting.transcription_started_at)) {
     return NextResponse.json(
-      { error: "Transcription is already in progress.", request_id: requestId },
+      { error: "Транскрипция уже выполняется.", request_id: requestId },
       { status: 409 }
     );
   }
@@ -128,7 +128,7 @@ export async function POST(
   // instance never leaves a meeting stuck mid-transcription.
   if (!isTranscriptionConfigured()) {
     return NextResponse.json(
-      { error: "Transcription is not configured.", code: "TRANSCRIPTION_UNCONFIGURED", request_id: requestId },
+      { error: "Транскрипция не настроена.", code: "TRANSCRIPTION_UNCONFIGURED", request_id: requestId },
       { status: 503 }
     );
   }
@@ -141,13 +141,13 @@ export async function POST(
 
   if (claimError) {
     return NextResponse.json(
-      { error: "Could not start transcription.", request_id: requestId },
+      { error: "Не удалось запустить расшифровку.", request_id: requestId },
       { status: 500 }
     );
   }
   if (!claimed) {
     return NextResponse.json(
-      { error: "Transcription is already in progress.", request_id: requestId },
+      { error: "Транскрипция уже выполняется.", request_id: requestId },
       { status: 409 }
     );
   }
@@ -176,7 +176,7 @@ export async function POST(
     if (downloadError || !audioData) {
       await markFailed();
       return NextResponse.json(
-        { error: "Could not read the meeting recording.", request_id: requestId },
+        { error: "Не удалось прочитать запись встречи.", request_id: requestId },
         { status: 502 }
       );
     }
@@ -371,7 +371,7 @@ export async function POST(
     if (updateError) {
       await markFailed();
       return NextResponse.json(
-        { error: "Transcription completed but could not be saved.", request_id: requestId },
+        { error: "Транскрипция завершена, но сохранить ее не удалось.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -456,12 +456,12 @@ export async function POST(
     await markFailed();
     if (error instanceof TranscriptionError) {
       return NextResponse.json(
-        { error: "Transcription failed.", code: error.code, request_id: requestId },
+        { error: "Сбой транскрипции.", code: error.code, request_id: requestId },
         { status: statusForCode(error.code) }
       );
     }
     return NextResponse.json(
-      { error: "Transcription failed.", request_id: requestId },
+      { error: "Сбой транскрипции.", request_id: requestId },
       { status: 500 }
     );
   }

@@ -431,7 +431,7 @@ function StepCreateSeries({
           disabled={!seriesName.trim() || isPending}
           className="flex-1 h-11 rounded-xl"
         >
-          {isPending ? "Creating..." : "Create series"}
+          {isPending ? "Creating..." : "Создать серию"}
           {!isPending && <ArrowRight className="size-4 ml-1" />}
         </Button>
       </div>
@@ -446,21 +446,21 @@ function StepCreateSeries({
 const features = [
   {
     title: "Доска OIL",
-    desc: "Your dashboard for all outstanding issues across every series.",
+    desc: "Ваш дашборд всех нерешенных вопросов по всем сериям встреч.",
     shortcut: "J/K",
   },
   {
     title: "Запись в реальном времени",
-    desc: "Start a meeting and raise issues in real-time with type prefixes.",
+    desc: "Начните встречу и фиксируйте вопросы в реальном времени с префиксами типов.",
     shortcut: "N",
   },
   {
     title: "Бриф перед встречей",
-    desc: "Auto-generated summary of pending items before your next meeting.",
+    desc: "Автоматическая сводка открытых задач перед следующей встречей.",
   },
   {
     title: "Управление с клавиатуры",
-    desc: "Navigate, update status, and add items without touching the mouse.",
+    desc: "Перемещайтесь, меняйте статус и добавляйте пункты без мыши.",
     shortcut: "?",
   },
 ];
@@ -519,7 +519,7 @@ function StepTour({
         disabled={isPending}
         className="w-full h-11 rounded-xl"
       >
-        {isPending ? "Getting ready..." : "Start tracking"}
+        {isPending ? "Подготовка..." : "Начать отслеживание"}
         {!isPending && <Sparkles className="size-4 ml-1" />}
       </Button>
     </div>

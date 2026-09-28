@@ -42,5 +42,5 @@ export function rejectCrossOrigin(request: NextRequest) {
 
   return allowedOrigins.has(origin)
     ? null
-    : NextResponse.json({ error: "Cross-origin requests are not allowed" }, { status: 403 });
+    : NextResponse.json({ error: "Кросс-доменные запросы запрещены" }, { status: 403 });
 }

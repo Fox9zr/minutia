@@ -162,7 +162,7 @@ export function useStartOrJoinMeeting() {
       if (error) throw error;
 
       const meeting = Array.isArray(data) ? data[0] : data;
-      if (!meeting) throw new Error("Meeting was not returned");
+      if (!meeting) throw new Error("Данные о встрече не получены");
       return meeting as Meeting;
     },
     onSuccess: (data) => {
@@ -461,7 +461,7 @@ export function useUpdateSpeakerMap() {
         body: JSON.stringify({ speaker, attendee }),
       });
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(payload.error ?? "Could not update the speaker.");
+      if (!response.ok) throw new Error(payload.error ?? "Не удалось обновить спикера.");
       return payload as { speaker_map: Record<string, string | null>; transcript_raw: string };
     },
     onSuccess: (_data, variables) => {
@@ -469,7 +469,7 @@ export function useUpdateSpeakerMap() {
         queryKey: meetingKeys.detail(variables.meetingId),
       });
     },
-    meta: { successMessage: "Speaker renamed." },
+    meta: { successMessage: "Спикер переименован." },
   });
 }
 

@@ -16,7 +16,7 @@ export async function* streamAi(input: {
   config?: AiConfig | null;
 }): AsyncGenerator<string> {
   const config = input.config ?? (await getAiConfig());
-  if (!config) throw new AiNotConfiguredError("AI is not configured.");
+  if (!config) throw new AiNotConfiguredError("ИИ не настроен.");
   const timeoutMs = input.timeoutMs ?? 60_000;
 
   if (config.provider === "openai-compatible") {

@@ -84,7 +84,7 @@ export function verifyInviteRequestActionToken(token: string) {
 
 export async function loadInviteRequestFromToken(token: string) {
   const payload = verifyInviteRequestActionToken(token);
-  if (!payload) return { error: "Invalid or expired request link" as const };
+  if (!payload) return { error: "Ссылка недействительна или срок ее действия истек" as const };
 
   const supabase = createServiceRoleClient();
   const { data, error } = await supabase
@@ -93,12 +93,12 @@ export async function loadInviteRequestFromToken(token: string) {
     .eq("id", payload.requestId)
     .maybeSingle();
 
-  if (error || !data) return { error: "Invite request not found" as const };
+  if (error || !data) return { error: "Запрос на приглашение не найден" as const };
   if (data.email.toLowerCase() !== payload.email.toLowerCase()) {
-    return { error: "Invite request does not match this link" as const };
+    return { error: "Запрос на приглашение не соответствует этой ссылке" as const };
   }
   if ((data.organization_id ?? null) !== payload.organizationId) {
-    return { error: "Invite request does not match this workspace" as const };
+    return { error: "Запрос на приглашение не относится к этому рабочему пространству" as const };
   }
 
   return { request: data as InviteRequestRecord };
@@ -124,7 +124,7 @@ export async function resolveInviteRequestAdminContext(
     return {
       authorized: false,
       status: 403,
-      error: "No workspace selected for this request",
+      error: "Для этого запроса не выбрано рабочее пространство",
     };
   }
 
@@ -146,7 +146,7 @@ export async function resolveInviteRequestAdminContext(
     return {
       authorized: false,
       status: 403,
-      error: "Workspace admin access required",
+      error: "Требуются права администратора рабочего пространства",
     };
   }
 
@@ -154,7 +154,7 @@ export async function resolveInviteRequestAdminContext(
     return {
       authorized: false,
       status: 404,
-      error: "Workspace not found",
+      error: "Рабочее пространство не найдено",
     };
   }
 

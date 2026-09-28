@@ -12,7 +12,7 @@ interface SyncIndicatorProps {
 const statusLabels: Record<SyncIndicatorProps["status"], string> = {
   synced: "Synced",
   syncing: "Syncing",
-  offline: "Offline, buffering changes",
+  offline: "Нет сети, изменения сохраняются локально",
 };
 
 export function SyncIndicator({ status, pendingCount = 0 }: SyncIndicatorProps) {

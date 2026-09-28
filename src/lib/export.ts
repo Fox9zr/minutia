@@ -3,7 +3,7 @@ import { formatIssueKey } from "@/lib/issue-utils";
 
 function issueToCsvRow(issue: Issue): Record<string, string> {
   return {
-    "Issue Key": formatIssueKey(issue),
+    "Ключ задачи": formatIssueKey(issue),
     Title: issue.title,
     Description: issue.description ?? "",
     Category: issue.category,
@@ -11,7 +11,7 @@ function issueToCsvRow(issue: Issue): Record<string, string> {
     Priority: issue.priority,
     Owner: issue.owner_name ?? "",
     "Due Date": issue.due_date ? String(issue.due_date) : "",
-    "Created At": String(issue.created_at),
+    "Дата создания": String(issue.created_at),
   };
 }
 

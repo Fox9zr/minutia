@@ -7,7 +7,7 @@ const DIRECTORY_SOURCES = [
 
 export class GoogleDirectoryPermissionError extends Error {
   constructor() {
-    super("Google Workspace directory access was not granted");
+    super("Доступ к каталогу Google Workspace не был предоставлен");
     this.name = "GoogleDirectoryPermissionError";
   }
 }

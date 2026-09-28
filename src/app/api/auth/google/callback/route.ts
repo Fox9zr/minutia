@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
         : GOOGLE_WORKSPACE_SCOPES.split(" ")
     );
   } catch (err) {
-    console.error("Failed to store Google tokens:", err);
+    console.error("Не удалось сохранить токены Google:", err);
     return redirectToSettings(request, "/settings?gcal=error&reason=store_failed");
   }
 

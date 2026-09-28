@@ -21,14 +21,14 @@ export async function POST(request: NextRequest) {
 
   if (setupError) {
     return NextResponse.json(
-      { error: "Failed to check setup status" },
+      { error: "Не удалось проверить статус настройки" },
       { status: 500 }
     );
   }
 
   if (setupConfig?.value === "true") {
     return NextResponse.json(
-      { error: "Setup is already complete" },
+      { error: "Настройка уже завершена" },
       { status: 409 }
     );
   }
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (!admin) {
-    return NextResponse.json({ error: "No admin user found" }, { status: 400 });
+    return NextResponse.json({ error: "Администратор не найден" }, { status: 400 });
   }
 
   const ownerId = admin.id;
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
     .from("meeting_series")
     .insert({
       owner_id: ownerId,
-      name: "Weekly Vendor Sync",
+      name: "Еженедельная синхронизация с подрядчиками",
       description: "Пример серии встреч с демо-задачами для ознакомления с Minutia.",
       cadence: "weekly",
       default_attendees: ["alice@partner.co", "bob@vendor.io"],
@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (seriesError || !series) {
-    return NextResponse.json({ error: seriesError?.message || "Failed to create series" }, { status: 500 });
+    return NextResponse.json({ error: seriesError?.message || "Не удалось создать серию" }, { status: 500 });
   }
 
   const today = new Date();
@@ -74,14 +74,14 @@ export async function POST(request: NextRequest) {
       date: lastWeek.toISOString(),
       status: "completed",
       attendees: ["alice@partner.co", "bob@vendor.io"],
-      notes_markdown: "First sync. Identified key blockers and assigned owners.",
+      notes_markdown: "Первая синхронизация. Выявлены ключевые блокеры и назначены ответственные.",
       completed_at: lastWeek.toISOString(),
     })
     .select()
     .single();
 
   if (meetingError || !meeting) {
-    return NextResponse.json({ error: meetingError?.message || "Failed to create meeting" }, { status: 500 });
+    return NextResponse.json({ error: meetingError?.message || "Не удалось создать встречу" }, { status: 500 });
   }
 
   const demoIssues = [

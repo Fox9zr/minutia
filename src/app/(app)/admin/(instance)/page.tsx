@@ -17,7 +17,7 @@ type Overview = {
 
 async function fetchOverview(): Promise<Overview> {
   const res = await fetch("/api/admin/overview");
-  if (!res.ok) throw new Error("Failed to load overview");
+  if (!res.ok) throw new Error("Не удалось загрузить сводку");
   return res.json();
 }
 

@@ -115,7 +115,7 @@ export async function sendMail(message: MailMessage) {
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      throw new Error(data?.message || data?.error?.message || "Resend delivery failed");
+      throw new Error(data?.message || data?.error?.message || "Не удалось отправить повторно");
     }
 
     return;

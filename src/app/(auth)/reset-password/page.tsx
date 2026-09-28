@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 type FormState = "idle" | "loading" | "success" | "error";
 
 const RESET_LINK_ERROR =
-  "Password reset link missing or expired. Request a new reset email.";
+  "Ссылка для сброса пароля отсутствует или устарела. Запросите новое письмо.";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
@@ -100,7 +100,7 @@ export default function ResetPasswordPage() {
     setFormState("success");
     setPassword("");
     setPasswordConfirm("");
-    setMessage("Password updated. Sign in with your new password.");
+    setMessage("Пароль обновлен. Войдите с новым паролем.");
   }
 
   return (

@@ -115,7 +115,7 @@ function ActionRow({
     >
       <button
         type="button"
-        aria-label={done ? "Completed" : "Mark done"}
+        aria-label={done ? "Completed" : "Отметить выполненным"}
         disabled={checked}
         onClick={() => {
           if (checked) return;

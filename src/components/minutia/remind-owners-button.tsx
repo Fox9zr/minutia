@@ -44,10 +44,10 @@ export function RemindOwnersButton({ seriesId }: RemindOwnersButtonProps) {
 
       if (!res.ok) {
         if (res.status === 400) {
-          flash("done", "Nothing to remind");
+          flash("done", "Нет тем для напоминания");
           return;
         }
-        flash("error", "Could not send");
+        flash("error", "Не удалось отправить");
         return;
       }
 
@@ -62,7 +62,7 @@ export function RemindOwnersButton({ seriesId }: RemindOwnersButtonProps) {
         flash("done", `Sent to ${data.ownerCount} owners via ${data.channel}`);
       }
     } catch {
-      flash("error", "Could not send");
+      flash("error", "Не удалось отправить");
     }
   }
 

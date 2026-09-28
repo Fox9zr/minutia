@@ -40,7 +40,7 @@ async function aaiFetch(
 ): Promise<Response> {
   const remaining = deadline - Date.now();
   if (remaining <= 0) {
-    throw new TranscriptionError("timeout", "AssemblyAI job timed out after the time budget", {
+    throw new TranscriptionError("timeout", "Превышен лимит времени выполнения задачи AssemblyAI", {
       provider: "assemblyai",
     });
   }
@@ -62,7 +62,7 @@ async function aaiFetch(
     const aborted = error instanceof Error && error.name === "AbortError";
     throw new TranscriptionError(
       aborted ? "timeout" : "provider_error",
-      aborted ? "AssemblyAI request timed out" : "AssemblyAI request failed",
+      aborted ? "Время ожидания запроса к AssemblyAI истекло" : "Сбой запроса к AssemblyAI",
       { provider: "assemblyai", cause: error }
     );
   } finally {

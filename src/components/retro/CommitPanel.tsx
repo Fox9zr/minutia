@@ -36,10 +36,10 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
       <div style={{ width: "100%", maxWidth: 620, position: "relative" }}>
         <div style={{ textAlign: "center", marginBottom: 28 }}>
           <h2 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem,4vw,2.75rem)", fontWeight: 600, color: "var(--studio-ink)", margin: "0 0 8px", letterSpacing: "-0.01em" }}>
-            {sealed ? "Sealed, nice work." : "Commit the actions"}
+            {sealed ? "Зафиксировано. Отличная работа." : "Зафиксировать поручения"}
           </h2>
           <p style={{ fontFamily: "var(--font-sans)", fontSize: 15.5, color: "var(--studio-ink-2)", margin: 0 }}>
-            {sealed ? "Three decisions, each with an owner. They won't get lost." : "Each theme becomes an action item with an owner and a due date."}
+            {sealed ? "Три решения, у каждого есть ответственный. Они не потеряются." : "Каждая тема становится поручением с ответственным и сроком."}
           </p>
         </div>
 
@@ -104,7 +104,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                   <Button variant="primary" size="lg" onClick={onSave} disabled={saving} iconRight={<Icons.ArrowRight size={18} />}>
-                    {saving ? "Saving…" : "Save to Minutia"}
+                    {saving ? "Saving…" : "Сохранить в Minutia"}
                   </Button>
                   <button type="button" onClick={onExport} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "transparent", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: 14.5, fontWeight: 500, color: "color-mix(in oklab, var(--card-ink) 60%, transparent)" }}>
                     <Icons.Download size={17} /> Just export markdown
@@ -134,8 +134,8 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
           tone="danger"
           title="Завершить ретроспективу?"
           body="This ends the retro for everyone. The board becomes read-only and live editing stops. This can't be undone."
-          warning={savedSeriesId ? undefined : "You exported markdown but didn't save to Minutia, so this board still expires in 30 days."}
-          confirmLabel="End retro"
+          warning={savedSeriesId ? undefined : "Вы экспортировали Markdown, но не сохранили данные в Minutia, поэтому срок действия этой доски истечет через 30 дней."}
+          confirmLabel="Завершить ретро"
           onConfirm={() => { setConfirmEnd(false); onEnd(); }}
           onCancel={() => setConfirmEnd(false)}
         />

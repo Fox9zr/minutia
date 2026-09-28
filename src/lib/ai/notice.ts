@@ -1,4 +1,4 @@
-// Neutral, provider-agnostic resolver for the "AI not available" upsell CTA.
+// Neutral, provider-agnostic resolver for the "ИИ недоступен" upsell CTA.
 // Thin wrapper over the shared pure upsell core: the OSS build never hardcodes a
 // destination or any plan or price language; the URL comes from instance_config
 // at runtime. Absent or unsafe values render an informational-only notice (no

@@ -3,7 +3,7 @@
 // database/stack noise is never shown; recognized failure classes get canned
 // copy; a clean server-authored sentence passes through unchanged.
 
-const GENERIC = "Something went wrong. Please try again.";
+const GENERIC = "Произошла ошибка. Повторите попытку.";
 
 // Tokens that mark a message as internal plumbing we must not surface verbatim.
 const NOISE = [
@@ -47,7 +47,7 @@ export function humanizeError(err: unknown): string {
   const m = raw.toLowerCase();
 
   if (m.includes("invalid login credentials")) {
-    return "That email or password doesn't match our records.";
+    return "Неверный адрес эл. почты или пароль.";
   }
   if (
     m.includes("jwt expired") ||
@@ -56,7 +56,7 @@ export function humanizeError(err: unknown): string {
     m.includes("auth session missing") ||
     m.includes("invalid claim")
   ) {
-    return "Your session expired. Please sign in again.";
+    return "Сессия истекла. Пожалуйста, войдите снова.";
   }
   if (
     code === "23505" ||
@@ -64,10 +64,10 @@ export function humanizeError(err: unknown): string {
     m.includes("unique constraint") ||
     m.includes("already exists")
   ) {
-    return "That already exists.";
+    return "Уже существует.";
   }
   if (code === "429" || m.includes("rate limit") || m.includes("too many") || m.includes("429")) {
-    return "Too many attempts. Please wait a moment and try again.";
+    return "Слишком много попыток. Подождите немного и повторите попытку.";
   }
   if (
     m.includes("failed to fetch") ||
@@ -76,7 +76,7 @@ export function humanizeError(err: unknown): string {
     m.includes("load failed") ||
     m.includes("network request failed")
   ) {
-    return "Network error. Check your connection and try again.";
+    return "Ошибка сети. Проверьте подключение и повторите попытку.";
   }
 
   // Pass a clean, human-authored sentence straight through; otherwise be generic.

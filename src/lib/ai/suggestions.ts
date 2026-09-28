@@ -11,7 +11,7 @@ import {
 
 // MIN-121: Context-aware item extraction.
 //
-// Shared by the suggestions route (manual "Review AI suggestions") and the
+// Shared by the suggestions route (manual "Проверить предложения ИИ") and the
 // transcribe route (auto-trigger when a recording finishes). It feeds the model
 // the whole series history so it can deduplicate, detect resolutions, follow up
 // on prior items, and flag contradictions, then enforces referential integrity
@@ -74,12 +74,12 @@ export function buildContextAwarePrompt(input: {
     "Unlike a one-off meeting summarizer, you are given the full living state of this series below: the open OIL items, recent decisions, and recent status changes. Reason over that history; it is the whole point.",
     "A facilitator reviews every suggestion before it enters the permanent record, so omitting a weak item is always better than inventing one.",
     "",
-    "OUTPUT CONTRACT",
+    "ВЫХОДНОЙ КОНТРАКТ",
     'Return only a single JSON object of the form {"suggestions": [ ... ]}.',
     "Do not wrap it in markdown fences. Do not add commentary, explanations, or text before or after the JSON.",
     'If nothing in the notes or transcript qualifies, return {"suggestions": []}.',
     "",
-    "Each suggestion object must have exactly these fields:",
+    "Каждый объект предложения должен содержать именно эти поля:",
     "- type: one of new_item, status_update, duplicate_warning.",
     "    new_item = a genuinely new item not already tracked in the OIL below.",
     "    status_update = this meeting moved an EXISTING open OIL item forward; set related_issue_number and suggested_status.",
@@ -87,14 +87,14 @@ export function buildContextAwarePrompt(input: {
     CATEGORY_GUIDE,
     "- title: concise imperative summary, max 120 characters, no trailing punctuation.",
     '- details: one or two sentences of supporting context, or "" if none.',
-    '- owner_name: the person accountable. The transcript is attributed as "Name: text". When a speaker self-assigns in the first person ("I\'ll take that", "I can own this"), set owner_name to that speaker\'s name. Otherwise copy a name verbatim only if the source explicitly assigns them. Never guess. Use "" when genuinely unassigned.',
+    '- owner_name: the person accountable. The transcript is attributed as "Название: текст". When a speaker self-assigns in the first person ("I\'ll take that", "Возьму на себя"), set owner_name to that speaker\'s name. Otherwise copy a name verbatim only if the source explicitly assigns them. Never guess. Use "" when genuinely unassigned.',
     "- due_date: an explicit calendar date as YYYY-MM-DD, only if the source states one. Never infer from relative phrasing. Use null otherwise.",
     "- confidence: 0 to 1. Use 0.9+ when explicitly stated and owned, 0.5 to 0.8 when implied, and omit any item you would score below 0.4.",
     "- source_excerpt: a verbatim quote copied from the notes or transcript that supports this item. Do not paraphrase. Keep it under 160 characters.",
     "- related_issue_number: the OIL item number this references (e.g. 45 for OIL-45). Required for status_update and duplicate_warning. Use null for a new_item.",
     "- suggested_status: for a status_update only, the item's new status (open, in_progress, pending, resolved, dropped). Use null otherwise.",
     "",
-    "CONTEXT-AWARE RULES (this is what makes Minutia different):",
+    "КОНТЕКСТНЫЕ ПРАВИЛА (ключевое отличие Minutia):",
     "1. Deduplicate: if the discussion raises something an open OIL item already covers, emit a duplicate_warning referencing that item, not a parallel new_item.",
     "2. Detect resolution: if a decision or update resolves or advances an open item, especially an open risk or blocker, emit a status_update with the new status, not a new_item.",
     "3. Follow up: a new development on a prior item is a status_update on that item, not a fresh item.",
@@ -114,7 +114,7 @@ export function buildContextAwarePrompt(input: {
     "Transcript:",
     input.transcript ? clamp(input.transcript, MAX_TRANSCRIPT_CHARS) : "(not provided)",
     "",
-    "Raw notes:",
+    "Черновые заметки:",
     input.notes ? clamp(input.notes, MAX_NOTES_CHARS) : "(empty)",
   ].join("\n");
 }
@@ -144,12 +144,12 @@ export async function generateMeetingSuggestions(
     .single();
 
   if (error || !meeting) {
-    return { ok: false, status: 404, error: "Meeting not found" };
+    return { ok: false, status: 404, error: "Встреча не найдена" };
   }
 
   const rawNotes = meeting.raw_notes_markdown || meeting.notes_markdown || "";
   if (!rawNotes.trim() && !meeting.transcript_raw?.trim()) {
-    return { ok: false, status: 400, error: "Add notes or a transcript before extracting suggestions." };
+    return { ok: false, status: 400, error: "Добавьте заметки или расшифровку для извлечения предложений." };
   }
 
   const context = await buildSeriesContext(
@@ -159,7 +159,7 @@ export async function generateMeetingSuggestions(
 
   const prompt = buildContextAwarePrompt({
     title: meeting.title,
-    seriesName: meeting.series?.name ?? "Untitled series",
+    seriesName: meeting.series?.name ?? "Серия без названия",
     attendees: meeting.attendees ?? [],
     notes: rawNotes,
     transcript: meeting.transcript_raw,
@@ -171,14 +171,14 @@ export async function generateMeetingSuggestions(
   try {
     ({ data: providerData, model } = await callAi({ system: SYSTEM_PROMPT, prompt }));
   } catch {
-    return { ok: false, status: 502, error: "AI provider request failed." };
+    return { ok: false, status: 502, error: "Сбой запроса к провайдеру ИИ." };
   }
 
   let parsed: z.infer<typeof suggestionsSchema>;
   try {
     parsed = suggestionsSchema.parse(JSON.parse(getTextFromOpenRouter(providerData)));
   } catch {
-    return { ok: false, status: 502, error: "AI provider returned invalid suggestions." };
+    return { ok: false, status: 502, error: "Провайдер ИИ вернул некорректные предложения." };
   }
 
   const normalized = normalizeSuggestions(parsed.suggestions, context.openIssues);
@@ -189,7 +189,7 @@ export async function generateMeetingSuggestions(
     .eq("meeting_id", meetingId)
     .eq("status", "pending");
   if (deleteError) {
-    return { ok: false, status: 500, error: "Failed to refresh AI suggestions." };
+    return { ok: false, status: 500, error: "Не удалось обновить предложения ИИ." };
   }
 
   if (normalized.length === 0) {
@@ -219,7 +219,7 @@ export async function generateMeetingSuggestions(
     .select("*")
     .order("created_at", { ascending: true });
   if (insertError) {
-    return { ok: false, status: 500, error: "Failed to save AI suggestions." };
+    return { ok: false, status: 500, error: "Не удалось сохранить предложения ИИ." };
   }
 
   return { ok: true, suggestions: inserted ?? [], model };

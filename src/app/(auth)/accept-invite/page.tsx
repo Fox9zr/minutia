@@ -82,7 +82,7 @@ function AcceptInviteForm() {
         } = await supabase.auth.getUser();
 
         if (error || !user?.email) {
-          throw new Error("Invite link missing or expired. Ask your admin to resend it.");
+          throw new Error("Ссылка-приглашение отсутствует или недействительна. Запросите повторную отправку у администратора.");
         }
 
         if (!cancelled) {
@@ -95,7 +95,7 @@ function AcceptInviteForm() {
           setErrorMessage(
             err instanceof Error
               ? err.message
-              : "Invite link missing or expired. Ask your admin to resend it."
+              : "Ссылка-приглашение отсутствует или недействительна. Запросите повторную отправку у администратора."
           );
         }
       }

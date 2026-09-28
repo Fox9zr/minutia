@@ -19,7 +19,7 @@ export function buildSummaryPrompt(input: {
   transcript: string;
 }): string {
   return [
-    "Write the recap for this meeting.",
+    "Составьте итоги этой встречи.",
     "",
     `Series: ${clamp(input.seriesName, 200)}`,
     `Meeting: ${clamp(input.title, 200)}`,

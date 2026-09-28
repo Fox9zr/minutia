@@ -4,7 +4,7 @@ export const DESKTOP_REPO_URL = `https://github.com/${DESKTOP_REPO}`;
 export const DESKTOP_RELEASES_URL = `${DESKTOP_REPO_URL}/releases`;
 
 export const DESKTOP_REQUIREMENTS =
-  "Requires macOS 14.4 or later. Apple silicon and Intel.";
+  "Требуется macOS 14.4 или новее. Apple Silicon и Intel.";
 
 export type DesktopRelease =
   | { available: true; version: string; downloadUrl: string; releaseUrl: string }

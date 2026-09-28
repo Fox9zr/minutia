@@ -532,10 +532,10 @@ function OutstandingWidget({
       return `Issue moved to position ${index + 1} of ${fullIds.length}.`;
     },
     onDragEnd() {
-      return "Issue dropped.";
+      return "Задача снята.";
     },
     onDragCancel() {
-      return "Reorder cancelled.";
+      return "Изменение порядка отменено.";
     },
   };
 

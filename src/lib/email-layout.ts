@@ -1,7 +1,7 @@
 import { escapeHtml } from "@/lib/escape-html";
 
 export const EMAIL_ACCENT = "#b23b2e";
-export const MINUTIA_EMAIL_BRANDING = "Sent via Minutia";
+export const MINUTIA_EMAIL_BRANDING = "Отправлено через Minutia";
 
 const palette = {
   ink: "#171717",

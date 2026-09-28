@@ -31,7 +31,7 @@ export function useAiAccess() {
 }
 
 export const AI_UNAVAILABLE_MESSAGE =
-  "AI features are not enabled for this account.";
+  "Функции ИИ отключены для этого аккаунта.";
 
 // The neutral upsell destination for a nudge slot (instance_config.<slot>_notice_url),
 // fetched lazily so it only loads on the gated surfaces that actually render a

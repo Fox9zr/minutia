@@ -18,7 +18,7 @@ export function useOrgMembers() {
     queryKey: orgMemberKeys.all,
     queryFn: async () => {
       const res = await fetch("/api/workspace/members");
-      if (!res.ok) throw new Error("Failed to load workspace members");
+      if (!res.ok) throw new Error("Не удалось загрузить участников пространства");
       const data = await res.json();
       return data.members ?? [];
     },

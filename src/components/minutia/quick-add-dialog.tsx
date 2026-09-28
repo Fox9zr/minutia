@@ -89,17 +89,17 @@ export function QuickAddDialog() {
     setNoMeetingSeriesId(null);
 
     if (!title.trim()) {
-      setError("Title is required");
+      setError("Название обязательно");
       return;
     }
 
     if (!seriesId) {
-      setError("Please select a series");
+      setError("Выберите серию");
       return;
     }
 
     if (!latestMeetingId) {
-      setError("No meeting found for this series. Create a meeting first.");
+      setError("В этой серии нет встреч. Сначала создайте встречу.");
       setNoMeetingSeriesId(seriesId);
       return;
     }
@@ -117,7 +117,7 @@ export function QuickAddDialog() {
           closeQuickAddDialog();
         },
         onError: () => {
-          setError("Failed to create issue. Please try again.");
+          setError("Не удалось создать задачу. Повторите попытку.");
         },
       },
     );
@@ -249,7 +249,7 @@ export function QuickAddDialog() {
               Cancel
             </Button>
             <Button type="submit" variant="accent" size="sm" disabled={createIssue.isPending}>
-              {createIssue.isPending ? "Adding..." : "Add issue"}
+              {createIssue.isPending ? "Adding..." : "Добавить проблему"}
             </Button>
           </div>
         </form>

@@ -38,7 +38,7 @@ export function CreateClient() {
       saveFacilitatorToken(result.token, result.facilitator_token);
       router.push(`/retro/${result.token}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not create the board.");
+      setError(e instanceof Error ? e.message : "Не удалось создать доску.");
       setBusy(false);
     }
   }
@@ -111,7 +111,7 @@ export function CreateClient() {
         </p>
       </div>
       <Button size="lg" onClick={() => setOpen(true)} disabled={busy}>
-        {busy ? "Creating…" : "Start a retro"}
+        {busy ? "Creating…" : "Начать ретроспективу"}
       </Button>
       {error && (
         <p style={{ fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--danger)" }}>

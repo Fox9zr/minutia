@@ -63,12 +63,12 @@ export function SendMeetingNotesButton({ meetingId, attendees }: Props) {
         body: JSON.stringify({ recipients: recipientList }),
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send notes");
+      if (!res.ok) throw new Error(data.error || "Не удалось отправить заметки");
       setStatus("sent");
       setMessage(`Sent to ${data.sent} recipient${data.sent === 1 ? "" : "s"}.`);
     } catch (err) {
       setStatus("error");
-      setMessage(err instanceof Error ? err.message : "Failed to send notes");
+      setMessage(err instanceof Error ? err.message : "Не удалось отправить заметки");
     }
   }
 

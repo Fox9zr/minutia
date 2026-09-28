@@ -39,9 +39,9 @@ function isResetRateLimited(email: string): boolean {
 
 function emailNotConfiguredMessage(error: unknown) {
   const message = error instanceof Error ? error.message : "";
-  return message.includes("Email is not configured")
-    ? "Email is not configured for this workspace."
-    : message || "Failed to send password reset email";
+  return message.includes("Электронная почта не настроена")
+    ? "Электронная почта не настроена для этого рабочего пространства."
+    : message || "Не удалось отправить письмо для сброса пароля";
 }
 
 export async function POST(request: NextRequest) {
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = schema.safeParse(body);
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error:
-          "Too many password reset requests. Please wait a few minutes before trying again.",
+          "Слишком много запросов на сброс пароля. Подождите несколько минут и повторите попытку.",
       },
       { status: 429 }
     );
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
   const rawLink = data.properties?.action_link;
   if (!rawLink) {
     return NextResponse.json(
-      { error: "Failed to create password reset link" },
+      { error: "Не удалось создать ссылку для сброса пароля" },
       { status: 500 }
     );
   }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
   try {
     await sendMail({
       to: email,
-      subject: "Reset your Minutia password",
+      subject: "Сброс пароля Minutia",
       text: `Reset your Minutia password: ${resetUrl}`,
       html: `
         <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;max-width:560px;margin:0 auto;padding:32px 24px;color:#171717;">

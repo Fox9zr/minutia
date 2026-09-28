@@ -67,7 +67,7 @@ export async function transcribeWithLocalSidecar(
   } catch (error) {
     if (error instanceof TranscriptionError) throw error;
     const aborted = error instanceof Error && error.name === "AbortError";
-    throw new TranscriptionError(aborted ? "timeout" : "provider_error", "Local STT sidecar request failed", {
+    throw new TranscriptionError(aborted ? "timeout" : "provider_error", "Ошибка запроса к локальному сервису STT", {
       provider: "local",
       cause: error,
     });

@@ -134,9 +134,9 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
 
   const bodyHtml = `
     ${chips}
-    ${section("Items raised", raisedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(raisedIssues, appUrl)}</table>`)}
-    ${section("Resolved this meeting", resolvedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(resolvedIssues, appUrl)}</table>`)}
-    ${section("Carried forward", carriedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(carriedIssues, appUrl)}</table>`)}
+    ${section("Поднятые вопросы", raisedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(raisedIssues, appUrl)}</table>`)}
+    ${section("Решено на этой встрече", resolvedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(resolvedIssues, appUrl)}</table>`)}
+    ${section("Перенесено", carriedIssues.length, `<table role="presentation" width="100%" cellpadding="0" cellspacing="0">${issueRows(carriedIssues, appUrl)}</table>`)}
     ${section("Decisions", decisions.length, decisionRows(decisions))}
     ${section("Notes", 1, notesBlock(meeting.notes_markdown ?? ""))}
   `;
@@ -169,7 +169,7 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
     ...decisions.map((decision) => `- ${decision.title}`),
     "",
     "Notes",
-    meeting.notes_markdown || "No freeform notes captured.",
+    meeting.notes_markdown || "Заметки в свободной форме не зафиксированы.",
     "",
     `Open meeting: ${meetingUrl}`,
   ];

@@ -122,13 +122,13 @@ export function useMeetingRecorder(meetingId: string): MeetingRecorder {
     setError(null);
     if (!isRecordingSupported()) {
       setIsSupported(false);
-      setError("Recording is not supported in this browser.");
+      setError("Запись в этом браузере не поддерживается.");
       return;
     }
     const mimeType = pickAudioMimeType();
     if (!mimeType) {
       setIsSupported(false);
-      setError("This browser cannot record audio.");
+      setError("Этот браузер не поддерживает запись звука.");
       return;
     }
 

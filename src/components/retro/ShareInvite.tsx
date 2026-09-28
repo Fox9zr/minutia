@@ -48,7 +48,7 @@ export function ShareInvite({ open, boardName, template, people, link, onClose, 
           <Icons.Link size={16} style={{ color: "var(--studio-ink-3)", flex: "0 0 auto" }} />
           <span style={{ flex: 1, minWidth: 0, fontFamily: "var(--font-mono)", fontSize: 13.5, color: "var(--studio-ink)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{display}</span>
           <Button variant={copied ? "secondary" : "primary"} size="sm" onClick={copy} iconLeft={copied ? <Icons.Check size={15} /> : null}>
-            {copied ? "Copied" : "Copy link"}
+            {copied ? "Copied" : "Копировать ссылку"}
           </Button>
         </div>
 

@@ -21,7 +21,7 @@ export async function GET(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated", request_id: requestId }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован", request_id: requestId }, { status: 401 });
   }
 
   const { data: meeting, error: meetingError } = await supabase
@@ -30,7 +30,7 @@ export async function GET(
     .eq("id", meetingId)
     .single();
   if (meetingError || !meeting) {
-    return NextResponse.json({ error: "Meeting not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
 
   const { data, error } = await supabase
@@ -39,7 +39,7 @@ export async function GET(
     .eq("meeting_id", meetingId)
     .order("created_at", { ascending: true });
   if (error) {
-    return NextResponse.json({ error: "Failed to load AI suggestions.", request_id: requestId }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось загрузить предложения ИИ.", request_id: requestId }, { status: 500 });
   }
 
   return NextResponse.json({ suggestions: data ?? [], request_id: requestId });
@@ -55,7 +55,7 @@ export async function POST(
   try {
     requestSchema.parse(await request.json());
   } catch {
-    return NextResponse.json({ error: "Invalid request body", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело запроса", request_id: requestId }, { status: 400 });
   }
 
   // Enforces authentication; also requires has_full_access when feature gating
@@ -70,7 +70,7 @@ export async function POST(
 
   if (!(await hasAiConfigured())) {
     return NextResponse.json(
-      { error: "AI suggestions are not configured.", request_id: requestId },
+      { error: "Предложения ИИ не настроены.", request_id: requestId },
       { status: 503 }
     );
   }
@@ -85,13 +85,13 @@ export async function POST(
     .eq("id", meetingId)
     .single();
   if (!meeting) {
-    return NextResponse.json({ error: "Meeting not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
   // Generation deletes and replaces pending suggestions and spends an AI call,
   // so restrict it to those who manage the series (mirrors the accept route).
   if (!user || !(await userManagesSeries(meeting.series_id, user.id))) {
     return NextResponse.json(
-      { error: "Only series owners and facilitators can generate AI suggestions.", request_id: requestId },
+      { error: "Только владельцы и ведущие серии могут генерировать предложения ИИ.", request_id: requestId },
       { status: 403 }
     );
   }

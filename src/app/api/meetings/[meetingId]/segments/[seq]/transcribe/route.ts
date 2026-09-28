@@ -40,7 +40,7 @@ export async function POST(
 
   const seq = Number(seqRaw);
   if (!Number.isInteger(seq) || seq < 0 || seq > 10000) {
-    return NextResponse.json({ error: "Invalid segment.", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректный сегмент.", request_id: requestId }, { status: 400 });
   }
 
   const aiDenied = await requireAiAccess();
@@ -57,7 +57,7 @@ export async function POST(
   }
   const parsed = parseSegmentPath(meetingId, seq, path);
   if (!parsed) {
-    return NextResponse.json({ error: "Invalid segment path.", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректный путь сегмента.", request_id: requestId }, { status: 400 });
   }
   const storagePath = path as string;
 
@@ -72,12 +72,12 @@ export async function POST(
     .single();
 
   if (meetingError || !meeting) {
-    return NextResponse.json({ error: "Meeting not found.", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена.", request_id: requestId }, { status: 404 });
   }
 
   if (!isTranscriptionConfigured()) {
     return NextResponse.json(
-      { error: "Transcription is not configured.", code: "TRANSCRIPTION_UNCONFIGURED", request_id: requestId },
+      { error: "Транскрипция не настроена.", code: "TRANSCRIPTION_UNCONFIGURED", request_id: requestId },
       { status: 503 }
     );
   }
@@ -93,7 +93,7 @@ export async function POST(
 
   if (upsertError) {
     return NextResponse.json(
-      { error: "Could not register the segment.", request_id: requestId },
+      { error: "Не удалось зарегистрировать сегмент.", request_id: requestId },
       { status: 500 }
     );
   }
@@ -106,13 +106,13 @@ export async function POST(
 
   if (claimError) {
     return NextResponse.json(
-      { error: "Could not start segment transcription.", request_id: requestId },
+      { error: "Не удалось запустить расшифровку фрагмента.", request_id: requestId },
       { status: 500 }
     );
   }
   if (claimed !== true) {
     return NextResponse.json(
-      { error: "Segment transcription is already in progress.", request_id: requestId },
+      { error: "Расшифровка фрагмента уже выполняется.", request_id: requestId },
       { status: 409 }
     );
   }
@@ -141,7 +141,7 @@ export async function POST(
     if (downloadError || !audioData) {
       await markFailed("download_failed");
       return NextResponse.json(
-        { error: "Could not read the segment audio.", request_id: requestId },
+        { error: "Не удалось прочитать аудиозапись фрагмента.", request_id: requestId },
         { status: 502 }
       );
     }
@@ -170,7 +170,7 @@ export async function POST(
     if (updateError) {
       await markFailed("save_failed");
       return NextResponse.json(
-        { error: "Segment transcribed but could not be saved.", request_id: requestId },
+        { error: "Фрагмент расшифрован, но сохранить его не удалось.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -187,13 +187,13 @@ export async function POST(
     if (error instanceof TranscriptionError) {
       await markFailed(error.code);
       return NextResponse.json(
-        { error: "Segment transcription failed.", code: error.code, request_id: requestId },
+        { error: "Ошибка расшифровки фрагмента.", code: error.code, request_id: requestId },
         { status: statusForCode(error.code) }
       );
     }
     await markFailed("provider_error");
     return NextResponse.json(
-      { error: "Segment transcription failed.", request_id: requestId },
+      { error: "Ошибка расшифровки фрагмента.", request_id: requestId },
       { status: 500 }
     );
   }

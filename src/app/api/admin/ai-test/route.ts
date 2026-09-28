@@ -19,14 +19,14 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   if (
     typeof body !== "object" ||
     body === null
   ) {
-    return NextResponse.json({ ok: false, error: "Invalid request body" }, { status: 400 });
+    return NextResponse.json({ ok: false, error: "Некорректное тело запроса" }, { status: 400 });
   }
 
   const { provider, baseUrl, apiKey: bodyApiKey, model } = body as Record<string, unknown>;
@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
       });
       return NextResponse.json({ ok: true });
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Unknown error";
+      const message = err instanceof Error ? err.message : "Неизвестная ошибка";
       return NextResponse.json({ ok: false, error: message }, { status: 200 });
     }
   }
@@ -98,7 +98,7 @@ export async function POST(request: NextRequest) {
     });
     return NextResponse.json({ ok: true });
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Unknown error";
+    const message = err instanceof Error ? err.message : "Неизвестная ошибка";
     return NextResponse.json({ ok: false, error: message }, { status: 200 });
   }
 }

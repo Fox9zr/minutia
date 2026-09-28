@@ -23,7 +23,7 @@ export async function PATCH(
   try {
     body = requestSchema.parse(await request.json());
   } catch {
-    return NextResponse.json({ error: "Invalid request body", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело запроса", request_id: requestId }, { status: 400 });
   }
   const attendee = body.attendee?.trim() || null;
 
@@ -40,7 +40,7 @@ export async function PATCH(
     .eq("id", meetingId)
     .single();
   if (meetingError || !meeting) {
-    return NextResponse.json({ error: "Meeting not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
 
   // Correcting attribution rewrites transcript_raw, so restrict it to those who
@@ -48,14 +48,14 @@ export async function PATCH(
   // separate AI re-extraction below has its own entitlement gate.
   if (!user || !(await userManagesSeries(meeting.series_id, user.id))) {
     return NextResponse.json(
-      { error: "Only series owners and facilitators can correct speakers.", request_id: requestId },
+      { error: "Только владельцы и ведущие серии могут изменять спикеров.", request_id: requestId },
       { status: 403 }
     );
   }
 
   if (!meeting.transcript_segments?.length) {
     return NextResponse.json(
-      { error: "This meeting has no diarized transcript to correct.", request_id: requestId },
+      { error: "В этой встрече нет расшифровки по спикерам для исправления.", request_id: requestId },
       { status: 400 }
     );
   }
@@ -69,7 +69,7 @@ export async function PATCH(
     .eq("id", meetingId);
   if (updateError) {
     return NextResponse.json(
-      { error: "Could not save the speaker correction.", request_id: requestId },
+      { error: "Не удалось сохранить исправление спикера.", request_id: requestId },
       { status: 500 }
     );
   }

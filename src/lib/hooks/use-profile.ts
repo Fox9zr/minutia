@@ -28,7 +28,7 @@ export function useProfile() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const { data, error } = await supabase
         .from("profiles")
@@ -54,7 +54,7 @@ export function useCompleteOnboarding() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       const { error } = await supabase
         .from("profiles")
@@ -81,7 +81,7 @@ export function useUpdateProfile() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) throw new Error("Not authenticated");
+      if (!user) throw new Error("Не авторизован");
 
       // Update profile name
       const { data: profile, error: profileError } = await supabase

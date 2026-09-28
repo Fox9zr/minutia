@@ -20,7 +20,7 @@ export async function GET() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const serviceClient = createServiceRoleClient();
@@ -42,7 +42,7 @@ export async function GET() {
     .order("joined_at", { ascending: true });
 
   if (error) {
-    return NextResponse.json({ error: "Failed to load workspace members" }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось загрузить участников пространства" }, { status: 500 });
   }
 
   const members = ((data ?? []) as unknown as MemberRow[]).map((row) => {

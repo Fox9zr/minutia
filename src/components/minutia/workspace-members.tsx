@@ -64,7 +64,7 @@ function memberProfile(member: OrgMember) {
 }
 
 function memberEmail(member: OrgMember) {
-  return memberProfile(member)?.email ?? "Unknown email";
+  return memberProfile(member)?.email ?? "Неизвестный адрес эл. почты";
 }
 
 function memberName(member: OrgMember) {
@@ -160,7 +160,7 @@ export function WorkspaceMembers() {
 
     if (!res.ok) {
       setInviteState("error");
-      setInviteMessage(data.error || "Failed to send invitation.");
+      setInviteMessage(data.error || "Не удалось отправить приглашение.");
       return;
     }
 
@@ -170,7 +170,7 @@ export function WorkspaceMembers() {
       setInviteLink(data.acceptUrl);
       setInviteMessage("");
     } else {
-      setInviteMessage("Invitation sent.");
+      setInviteMessage("Приглашение отправлено.");
     }
     await refreshOrgAdmin();
   }
@@ -208,7 +208,7 @@ export function WorkspaceMembers() {
 
     if (!res.ok) {
       setMemberMessageState("error");
-      setMemberMessage(data.error || "Failed to update role.");
+      setMemberMessage(data.error || "Не удалось обновить роль.");
       setMemberActionId(null);
       return;
     }
@@ -242,7 +242,7 @@ export function WorkspaceMembers() {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      const message = data.error || "Failed to remove member.";
+      const message = data.error || "Не удалось удалить участника.";
       setMemberMessageState("error");
       setMemberMessage(message);
       toast.error(message);
@@ -278,7 +278,7 @@ export function WorkspaceMembers() {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      const message = data.error || "Failed to revoke invitation.";
+      const message = data.error || "Не удалось отозвать приглашение.";
       setInviteState("error");
       setInviteMessage(message);
       toast.error(message);
@@ -287,7 +287,7 @@ export function WorkspaceMembers() {
     }
 
     setInviteState("sent");
-    setInviteMessage("Invitation revoked.");
+    setInviteMessage("Приглашение отозвано.");
     setInvitationActionId(null);
     await refreshOrgAdmin();
   }
@@ -401,7 +401,7 @@ export function WorkspaceMembers() {
             {upsell?.upgradeEnabled ? (
               <Button size="sm" className="shrink-0" onClick={handleUpgrade} loading={upgradePending}>
                 {!upgradePending && <Sparkles className="size-3.5" />}
-                {upgradePending ? "Starting" : "Upgrade workspace"}
+                {upgradePending ? "Starting" : "Обновить тариф пространства"}
               </Button>
             ) : upsellCta ? (
               <Button asChild size="sm" className="shrink-0">

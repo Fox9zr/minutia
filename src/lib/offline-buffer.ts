@@ -37,7 +37,7 @@ function openDB(): Promise<IDBDatabase> {
     request.onerror = () => reject(request.error);
     // Another tab holding an older version open would otherwise hang the upgrade.
     request.onblocked = () =>
-      reject(new Error("IndexedDB upgrade blocked by another open tab"));
+      reject(new Error("Обновление IndexedDB заблокировано другой открытой вкладкой"));
   });
 }
 

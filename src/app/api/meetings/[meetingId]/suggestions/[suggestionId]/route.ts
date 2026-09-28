@@ -28,7 +28,7 @@ export async function PATCH(
   try {
     body = reviewSchema.parse(await request.json());
   } catch {
-    return NextResponse.json({ error: "Invalid request body", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело запроса", request_id: requestId }, { status: 400 });
   }
 
   const supabase = await createClient();
@@ -36,7 +36,7 @@ export async function PATCH(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated", request_id: requestId }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован", request_id: requestId }, { status: 401 });
   }
 
   const { data: suggestion, error } = await supabase
@@ -47,21 +47,21 @@ export async function PATCH(
     .single();
 
   if (error || !suggestion) {
-    return NextResponse.json({ error: "AI suggestion not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Предложение ИИ не найдено", request_id: requestId }, { status: 404 });
   }
 
   // Accepting a suggestion mutates the OIL (creates an issue/decision, or moves
   // an existing item), so restrict review to those who manage the series.
   if (!(await userManagesSeries(suggestion.series_id, user.id))) {
     return NextResponse.json(
-      { error: "Only series owners and facilitators can review AI suggestions.", request_id: requestId },
+      { error: "Только владельцы и ведущие серии могут проверять предложения ИИ.", request_id: requestId },
       { status: 403 }
     );
   }
 
   if (suggestion.status !== "pending") {
     return NextResponse.json(
-      { error: "AI suggestion has already been reviewed.", request_id: requestId },
+      { error: "Предложение ИИ уже рассмотрено.", request_id: requestId },
       { status: 409 }
     );
   }
@@ -91,7 +91,7 @@ export async function PATCH(
 
     if (updateError) {
       return NextResponse.json(
-        { error: "Failed to reject AI suggestion.", request_id: requestId },
+        { error: "Не удалось отклонить предложение ИИ.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -107,13 +107,13 @@ export async function PATCH(
     const targetStatus = body.suggested_status ?? suggestion.suggested_status;
     if (suggestion.related_issue_number == null) {
       return NextResponse.json(
-        { error: "This suggestion is not linked to an existing item.", request_id: requestId },
+        { error: "Это предложение не связано с существующим элементом.", request_id: requestId },
         { status: 400 }
       );
     }
     if (!targetStatus) {
       return NextResponse.json(
-        { error: "This suggestion has no target status to apply.", request_id: requestId },
+        { error: "Для этого предложения не задан целевой статус.", request_id: requestId },
         { status: 400 }
       );
     }
@@ -127,13 +127,13 @@ export async function PATCH(
 
     if (findError) {
       return NextResponse.json(
-        { error: "Failed to look up the referenced item.", request_id: requestId },
+        { error: "Не удалось найти связанный элемент.", request_id: requestId },
         { status: 500 }
       );
     }
     if (!existing) {
       return NextResponse.json(
-        { error: "The referenced item no longer exists.", request_id: requestId },
+        { error: "Указанный элемент больше не существует.", request_id: requestId },
         { status: 404 }
       );
     }
@@ -145,7 +145,7 @@ export async function PATCH(
     // is only ever set on a genuine transition into "resolved".
     if (existing.status === targetStatus) {
       return NextResponse.json(
-        { error: "The referenced item is already in that status.", request_id: requestId },
+        { error: "Указанный элемент уже находится в этом статусе.", request_id: requestId },
         { status: 409 }
       );
     }
@@ -160,7 +160,7 @@ export async function PATCH(
 
     if (issueUpdateError) {
       return NextResponse.json(
-        { error: "Failed to update the referenced item.", request_id: requestId },
+        { error: "Не удалось обновить связанный элемент.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -177,7 +177,7 @@ export async function PATCH(
 
     if (auditError) {
       return NextResponse.json(
-        { error: "Failed to record the status change.", request_id: requestId },
+        { error: "Не удалось зафиксировать изменение статуса.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -201,7 +201,7 @@ export async function PATCH(
 
     if (markError) {
       return NextResponse.json(
-        { error: "Failed to mark AI suggestion accepted.", request_id: requestId },
+        { error: "Не удалось принять предложение ИИ.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -215,7 +215,7 @@ export async function PATCH(
   if (suggestion.type === "duplicate_warning") {
     return NextResponse.json(
       {
-        error: "A duplicate warning can't be accepted. Dismiss it or open the existing item.",
+        error: "Предупреждение о дубликате нельзя принять. Отклоните его или откройте существующий элемент.",
         request_id: requestId,
       },
       { status: 400 }
@@ -239,7 +239,7 @@ export async function PATCH(
 
     if (decisionError || !decision) {
       return NextResponse.json(
-        { error: "Failed to create decision from AI suggestion.", request_id: requestId },
+        { error: "Не удалось создать решение на основе предложения ИИ.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -262,7 +262,7 @@ export async function PATCH(
 
     if (updateError) {
       return NextResponse.json(
-        { error: "Failed to mark AI suggestion accepted.", request_id: requestId },
+        { error: "Не удалось принять предложение ИИ.", request_id: requestId },
         { status: 500 }
       );
     }
@@ -291,7 +291,7 @@ export async function PATCH(
 
   if (issueError || !issue) {
     return NextResponse.json(
-      { error: "Failed to create issue from AI suggestion.", request_id: requestId },
+      { error: "Не удалось создать задачу на основе предложения ИИ.", request_id: requestId },
       { status: 500 }
     );
   }
@@ -314,7 +314,7 @@ export async function PATCH(
 
   if (updateError) {
     return NextResponse.json(
-      { error: "Failed to mark AI suggestion accepted.", request_id: requestId },
+      { error: "Не удалось принять предложение ИИ.", request_id: requestId },
       { status: 500 }
     );
   }

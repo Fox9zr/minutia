@@ -128,7 +128,7 @@ export async function syncCalendarAgendaForUser({
       }),
     };
   } catch (err) {
-    const message = err instanceof Error ? err.message : "Calendar agenda failed";
+    const message = err instanceof Error ? err.message : "Сбой загрузки повестки календаря";
     if (message.includes("not connected")) {
       return { connected: false, events: [] };
     }

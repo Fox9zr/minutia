@@ -5,11 +5,11 @@ import type { RetroPhase } from "./types";
 // scripts/verify-retro-contracts.test.mjs guards against drift.
 export const RETRO_PHASES: RetroPhase[] = ["lobby", "reflect", "reveal", "discuss", "commit"];
 
-// Reveal, theming, and dot-voting happen together in one "Reveal & Vote" phase.
+// Reveal, theming, and dot-voting happen together in one "Открыть и голосовать" phase.
 export const RETRO_PHASE_LABELS: Record<RetroPhase, string> = {
   lobby: "Lobby",
   reflect: "Reflect",
-  reveal: "Reveal & Vote",
+  reveal: "Открыть и голосовать",
   discuss: "Discuss",
   commit: "Commit",
   closed: "Commit",

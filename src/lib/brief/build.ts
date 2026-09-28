@@ -118,8 +118,8 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
       (metaLine
         ? `<p style="margin:14px 0 0;color:#6b665f;font-size:14px;line-height:21px;" class="m-muted">${escapeHtml(metaLine)}</p>`
         : "") +
-      sectionHtml("Your open items", mine, "You have no open items right now. Nice.") +
-      sectionHtml("Also on the log", also, "Nothing else open.");
+      sectionHtml("Ваши открытые задачи", mine, "У вас нет открытых задач. Отлично.") +
+      sectionHtml("Также в журнале", also, "Других открытых задач нет.");
 
     const cta = {
       label: "Открыть журнал событий",
@@ -133,7 +133,7 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
       heading: series.name,
       bodyHtml,
       cta,
-      footerNote: "You are on the attendee list for this series.",
+      footerNote: "Вы в списке участников этой серии встреч.",
       footerUrl: instanceUrl,
     });
 
@@ -141,13 +141,13 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
       `Brief: ${series.name}`,
       metaLine,
       "",
-      sectionText("Your open items", mine, "You have no open items right now. Nice."),
+      sectionText("Ваши открытые задачи", mine, "У вас нет открытых задач. Отлично."),
       "",
-      sectionText("Also on the log", also, "Nothing else open."),
+      sectionText("Также в журнале", also, "Других открытых задач нет."),
       "",
       `See the live log: ${cta.href}`,
       "",
-      "Sent via Minutia",
+      "Отправлено через Minutia",
     ]
       .filter((line) => line !== undefined)
       .join("\n");

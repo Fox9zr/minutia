@@ -23,7 +23,7 @@ export function useGoogleCalendarStatus(enabled = true) {
     enabled,
     queryFn: async () => {
       const res = await fetch("/api/calendar/status");
-      if (!res.ok) throw new Error("Failed to fetch calendar status");
+      if (!res.ok) throw new Error("Не удалось получить статус календаря");
       return res.json();
     },
     staleTime: 5 * 60 * 1000,
@@ -37,7 +37,7 @@ export function useCalendarList() {
     queryKey: calendarKeys.calendars,
     queryFn: async () => {
       const res = await fetch("/api/calendar/calendars");
-      if (!res.ok) throw new Error("Failed to fetch calendars");
+      if (!res.ok) throw new Error("Не удалось получить календари");
       return res.json();
     },
     enabled: !!status?.connected,
@@ -52,7 +52,7 @@ export function useCalendarEvents(seriesId: string | undefined) {
     queryKey: calendarKeys.events(seriesId ?? ""),
     queryFn: async () => {
       const res = await fetch(`/api/calendar/events?seriesId=${seriesId}`);
-      if (!res.ok) throw new Error("Failed to fetch events");
+      if (!res.ok) throw new Error("Не удалось получить события");
       return res.json();
     },
     enabled: !!seriesId && !!status?.connected,
@@ -73,7 +73,7 @@ export function useCalendarAgenda(enabled = true) {
     queryKey: calendarKeys.agenda,
     queryFn: async () => {
       const res = await fetch("/api/calendar/agenda");
-      if (!res.ok) throw new Error("Failed to fetch calendar agenda");
+      if (!res.ok) throw new Error("Не удалось получить повестку из календаря");
       return res.json();
     },
     enabled: enabled && !!status?.connected,
@@ -92,7 +92,7 @@ export function useStartCalendarAgendaEvent() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ calendarEventId }),
       });
-      if (!res.ok) throw new Error("Failed to start calendar meeting");
+      if (!res.ok) throw new Error("Не удалось запустить встречу из календаря");
       return res.json() as Promise<{ meetingUrl: string | null; captureUrl: string }>;
     },
     onSuccess: () => {
@@ -112,7 +112,7 @@ export function useLinkCalendar() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ seriesId, calendarId }),
       });
-      if (!res.ok) throw new Error("Failed to link calendar");
+      if (!res.ok) throw new Error("Не удалось привязать календарь");
       return res.json();
     },
     onSuccess: (_data, { seriesId }) => {
@@ -133,7 +133,7 @@ export function useUnlinkCalendar() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ seriesId }),
       });
-      if (!res.ok) throw new Error("Failed to unlink calendar");
+      if (!res.ok) throw new Error("Не удалось отвязать календарь");
       return res.json();
     },
     onSuccess: (_data, seriesId) => {
@@ -150,7 +150,7 @@ export function useDisconnectGoogle() {
   return useMutation({
     mutationFn: async () => {
       const res = await fetch("/api/auth/google/disconnect", { method: "POST" });
-      if (!res.ok) throw new Error("Failed to disconnect");
+      if (!res.ok) throw new Error("Не удалось отключить");
       return res.json();
     },
     onSuccess: () => {

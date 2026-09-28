@@ -25,7 +25,7 @@ async function storeGoogleProviderTokens(session: Session) {
       GOOGLE_WORKSPACE_SCOPES.split(" ")
     );
   } catch (err) {
-    console.error("Failed to store Google provider tokens:", err);
+    console.error("Не удалось сохранить токены провайдера Google:", err);
   }
 }
 

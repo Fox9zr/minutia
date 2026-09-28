@@ -21,7 +21,7 @@ export async function POST(
 
   const aiConfig = await getAiConfig();
   if (!aiConfig) {
-    return NextResponse.json({ error: "AI recap is not configured." }, { status: 503 });
+    return NextResponse.json({ error: "Итоги от ИИ не настроены." }, { status: 503 });
   }
   const model = aiConfig.model;
 
@@ -35,7 +35,7 @@ export async function POST(
     .single();
 
   if (error || !meeting) {
-    return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена" }, { status: 404 });
   }
 
   let transcript =
@@ -55,14 +55,14 @@ export async function POST(
 
   if (!transcript) {
     return NextResponse.json(
-      { error: "Add notes or a transcript before generating a recap." },
+      { error: "Добавьте заметки или расшифровку для формирования итогов." },
       { status: 400 }
     );
   }
 
   const prompt = buildSummaryPrompt({
     title: meeting.title,
-    seriesName: (meeting.series as unknown as { name: string } | null)?.name ?? "Untitled series",
+    seriesName: (meeting.series as unknown as { name: string } | null)?.name ?? "Серия без названия",
     attendees: meeting.attendees ?? [],
     transcript,
   });

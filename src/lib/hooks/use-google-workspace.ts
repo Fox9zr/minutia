@@ -16,7 +16,7 @@ export function useWorkspaceDirectorySearch(query: string, enabled: boolean) {
       const res = await fetch(
         `/api/workspace/directory?q=${encodeURIComponent(trimmedQuery)}`
       );
-      if (!res.ok) throw new Error("Failed to search Workspace Directory");
+      if (!res.ok) throw new Error("Не удалось выполнить поиск в каталоге Workspace");
       const data = await res.json();
       return data.people;
     },

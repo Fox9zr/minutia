@@ -40,7 +40,7 @@ export function CarryoverItem({
     >
       <button
         type="button"
-        aria-label={done ? "Reopen" : "Mark done"}
+        aria-label={done ? "Reopen" : "Отметить выполненным"}
         onClick={onToggle}
         style={{
           flex: "0 0 auto", marginTop: 1,

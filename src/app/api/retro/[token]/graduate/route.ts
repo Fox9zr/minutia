@@ -18,7 +18,7 @@ export async function POST(
 
   const cfg = await getInstanceConfigMap(["retro_enabled"]);
   if (cfg.retro_enabled !== "true") {
-    return NextResponse.json({ error: "Not found" }, { status: 404 });
+    return NextResponse.json({ error: "Не найдено" }, { status: 404 });
   }
 
   const supabase = await createClient();
@@ -26,14 +26,14 @@ export async function POST(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   let body: { target?: "new" | "existing"; name?: string; series_id?: string };
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело запроса" }, { status: 400 });
   }
 
   const svc = createServiceRoleClient();
@@ -43,7 +43,7 @@ export async function POST(
     .eq("token", token)
     .single();
   if (!board) {
-    return NextResponse.json({ error: "Board not found" }, { status: 404 });
+    return NextResponse.json({ error: "Доска не найдена" }, { status: 404 });
   }
   if (board.saved_to_series_id) {
     return NextResponse.json(
@@ -79,7 +79,7 @@ export async function POST(
     }
   }
   if (!actions || actions.length === 0) {
-    return NextResponse.json({ error: "No action items to save" }, { status: 422 });
+    return NextResponse.json({ error: "Нет поручений для сохранения" }, { status: 422 });
   }
 
   // Validate access to an existing target up front (read-only, before claiming).
@@ -94,7 +94,7 @@ export async function POST(
       .eq("id", body.series_id)
       .single();
     if (!series) {
-      return NextResponse.json({ error: "Series not accessible" }, { status: 403 });
+      return NextResponse.json({ error: "Серия недоступна" }, { status: 403 });
     }
     existingSeriesId = series.id;
   }
@@ -145,7 +145,7 @@ export async function POST(
       .single();
     if (error || !series) {
       await release();
-      return NextResponse.json({ error: "Could not create series" }, { status: 400 });
+      return NextResponse.json({ error: "Не удалось создать серию" }, { status: 400 });
     }
     seriesId = series.id;
   }
@@ -167,7 +167,7 @@ export async function POST(
     .single();
   if (meetingErr || !meeting) {
     await release();
-    return NextResponse.json({ error: "Could not create meeting" }, { status: 400 });
+    return NextResponse.json({ error: "Не удалось создать встречу" }, { status: 400 });
   }
 
   // Insert one issue per action, individually, so we can link each back reliably.
@@ -202,7 +202,7 @@ export async function POST(
     .eq("id", board.id);
   if (finalErr) {
     await release();
-    return NextResponse.json({ error: "Could not finalize save" }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось завершить сохранение" }, { status: 500 });
   }
 
   return NextResponse.json({ series_id: seriesId, issue_count: issueCount });

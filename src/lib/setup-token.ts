@@ -24,7 +24,7 @@ export function requireSetupToken(request: NextRequest) {
     return {
       authorized: false as const,
       status: 403,
-      error: "Invalid setup token",
+      error: "Недействительный токен настройки",
     };
   }
 

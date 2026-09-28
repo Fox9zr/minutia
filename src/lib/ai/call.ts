@@ -66,7 +66,7 @@ export async function dispatchAi(
       lastError = err;
     }
   }
-  throw lastError ?? new Error("AI provider request failed");
+  throw lastError ?? new Error("Сбой запроса к провайдеру ИИ");
 }
 
 export async function callAi(input: {
@@ -76,6 +76,6 @@ export async function callAi(input: {
   retries?: number;
 }): Promise<{ data: unknown; model: string }> {
   const config = await getAiConfig();
-  if (!config) throw new AiNotConfiguredError("AI is not configured.");
+  if (!config) throw new AiNotConfiguredError("ИИ не настроен.");
   return dispatchAi(config, input);
 }

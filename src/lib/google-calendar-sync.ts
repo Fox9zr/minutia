@@ -89,7 +89,7 @@ export function normalizeGoogleCalendarEvent({
   event: GoogleCalendarRawEvent;
 }): NormalizedGoogleCalendarEvent {
   if (!event.start?.dateTime || !event.end?.dateTime) {
-    throw new Error("Timed Google Calendar event required");
+    throw new Error("Требуется событие Google Календаря с указанным временем");
   }
 
   const recurringIdentity = event.recurringEventId ?? null;

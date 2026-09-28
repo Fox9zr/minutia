@@ -312,7 +312,7 @@ async function ensureMeeting({
       description: event.description,
     });
   } catch (draftError) {
-    console.error("Failed to auto-draft agenda issues for meeting", data.id, draftError);
+    console.error("Не удалось составить черновик повестки встречи", data.id, draftError);
   }
 
   return data;

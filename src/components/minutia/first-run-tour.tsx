@@ -20,31 +20,31 @@ type TourStep = {
 const TOUR_STEPS: TourStep[] = [
   {
     title: "Ваша доска OIL",
-    body: "This is the control room for open work, pending decisions, and series health.",
+    body: "Центр управления текущими задачами, ожидающими решениями и состоянием серии встреч.",
     target: "[data-tour='oil-board']",
     route: "/",
   },
   {
     title: "Добавить виджеты",
-    body: "Customize the dashboard with meeting, health, and workload panels.",
+    body: "Настройте дашборд с панелями встреч, метрик состояния и нагрузки.",
     target: "[data-tour='add-widget']",
     route: "/",
   },
   {
     title: "Быстро добавить задачи",
-    body: "Use the floating plus or press N to capture an issue without leaving the board.",
+    body: "Используйте кнопку «+» или клавишу N, чтобы создать задачу прямо на доске.",
     target: "[data-tour='quick-add']",
     route: "/",
   },
   {
     title: "Поиск и горячие клавиши",
-    body: "Use Command K to jump anywhere. Press ? whenever you want the full shortcut map.",
+    body: "Нажмите Command+K для быстрого перехода. Нажмите ?, чтобы открыть список горячих клавиш.",
     target: "[data-tour='command-palette']",
     route: "/",
   },
   {
     title: "Серии — это комнаты встреч",
-    body: "Open recurring meeting series from here. Each one owns its meetings, issues, and decisions.",
+    body: "Открывайте повторяющиеся серии встреч отсюда. Каждая включает свои встречи, задачи и решения.",
     target: "[data-tour='series-nav']",
     route: "/series",
   },

@@ -11,7 +11,7 @@ export async function GET() {
     .single();
 
   if (data?.value !== "true") {
-    return NextResponse.json({ error: "Setup incomplete." }, { status: 503 });
+    return NextResponse.json({ error: "Настройка не завершена." }, { status: 503 });
   }
 
   const config = await getInstanceConfigMap(["instance_name"]);

@@ -27,7 +27,7 @@ export async function POST(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const { data: series } = await supabase
@@ -37,7 +37,7 @@ export async function POST(
     .single();
 
   if (!series) {
-    return NextResponse.json({ error: "Series not found" }, { status: 404 });
+    return NextResponse.json({ error: "Серия не найдена" }, { status: 404 });
   }
 
   const admin = createServiceRoleClient();
@@ -60,7 +60,7 @@ export async function POST(
 
   if (!canRemind) {
     return NextResponse.json(
-      { error: "Only series owners and facilitators can send reminders." },
+      { error: "Только владельцы и ведущие серии могут отправлять напоминания." },
       { status: 403 }
     );
   }
@@ -91,7 +91,7 @@ export async function POST(
   const owners = gatherOwnerReminders(issues, profilesById);
   if (owners.length === 0) {
     return NextResponse.json(
-      { error: "No open issues to remind about." },
+      { error: "Нет открытых вопросов для напоминания." },
       { status: 400 }
     );
   }
@@ -162,7 +162,7 @@ export async function POST(
     });
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Failed to send reminders" },
+      { error: err instanceof Error ? err.message : "Не удалось отправить напоминания" },
       { status: 500 }
     );
   }

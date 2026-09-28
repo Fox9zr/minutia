@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   const { data } = await supabase
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   const scopes = Array.isArray(data?.scopes) ? data.scopes : [];
   if (!scopes.includes(GOOGLE_DIRECTORY_SCOPE)) {
     return NextResponse.json(
-      { error: "Google Workspace directory access not connected" },
+      { error: "Доступ к каталогу Google Workspace не подключен" },
       { status: 403 }
     );
   }
@@ -40,10 +40,10 @@ export async function GET(request: NextRequest) {
   } catch (err) {
     if (err instanceof GoogleDirectoryPermissionError) {
       return NextResponse.json(
-        { error: "Google Workspace directory access not granted" },
+        { error: "Доступ к каталогу Google Workspace не предоставлен" },
         { status: 403 }
       );
     }
-    return NextResponse.json({ error: "Directory search failed" }, { status: 500 });
+    return NextResponse.json({ error: "Ошибка поиска в каталоге" }, { status: 500 });
   }
 }

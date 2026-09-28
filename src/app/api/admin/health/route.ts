@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
     .select("id", { head: true, count: "exact" });
   probes.push(
     dbRes.error
-      ? { service: "database", status: "down", detail: "Database query failed" }
+      ? { service: "database", status: "down", detail: "Ошибка выполнения запроса к базе данных" }
       : { service: "database", status: "ok" }
   );
 
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
       : {
           service: "storage",
           status: "degraded",
-          detail: "Storage unavailable",
+          detail: "Хранилище недоступно",
         }
   );
 

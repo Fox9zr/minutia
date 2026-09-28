@@ -60,7 +60,7 @@ function generateBriefText(
   }
 
   if (pendingIssues.length === 0) {
-    lines.push("No pending items. All clear!");
+    lines.push("Нет активных задач. Всё чисто!");
   } else {
     lines.push(`${pendingIssues.length} item${pendingIssues.length === 1 ? "" : "s"} pending:`);
     lines.push("");
@@ -76,7 +76,7 @@ function generateBriefText(
   }
 
   lines.push("");
-  lines.push("Sent via Minutia");
+  lines.push("Отправлено через Minutia");
   return lines.join("\n");
 }
 
@@ -108,17 +108,17 @@ export function BriefCard({
         setEmailUnavailable(false);
         toast(`Brief sent to ${n} attendee${n === 1 ? "" : "s"}`);
       } else if (res.status === 422) {
-        setNotice("No attendee emails on this series. Add emails to the attendees to send.");
+        setNotice("В этой серии встреч нет email-адресов участников. Укажите адреса для отправки.");
       } else if (res.status === 409) {
         setEmailUnavailable(true);
-        setNotice("Email is not configured on this instance. Copy the brief to share it.");
+        setNotice("Электронная почта не настроена на этом инстансе. Скопируйте сводку, чтобы поделиться ей.");
       } else if (typeof data.sent === "number" && data.sent > 0) {
         setNotice(`Sent to ${data.sent} before failing. Copy the brief to reach the rest.`);
       } else {
-        setNotice(data.error ? String(data.error) : "Could not send the brief.");
+        setNotice(data.error ? String(data.error) : "Не удалось отправить сводку.");
       }
     } catch {
-      setNotice("Could not send the brief.");
+      setNotice("Не удалось отправить сводку.");
     } finally {
       setSending(false);
     }
@@ -232,7 +232,7 @@ export function BriefCard({
             data-testid="send-brief-btn"
           >
             <Send className="size-3.5" data-icon="inline-start" />
-            {sending ? "Sending..." : "Email brief"}
+            {sending ? "Sending..." : "Отправить сводку по эл. почте"}
           </Button>
           <Button
             variant={emailUnavailable ? "accent" : "ghost"}

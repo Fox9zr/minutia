@@ -27,7 +27,7 @@ export async function POST(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
 
   let body: unknown;
@@ -52,7 +52,7 @@ export async function POST(
     .single();
 
   if (meetingError || !meeting) {
-    return NextResponse.json({ error: "Meeting not found" }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена" }, { status: 404 });
   }
 
   const payload = meeting as MeetingPayload;
@@ -64,7 +64,7 @@ export async function POST(
 
   if (payload.status !== "completed") {
     return NextResponse.json(
-      { error: "Meeting notes can only be sent after a meeting is completed." },
+      { error: "Заметки встречи можно отправить только после ее завершения." },
       { status: 400 }
     );
   }
@@ -84,7 +84,7 @@ export async function POST(
 
   if (recipients.length === 0) {
     return NextResponse.json(
-      { error: "Add at least one attendee email before sending notes." },
+      { error: "Укажите хотя бы один email участника перед отправкой заметок." },
       { status: 400 }
     );
   }
@@ -124,7 +124,7 @@ export async function POST(
     });
   } catch (err) {
     return NextResponse.json(
-      { error: err instanceof Error ? err.message : "Failed to send meeting notes" },
+      { error: err instanceof Error ? err.message : "Не удалось отправить протокол встречи" },
       { status: 500 }
     );
   }

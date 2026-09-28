@@ -102,9 +102,9 @@ export function buildNewUserOrganizationInviteEmail({
   const html = buildEmailHtml({
     organizationName,
     role,
-    headline: "You have been invited to Minutia",
+    headline: "Вас пригласили в Minutia",
     body: `Use this invite to set your password and join ${organizationName}.`,
-    buttonLabel: "Set password",
+    buttonLabel: "Установить пароль",
     buttonUrl: acceptUrl,
     footer: "No temporary password is shared. The invite link is one-time use and should only be opened by the invited teammate.",
   });
@@ -130,9 +130,9 @@ export function buildExistingUserOrganizationInviteEmail({
   const html = buildEmailHtml({
     organizationName,
     role,
-    headline: "You have access to a Minutia workspace",
+    headline: "У вас есть доступ к рабочему пространству Minutia",
     body: `You were added to ${organizationName}. Your existing Minutia sign-in still works.`,
-    buttonLabel: "Open workspace",
+    buttonLabel: "Открыть рабочее пространство",
     buttonUrl: settingsUrl,
     footer: "Use your existing password or magic link to sign in if this browser does not already have a session.",
   });

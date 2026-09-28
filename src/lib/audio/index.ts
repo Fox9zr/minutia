@@ -110,9 +110,9 @@ export function micErrorMessage(err: unknown): string {
       return "Your microphone is in use by another app. Close it (Zoom, the Minutia companion, another tab), then press Record again.";
     case "NotFoundError":
     case "OverconstrainedError":
-      return "No microphone was found. Connect one, then press Record again.";
+      return "Микрофон не найден. Подключите его и нажмите «Запись» снова.";
     default:
-      return "Could not start the microphone. Check your browser's microphone settings and try again.";
+      return "Не удалось включить микрофон. Проверьте настройки микрофона в браузере и повторите попытку.";
   }
 }
 

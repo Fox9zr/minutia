@@ -85,8 +85,8 @@ function sourceBadgeLabel(source: string): string {
     transcript: "Transcript",
     email: "Email",
     api: "API",
-    ai_suggested: "AI Suggested",
-    calendar_auto_draft: "Calendar draft",
+    ai_suggested: "Предложено ИИ",
+    calendar_auto_draft: "Черновик в календаре",
   };
   return map[source] ?? source;
 }
@@ -185,7 +185,7 @@ function InlineEditText({
     );
   }
 
-  const displayValue = value || placeholder || "Click to edit";
+  const displayValue = value || placeholder || "Нажмите для редактирования";
 
   if (Tag === "h1") {
     return (
@@ -405,7 +405,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
       patch<Issue[]>({ queryKey: issueKeys.all, predicate: isListCache }, removeIssue(id)),
     ]);
     router.push("/dashboard");
-    toast("Issue deleted", {
+    toast("Задача удалена", {
       duration: 5000,
       action: {
         label: "Отменить",
@@ -488,7 +488,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                   )}
                 >
                   <CalendarIcon className="mr-1.5 size-3.5" />
-                  {issue.due_date ? formatDate(issue.due_date) : "No due date"}
+                  {issue.due_date ? formatDate(issue.due_date) : "Срок не задан"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -637,7 +637,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                 ref={updateInputRef}
                 value={updateNote}
                 onChange={(e) => setUpdateNote(e.target.value)}
-                placeholder="What's the latest on this issue?"
+                placeholder="Какой статус по этому вопросу?"
                 className="w-full bg-transparent text-sm text-ink placeholder:text-ink-4 resize-none focus:outline-none"
                 rows={3}
                 onKeyDown={(e) => {
@@ -673,7 +673,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                     onClick={handleSubmitUpdate}
                     disabled={!updateNote.trim() || addUpdate.isPending}
                   >
-                    {addUpdate.isPending ? "Saving..." : "Add update"}
+                    {addUpdate.isPending ? "Saving..." : "Добавить статус"}
                   </Button>
                 </div>
               </div>

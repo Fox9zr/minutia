@@ -4,9 +4,9 @@ import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import { requireSetupToken } from "@/lib/setup-token";
 
 const createAdminSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters"),
-  name: z.string().min(1, "Name is required").max(100),
+  email: z.string().email("Некорректный адрес эл. почты"),
+  password: z.string().min(8, "Пароль должен содержать не менее 8 символов"),
+  name: z.string().min(1, "Укажите имя").max(100),
 });
 
 export async function POST(request: NextRequest) {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = createAdminSchema.safeParse(body);
@@ -43,14 +43,14 @@ export async function POST(request: NextRequest) {
 
   if (setupError) {
     return NextResponse.json(
-      { error: "Failed to check setup status" },
+      { error: "Не удалось проверить статус настройки" },
       { status: 500 }
     );
   }
 
   if (setupConfig?.value === "true") {
     return NextResponse.json(
-      { error: "Setup is already complete" },
+      { error: "Настройка уже завершена" },
       { status: 409 }
     );
   }
@@ -63,14 +63,14 @@ export async function POST(request: NextRequest) {
 
   if (checkError) {
     return NextResponse.json(
-      { error: "Failed to check existing admins" },
+      { error: "Не удалось проверить текущих администраторов" },
       { status: 500 }
     );
   }
 
   if (existingAdmins && existingAdmins.length > 0) {
     return NextResponse.json(
-      { error: "An admin account already exists" },
+      { error: "Аккаунт администратора уже существует" },
       { status: 409 }
     );
   }
@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
 
   if (profileError) {
     return NextResponse.json(
-      { error: "User created but failed to set admin role: " + profileError.message },
+      { error: "Пользователь создан, но не удалось назначить роль администратора:" + profileError.message },
       { status: 500 }
     );
   }

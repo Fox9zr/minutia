@@ -4,7 +4,7 @@
 // instance can point at its own docs while a hosted instance points at upgrade.
 // Kept dependency-free so the esbuild contract verifier can bundle it.
 
-export const UPSELL_DEFAULT_CTA_LABEL = "Learn more";
+export const UPSELL_DEFAULT_CTA_LABEL = "Подробнее";
 
 // 14 days: long enough that a dismissed nudge never nags, short enough that it
 // returns the next time the user genuinely hits the wall.

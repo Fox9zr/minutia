@@ -2,7 +2,7 @@
 
 import React from "react";
 
-const DEFAULT_PHASES = ["Lobby", "Reflect", "Reveal & Vote", "Discuss", "Commit"];
+const DEFAULT_PHASES = ["Lobby", "Reflect", "Открыть и голосовать", "Discuss", "Commit"];
 
 export interface PhaseBarProps extends React.HTMLAttributes<HTMLDivElement> {
   phases?: string[];

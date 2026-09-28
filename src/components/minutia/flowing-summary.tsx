@@ -184,7 +184,7 @@ export function FlowingSummary({
             disabled={!canGenerate || showPreparing}
           >
             {done ? <Loader2 className="size-3.5" /> : <Sparkles className="size-3.5" />}
-            {done ? "Regenerate recap" : "Generate recap"}
+            {done ? "Сгенерировать резюме заново" : "Сформировать итоги"}
           </Button>
         )}
       </div>
@@ -225,7 +225,7 @@ export function FlowingSummary({
       )}
 
       <span className="sr-only" aria-live="polite" aria-atomic="false" aria-relevant="text">
-        {done ? "Summary ready" : ""}
+        {done ? "Итоги готовы" : ""}
       </span>
     </section>
   );

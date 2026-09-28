@@ -33,10 +33,10 @@ export function InviteRequestReviewClient({
   const [selectedDecision, setSelectedDecision] = useState<Decision>(initialDecision);
   const [state, setState] = useState<ActionState>(() => {
     if (status === "approved") {
-      return { kind: "done", status, message: "This request was already approved." };
+      return { kind: "done", status, message: "Этот запрос уже одобрен." };
     }
     if (status === "rejected") {
-      return { kind: "done", status, message: "This request was already rejected." };
+      return { kind: "done", status, message: "Этот запрос уже отклонен." };
     }
     return { kind: "idle" };
   });
@@ -54,7 +54,7 @@ export function InviteRequestReviewClient({
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      setState({ kind: "error", message: data.error || "Could not update access." });
+      setState({ kind: "error", message: data.error || "Не удалось обновить доступ." });
       return;
     }
 
@@ -178,7 +178,7 @@ export function InviteRequestReviewClient({
             ) : (
               <X className="size-4" />
             )}
-            {selectedDecision === "approve" ? "Confirm approval" : "Confirm rejection"}
+            {selectedDecision === "approve" ? "Подтвердить согласование" : "Подтвердить отклонение"}
           </Button>
         </div>
       </div>

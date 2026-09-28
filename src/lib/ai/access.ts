@@ -10,7 +10,7 @@ export async function requireAiAccess(): Promise<NextResponse | null> {
 
   if (!user) {
     return NextResponse.json(
-      { error: "Not authenticated" },
+      { error: "Не авторизован" },
       { status: 401 },
     );
   }
@@ -29,7 +29,7 @@ export async function requireAiAccess(): Promise<NextResponse | null> {
         (error ? ` error=${error.message}` : " reason=profile-missing"),
     );
     return NextResponse.json(
-      { error: "Unable to verify access. Please try again." },
+      { error: "Не удалось проверить доступ. Повторите попытку." },
       { status: 403 },
     );
   }
@@ -40,7 +40,7 @@ export async function requireAiAccess(): Promise<NextResponse | null> {
     );
     return NextResponse.json(
       {
-        error: "AI features are not enabled for this account.",
+        error: "Функции ИИ отключены для этого аккаунта.",
         code: "FEATURE_UNAVAILABLE",
       },
       { status: 403 },

@@ -14,7 +14,7 @@ import { inviteDelivery } from "@/lib/invitations";
 import type { MailMessage } from "@/lib/email";
 
 const INVITE_UPGRADE_REQUIRED =
-  "Inviting teammates requires an upgraded workspace.";
+  "Для приглашения участников необходимо обновить тариф рабочего пространства.";
 
 const inviteSchema = z.object({
   email: z.string().email(),
@@ -29,7 +29,7 @@ function requireJsonBody(request: NextRequest) {
   const contentType = request.headers.get("content-type") ?? "";
   return contentType.toLowerCase().includes("application/json")
     ? null
-    : NextResponse.json({ error: "JSON body required" }, { status: 415 });
+    : NextResponse.json({ error: "Требуется тело JSON" }, { status: 415 });
 }
 
 export async function GET() {
@@ -58,7 +58,7 @@ export async function GET() {
   ]);
 
   if (orgResult.error || memberResult.error || invitationResult.error) {
-    return NextResponse.json({ error: "Failed to load organization" }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось загрузить организацию" }, { status: 500 });
   }
 
   return NextResponse.json({
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = inviteSchema.safeParse(body);
@@ -163,7 +163,7 @@ export async function POST(request: NextRequest) {
     .single();
 
   if (organizationError || !organization) {
-    return NextResponse.json({ error: "Failed to load organization" }, { status: 500 });
+    return NextResponse.json({ error: "Не удалось загрузить организацию" }, { status: 500 });
   }
 
   let acceptUrl: string;
@@ -196,7 +196,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!data.user?.id) {
-      return NextResponse.json({ error: "Failed to create invite user" }, { status: 500 });
+      return NextResponse.json({ error: "Не удалось создать приглашение для пользователя" }, { status: 500 });
     }
 
     const { error: memberError } = await supabase
@@ -217,7 +217,7 @@ export async function POST(request: NextRequest) {
 
     const rawInviteLink = data.properties?.action_link;
     if (!rawInviteLink) {
-      return NextResponse.json({ error: "Failed to generate invite link" }, { status: 500 });
+      return NextResponse.json({ error: "Не удалось создать ссылку-приглашение" }, { status: 500 });
     }
     acceptUrl = toPublicActionLink(rawInviteLink);
 
@@ -262,7 +262,7 @@ export async function DELETE(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело JSON" }, { status: 400 });
   }
 
   const parsed = revokeInvitationSchema.safeParse(body);
@@ -288,7 +288,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   if (!data) {
-    return NextResponse.json({ error: "Invitation not found" }, { status: 404 });
+    return NextResponse.json({ error: "Приглашение не найдено" }, { status: 404 });
   }
 
   return NextResponse.json({ revoked: true });

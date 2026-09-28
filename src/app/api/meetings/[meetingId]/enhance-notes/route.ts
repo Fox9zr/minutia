@@ -7,7 +7,7 @@ import { hasAiConfigured } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
 
 const PROMPT_VERSION = "ai-notes-v1";
-const SYSTEM_PROMPT = "You are a precise meeting-notes editor. Return valid JSON only.";
+const SYSTEM_PROMPT = "Вы — точный редактор протоколов встреч. Возвращайте только корректный JSON.";
 
 const requestSchema = z.object({
   mode: z.enum(["preview"]).default("preview"),
@@ -33,12 +33,12 @@ function section(title: string, items: string[]) {
 function toMarkdown(notes: AiNotes) {
   return [
     section("Summary", notes.summary),
-    section("Action Items", notes.action_items),
+    section("Поручения", notes.action_items),
     section("Decisions", notes.decisions),
     section("Risks", notes.risks),
     section("Blockers", notes.blockers),
     section("Follow-ups", notes.follow_ups),
-    section("Open Questions", notes.open_questions),
+    section("Открытые вопросы", notes.open_questions),
   ].filter(Boolean).join("\n\n");
 }
 
@@ -52,24 +52,24 @@ function buildPrompt(input: {
   decisions: { title: string; rationale: string | null }[];
 }) {
   return [
-    "You enhance recurring meeting notes for Minutia, an Outstanding Issues Log.",
+    "Вы оптимизируете протоколы регулярных встреч для Minutia — журнала нерешенных вопросов.",
     "Return strict JSON with these array fields: summary, action_items, decisions, risks, blockers, follow_ups, open_questions.",
-    "Return only the JSON object. Do not wrap it in markdown fences or add commentary.",
+    "Верните только JSON-объект. Не оборачивайте в разметку markdown и не добавляйте комментариев.",
     "Each field must be an array of concise strings. Use [] when there is no evidence for a field.",
     "Do not invent owners, dates, or decisions. If uncertain, put the uncertainty in open_questions.",
-    "Prefer concise, accountable wording.",
+    "Формулируйте кратко и с указанием ответственных.",
     "",
     `Series: ${input.seriesName}`,
     `Meeting: ${input.title}`,
     `Attendees: ${input.attendees.join(", ") || "Unknown"}`,
     "",
-    "Raw notes:",
+    "Черновые заметки:",
     input.notes || "(empty)",
     "",
     "Transcript:",
     input.transcript || "(not provided)",
     "",
-    "Existing open context:",
+    "Текущий открытый контекст:",
     JSON.stringify({ issues: input.issues, decisions: input.decisions }),
   ].join("\n");
 }
@@ -84,7 +84,7 @@ export async function POST(
   try {
     requestSchema.parse(await request.json());
   } catch {
-    return NextResponse.json({ error: "Invalid request body", request_id: requestId }, { status: 400 });
+    return NextResponse.json({ error: "Некорректное тело запроса", request_id: requestId }, { status: 400 });
   }
 
   const aiDenied = await requireAiAccess();
@@ -100,12 +100,12 @@ export async function POST(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated", request_id: requestId }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован", request_id: requestId }, { status: 401 });
   }
 
   if (!(await hasAiConfigured())) {
     return NextResponse.json(
-      { error: "AI notes are not configured.", request_id: requestId },
+      { error: "Создание заметок с помощью ИИ не настроено.", request_id: requestId },
       { status: 503 }
     );
   }
@@ -117,20 +117,20 @@ export async function POST(
     .single();
 
   if (error || !meeting) {
-    return NextResponse.json({ error: "Meeting not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
 
   const rawNotes = meeting.raw_notes_markdown || meeting.notes_markdown || "";
   if (!rawNotes.trim() && !meeting.transcript_raw?.trim()) {
     return NextResponse.json(
-      { error: "Add notes or a transcript before enhancing.", request_id: requestId },
+      { error: "Добавьте заметки или расшифровку перед обработкой.", request_id: requestId },
       { status: 400 }
     );
   }
 
   const prompt = buildPrompt({
     title: meeting.title,
-    seriesName: meeting.series?.name ?? "Untitled series",
+    seriesName: meeting.series?.name ?? "Серия без названия",
     attendees: meeting.attendees ?? [],
     notes: rawNotes,
     transcript: meeting.transcript_raw,
@@ -144,7 +144,7 @@ export async function POST(
     ({ data: providerData, model } = await callAi({ system: SYSTEM_PROMPT, prompt }));
   } catch {
     return NextResponse.json(
-      { error: "AI provider request failed.", request_id: requestId },
+      { error: "Сбой запроса к провайдеру ИИ.", request_id: requestId },
       { status: 502 }
     );
   }
@@ -154,7 +154,7 @@ export async function POST(
     parsed = notesSchema.parse(JSON.parse(getTextFromOpenRouter(providerData)));
   } catch {
     return NextResponse.json(
-      { error: "AI provider returned invalid notes.", request_id: requestId },
+      { error: "Провайдер ИИ вернул некорректные заметки.", request_id: requestId },
       { status: 502 }
     );
   }
@@ -175,7 +175,7 @@ export async function POST(
 
   if (updateError) {
     return NextResponse.json(
-      { error: "Failed to save AI notes.", request_id: requestId },
+      { error: "Не удалось сохранить заметки ИИ.", request_id: requestId },
       { status: 500 }
     );
   }

@@ -422,7 +422,7 @@ function CalendarEventDetail({
         <div className="space-y-2">
           <div className="flex flex-wrap gap-1.5">
             <span className="inline-flex items-center gap-1 rounded-full bg-paper-3 px-2 py-1 text-[10px] font-medium text-ink-3">
-              {event.seriesKind === "recurring" ? "Recurring series" : "Ad hoc series"}
+              {event.seriesKind === "recurring" ? "Повторяющаяся серия" : "Внеплановая серия"}
             </span>
             {isLive && (
               <span className="inline-flex items-center gap-1 rounded-full bg-accent-soft px-2 py-1 text-[10px] font-medium text-accent">
@@ -451,7 +451,7 @@ function CalendarEventDetail({
             <span>
               {event.attendeeEmails.length > 0
                 ? event.attendeeEmails.slice(0, 4).join(", ")
-                : "No attendees listed"}
+                : "Список участников пуст"}
               {event.attendeeEmails.length > 4 ? ` +${event.attendeeEmails.length - 4}` : ""}
             </span>
           </div>
@@ -480,7 +480,7 @@ function CalendarEventDetail({
             disabled={!isLive && isStarting}
             onClick={() => onStart(event)}
           >
-            {isLive ? "Join now" : "Start meeting"}
+            {isLive ? "Join now" : "Начать встречу"}
           </Button>
           <Button variant="outline" asChild>
             <Link href={`/series/${event.seriesId}`}>

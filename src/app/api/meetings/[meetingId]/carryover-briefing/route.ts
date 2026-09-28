@@ -11,7 +11,7 @@ import {
 } from "@/lib/ai/carryover";
 
 const PROMPT_VERSION = "carryover-briefing-v1";
-const SYSTEM_PROMPT = "You write concise pre-meeting carry-over briefings. Return valid JSON only.";
+const SYSTEM_PROMPT = "Вы составляете краткие вводные сводки по перенесенным вопросам перед встречей. Возвращайте только корректный JSON.";
 
 function buildPrompt(input: {
   seriesName: string;
@@ -30,12 +30,12 @@ function buildPrompt(input: {
   }));
 
   return [
-    "Write a pre-meeting carry-over briefing for a Minutia recurring meeting series.",
-    "A facilitator reads this to know what slipped before the meeting starts.",
+    "Составьте вводную сводку перенесенных вопросов для серии регулярных встреч Minutia.",
+    "Фасилитатор изучает это до начала встречи, чтобы выявить упущенные задачи.",
     "",
-    "OUTPUT CONTRACT",
+    "ВЫХОДНОЙ КОНТРАКТ",
     'Return only a single JSON object: {"briefing_markdown": "...", "overdue_count": N, "no_owner_count": N}.',
-    "Do not wrap it in markdown fences. Do not add any text before or after the JSON.",
+    "Не используйте разметку markdown. Не добавляйте текст до или после JSON.",
     "",
     "briefing_markdown rules:",
     "- 3 to 6 sentences of concise markdown.",
@@ -43,13 +43,13 @@ function buildPrompt(input: {
     "- Name up to 5 highest-priority items with their owner and due date.",
     "- Call out items with no owner explicitly.",
     "- Flag items open a long time as stale.",
-    "Do not invent owners, dates, or resolutions. Use only the data provided.",
+    "Не добавляйте вымышленных ответственных, даты или решения. Используйте только предоставленные данные.",
     "",
     `Series: ${input.seriesName}`,
     `Upcoming meeting: ${input.meetingTitle}`,
     `Totals: ${input.summary.total} open, ${input.summary.overdue_count} overdue, ${input.summary.no_owner_count} without an owner, ${input.summary.stale_count} stale.`,
     "",
-    "Open issues (already ranked, overdue first):",
+    "Открытые задачи (ранжированы, сначала просроченные):",
     JSON.stringify(items),
   ].join("\n");
 }
@@ -74,12 +74,12 @@ export async function POST(
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) {
-    return NextResponse.json({ error: "Not authenticated", request_id: requestId }, { status: 401 });
+    return NextResponse.json({ error: "Не авторизован", request_id: requestId }, { status: 401 });
   }
 
   if (!(await hasAiConfigured())) {
     return NextResponse.json(
-      { error: "Carry-over briefing is not configured.", request_id: requestId },
+      { error: "Сводка по перенесенным задачам не настроена.", request_id: requestId },
       { status: 503 }
     );
   }
@@ -90,7 +90,7 @@ export async function POST(
     .eq("id", meetingId)
     .single();
   if (error || !meeting) {
-    return NextResponse.json({ error: "Meeting not found", request_id: requestId }, { status: 404 });
+    return NextResponse.json({ error: "Встреча не найдена", request_id: requestId }, { status: 404 });
   }
 
   const { data: issues, error: issuesError } = await supabase
@@ -102,7 +102,7 @@ export async function POST(
     .limit(30);
   if (issuesError) {
     return NextResponse.json(
-      { error: "Failed to load carry-over issues.", request_id: requestId },
+      { error: "Не удалось загрузить перенесенные задачи.", request_id: requestId },
       { status: 500 }
     );
   }
@@ -123,7 +123,7 @@ export async function POST(
   }
 
   const prompt = buildPrompt({
-    seriesName: meeting.series?.name ?? "Untitled series",
+    seriesName: meeting.series?.name ?? "Серия без названия",
     meetingTitle: meeting.title,
     summary,
   });
@@ -134,7 +134,7 @@ export async function POST(
     ({ data: providerData, model } = await callAi({ system: SYSTEM_PROMPT, prompt }));
   } catch {
     return NextResponse.json(
-      { error: "AI provider request failed.", request_id: requestId },
+      { error: "Сбой запроса к провайдеру ИИ.", request_id: requestId },
       { status: 502 }
     );
   }
@@ -144,7 +144,7 @@ export async function POST(
     parsed = parseCarryoverBriefing(providerData);
   } catch {
     return NextResponse.json(
-      { error: "AI provider returned an invalid briefing.", request_id: requestId },
+      { error: "Провайдер ИИ вернул некорректную сводку.", request_id: requestId },
       { status: 502 }
     );
   }
