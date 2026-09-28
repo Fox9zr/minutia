@@ -135,9 +135,10 @@ export async function POST(
     if (channel === "email") {
       for (const owner of owners) {
         // Daiko demo fallback: derive demo email from owner name when no account exists
-        const demoEmail = owner.ownerEmail || (owner.ownerName ? owner.ownerName
-          .toLowerCase()
-          .replace(/[^a-zа-яё ]/gi, '')
+        const translitMap: Record<string, string> = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
+        const translit = (str: string) => str.toLowerCase().split('').map(ch => translitMap[ch] ?? ch).join('');
+        const demoEmail = owner.ownerEmail || (owner.ownerName ? translit(owner.ownerName)
+          .replace(/[^a-z. ]/g, '')
           .trim()
           .split(/\s+/)
           .slice(0, 2)
