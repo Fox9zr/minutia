@@ -141,6 +141,7 @@ export async function POST(
           .replace(/[^a-z. ]/g, '')
           .trim()
           .split(/\s+/)
+          .filter((p: string) => p.length > 1)
           .slice(0, 2)
           .join('.') + '@demo.tps.by' : null);
         if (!demoEmail) continue;
