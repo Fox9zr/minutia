@@ -199,6 +199,8 @@ export async function middleware(request: NextRequest) {
     "/auth/callback",
     "/reset-password",
     "/share",
+    "/respond",
+    "/api/respond",
     "/setup",
     "/api/setup",
     "/api/admin",

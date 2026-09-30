@@ -407,6 +407,7 @@ export function useUpdateIssue() {
       owner_name?: string | null;
       due_date?: string | null;
       priority?: string;
+      proposed_due_date?: string | null;
     },
     {
       previousIssueLists: IssueListSnapshot;

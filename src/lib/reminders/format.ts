@@ -51,13 +51,19 @@ function renderText(owners: OwnerReminder[], ctx: ReminderContext): string {
   return lines.join("\n");
 }
 
-function renderHtml(owners: OwnerReminder[], ctx: ReminderContext): string {
+function issueRespondButtons(url: string | undefined): string {
+  if (!url) return "";
+  return ` <a href="${url}" style="display:inline-block;margin:0 0 2px 8px;padding:2px 10px;border-radius:6px;background:#171717;color:#ffffff;font-size:12px;font-weight:600;text-decoration:none;">Принято</a>` +
+    ` <a href="${url}" style="display:inline-block;margin:0 0 2px 4px;padding:2px 10px;border-radius:6px;border:1px solid #d9d4cc;color:#171717;font-size:12px;font-weight:600;text-decoration:none;">Скорректировать</a>`;
+}
+
+function renderHtml(owners: OwnerReminder[], ctx: ReminderContext, respondUrls?: Record<string, string>): string {
   const sections = owners
     .map((owner) => {
       const items = owner.issues
         .map(
           (issue) =>
-            `<li style="margin:0 0 5px;color:#171717;font-size:15px;line-height:22px;" class="m-ink">${escapeHtml(issue.title)} (#${issue.issue_number})</li>`
+            `<li style="margin:0 0 5px;color:#171717;font-size:15px;line-height:22px;" class="m-ink">${escapeHtml(issue.title)} (#${issue.issue_number})${issueRespondButtons(respondUrls?.[issue.id])}</li>`
         )
         .join("");
       return `
@@ -88,11 +94,15 @@ export function formatReminderDigest(owners: OwnerReminder[], ctx: ReminderConte
   };
 }
 
-export function formatOwnerEmail(owner: OwnerReminder, ctx: ReminderContext) {
+export function formatOwnerEmail(
+  owner: OwnerReminder,
+  ctx: ReminderContext,
+  respondUrls?: Record<string, string>
+) {
   return {
     subject: `${ownerLabel(owner)}: открытые поручения — ${ctx.seriesName}`,
     text: renderText([owner], ctx),
-    html: renderHtml([owner], ctx),
+    html: renderHtml([owner], ctx, respondUrls),
   };
 }
 

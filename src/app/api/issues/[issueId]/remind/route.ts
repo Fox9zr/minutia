@@ -9,6 +9,7 @@ import {
   type ReminderProfile,
 } from "@/lib/reminders";
 import { createClient } from "@/lib/supabase/server";
+import { mintIssueResponseUrl } from "@/lib/issue-response-token";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import type { Issue } from "@/lib/types";
 
@@ -118,7 +119,11 @@ export async function POST(
     seriesName: series?.name ?? "Серия встреч",
     appUrl: absoluteAppUrl(request.url, `/series/${issue.series_id}`),
   };
-  const email = formatOwnerEmail(owner, ctx);
+  const respondPath = await mintIssueResponseUrl(issue.id);
+  const respondUrls = respondPath
+    ? { [issue.id]: absoluteAppUrl(request.url, respondPath) }
+    : undefined;
+  const email = formatOwnerEmail(owner, ctx, respondUrls);
 
   await sendMail({
     to: targetEmail,

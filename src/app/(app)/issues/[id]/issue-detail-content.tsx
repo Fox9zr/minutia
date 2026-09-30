@@ -477,6 +477,41 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             />
           </div>
 
+          {/* Accepted badge */}
+          {issue.accepted_at && (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Подтверждено</span>
+              <span className="text-xs font-medium text-green-700 bg-green-600/10 rounded px-1.5 py-0.5">
+                ✓ Принято {new Date(issue.accepted_at).toLocaleDateString("ru-RU")}
+              </span>
+            </div>
+          )}
+          {issue.proposed_due_date && (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Предложение</span>
+              <span className="text-xs text-amber-700 bg-amber-500/10 rounded px-1.5 py-0.5">
+                исполнитель просит срок до {new Date(issue.proposed_due_date).toLocaleDateString("ru-RU")}
+                {issue.proposed_note ? ` — «${issue.proposed_note}»` : ""}
+              </span>
+              <Button
+                variant="outline"
+                size="xs"
+                className="text-xs"
+                onClick={() => { handleFieldSave("due_date", formatISODate(new Date(issue.proposed_due_date!))); handleFieldSave("proposed_due_date", null); }}
+              >
+                Применить
+              </Button>
+              <Button
+                variant="ghost"
+                size="xs"
+                className="text-xs"
+                onClick={() => handleFieldSave("proposed_due_date", null)}
+              >
+                Отклонить
+              </Button>
+            </div>
+          )}
+
           {/* Due date */}
           <div className="flex items-center gap-2 text-sm">
             <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Срок</span>

@@ -220,6 +220,9 @@ export interface Issue {
   created_at: Date;
   updated_at: Date;
   update_count?: number;
+  accepted_at?: Date | null;
+  proposed_due_date?: Date | null;
+  proposed_note?: string | null;
 }
 
 export interface MeetingAiSuggestion {

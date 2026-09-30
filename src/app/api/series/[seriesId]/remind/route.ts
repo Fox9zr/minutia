@@ -13,6 +13,7 @@ import {
   type ReminderProfile,
 } from "@/lib/reminders";
 import { createClient } from "@/lib/supabase/server";
+import { mintIssueResponseUrl } from "@/lib/issue-response-token";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import type { Issue } from "@/lib/types";
 
@@ -164,7 +165,13 @@ export async function POST(
           .slice(0, 2)
           .join('.') + '@demo.tps.by' : null);
         if (!demoEmail) continue;
-        const email = formatOwnerEmail(owner, ctx);
+        // no-login response buttons per issue
+        const respondUrls: Record<string, string> = {};
+        for (const issue of owner.issues) {
+          const rp = await mintIssueResponseUrl(issue.id);
+          if (rp) respondUrls[issue.id] = absoluteAppUrl(request.url, rp);
+        }
+        const email = formatOwnerEmail(owner, ctx, Object.keys(respondUrls).length ? respondUrls : undefined);
         await sendMail({
           to: demoEmail,
           subject: email.subject,
