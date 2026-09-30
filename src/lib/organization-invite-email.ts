@@ -88,15 +88,15 @@ export function buildNewUserOrganizationInviteEmail({
   invitedEmail,
 }: NewUserOrganizationInviteEmailInput) {
   const roleLabel = roleCopy(role);
-  const subject = `Set your Kotrol password for ${organizationName}`;
+  const subject = `Задайте пароль Kotrol для ${organizationName}`;
 
   const text = [
-    `You have been invited to ${organizationName} as an organization ${roleLabel}.`,
+    `Вас пригласили в ${organizationName} с ролью ${roleLabel}.`,
     invitedEmail ? `Invited email: ${invitedEmail}` : "",
     "",
     `Set your password: ${acceptUrl}`,
     "",
-    "No temporary password is shared. This one-time link lets you choose your own password and open the workspace.",
+    "Временный пароль не отправляется. Одноразовая ссылка позволяет задать свой пароль и войти в рабочее пространство.",
   ].filter(Boolean).join("\n");
 
   const html = buildEmailHtml({
@@ -106,7 +106,7 @@ export function buildNewUserOrganizationInviteEmail({
     body: `Use this invite to set your password and join ${organizationName}.`,
     buttonLabel: "Установить пароль",
     buttonUrl: acceptUrl,
-    footer: "No temporary password is shared. The invite link is one-time use and should only be opened by the invited teammate.",
+    footer: "Временный пароль не отправляется. Ссылка приглашения одноразовая — открывать только приглашённому.",
   });
 
   return { subject, text, html };
@@ -119,10 +119,10 @@ export function buildExistingUserOrganizationInviteEmail({
 }: ExistingUserOrganizationInviteEmailInput) {
   const settingsUrl = new URL("/settings", appUrl).toString();
   const roleLabel = roleCopy(role);
-  const subject = `You have been added to ${organizationName} on Kotrol`;
+  const subject = `Вас добавили в ${organizationName} на Kotrol`;
 
   const text = [
-    `You have been added to ${organizationName} as an organization ${roleLabel}.`,
+    `Вас добавили в ${organizationName} с ролью ${roleLabel}.`,
     "",
     `Open workspace: ${settingsUrl}`,
   ].join("\n");
@@ -134,7 +134,7 @@ export function buildExistingUserOrganizationInviteEmail({
     body: `You were added to ${organizationName}. Your existing Kotrol sign-in still works.`,
     buttonLabel: "Открыть рабочее пространство",
     buttonUrl: settingsUrl,
-    footer: "Use your existing password or magic link to sign in if this browser does not already have a session.",
+    footer: "Используйте свой пароль или одноразовую ссылку для входа, если в этом браузере ещё нет сессии.",
   });
 
   return { subject, text, html };

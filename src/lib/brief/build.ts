@@ -111,8 +111,8 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
       .slice(0, MAX_ALSO);
 
     const subject = dateLabel
-      ? `Brief: ${series.name} on ${dateLabel}`
-      : `Brief: ${series.name}`;
+      ? `Брифинг: ${series.name} — ${dateLabel}`
+      : `Брифинг: ${series.name}`;
 
     const bodyHtml =
       (metaLine
@@ -128,8 +128,8 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
 
     const html = renderEmailLayout({
       preheader: mine.length
-        ? `You have ${mine.length} open item${mine.length === 1 ? "" : "s"} before ${series.name}`
-        : `Pre-meeting brief for ${series.name}`,
+        ? `У вас ${mine.length} открытых поручений перед «${series.name}»`
+        : `Брифинг перед встречей: ${series.name}`,
       heading: series.name,
       bodyHtml,
       cta,
@@ -138,14 +138,14 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
     });
 
     const text = [
-      `Brief: ${series.name}`,
+      `Брифинг: ${series.name}`,
       metaLine,
       "",
       sectionText("Ваши открытые задачи", mine, "У вас нет открытых задач. Отлично."),
       "",
       sectionText("Также в журнале", also, "Других открытых задач нет."),
       "",
-      `See the live log: ${cta.href}`,
+      `Живой журнал: ${cta.href}`,
       "",
       "Отправлено через Kotrol",
     ]

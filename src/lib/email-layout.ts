@@ -48,7 +48,7 @@ export function renderEmailLayout(input: EmailLayoutInput): string {
     : escapeHtml(MINUTIA_EMAIL_BRANDING);
 
   return `<!doctype html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -72,7 +72,7 @@ export function renderEmailLayout(input: EmailLayoutInput): string {
           <table role="presentation" class="m-card" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:${palette.card};border:1px solid ${palette.rule};border-radius:18px;overflow:hidden;">
             <tr>
               <td class="m-rule" style="padding:24px 28px 18px;border-bottom:1px solid ${palette.rule};">
-                <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;letter-spacing:.01em;color:${palette.accent};">minutia</span>
+                <span style="font-family:Georgia,'Times New Roman',serif;font-size:20px;font-weight:700;letter-spacing:.01em;color:${palette.accent};">Kotrol</span>
               </td>
             </tr>
             <tr>
