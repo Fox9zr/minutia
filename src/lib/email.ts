@@ -53,6 +53,23 @@ export async function getSmtpConfig(): Promise<SmtpConfig | null> {
 }
 
 export function createMailTransport(smtp: SmtpConfig) {
+  // Gmail OAuth2 mode: avoids app-passwords entirely (env-gated).
+  if (process.env.SMTP_OAUTH2 === "1" && process.env.GMAIL_OAUTH_USER) {
+    return nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        type: "OAuth2",
+        user: process.env.GMAIL_OAUTH_USER,
+        clientId: process.env.GMAIL_OAUTH_CLIENT_ID,
+        clientSecret: process.env.GMAIL_OAUTH_CLIENT_SECRET,
+        refreshToken: process.env.GMAIL_OAUTH_REFRESH_TOKEN,
+      } as never,
+      connectionTimeout: 15000,
+      greetingTimeout: 15000,
+    });
+  }
   return nodemailer.createTransport({
     host: smtp.host,
     port: smtp.port,
