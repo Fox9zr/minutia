@@ -18,7 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCreateIssue } from "@/lib/hooks/use-issues";
-import { useСерии } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-series";
 import { useAllMeetings } from "@/lib/hooks/use-meetings";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { CATEGORY_CONFIG } from "@/lib/constants";
@@ -30,14 +30,14 @@ export function QuickAddDialog() {
   const closeQuickAddDialog = useUIStore((s) => s.closeQuickAddDialog);
 
   const [title, setTitle] = React.useState("");
-  const [seriesId, setСерииId] = React.useState("");
+  const [seriesId, setSeriesId] = React.useState("");
   const [category, setCategory] = React.useState<IssueCategory>("action");
   const [error, setError] = React.useState<string | null>(null);
-  const [noMeetingСерииId, setNoMeetingСерииId] = React.useState<string | null>(null);
+  const [noMeetingSeriesId, setNoMeetingSeriesId] = React.useState<string | null>(null);
   const titleRef = React.useRef<HTMLInputElement>(null);
 
   const createIssue = useCreateIssue();
-  const { data: seriesList = [] } = useСерии(open);
+  const { data: seriesList = [] } = useSeries(open);
   const { data: allMeetings = [] } = useAllMeetings();
 
   const latestMeetingId = React.useMemo(() => {
@@ -64,14 +64,14 @@ export function QuickAddDialog() {
   React.useEffect(() => {
     if (!open) {
       setTitle("");
-      setСерииId("");
+      setSeriesId("");
       setCategory("action");
       setError(null);
-      setNoMeetingСерииId(null);
+      setNoMeetingSeriesId(null);
     }
   }, [open]);
 
-  function goToСерии(id?: string) {
+  function goToSeries(id?: string) {
     closeQuickAddDialog();
     router.push(id ? `/series/${id}` : "/series");
   }
@@ -79,14 +79,14 @@ export function QuickAddDialog() {
   // Auto-select first series when dialog opens.
   React.useEffect(() => {
     if (open && seriesList.length > 0 && !seriesId) {
-      setСерииId(seriesList[0].id);
+      setSeriesId(seriesList[0].id);
     }
   }, [open, seriesList, seriesId]);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    setNoMeetingСерииId(null);
+    setNoMeetingSeriesId(null);
 
     if (!title.trim()) {
       setError("Название обязательно");
@@ -100,7 +100,7 @@ export function QuickAddDialog() {
 
     if (!latestMeetingId) {
       setError("В этой серии нет встреч. Сначала создайте встречу.");
-      setNoMeetingСерииId(seriesId);
+      setNoMeetingSeriesId(seriesId);
       return;
     }
 
@@ -166,12 +166,12 @@ export function QuickAddDialog() {
               htmlFor="quick-add-series"
               className="text-[11px] font-mono uppercase tracking-wider text-ink-3"
             >
-              Серии
+              Series
             </label>
             {seriesList.length > 0 ? (
               <Select
                 value={seriesId}
-                onValueChange={setСерииId}
+                onValueChange={setSeriesId}
               >
                 <SelectTrigger id="quick-add-series" className="w-full" aria-label="Серия">
                   <SelectValue placeholder="Выберите серию" />
@@ -191,7 +191,7 @@ export function QuickAddDialog() {
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => goToСерии()}
+                  onClick={() => goToSeries()}
                 >
                   Create a series
                 </Button>
@@ -226,12 +226,12 @@ export function QuickAddDialog() {
           {error && (
             <div role="alert" className="space-y-2">
               <p className="text-sm text-destructive">{error}</p>
-              {noMeetingСерииId && (
+              {noMeetingSeriesId && (
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => goToСерии(noMeetingСерииId)}
+                  onClick={() => goToSeries(noMeetingSeriesId)}
                 >
                   Go to series to start a meeting
                 </Button>

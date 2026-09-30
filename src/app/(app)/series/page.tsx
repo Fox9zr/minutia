@@ -3,9 +3,9 @@
 import * as React from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Link from "next/link";
-import { useСерии } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-series";
 import { EmptyState } from "@/components/minutia/empty-state";
-import { CreateСерииDialog } from "@/components/minutia/create-series-dialog";
+import { CreateSeriesDialog } from "@/components/minutia/create-series-dialog";
 import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -28,10 +28,10 @@ function formatDate(date: Date | string): string {
   });
 }
 
-export default function СерииListPage() {
-  const { data: seriesList, isLoading } = useСерии();
+export default function SeriesListPage() {
+  const { data: seriesList, isLoading } = useSeries();
   const [dialogOpen, setDialogOpen] = React.useState(false);
-  const [activeСерииId, setActiveСерииId] = React.useState<string | null>(
+  const [activeSeriesId, setActiveSeriesId] = React.useState<string | null>(
     null
   );
   const mounted = React.useSyncExternalStore(
@@ -47,13 +47,13 @@ export default function СерииListPage() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-display text-2xl font-semibold text-ink">
-            Серии
+            Series
           </h1>
           <Button variant="accent"
             onClick={() => setDialogOpen(true)}
           >
             <Plus className="size-4" data-icon="inline-start" />
-            Создать серию
+            Create series
           </Button>
         </div>
 
@@ -82,7 +82,7 @@ export default function СерииListPage() {
           />
         )}
 
-        {/* Серии grid */}
+        {/* Series grid */}
         {mounted && !isLoading && seriesList && seriesList.length > 0 && (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {seriesList.map((series, i) => (
@@ -95,18 +95,18 @@ export default function СерииListPage() {
                   delay: i * 0.06,
                   ease: [0.2, 0.8, 0.2, 1],
                 }}
-                onHoverStart={() => setActiveСерииId(series.id)}
+                onHoverStart={() => setActiveSeriesId(series.id)}
                 onHoverEnd={() =>
-                  setActiveСерииId((current) =>
+                  setActiveSeriesId((current) =>
                     current === series.id ? null : current
                   )
                 }
               >
                 <Link
                   href={`/series/${series.id}`}
-                  onFocus={() => setActiveСерииId(series.id)}
+                  onFocus={() => setActiveSeriesId(series.id)}
                   onBlur={() =>
-                    setActiveСерииId((current) =>
+                    setActiveSeriesId((current) =>
                       current === series.id ? null : current
                     )
                   }
@@ -157,7 +157,7 @@ export default function СерииListPage() {
                   </div>
 
                   <AnimatePresence>
-                    {activeСерииId === series.id && (
+                    {activeSeriesId === series.id && (
                       <motion.div
                         data-testid="series-card-detail-panel"
                         className="pointer-events-none absolute left-3 right-3 top-[calc(100%-0.5rem)] z-20 rounded-md bg-card px-3 py-2.5 shadow-xl"
@@ -186,7 +186,7 @@ export default function СерииListPage() {
         )}
       </div>
 
-      <CreateСерииDialog open={dialogOpen} onOpenChange={setDialogOpen} />
+      <CreateSeriesDialog open={dialogOpen} onOpenChange={setDialogOpen} />
     </div>
   );
 }

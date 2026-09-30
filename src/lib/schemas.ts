@@ -8,7 +8,7 @@ const sharePermissionEnum = z.enum(["view", "comment"]);
 const shareResourceTypeEnum = z.enum(["meeting", "series", "issue"]);
 const themeEnum = z.enum(["light", "dark", "system"]);
 
-export const createСерииSchema = z.object({
+export const createSeriesSchema = z.object({
   name: z.string().min(1).max(200),
   description: z.string().optional(),
   cadence: cadenceEnum,
@@ -66,7 +66,7 @@ export const quickAddIssueSchema = z.object({
   category: issueCategoryEnum.optional(),
 });
 
-export type CreateСерииInput = z.infer<typeof createСерииSchema>;
+export type CreateSeriesInput = z.infer<typeof createSeriesSchema>;
 export type CreateMeetingInput = z.infer<typeof createMeetingSchema>;
 export type CreateIssueInput = z.infer<typeof createIssueSchema>;
 export type UpdateIssueStatusInput = z.infer<typeof updateIssueStatusSchema>;

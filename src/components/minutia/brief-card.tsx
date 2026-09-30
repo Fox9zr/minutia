@@ -173,7 +173,7 @@ export function BriefCard({
           )}
         </div>
 
-        {/* Серии name */}
+        {/* Series name */}
         <h3 className="font-display font-medium text-ink text-lg mb-4">
           {seriesName}
         </h3>

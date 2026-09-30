@@ -4,7 +4,7 @@ import * as React from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { Check, ChevronDown } from "lucide-react";
 import { useIssues, useUpdateIssueStatus } from "@/lib/hooks/use-issues";
-import { useСерии } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-series";
 import { useProfile } from "@/lib/hooks/use-profile";
 import { PRIORITY_CONFIG } from "@/lib/constants";
 import { EmptyState } from "@/components/minutia";
@@ -195,7 +195,7 @@ function ActionsSkeleton() {
 
 export default function MyActionsPage() {
   const { data: issues, isLoading: issuesLoading } = useIssues();
-  const { data: seriesList, isLoading: seriesLoading } = useСерии();
+  const { data: seriesList, isLoading: seriesLoading } = useSeries();
   const { data: profile, isLoading: profileLoading } = useProfile();
   const updateStatus = useUpdateIssueStatus();
 

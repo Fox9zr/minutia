@@ -448,7 +448,7 @@ export default function AdminSettingsPage() {
           <CardHeader>
             <CardTitle>AI</CardTitle>
             <CardDescription>
-              Bring-your-own-key AI configuration. Применяется к AI summaries and suggestions.
+              Bring-your-own-key AI configuration. Applies to AI summaries and suggestions.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -566,7 +566,7 @@ export default function AdminSettingsPage() {
       {showFeatureFlags && (
         <Card>
           <CardHeader>
-            <CardTitle>Функциональные флаги</CardTitle>
+            <CardTitle>Feature flags</CardTitle>
             <CardDescription>
               Toggle optional surfaces and configure reminder channels.
             </CardDescription>
@@ -649,7 +649,7 @@ export default function AdminSettingsPage() {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <Label htmlFor="capacity_notice_url">Ссылка на Промпт ёмкости</Label>
+                  <Label htmlFor="capacity_notice_url">Ссылка на Capacity prompt</Label>
                   <Input
                     id="capacity_notice_url"
                     placeholder="https://example.com/more-space"
@@ -681,7 +681,7 @@ export default function AdminSettingsPage() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="discard_after_transcript">
-                  Удалять аудио после расшифровки (recommended)
+                  Discard audio after transcription (recommended)
                 </SelectItem>
                 <SelectItem value="keep_forever">Хранить аудио бессрочно</SelectItem>
               </SelectContent>

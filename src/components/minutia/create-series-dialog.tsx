@@ -4,8 +4,8 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
-import { createСерииSchema, type CreateСерииInput } from "@/lib/schemas";
-import { useCreateСерии } from "@/lib/hooks/use-series";
+import { createSeriesSchema, type CreateSeriesInput } from "@/lib/schemas";
+import { useCreateSeries } from "@/lib/hooks/use-series";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
 import type { Cadence } from "@/lib/types";
 import {
@@ -25,16 +25,16 @@ import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { cn } from "@/lib/utils";
 import { Loader2 } from "lucide-react";
 
-interface CreateСерииDialogProps {
+interface CreateSeriesDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-export function CreateСерииDialog({
+export function CreateSeriesDialog({
   open,
   onOpenChange,
-}: CreateСерииDialogProps) {
-  const createСерии = useCreateСерии();
+}: CreateSeriesDialogProps) {
+  const createSeries = useCreateSeries();
 
   const {
     register,
@@ -43,8 +43,8 @@ export function CreateСерииDialog({
     watch,
     setValue,
     formState: { errors },
-  } = useForm<CreateСерииInput>({
-    resolver: zodResolver(createСерииSchema as any),
+  } = useForm<CreateSeriesInput>({
+    resolver: zodResolver(createSeriesSchema as any),
     defaultValues: {
       name: "",
       description: "",
@@ -55,8 +55,8 @@ export function CreateСерииDialog({
 
   const selectedCadence = watch("cadence");
 
-  async function onSubmit(data: CreateСерииInput) {
-    await createСерии.mutateAsync(data);
+  async function onSubmit(data: CreateSeriesInput) {
+    await createSeries.mutateAsync(data);
     reset();
     onOpenChange(false);
   }
@@ -160,13 +160,13 @@ export function CreateСерииDialog({
           <div className="border-t border-rule pt-6 flex justify-end">
             <Button variant="accent"
               type="submit"
-              disabled={createСерии.isPending}
+              disabled={createSeries.isPending}
               className="px-6 h-10"
             >
-              {createСерии.isPending && (
+              {createSeries.isPending && (
                 <Loader2 className="size-3.5 animate-spin" />
               )}
-              Создать серию
+              Create series
             </Button>
           </div>
         </form>

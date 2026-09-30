@@ -48,7 +48,7 @@ type SourceSummary = {
   meeting_title?: string | null;
 };
 
-export type AskСерииCitation = {
+export type AskSeriesCitation = {
   type: "meeting" | "issue" | "decision" | "notes";
   source_id: string;
   title: string;
@@ -58,9 +58,9 @@ export type AskСерииCitation = {
   label: string;
 };
 
-export type AskСерииParsedAnswer = {
+export type AskSeriesParsedAnswer = {
   answer: string;
-  citations: AskСерииCitation[];
+  citations: AskSeriesCitation[];
   unsupported: boolean;
 };
 
@@ -83,7 +83,7 @@ export function getTextFromOpenRouter(data: unknown) {
 }
 
 function citationHref(input: {
-  type: AskСерииCitation["type"];
+  type: AskSeriesCitation["type"];
   sourceId: string;
   meetingId: string | null;
 }) {
@@ -94,7 +94,7 @@ function citationHref(input: {
   return meetingId ? `meetings/${meetingId}` : "";
 }
 
-function citationLabel(citation: Pick<AskСерииCitation, "type" | "title" | "meeting_title">) {
+function citationLabel(citation: Pick<AskSeriesCitation, "type" | "title" | "meeting_title">) {
   const sourceLabel = citation.meeting_title || citation.title;
   return citation.type === "notes" ? `Notes: ${sourceLabel}` : sourceLabel;
 }
@@ -105,7 +105,7 @@ function resolveCitation(input: {
   meetings: Map<string, SourceSummary>;
   issues: Map<string, SourceSummary>;
   decisions: Map<string, SourceSummary>;
-}): AskСерииCitation | null {
+}): AskSeriesCitation | null {
   const inferredType =
     input.citation.type ??
     (input.meetings.has(input.citation.source_id)
@@ -135,7 +135,7 @@ function resolveCitation(input: {
   });
   if (!relativeHref) return null;
 
-  const citation: AskСерииCitation = {
+  const citation: AskSeriesCitation = {
     type: inferredType,
     source_id: input.citation.source_id,
     title,
@@ -150,13 +150,13 @@ function resolveCitation(input: {
   return citation;
 }
 
-export function parseAskСерииAnswer(input: {
+export function parseAskSeriesAnswer(input: {
   providerData: unknown;
   seriesId: string;
   meetings: SourceSummary[];
   issues: SourceSummary[];
   decisions: SourceSummary[];
-}): AskСерииParsedAnswer {
+}): AskSeriesParsedAnswer {
   const parsed = providerAnswerSchema.parse(JSON.parse(getTextFromOpenRouter(input.providerData)));
   const meetings = new Map(input.meetings.map((source) => [source.id, source]));
   const issues = new Map(input.issues.map((source) => [source.id, source]));
@@ -177,7 +177,7 @@ export function parseAskСерииAnswer(input: {
           ]
         : []
     )
-    .filter((citation): citation is AskСерииCitation => citation !== null);
+    .filter((citation): citation is AskSeriesCitation => citation !== null);
 
   if (parsed.unsupported || citations.length === 0) {
     return {

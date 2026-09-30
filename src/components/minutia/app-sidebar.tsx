@@ -14,7 +14,7 @@ import {
   Building2,
 } from "lucide-react";
 import { signOut } from "@/lib/supabase/auth-actions";
-import { useСерии } from "@/lib/hooks/use-series";
+import { useSeries } from "@/lib/hooks/use-series";
 import { useIssues } from "@/lib/hooks/use-issues";
 import { useUnreadCount } from "@/lib/hooks/use-notifications";
 import {
@@ -76,7 +76,7 @@ interface AppSidebarProps {
 
 export function AppSidebar({ profile, organizations }: AppSidebarProps) {
   const pathname = usePathname();
-  const { data: seriesList } = useСерии();
+  const { data: seriesList } = useSeries();
   const { data: issues } = useIssues();
   const { data: unreadCount } = useUnreadCount();
   const currentOrganization = organizations.find(

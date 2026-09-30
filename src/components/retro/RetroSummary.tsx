@@ -15,11 +15,11 @@ export interface RetroSummaryProps {
   cards: RetroCardData[];
   votes: Record<string, number>;
   actions: RetroAction[];
-  savedСерииId: string | null;
+  savedSeriesId: string | null;
   onExport: () => void;
 }
 
-export function RetroSummary({ boardName, columns, cards, votes, actions, savedСерииId, onExport }: RetroSummaryProps) {
+export function RetroSummary({ boardName, columns, cards, votes, actions, savedSeriesId, onExport }: RetroSummaryProps) {
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-10) var(--space-6)" }}>
       <div style={{ width: "100%", maxWidth: 920, margin: "0 auto" }}>
@@ -78,8 +78,8 @@ export function RetroSummary({ boardName, columns, cards, votes, actions, saved�
         </section>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 16, paddingTop: 8 }}>
-          {savedСерииId && (
-            <Link href={`/series/${savedСерииId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-bright)" }}>
+          {savedSeriesId && (
+            <Link href={`/series/${savedSeriesId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-bright)" }}>
               Open the series &rarr;
             </Link>
           )}

@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
-import { parseAskСерииAnswer } from "@/lib/ai/ask-series-answer";
+import { parseAskSeriesAnswer } from "@/lib/ai/ask-series-answer";
 import { createClient } from "@/lib/supabase/server";
 import { callAi } from "@/lib/ai/call";
 import { hasAiConfigured } from "@/lib/ai/config";
@@ -52,7 +52,7 @@ function buildPrompt(input: {
     "",
     `Question: ${input.question}`,
     "",
-    "Серии:",
+    "Series:",
     JSON.stringify(input.series, null, 2),
     "",
     "Meetings:",
@@ -162,7 +162,7 @@ export async function POST(
 
   let normalized;
   try {
-    normalized = parseAskСерииAnswer({
+    normalized = parseAskSeriesAnswer({
       providerData,
       seriesId,
       meetings: (meetings ?? []).map((meeting) => ({

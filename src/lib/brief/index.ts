@@ -1,7 +1,7 @@
 export { ownerMatchesRecipient, type BriefOwner } from "./match";
 export {
-  buildСерииBrief,
+  buildSeriesBrief,
   type BriefEmail,
   type BriefIssue,
-  type BuildСерииBriefInput,
+  type BuildSeriesBriefInput,
 } from "./build";

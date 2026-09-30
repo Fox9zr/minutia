@@ -19,7 +19,7 @@ export const markAllRead =
   <T extends { read: boolean }>(list: T[]): T[] =>
     list.map((n) => (n.read ? n : { ...n, read: true }));
 
-export const patchСерииFields =
+export const patchSeriesFields =
   <T extends { id: string }>(id: string, fields: Partial<T>) =>
   (list: T[]): T[] =>
     list.map((s) => (s.id === id ? { ...s, ...fields } : s));

@@ -6,7 +6,7 @@ import { StatusChip } from "@/components/minutia/status-chip";
 import { CategoryBadge } from "@/components/minutia/category-badge";
 import { PrefetchIssueLink } from "@/components/minutia/prefetch-issue-link";
 import { cn } from "@/lib/utils";
-import type { Issue, IssueStatus, Meeting, MeetingСерии } from "@/lib/types";
+import type { Issue, IssueStatus, Meeting, MeetingSeries } from "@/lib/types";
 import { daysSince } from "@/lib/date-utils";
 
 function formatOrdinal(value: number): string {
@@ -37,7 +37,7 @@ export function MeetingTriageWidget({
   index: number;
   issues: Issue[];
   meetings: (Meeting & { issues_raised: number; issues_resolved: number })[];
-  seriesList: (MeetingСерии & { open_issues_count: number })[];
+  seriesList: (MeetingSeries & { open_issues_count: number })[];
   onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
   const openIssues = issues.filter(

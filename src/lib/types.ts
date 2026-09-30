@@ -16,7 +16,7 @@ export type TranscriptionStatus =
   | "failed";
 export type RecordingState = "idle" | "recording" | "paused" | "stopped";
 export type OrganizationRole = "admin" | "member";
-export type СерииParticipantRole = "owner" | "facilitator" | "participant";
+export type SeriesParticipantRole = "owner" | "facilitator" | "participant";
 // MIN-121: how an AI suggestion relates to the existing OIL.
 export type SuggestionType = "new_item" | "status_update" | "duplicate_warning";
 
@@ -90,7 +90,7 @@ export interface UserSettings {
   updated_at: Date;
 }
 
-export interface MeetingСерии {
+export interface MeetingSeries {
   id: string;
   organization_id: string;
   owner_id: string;
@@ -107,10 +107,10 @@ export interface MeetingСерии {
   updated_at: Date;
 }
 
-export interface СерииParticipant {
+export interface SeriesParticipant {
   series_id: string;
   user_id: string;
-  role: СерииParticipantRole;
+  role: SeriesParticipantRole;
   invited_by: string | null;
   joined_at: Date;
   created_at: Date;
@@ -311,7 +311,7 @@ export type IssueWithUpdates = Issue & {
   raised_in_meeting: Meeting;
 };
 
-export type СерииWithMeetings = MeetingСерии & {
+export type SeriesWithMeetings = MeetingSeries & {
   meetings: Meeting[];
   open_issues_count: number;
 };

@@ -27,7 +27,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { useMeetingsByMonth } from "@/lib/hooks/use-meetings";
-import type { MeetingWithСерии } from "@/lib/hooks/use-meetings";
+import type { MeetingWithSeries } from "@/lib/hooks/use-meetings";
 import {
   useCalendarAgenda,
   useGoogleCalendarStatus,
@@ -173,7 +173,7 @@ function DayAgenda({
   onOpenCalendarEvent,
 }: {
   date: Date;
-  meetings: MeetingWithСерии[];
+  meetings: MeetingWithSeries[];
   calendarEvents: GoogleCalendarAgendaItem[];
   calendarConnected: boolean;
   agendaLoading: boolean;
@@ -340,7 +340,7 @@ function CalendarContent({
   viewMonth: number;
   selectedDate: Date;
   meetingDays: Set<number>;
-  meetings: MeetingWithСерии[];
+  meetings: MeetingWithSeries[];
   calendarEvents: GoogleCalendarAgendaItem[];
   calendarConnected: boolean;
   agendaLoading: boolean;

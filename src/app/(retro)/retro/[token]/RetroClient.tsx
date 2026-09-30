@@ -72,7 +72,7 @@ export function RetroClient({
   const ended = !!board.ended_at;
   const [now, setNow] = React.useState(0);
   const [saving, setSaving] = React.useState(false);
-  const [savedСерииId, setSavedСерииId] = React.useState<string | null>(board.saved_to_series_id);
+  const [savedSeriesId, setSavedSeriesId] = React.useState<string | null>(board.saved_to_series_id);
   const [redirecting, setRedirecting] = React.useState(false);
   const [saveError, setSaveError] = React.useState<string | null>(null);
   const [exported, setExported] = React.useState(false);
@@ -330,7 +330,7 @@ export function RetroClient({
         setSaving(false);
         return null;
       }
-      setSavedСерииId(json.series_id);
+      setSavedSeriesId(json.series_id);
       setSaving(false);
       return json.series_id ?? null;
     } catch {
@@ -358,15 +358,15 @@ export function RetroClient({
     };
     // Already graduated in a prior or concurrent session: hand the user straight
     // into the existing series rather than stranding them on the retro page.
-    if (savedСерииId) {
-      handOff(savedСерииId);
+    if (savedSeriesId) {
+      handOff(savedSeriesId);
       return;
     }
     void (async () => {
       const seriesId = await saveToMinutia();
       if (seriesId) handOff(seriesId);
     })();
-  }, [savedСерииId, saveToMinutia]);
+  }, [savedSeriesId, saveToMinutia]);
 
   const carry: RetroCarry[] = snapshot.carryover.map((c) => ({ ...c, done: carryDone[c.id] ?? c.done }));
   const editing = editor.cardId ? snapshot.cards.find((c) => c.id === editor.cardId) : null;
@@ -416,7 +416,7 @@ export function RetroClient({
             cards={snapshot.cards}
             votes={snapshot.votes}
             actions={snapshot.actions}
-            savedСерииId={savedСерииId}
+            savedSeriesId={savedSeriesId}
             onExport={exportMarkdown}
           />
         </main>
@@ -489,9 +489,9 @@ export function RetroClient({
             onSave={saveToMinutia}
             onExport={exportMarkdown}
             saving={saving}
-            savedСерииId={savedСерииId}
+            savedSeriesId={savedSeriesId}
             saveError={saveError}
-            canEnd={sealed && isFacilitator && (!!savedСерииId || exported)}
+            canEnd={sealed && isFacilitator && (!!savedSeriesId || exported)}
             onEnd={endRetro}
           />
         )}

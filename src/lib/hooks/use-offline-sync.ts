@@ -55,7 +55,7 @@ export function useOfflineSync() {
       }
 
       const items = await getPendingItems();
-      const affectedСерии = new Set<string>();
+      const affectedSeries = new Set<string>();
       const affectedMeetings = new Set<string>();
 
       for (const item of items) {
@@ -82,7 +82,7 @@ export function useOfflineSync() {
           }
 
           await removePendingItem(item.id);
-          affectedСерии.add(item.series_id);
+          affectedSeries.add(item.series_id);
           affectedMeetings.add(item.meeting_id);
         } catch {
           // If a single item fails, stop flushing; we will retry on next online event
@@ -91,9 +91,9 @@ export function useOfflineSync() {
       }
 
       // Invalidate caches for all affected series/meetings
-      if (affectedСерии.size > 0 || affectedMeetings.size > 0) {
+      if (affectedSeries.size > 0 || affectedMeetings.size > 0) {
         queryClient.invalidateQueries({ queryKey: issueKeys.all });
-        for (const sid of affectedСерии) {
+        for (const sid of affectedSeries) {
           queryClient.invalidateQueries({ queryKey: issueKeys.list(sid) });
         }
         for (const mid of affectedMeetings) {

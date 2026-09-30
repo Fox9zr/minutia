@@ -9,7 +9,7 @@ import { MinutiaCategoryIcon } from "@/components/minutia/minutia-icons";
 import type {
   GuestShare,
   Meeting,
-  MeetingСерии,
+  MeetingSeries,
   Issue,
   Decision,
   IssueUpdate,
@@ -27,7 +27,7 @@ type GuestSharePayload = {
   resource_type: "meeting" | "series" | "issue";
   expired?: boolean;
   meeting?: Meeting;
-  series?: MeetingСерии | null;
+  series?: MeetingSeries | null;
   issue?: Issue;
   meetings?: Meeting[];
   issues?: Issue[];
@@ -237,7 +237,7 @@ function MeetingShareView({
   updatedAt,
 }: {
   meeting: Meeting & { issues?: Issue[]; decisions?: Decision[] };
-  series: MeetingСерии | null;
+  series: MeetingSeries | null;
   issues: Issue[];
   decisions: Decision[];
   share: GuestShare;
@@ -338,10 +338,10 @@ function MeetingShareView({
 }
 
 // ---------------------------------------------------------------------------
-// Серии share view
+// Series share view
 // ---------------------------------------------------------------------------
 
-function СерииIssueRow({ issue }: { issue: Issue }) {
+function SeriesIssueRow({ issue }: { issue: Issue }) {
   return (
     <div className="flex items-center gap-3 bg-card border border-rule rounded-md px-4 py-3">
       <span
@@ -362,7 +362,7 @@ function СерииIssueRow({ issue }: { issue: Issue }) {
   );
 }
 
-function СерииShareView({
+function SeriesShareView({
   series,
   meetings,
   openIssuesCount,
@@ -370,7 +370,7 @@ function СерииShareView({
   share,
   youEmail,
 }: {
-  series: MeetingСерии;
+  series: MeetingSeries;
   meetings: Meeting[];
   openIssuesCount: number;
   openIssues: Issue[];
@@ -417,7 +417,7 @@ function СерииShareView({
           ) : (
             <div className="mt-4 space-y-2">
               {myItems.map((issue) => (
-                <СерииIssueRow key={issue.id} issue={issue} />
+                <SeriesIssueRow key={issue.id} issue={issue} />
               ))}
             </div>
           )}
@@ -432,7 +432,7 @@ function СерииShareView({
         ) : (
           <div className="mt-4 space-y-2">
             {openIssues.map((issue) => (
-              <СерииIssueRow key={issue.id} issue={issue} />
+              <SeriesIssueRow key={issue.id} issue={issue} />
             ))}
           </div>
         )}
@@ -788,7 +788,7 @@ export default async function GuestSharePage({
     }
 
     return (
-      <СерииShareView
+      <SeriesShareView
         series={payload.series}
         meetings={payload.meetings ?? []}
         openIssuesCount={payload.open_issues_count ?? 0}

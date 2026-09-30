@@ -1,6 +1,6 @@
 // Prose recap prompt for the streamed summary. Distinct from enhance-notes /
 // suggestions (which demand JSON); a flowing recap is human-readable prose. The
-// context shape (Серии / Meeting / Attendees / Transcript) mirrors the
+// context shape (Series / Meeting / Attendees / Transcript) mirrors the
 // enhance-notes user prompt so we reuse the mental model, not the output format.
 
 export const SUMMARY_SYSTEM_PROMPT =
@@ -21,7 +21,7 @@ export function buildSummaryPrompt(input: {
   return [
     "Составьте итоги этой встречи.",
     "",
-    `Серии: ${clamp(input.seriesName, 200)}`,
+    `Series: ${clamp(input.seriesName, 200)}`,
     `Meeting: ${clamp(input.title, 200)}`,
     `Attendees: ${clamp(input.attendees.join(", ") || "Unknown", 500)}`,
     "",

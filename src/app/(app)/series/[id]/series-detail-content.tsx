@@ -6,11 +6,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import {
-  useСерииDetail,
-  useСерииParticipantRole,
-  useСерииRealtime,
-  useUpdateСерии,
-  useDeleteСерии,
+  useSeriesDetail,
+  useSeriesParticipantRole,
+  useSeriesRealtime,
+  useUpdateSeries,
+  useDeleteSeries,
 } from "@/lib/hooks/use-series";
 import {
   useMeetings,
@@ -44,7 +44,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
-import { createСерииSchema, type CreateСерииInput } from "@/lib/schemas";
+import { createSeriesSchema, type CreateSeriesInput } from "@/lib/schemas";
 import { useConfirm } from "@/components/ui/confirm";
 import { ShareButton } from "@/components/minutia/share-button";
 import { RemindOwnersButton } from "@/components/minutia/remind-owners-button";
@@ -66,11 +66,11 @@ import Link from "next/link";
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-interface СерииDetailContentProps {
+interface SeriesDetailContentProps {
   seriesId: string;
 }
 
-type AskСерииCitation = {
+type AskSeriesCitation = {
   type: "meeting" | "issue" | "decision" | "notes";
   source_id: string;
   title: string;
@@ -80,34 +80,34 @@ type AskСерииCitation = {
   label: string;
 };
 
-type AskСерииAnswer = {
+type AskSeriesAnswer = {
   answer: string;
-  citations: AskСерииCitation[];
+  citations: AskSeriesCitation[];
   unsupported: boolean;
   model: string;
   prompt_version: string;
 };
 
-export function СерииDetailContent({ seriesId }: СерииDetailContentProps) {
+export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
   const router = useRouter();
-  const validСерииId = UUID_PATTERN.test(seriesId);
-  const queryСерииId = validСерииId ? seriesId : "";
-  const { data: series, isLoading: seriesLoading } = useСерииDetail(seriesId);
-  const { data: meetings } = useMeetings(queryСерииId);
-  const { data: issues } = useIssues(queryСерииId, validСерииId);
-  const { data: decisions } = useDecisions(undefined, queryСерииId, validСерииId);
-  const { data: participantRole } = useСерииParticipantRole(queryСерииId);
+  const validSeriesId = UUID_PATTERN.test(seriesId);
+  const querySeriesId = validSeriesId ? seriesId : "";
+  const { data: series, isLoading: seriesLoading } = useSeriesDetail(seriesId);
+  const { data: meetings } = useMeetings(querySeriesId);
+  const { data: issues } = useIssues(querySeriesId, validSeriesId);
+  const { data: decisions } = useDecisions(undefined, querySeriesId, validSeriesId);
+  const { data: participantRole } = useSeriesParticipantRole(querySeriesId);
 
-  useСерииRealtime(queryСерииId);
+  useSeriesRealtime(querySeriesId);
   const startOrJoinMeeting = useStartOrJoinMeeting();
 
   const [settingsOpen, setSettingsOpen] = React.useState(false);
   const [importOpen, setImportOpen] = React.useState(false);
   const [startingMeeting, setStartingMeeting] = React.useState(false);
   const [askQuestion, setAskQuestion] = React.useState("");
-  const [askAnswer, setAskAnswer] = React.useState<AskСерииAnswer | null>(null);
+  const [askAnswer, setAskAnswer] = React.useState<AskSeriesAnswer | null>(null);
   const [askError, setAskError] = React.useState<string | null>(null);
-  const [askingСерии, setAskingСерии] = React.useState(false);
+  const [askingSeries, setAskingSeries] = React.useState(false);
   const { data: aiAccess } = useAiAccess();
   const hasAccess = aiAccess?.hasAccess === true;
 
@@ -134,7 +134,7 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
     (m) => m.status === "upcoming" || m.status === "live"
   );
   const liveMeeting = sortedMeetings.find((m) => m.status === "live");
-  const canManageСерии =
+  const canManageSeries =
     participantRole === "owner" || participantRole === "facilitator";
 
   const showBrief =
@@ -165,12 +165,12 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
     }
   }
 
-  async function handleAskСерии() {
+  async function handleAskSeries() {
     const question = askQuestion.trim();
     if (!question) return;
 
     setAskError(null);
-    setAskingСерии(true);
+    setAskingSeries(true);
     try {
       const response = await fetch(`/api/series/${seriesId}/ask`, {
         method: "POST",
@@ -182,11 +182,11 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
         setAskError(payload.error ?? "Не удалось получить ответ по серии встреч.");
         return;
       }
-      setAskAnswer(payload as AskСерииAnswer);
+      setAskAnswer(payload as AskSeriesAnswer);
     } catch {
       setAskError("Не удалось получить ответ по серии встреч.");
     } finally {
-      setAskingСерии(false);
+      setAskingSeries(false);
     }
   }
 
@@ -234,7 +234,7 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
             </div>
             <div className="flex items-center gap-1 sm:gap-2 shrink-0">
               <ShareButton resource_type="series" resource_id={seriesId} />
-              {canManageСерии && (
+              {canManageSeries && (
                 <>
                   <RemindOwnersButton seriesId={seriesId} />
                   <Button
@@ -311,7 +311,7 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
               onKeyDown={(event) => {
                 if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
                   event.preventDefault();
-                  void handleAskСерии();
+                  void handleAskSeries();
                 }
               }}
               placeholder="Спросите о решениях, ответственных, рисках или поручениях..."
@@ -319,11 +319,11 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
             />
             <Button variant="accent"
               type="button"
-              onClick={handleAskСерии}
-              disabled={!hasAccess || askingСерии || !askQuestion.trim()}
+              onClick={handleAskSeries}
+              disabled={!hasAccess || askingSeries || !askQuestion.trim()}
               className="sm:self-start"
             >
-              {askingСерии ? (
+              {askingSeries ? (
                 <Loader2 className="size-3.5 animate-spin" />
               ) : (
                 <Sparkles className="size-3.5" />
@@ -414,7 +414,7 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
       </div>
 
       {/* Settings dialog */}
-      <СерииSettingsDialog
+      <SeriesSettingsDialog
         open={settingsOpen}
         onOpenChange={setSettingsOpen}
         series={series}
@@ -434,10 +434,10 @@ export function СерииDetailContent({ seriesId }: СерииDetailContentPro
 }
 
 // ---------------------------------------------------------------------------
-// Серии settings dialog (inline, keeps the file self-contained)
+// Series settings dialog (inline, keeps the file self-contained)
 // ---------------------------------------------------------------------------
 
-function СерииSettingsDialog({
+function SeriesSettingsDialog({
   open,
   onOpenChange,
   series,
@@ -448,8 +448,8 @@ function СерииSettingsDialog({
 }) {
   const router = useRouter();
   const confirm = useConfirm();
-  const updateСерии = useUpdateСерии();
-  const deleteСерии = useDeleteСерии();
+  const updateSeries = useUpdateSeries();
+  const deleteSeries = useDeleteSeries();
   const { data: gcalStatus } = useGoogleCalendarStatus();
   const { data: calendarList } = useCalendarList();
   const linkCalendar = useLinkCalendar();
@@ -461,8 +461,8 @@ function СерииSettingsDialog({
     watch,
     setValue,
     formState: { errors },
-  } = useForm<CreateСерииInput>({
-    resolver: zodResolver(createСерииSchema as any),
+  } = useForm<CreateSeriesInput>({
+    resolver: zodResolver(createSeriesSchema as any),
     values: {
       name: series.name,
       description: series.description ?? "",
@@ -473,12 +473,12 @@ function СерииSettingsDialog({
 
   const selectedCadence = watch("cadence");
 
-  async function onSubmit(data: CreateСерииInput) {
-    await updateСерии.mutateAsync({ id: series.id, ...data });
+  async function onSubmit(data: CreateSeriesInput) {
+    await updateSeries.mutateAsync({ id: series.id, ...data });
     onOpenChange(false);
   }
 
-  async function handleDeleteСерии() {
+  async function handleDeleteSeries() {
     if (
       !(await confirm({
         title: "Удалить эту серию?",
@@ -488,7 +488,7 @@ function СерииSettingsDialog({
       }))
     )
       return;
-    deleteСерии.mutate(series.id, {
+    deleteSeries.mutate(series.id, {
       onSuccess: () => router.push("/series"),
     });
   }
@@ -618,9 +618,9 @@ function СерииSettingsDialog({
           <DialogFooter>
             <Button variant="accent"
               type="submit"
-              disabled={updateСерии.isPending}
+              disabled={updateSeries.isPending}
             >
-              {updateСерии.isPending && (
+              {updateSeries.isPending && (
                 <Loader2 className="size-3.5 animate-spin" />
               )}
               Save changes
@@ -634,9 +634,9 @@ function СерииSettingsDialog({
             type="button"
             variant="destructive"
             size="sm"
-            onClick={handleDeleteСерии}
-            disabled={deleteСерии.isPending}
-            loading={deleteСерии.isPending}
+            onClick={handleDeleteSeries}
+            disabled={deleteSeries.isPending}
+            loading={deleteSeries.isPending}
           >
             Delete series
           </Button>

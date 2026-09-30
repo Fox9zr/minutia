@@ -5,7 +5,7 @@ import { AlertTriangle, RotateCcw, Home } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-export default function СерииDetailError({
+export default function SeriesDetailError({
   error,
   reset,
 }: {
@@ -25,7 +25,7 @@ export default function СерииDetailError({
         <AlertTriangle className="size-6 text-danger" />
       </div>
       <h2 className="font-display text-xl font-semibold text-ink mb-2">
-        Серии not found
+        Series not found
       </h2>
       <p className="max-w-md text-sm text-ink-2 mb-6">
         This series may have been deleted, or the link is invalid.

@@ -301,7 +301,7 @@ export function WorkspaceMembers() {
           <div className="space-y-1.5">
             <CardTitle id="workspace-access-title">Доступ к рабочему пространству</CardTitle>
             <CardDescription>
-              Пригласить коллег into {orgAdmin.organization.name}.
+              Invite teammates into {orgAdmin.organization.name}.
             </CardDescription>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -480,7 +480,7 @@ export function WorkspaceMembers() {
         <section className="space-y-2" aria-labelledby="workspace-invitations-title">
           <div className="flex items-center justify-between">
             <h3 id="workspace-invitations-title" className="text-sm font-medium text-ink">
-              Ожидающие приглашения
+              Pending invitations
             </h3>
             <span className="text-xs text-ink-3">Статус</span>
           </div>

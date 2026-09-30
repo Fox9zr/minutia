@@ -3,10 +3,10 @@ import type { createClient } from "@/lib/supabase/server";
 import { getTextFromOpenRouter } from "./ask-series-answer";
 import { callAi } from "./call";
 import {
-  buildСерииContext,
-  formatСерииContextForPrompt,
+  buildSeriesContext,
+  formatSeriesContextForPrompt,
   normalizeSuggestions,
-  type СерииContextClient,
+  type SeriesContextClient,
 } from "./context-builder";
 
 // MIN-121: Context-aware item extraction.
@@ -105,9 +105,9 @@ export function buildContextAwarePrompt(input: {
     "8. Emit at most 10 suggestions total. If more seem to qualify, keep only the ten highest-confidence ones.",
     "9. Attributed transcript: each line is \"Name: text\". A first-person self-assignment by a speaker makes that speaker the owner_name. An unmapped speaker line reads \"Speaker A:\"; treat those as unattributed, never invent a name.",
     "",
-    formatСерииContextHeading(input.contextBlock),
+    formatSeriesContextHeading(input.contextBlock),
     "",
-    `Серии: ${clamp(input.seriesName, 200)}`,
+    `Series: ${clamp(input.seriesName, 200)}`,
     `Meeting: ${clamp(input.title, 200)}`,
     `Attendees: ${clamp(input.attendees.join(", ") || "Unknown", 500)}`,
     "",
@@ -119,7 +119,7 @@ export function buildContextAwarePrompt(input: {
   ].join("\n");
 }
 
-function formatСерииContextHeading(contextBlock: string) {
+function formatSeriesContextHeading(contextBlock: string) {
   return ["=== SERIES HISTORY (cross-meeting memory) ===", contextBlock].join("\n");
 }
 
@@ -152,8 +152,8 @@ export async function generateMeetingSuggestions(
     return { ok: false, status: 400, error: "Добавьте заметки или расшифровку для извлечения предложений." };
   }
 
-  const context = await buildСерииContext(
-    supabase as unknown as СерииContextClient,
+  const context = await buildSeriesContext(
+    supabase as unknown as SeriesContextClient,
     meeting.series_id
   );
 
@@ -163,7 +163,7 @@ export async function generateMeetingSuggestions(
     attendees: meeting.attendees ?? [],
     notes: rawNotes,
     transcript: meeting.transcript_raw,
-    contextBlock: formatСерииContextForPrompt(context),
+    contextBlock: formatSeriesContextForPrompt(context),
   });
 
   let providerData: unknown;

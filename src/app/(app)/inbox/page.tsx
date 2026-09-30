@@ -193,7 +193,7 @@ export default function InboxPage() {
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="font-display text-base font-medium text-ink mb-1.5">Все актуально.</p>
           <p className="text-[13px] text-ink-3 italic max-w-xs">
-            Когда что-то потребует вашего внимания, это появится здесь.
+            When something needs your attention, it will appear here.
           </p>
         </div>
       ) : (
