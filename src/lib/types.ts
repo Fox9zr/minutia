@@ -312,3 +312,16 @@ export type SeriesWithMeetings = MeetingSeries & {
   meetings: Meeting[];
   open_issues_count: number;
 };
+
+// Kotrol «Материалы»: именованные ссылки на файлы/документы (лежат во внешнем
+// хранилище — Яндекс.Диск и т.п.), привязанные к встрече или поручению.
+export interface MaterialLink {
+  id: string;
+  series_id: string;
+  meeting_id: string | null;
+  issue_id: string | null;
+  title: string;
+  url: string;
+  created_by: string;
+  created_at: Date;
+}

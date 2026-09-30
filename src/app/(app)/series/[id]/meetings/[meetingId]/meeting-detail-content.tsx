@@ -46,6 +46,7 @@ import { DiarizedTranscript } from "@/components/minutia/diarized-transcript";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
+import { MaterialLinksSection, TextWithLinks } from "@/components/minutia/material-links";
 import { ShareButton } from "@/components/minutia/share-button";
 import { SendMeetingNotesButton } from "@/components/minutia/send-meeting-notes-button";
 import { RemindOwnersButton } from "@/components/minutia/remind-owners-button";
@@ -1394,6 +1395,11 @@ export function MeetingDetailContent({
                 placeholder="Введите заметки к встрече..."
                 className="min-h-[300px] bg-card border-rule text-sm font-sans leading-relaxed resize-y"
               />
+              <MaterialLinksSection
+                target={{ seriesId, meetingId }}
+                canManage={canManageMeeting}
+                className="mt-4"
+              />
               <div className="mt-4 pt-4 border-t border-rule">
                 <h3 className="text-[11px] font-mono uppercase tracking-wider text-ink-4 font-medium mb-3">
                   Sync status
@@ -2033,7 +2039,7 @@ export function MeetingDetailContent({
                   <h4 className="text-sm font-semibold text-ink">Черновые заметки</h4>
                 </div>
                 <pre className="h-full overflow-auto whitespace-pre-wrap px-5 py-4 text-sm leading-6 text-ink-2">
-                  {meeting.raw_notes_markdown || notes || "Исходные заметки не найдены."}
+                  <TextWithLinks text={meeting.raw_notes_markdown || notes || "Исходные заметки не найдены."} />
                 </pre>
               </div>
               <div className="min-h-0 bg-paper-2/40">

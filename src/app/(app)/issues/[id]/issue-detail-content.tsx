@@ -35,6 +35,7 @@ import { CategoryBadge } from "@/components/minutia/category-badge";
 import { IssueKey } from "@/components/minutia/issue-key";
 import { MemberCombobox } from "@/components/minutia/member-combobox";
 import { PriorityIndicator } from "@/components/minutia/priority-indicator";
+import { MaterialLinksSection } from "@/components/minutia/material-links";
 import { TimelineNode } from "@/components/minutia/timeline-node";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
@@ -591,6 +592,13 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             multiline
           />
         </div>
+
+        {/* Материалы: именованные ссылки на файлы (Яндекс.Диск и т.п.) */}
+        <MaterialLinksSection
+          target={{ seriesId: issue.series_id, issueId: issue.id }}
+          canManage
+          className="mb-8"
+        />
 
         {/* Lifecycle Timeline */}
         {updates.length > 0 && (
