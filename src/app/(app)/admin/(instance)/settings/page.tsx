@@ -687,7 +687,7 @@ export default function AdminSettingsPage() {
               </SelectContent>
             </Select>
             <p className="text-xs text-ink-3">
-              Raw recordings are the most sensitive artifact this instance stores. Discarding after
+              Оригинальные записи — самый sensitive artifact this instance stores. Discarding after
               transcription keeps only the text.
             </p>
             {retentionMessage && (

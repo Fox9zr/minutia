@@ -1,7 +1,7 @@
 // ---------------------------------------------------------------------------
 // Audio retention policy (pure, no env, no side effects).
 //
-// Raw recordings are the most sensitive artifact an instance stores, so the
+// Оригинальные записи — самый sensitive artifact an instance stores, so the
 // default is to discard them once a transcript exists. The setting is a
 // non-secret instance_config value; unrecognized values are treated as "keep"
 // so a typo never destroys data.
