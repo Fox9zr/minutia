@@ -604,7 +604,7 @@ export default function AdminSettingsPage() {
               <div className={cn("grid gap-4 pt-5", caps.retroToggle && "border-t border-rule")}>
                 {caps.slackWebhook && (
                   <div className="flex flex-col gap-1.5">
-                    <Label htmlFor="slack_webhook_url">Slack webhook URL</Label>
+                    <Label htmlFor="slack_webhook_url">Webhook Slack URL</Label>
                     <Input
                       id="slack_webhook_url"
                       placeholder="https://hooks.slack.com/services/..."
@@ -636,7 +636,7 @@ export default function AdminSettingsPage() {
                 )}
               >
                 <p className="text-xs text-ink-3">
-                  Optional links shown to accounts without AI access. Leave blank and the
+                  Необязательные ссылки, показываемые аккаунтам without AI access. Leave blank and the
                   prompt stays informational, with no button.
                 </p>
                 <div className="flex flex-col gap-1.5">

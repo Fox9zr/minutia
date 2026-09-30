@@ -115,7 +115,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Оформление</CardTitle>
             <CardDescription>
-              Choose how Kotrol ищет вас.
+              Выберите, как Kotrol ищет вас.
             </CardDescription>
           </CardHeader>
           <CardContent>
