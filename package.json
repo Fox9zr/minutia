@@ -97,6 +97,7 @@
     "test:e2e:debug": "playwright test --debug"
   },
   "dependencies": {
+    "pg": "^8.13.0",
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
@@ -127,6 +128,7 @@
     "undici": "^6.21.0"
   },
   "devDependencies": {
+    "@types/pg": "^8.11.0",
     "@axe-core/playwright": "^4.12.1",
     "@playwright/test": "^1.59.1",
     "@serwist/turbopack": "^9.5.10",
