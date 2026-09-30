@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Mail, ArrowRight, ExternalLink } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { GOOGLE_WORKSPACE_SCOPES } from "@/lib/google-oauth-scopes";
 import { getSafeNext, buildCallbackUrl, LoadingDots, GoogleIcon } from "../_shared";
@@ -22,16 +22,10 @@ const GUEST_LOGIN_ERROR_MESSAGE =
 const LOGIN_FOOTER_PHRASES = [
   "Управляйте памятью ваших встреч.",
   "Контролируйте каждую заметку, поручение и решение.",
-  "Сохраняйте переносимость истории встреч.",
-  "Изучайте исходный код. Запускайте на своих условиях.",
-  "Работает на базе открытой базы знаний встреч.",
-  "Разверните рабочие процессы там, где работает команда.",
   "Превращайте регулярные встречи в долговременный контекст.",
   "Ведите решения и поручения в единой системе.",
-  "Разверните инфраструктуру памяти встреч на своих серверах.",
   "Фиксируйте результаты каждой встречи.",
   "Контролируйте путь от стенограммы к действиям.",
-  "Разверните базу знаний встреч команды на собственных серверах.",
 ] as const;
 
 export default function LoginPage() {
@@ -464,16 +458,7 @@ function LoginForm() {
         data-testid="login-footer"
         className="mt-6 text-center font-sans text-xs text-ink-4"
       >
-        <span ref={footerPhraseRef}>{LOGIN_FOOTER_PHRASES[0]}</span>{" "}
-        <a
-          href="https://github.com/shiprite-dev/minutia"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-ink-3 underline underline-offset-4 transition-colors hover:text-ink-2"
-        >
-          GitHub
-          <ExternalLink className="h-3 w-3" />
-        </a>
+        <span ref={footerPhraseRef}>{LOGIN_FOOTER_PHRASES[0]}</span>
       </p>
     </motion.div>
   );
