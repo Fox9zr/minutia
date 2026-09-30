@@ -83,7 +83,7 @@ function LoginForm() {
   const nextPath = getSafeNext(searchParams.get("next"));
   const callbackUrl = buildCallbackUrl(nextPath);
 
-  async function handleПарольLogin(e: React.FormEvent) {
+  async function handlePasswordLogin(e: React.FormEvent) {
     e.preventDefault();
     if (!canSignIn) return;
 
@@ -271,7 +271,7 @@ function LoginForm() {
           </motion.div>
         ) : (
           <>
-            <form onSubmit={handleПарольLogin} className="space-y-4">
+            <form onSubmit={handlePasswordLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="font-sans text-ink-2">
                   Email
