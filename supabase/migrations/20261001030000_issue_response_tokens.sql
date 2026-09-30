@@ -10,13 +10,22 @@ create table if not exists public.issue_response_tokens (
   created_at timestamptz not null default now()
 );
 
-alter table public.issue_response_tokens enable row level security;
+do $$ begin
+  alter table public.issue_response_tokens enable row level security;
+exception when others then null;
+end $$;
 
 -- service-role only (kong anon has no access); public flow goes through API routes
-create policy irt_read_none on public.issue_response_tokens
-  for select to authenticated using (false);
-create policy irt_write_none on public.issue_response_tokens
-  for all to authenticated using (false) with check (false);
+do $$ begin
+  if not exists (select 1 from pg_policies where tablename='issue_response_tokens' and policyname='irt_read_none') then
+    create policy irt_read_none on public.issue_response_tokens
+      for select to authenticated using (false);
+  end if;
+  if not exists (select 1 from pg_policies where tablename='issue_response_tokens' and policyname='irt_write_none') then
+    create policy irt_write_none on public.issue_response_tokens
+      for all to authenticated using (false) with check (false);
+  end if;
+end $$;
 
 -- proposed date adjustments visible to issue viewers via RLS on issues (join not needed, stored on issues)
 alter table public.issues
