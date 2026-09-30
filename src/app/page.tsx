@@ -5,7 +5,7 @@ import { ArrowRight, Check } from "lucide-react";
 export const metadata: Metadata = {
   title: "Kotrol: реестр встреч и поручений",
   description:
-    "Stop losing track of meeting outcomes. Kotrol is the open-source Outstanding Issues Log for recurring meetings.",
+    "Kotrol — надёжный реестр вопросов и поручений для регулярных встреч: решения, задачи и контроль сроков в одном месте.",
 };
 
 const features = [
@@ -37,44 +37,34 @@ export default function LandingPage() {
       {/* ─── Hero ─── */}
       <section className="mx-auto max-w-3xl px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-28">
         <p className="text-xs font-mono uppercase tracking-wider text-accent mb-5">
-          The open-source Outstanding Issues Log for recurring meetings
+          Реестр нерешённых вопросов для регулярных встреч
         </p>
         <h1 className="font-display text-4xl font-bold leading-tight tracking-tight text-ink sm:text-6xl">
-          Stop losing track of meeting outcomes.
+          Поручения со встреч больше не теряются.
         </h1>
         <p className="mt-6 text-lg text-ink-2 sm:text-xl">
-          Kotrol is the Outstanding Issues Log for recurring meetings — a
-          durable record of decisions, action items, and follow-ups that never
-          disappears into a forgotten doc.
+          Kotrol — надёжный реестр решений, поручений и контрольных точек по
+          регулярным встречам. Всё, что решено и кому-то поручено, остаётся
+          в системе — с ответственными, сроками и напоминаниями.
         </p>
         <div className="mt-10 flex items-center justify-center">
           <Link
             href="/login?mode=signup"
             className="inline-flex items-center gap-2 rounded-md bg-ink px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-ink-2"
           >
-            Get started free
+            Начать работу
             <ArrowRight className="size-4" />
           </Link>
         </div>
         <p className="mt-3 text-xs text-ink-4">
-          No credit card required. Open source.
-        </p>
-        <p className="mt-6 text-sm text-ink-3">
-          On a Mac?{" "}
-          <Link
-            href="/download"
-            className="inline-flex items-center gap-1 font-medium text-accent hover:text-accent-hover"
-          >
-            Get the macOS companion
-            <ArrowRight className="size-3.5" />
-          </Link>
+          Доступ по приглашению администратора.
         </p>
       </section>
 
       {/* ─── Features ─── */}
       <section className="mx-auto max-w-5xl px-6 py-16 border-t border-rule">
         <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl text-center mb-12">
-          Everything you need to keep meetings accountable
+          Всё, чтобы встречи заканчивались результатом
         </h2>
         <div className="grid gap-8 sm:grid-cols-2">
           {features.map((feature) => (
@@ -97,17 +87,17 @@ export default function LandingPage() {
       <section className="border-t border-rule">
         <div className="mx-auto max-w-3xl px-6 py-20 text-center">
           <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
-            Ready to close the loop on every meeting?
+            Готовы закрывать вопросы на каждой встрече?
           </h2>
           <p className="mt-4 text-ink-2">
-            Free and open source. Self-host in minutes and own your data.
+            Войдите в систему или запросите доступ у администратора.
           </p>
           <div className="mt-8">
             <Link
               href="/login?mode=signup"
               className="inline-flex items-center gap-2 rounded-md bg-accent px-6 py-3 text-sm font-medium text-paper transition-colors hover:bg-accent-hover"
             >
-              Get started free
+              Войти
               <ArrowRight className="size-4" />
             </Link>
           </div>
@@ -118,10 +108,10 @@ export default function LandingPage() {
       <footer className="border-t border-rule">
         <div className="mx-auto max-w-5xl px-6 py-8 flex items-center justify-between">
           <span className="font-display text-sm font-semibold text-ink">
-            Minutia
+            Kotrol
           </span>
           <p className="text-xs text-ink-4">
-            The open-source Outstanding Issues Log. Run it yourself.
+            Реестр встреч и поручений. Данные хранятся на серверах компании.
           </p>
         </div>
       </footer>

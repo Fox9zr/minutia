@@ -45,7 +45,7 @@ export default function LoginPage() {
 function LoginForm() {
   const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [password, setПароль] = useState("");
   const [formState, setFormState] = useState<FormState>("idle");
   const [inviteState, setInviteState] = useState<InviteState>("idle");
   const [inviteMessage, setInviteMessage] = useState("");
@@ -89,7 +89,7 @@ function LoginForm() {
   const nextPath = getSafeNext(searchParams.get("next"));
   const callbackUrl = buildCallbackUrl(nextPath);
 
-  async function handlePasswordLogin(e: React.FormEvent) {
+  async function handleПарольLogin(e: React.FormEvent) {
     e.preventDefault();
     if (!canSignIn) return;
 
@@ -132,7 +132,7 @@ function LoginForm() {
     }
   }
 
-  async function handleForgotPassword() {
+  async function handleForgotПароль() {
     if (!email.trim()) return;
     if (resetCooldown > 0 || formState === "loading") return;
 
@@ -268,7 +268,7 @@ function LoginForm() {
               onClick={() => {
                 setFormState("idle");
                 setEmail("");
-                setPassword("");
+                setПароль("");
               }}
               className="font-sans text-sm text-ink-3 underline underline-offset-4 transition-colors hover:text-ink-2"
             >
@@ -277,10 +277,10 @@ function LoginForm() {
           </motion.div>
         ) : (
           <>
-            <form onSubmit={handlePasswordLogin} className="space-y-4">
+            <form onSubmit={handleПарольLogin} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="font-sans text-ink-2">
-                  Email address
+                  Email
                 </Label>
                 <Input
                   id="email"
@@ -296,11 +296,11 @@ function LoginForm() {
               <div className="space-y-2">
                 <div className="flex items-center justify-between gap-3">
                   <Label htmlFor="password" className="font-sans text-ink-2">
-                    Password
+                    Пароль
                   </Label>
                   <button
                     type="button"
-                    onClick={handleForgotPassword}
+                    onClick={handleForgotПароль}
                     disabled={
                       formState === "loading" ||
                       !email.trim() ||
@@ -318,7 +318,7 @@ function LoginForm() {
                   type="password"
                   placeholder="Минимум 8 символов"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setПароль(e.target.value)}
                   required
                   minLength={8}
                   autoComplete="current-password"
@@ -351,7 +351,7 @@ function LoginForm() {
                   </span>
                 ) : (
                   <span className="flex items-center gap-2">
-                    Sign in
+                    Войти
                     <ArrowRight className="h-4 w-4" />
                   </span>
                 )}
@@ -428,11 +428,11 @@ function LoginForm() {
             ) : (
               <div className="mt-5 rounded-[14px] border border-rule bg-paper px-4 py-3">
                 <p className="font-sans text-xs font-medium text-ink">
-                  Need access to this Kotrol workspace?
+                  Нет доступа к этому рабочему пространству Kotrol?
                 </p>
                 <div className="mt-2 flex items-center justify-between gap-3">
                   <p className="font-sans text-xs text-ink-4">
-                    Enter your email and ask the admin for an invite.
+                    Укажите ваш email и отправьте запрос администратору.
                   </p>
                   <Button
                     type="button"
@@ -441,7 +441,7 @@ function LoginForm() {
                     disabled={inviteState === "loading" || !email.trim()}
                     className="h-8 shrink-0 rounded-[10px] border-rule bg-paper text-xs text-ink hover:bg-paper-3"
                   >
-                    {inviteState === "loading" ? "Sending" : "Запросить приглашение"}
+                    {inviteState === "loading" ? "Отправка..." : "Запросить приглашение"}
                   </Button>
                 </div>
                 {inviteMessage && (
