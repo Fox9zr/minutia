@@ -114,7 +114,7 @@ export async function POST(
     subject: email.subject,
     text: email.text,
     html: email.html,
-    from: sender,
+    from: sender ?? undefined,
   });
 
   return NextResponse.json({ ok: true, sentTo: targetEmail });
