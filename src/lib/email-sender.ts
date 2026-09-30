@@ -44,5 +44,5 @@ export function isDeliverableSender(from: string | null | undefined): boolean {
 
 /** Normalize to `Name <addr>` (some providers require a display name). */
 export function formatSender(from: string): string {
-  return from.includes("<") ? from : `Minutia <${from}>`;
+  return from.includes("<") ? from : `Kotrol <${from}>`;
 }

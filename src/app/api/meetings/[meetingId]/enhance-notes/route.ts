@@ -52,7 +52,7 @@ function buildPrompt(input: {
   decisions: { title: string; rationale: string | null }[];
 }) {
   return [
-    "Вы оптимизируете протоколы регулярных встреч для Minutia — журнала нерешенных вопросов.",
+    "Вы оптимизируете протоколы регулярных встреч для Kotrol — журнала нерешенных вопросов.",
     "Return strict JSON with these array fields: summary, action_items, decisions, risks, blockers, follow_ups, open_questions.",
     "Верните только JSON-объект. Не оборачивайте в разметку markdown и не добавляйте комментариев.",
     "Each field must be an array of concise strings. Use [] when there is no evidence for a field.",

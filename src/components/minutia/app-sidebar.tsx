@@ -101,8 +101,9 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
     <Sidebar>
       <SidebarHeader className="px-5 pt-10 pb-8">
         <Link href="/" className="flex items-center gap-2.5 font-display text-[22px] font-semibold tracking-tight text-ink">
-          <span className="size-2.5 rounded-full bg-accent inline-block" />
-          minutia
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/kotrol-mark.png" alt="Kotrol" className="size-8 rounded-md inline-block" />
+          Kotrol
         </Link>
       </SidebarHeader>
 

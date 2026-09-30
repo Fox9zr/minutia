@@ -138,14 +138,14 @@ function AcceptInviteForm() {
             <KeyRound className="h-5 w-5 text-accent" />
           </div>
           <p className="font-sans text-xs font-extrabold uppercase tracking-[0.12em] text-accent">
-            Minutia invite
+            Kotrol invite
           </p>
           <h1 className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink">
             Set your password
           </h1>
           <p className="mt-2 font-sans text-sm leading-6 text-ink-3">
             Your workspace invite is tied to this email. Choose a password to finish
-            joining Minutia.
+            joining Kotrol.
           </p>
         </div>
 
@@ -240,7 +240,7 @@ function AcceptInviteForm() {
               <div className="flex gap-3">
                 <ShieldCheck className="mt-0.5 h-4 w-4 text-success" />
                 <p className="font-sans text-xs leading-5 text-ink-3">
-                  Minutia does not send temporary passwords. This password is created
+                  Kotrol does not send temporary passwords. This password is created
                   only by you.
                 </p>
               </div>

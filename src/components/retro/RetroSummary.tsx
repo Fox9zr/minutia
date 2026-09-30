@@ -27,7 +27,7 @@ export function RetroSummary({ boardName, columns, cards, votes, actions, savedS
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--success)", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>
             <Icons.CheckCircle size={16} /> Retro complete
           </div>
-          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem,4vw,2.75rem)", fontWeight: 600, color: "var(--studio-ink)", margin: 0, letterSpacing: "-0.01em" }}>{boardName || "Minutia Retro"}</h1>
+          <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2rem,4vw,2.75rem)", fontWeight: 600, color: "var(--studio-ink)", margin: 0, letterSpacing: "-0.01em" }}>{boardName || "Kotrol Retro"}</h1>
           <p style={{ fontFamily: "var(--font-sans)", fontSize: 15, color: "var(--studio-ink-2)", margin: "8px 0 0" }}>
             This board is read-only. Live editing has ended.
           </p>

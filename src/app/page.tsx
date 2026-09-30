@@ -3,9 +3,9 @@ import Link from "next/link";
 import { ArrowRight, Check } from "lucide-react";
 
 export const metadata: Metadata = {
-  title: "Minutia: реестр нерешенных вопросов с открытым исходным кодом",
+  title: "Kotrol: реестр встреч и поручений",
   description:
-    "Stop losing track of meeting outcomes. Minutia is the open-source Outstanding Issues Log for recurring meetings.",
+    "Stop losing track of meeting outcomes. Kotrol is the open-source Outstanding Issues Log for recurring meetings.",
 };
 
 const features = [
@@ -43,7 +43,7 @@ export default function LandingPage() {
           Stop losing track of meeting outcomes.
         </h1>
         <p className="mt-6 text-lg text-ink-2 sm:text-xl">
-          Minutia is the Outstanding Issues Log for recurring meetings — a
+          Kotrol is the Outstanding Issues Log for recurring meetings — a
           durable record of decisions, action items, and follow-ups that never
           disappears into a forgotten doc.
         </p>

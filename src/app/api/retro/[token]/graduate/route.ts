@@ -137,7 +137,7 @@ export async function POST(
       .from("meeting_series")
       .insert({
         name: (body.name || board.name).slice(0, 120),
-        description: "Создано из ретроспективы Minutia",
+        description: "Создано из ретроспективы Kotrol",
         owner_id: user.id,
         organization_id: profile?.current_organization_id ?? null,
       })

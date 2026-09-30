@@ -3,7 +3,7 @@ import { renderEmailLayout } from "@/lib/email-layout";
 import type { Issue } from "@/lib/types";
 import type { OwnerReminder, ReminderContext } from "./gather";
 
-export const MINUTIA_BRANDING = "Отправлено через Minutia";
+export const MINUTIA_BRANDING = "Отправлено через Kotrol";
 
 function ownerLabel(owner: OwnerReminder): string {
   return owner.ownerName?.trim() || "Без ответственного";
@@ -73,7 +73,7 @@ function renderHtml(owners: OwnerReminder[], ctx: ReminderContext): string {
     heading: `Открытые поручения: ${ctx.seriesName}`,
     intro: leadLine(owners, ctx),
     bodyHtml: sections,
-    cta: { label: "Открыть в Minutia", href: ctx.appUrl },
+    cta: { label: "Открыть в Kotrol", href: ctx.appUrl },
     footerUrl: ctx.appUrl,
   });
 }

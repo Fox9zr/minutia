@@ -326,7 +326,7 @@ export function RetroClient({
       }
       const json = await res.json().catch(() => ({}));
       if (!res.ok) {
-        setSaveError(json.error || "Не удалось сохранить в Minutia.");
+        setSaveError(json.error || "Не удалось сохранить в Kotrol.");
         setSaving(false);
         return null;
       }
@@ -401,7 +401,7 @@ export function RetroClient({
         <header style={{ position: "relative", zIndex: 2, display: "flex", alignItems: "center", gap: 16, padding: "0 var(--space-6)", height: 56, borderBottom: "1px solid var(--studio-line)", background: "var(--studio-raised)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
             <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)", boxShadow: "var(--glow-accent)" }} />
-            <span style={{ fontFamily: "var(--font-serif)", fontSize: 17, fontWeight: 600, color: "var(--studio-ink)" }}>{board.name || "Minutia Retro"}</span>
+            <span style={{ fontFamily: "var(--font-serif)", fontSize: 17, fontWeight: 600, color: "var(--studio-ink)" }}>{board.name || "Kotrol Retro"}</span>
           </div>
           <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 9 }}>
             <Icons.Sun size={15} style={{ color: theme === "daylight" ? "var(--accent)" : "var(--studio-ink-3)" }} />
@@ -440,7 +440,7 @@ export function RetroClient({
       <header style={{ position: "relative", zIndex: 2, display: "flex", alignItems: "center", gap: 16, padding: "0 var(--space-6)", height: 56, borderBottom: "1px solid var(--studio-line)", background: "var(--studio-raised)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 9 }}>
           <span style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)", boxShadow: "var(--glow-accent)" }} />
-          <span style={{ fontFamily: "var(--font-serif)", fontSize: 17, fontWeight: 600, color: "var(--studio-ink)" }}>{board.name || "Minutia Retro"}</span>
+          <span style={{ fontFamily: "var(--font-serif)", fontSize: 17, fontWeight: 600, color: "var(--studio-ink)" }}>{board.name || "Kotrol Retro"}</span>
         </div>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 7, padding: "5px 11px", borderRadius: "var(--r-pill)", background: "var(--studio-surface)", border: "1px solid var(--studio-line)", color: "var(--studio-ink-2)", fontFamily: "var(--font-sans)", fontSize: 12.5 }}>
           <span style={{ width: 7, height: 7, borderRadius: 2, background: "var(--c-rose)" }} />{template?.name ?? board.template}

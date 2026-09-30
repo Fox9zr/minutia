@@ -16,7 +16,7 @@ export async function GET() {
 
   const config = await getInstanceConfigMap(["instance_name"]);
   return NextResponse.json({
-    name: config.instance_name || "Minutia",
+    name: config.instance_name || "Kotrol",
     supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
     supabaseAnonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
   });

@@ -70,7 +70,7 @@ export function buildContextAwarePrompt(input: {
   contextBlock: string;
 }) {
   return [
-    "You extract reviewable accountability suggestions for Minutia, an Outstanding Issues Log (OIL) for a recurring meeting series.",
+    "You extract reviewable accountability suggestions for Kotrol, an Outstanding Issues Log (OIL) for a recurring meeting series.",
     "Unlike a one-off meeting summarizer, you are given the full living state of this series below: the open OIL items, recent decisions, and recent status changes. Reason over that history; it is the whole point.",
     "A facilitator reviews every suggestion before it enters the permanent record, so omitting a weak item is always better than inventing one.",
     "",
@@ -94,7 +94,7 @@ export function buildContextAwarePrompt(input: {
     "- related_issue_number: the OIL item number this references (e.g. 45 for OIL-45). Required for status_update and duplicate_warning. Use null for a new_item.",
     "- suggested_status: for a status_update only, the item's new status (open, in_progress, pending, resolved, dropped). Use null otherwise.",
     "",
-    "КОНТЕКСТНЫЕ ПРАВИЛА (ключевое отличие Minutia):",
+    "КОНТЕКСТНЫЕ ПРАВИЛА (ключевое отличие Kotrol):",
     "1. Deduplicate: if the discussion raises something an open OIL item already covers, emit a duplicate_warning referencing that item, not a parallel new_item.",
     "2. Detect resolution: if a decision or update resolves or advances an open item, especially an open risk or blocker, emit a status_update with the new status, not a new_item.",
     "3. Follow up: a new development on a prior item is a status_update on that item, not a fresh item.",

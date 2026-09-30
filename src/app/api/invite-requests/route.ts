@@ -96,7 +96,7 @@ async function getInviteTarget(
 
   return {
     organizationId: null,
-    organizationName: "Minutia",
+    organizationName: "Kotrol",
     adminEmails: await getGlobalAdminEmails(supabase),
   };
 }
@@ -164,7 +164,7 @@ export async function POST(request: NextRequest) {
     await sendMail({
       to,
       replyTo: requestedEmail,
-      subject: "Запрос на приглашение в Minutia",
+      subject: "Запрос на приглашение в Kotrol",
       text: [
         `${requestedEmail} requested access to ${inviteTarget.organizationName}.`,
         `Requested page: ${requestedUrl}`,

@@ -83,7 +83,7 @@ export async function sendMail(message: MailMessage) {
     const { appendFile, mkdir } = await import("node:fs/promises");
     const { dirname } = await import("node:path");
 
-    const from = resolved ?? "Minutia <noreply@localhost>";
+    const from = resolved ?? "Kotrol <noreply@localhost>";
     await mkdir(dirname(testOutbox), { recursive: true });
     await appendFile(
       testOutbox,

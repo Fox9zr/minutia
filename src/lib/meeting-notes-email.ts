@@ -142,13 +142,13 @@ export function buildMeetingNotesEmail(input: MeetingEmailInput) {
   `;
 
   const html = renderEmailLayout({
-    preheader: `${allIssueCount} поручений, ${decisions.length} решений и заметки встречи — из Minutia.`,
+    preheader: `${allIssueCount} поручений, ${decisions.length} решений и заметки встречи — из Kotrol.`,
     heading: meeting.title,
     intro: `${seriesName} · ${formatDate(meeting.date)}`,
     bodyHtml,
-    cta: { label: "Открыть встречу в Minutia", href: meetingUrl },
+    cta: { label: "Открыть встречу в Kotrol", href: meetingUrl },
     footerNote:
-      "Ссылки на поручения открываются в Minutia. Если вы не вошли в систему, вам предложат войти. Если нет доступа — запросите приглашение на экране входа.",
+      "Ссылки на поручения открываются в Kotrol. Если вы не вошли в систему, вам предложат войти. Если нет доступа — запросите приглашение на экране входа.",
     footerUrl: appUrl,
   });
 

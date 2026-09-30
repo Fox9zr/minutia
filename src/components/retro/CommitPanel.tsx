@@ -82,7 +82,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
                   <Icons.CheckCircle size={16} /> Saved
                 </div>
                 <h3 style={{ fontFamily: "var(--font-serif)", fontSize: "1.6rem", fontWeight: 600, margin: "0 0 8px", lineHeight: 1.15 }}>
-                  Your action items are now tracked in Minutia.
+                  Your action items are now tracked in Kotrol.
                 </h3>
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: 15, lineHeight: 1.5, color: "color-mix(in oklab, var(--card-ink) 78%, transparent)", margin: "0 0 20px", maxWidth: 460 }}>
                   Next retro starts with whatever&apos;s still open.
@@ -100,11 +100,11 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
                   The only retro where the action items don&apos;t die.
                 </h3>
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: 15, lineHeight: 1.5, color: "color-mix(in oklab, var(--card-ink) 78%, transparent)", margin: "0 0 20px", maxWidth: 460 }}>
-                  Keep these alive in Minutia so your next retro starts with what&apos;s still open. One tap seeds a living issue log, no copy-paste, nothing forgotten.
+                  Keep these alive in Kotrol so your next retro starts with what&apos;s still open. One tap seeds a living issue log, no copy-paste, nothing forgotten.
                 </p>
                 <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
                   <Button variant="primary" size="lg" onClick={onSave} disabled={saving} iconRight={<Icons.ArrowRight size={18} />}>
-                    {saving ? "Saving…" : "Сохранить в Minutia"}
+                    {saving ? "Saving…" : "Сохранить в Kotrol"}
                   </Button>
                   <button type="button" onClick={onExport} style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "transparent", border: "none", cursor: "pointer", fontFamily: "var(--font-sans)", fontSize: 14.5, fontWeight: 500, color: "color-mix(in oklab, var(--card-ink) 60%, transparent)" }}>
                     <Icons.Download size={17} /> Just export markdown
@@ -134,7 +134,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
           tone="danger"
           title="Завершить ретроспективу?"
           body="This ends the retro for everyone. The board becomes read-only and live editing stops. This can't be undone."
-          warning={savedSeriesId ? undefined : "Вы экспортировали Markdown, но не сохранили данные в Minutia, поэтому срок действия этой доски истечет через 30 дней."}
+          warning={savedSeriesId ? undefined : "Вы экспортировали Markdown, но не сохранили данные в Kotrol, поэтому срок действия этой доски истечет через 30 дней."}
           confirmLabel="Завершить ретро"
           onConfirm={() => { setConfirmEnd(false); onEnd(); }}
           onCancel={() => setConfirmEnd(false)}

@@ -72,7 +72,7 @@ export default function SetupPage() {
   const [adminCreated, setAdminCreated] = React.useState(false);
   const [adminError, setAdminError] = React.useState<string | null>(null);
 
-  const [instanceName, setInstanceName] = React.useState("Minutia");
+  const [instanceName, setInstanceName] = React.useState("Kotrol");
   const [smtpHost, setSmtpHost] = React.useState("");
   const [smtpPort, setSmtpPort] = React.useState("587");
   const [smtpUser, setSmtpUser] = React.useState("");
@@ -88,7 +88,7 @@ export default function SetupPage() {
 
   const setupHeaders = React.useCallback(() => ({
     "Content-Type": "application/json",
-    ...(setupToken.trim() ? { "x-minutia-setup-token": setupToken.trim() } : {}),
+    ...(setupToken.trim() ? { "x-kotrol-setup-token": setupToken.trim() } : {}),
   }), [setupToken]);
 
   const runEnvCheck = React.useCallback(async () => {
@@ -578,7 +578,7 @@ function StepCreateAdmin({
           Create admin account
         </h2>
         <p className="text-sm text-ink-3 mt-1">
-          This account will manage your Minutia instance.
+          This account will manage your Kotrol instance.
         </p>
       </div>
 
@@ -735,7 +735,7 @@ function StepConfigure({
             id="instance-name"
             value={instanceName}
             onChange={(e) => onInstanceNameChange(e.target.value)}
-            placeholder="Minutia"
+            placeholder="Kotrol"
             className="h-10 rounded-xl"
           />
         </div>
@@ -1003,7 +1003,7 @@ function StepReady({
         <div className="flex items-start gap-2 rounded-lg border border-rule bg-paper-2 px-3 py-2.5">
           <Sparkles className="size-4 text-ink-3 mt-0.5 shrink-0" />
           <p className="text-xs text-ink-3">
-            Minutia works without AI, but works best with it. You can add a provider anytime in Admin then Settings.
+            Kotrol works without AI, but works best with it. You can add a provider anytime in Admin then Settings.
           </p>
         </div>
       )}

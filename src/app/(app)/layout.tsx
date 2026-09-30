@@ -6,7 +6,7 @@ import { AppShell } from "./app-shell";
 export const metadata: Metadata = {
   title: {
     default: "Доска OIL",
-    template: "%s | Minutia",
+    template: "%s | Kotrol",
   },
 };
 

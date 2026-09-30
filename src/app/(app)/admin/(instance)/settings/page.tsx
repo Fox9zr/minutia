@@ -323,14 +323,14 @@ export default function AdminSettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Идентификатор инстанса</CardTitle>
-          <CardDescription>Идентификация данного инстанса Minutia.</CardDescription>
+          <CardDescription>Идентификация данного инстанса Kotrol.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="instance_name">Имя инстанса</Label>
             <Input
               id="instance_name"
-              placeholder="Minutia"
+              placeholder="Kotrol"
               value={field(form, "instance_name")}
               onChange={(e) => setKey("instance_name", e.target.value)}
             />

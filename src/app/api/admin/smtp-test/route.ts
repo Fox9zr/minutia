@@ -43,15 +43,15 @@ export async function POST(request: NextRequest) {
     const to = recipientEmail || smtp.from;
 
     await transport.sendMail({
-      from: `Minutia <${smtp.from}>`,
+      from: `Kotrol <${smtp.from}>`,
       to,
-      subject: "Тест SMTP Minutia",
-      text: "Your SMTP configuration is working correctly. This is a test email from your Minutia instance.",
+      subject: "Тест SMTP Kotrol",
+      text: "Your SMTP configuration is working correctly. This is a test email from your Kotrol instance.",
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px;">
           <h2 style="font-size: 18px; color: #1a1a1a; margin: 0 0 12px;">Проверка SMTP прошла успешно</h2>
           <p style="font-size: 14px; color: #666; line-height: 1.5; margin: 0;">
-            Your Minutia instance can send emails. This test was triggered from the setup wizard or admin settings.
+            Your Kotrol instance can send emails. This test was triggered from the setup wizard or admin settings.
           </p>
         </div>
       `,

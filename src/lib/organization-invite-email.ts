@@ -49,7 +49,7 @@ function buildEmailHtml({
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:580px;background:#fffdf8;border:1px solid #e2d8c8;border-radius:18px;overflow:hidden;box-shadow:0 18px 48px rgba(25,21,16,0.08);">
                 <tr>
                   <td style="background:#171717;padding:14px 28px;">
-                    <p style="margin:0;color:#fffaf1;font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;">minutia</p>
+                    <p style="margin:0;color:#fffaf1;font-size:12px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;">kotrol</p>
                   </td>
                 </tr>
                 <tr>
@@ -88,7 +88,7 @@ export function buildNewUserOrganizationInviteEmail({
   invitedEmail,
 }: NewUserOrganizationInviteEmailInput) {
   const roleLabel = roleCopy(role);
-  const subject = `Set your Minutia password for ${organizationName}`;
+  const subject = `Set your Kotrol password for ${organizationName}`;
 
   const text = [
     `You have been invited to ${organizationName} as an organization ${roleLabel}.`,
@@ -102,7 +102,7 @@ export function buildNewUserOrganizationInviteEmail({
   const html = buildEmailHtml({
     organizationName,
     role,
-    headline: "Вас пригласили в Minutia",
+    headline: "Вас пригласили в Kotrol",
     body: `Use this invite to set your password and join ${organizationName}.`,
     buttonLabel: "Установить пароль",
     buttonUrl: acceptUrl,
@@ -119,7 +119,7 @@ export function buildExistingUserOrganizationInviteEmail({
 }: ExistingUserOrganizationInviteEmailInput) {
   const settingsUrl = new URL("/settings", appUrl).toString();
   const roleLabel = roleCopy(role);
-  const subject = `You have been added to ${organizationName} on Minutia`;
+  const subject = `You have been added to ${organizationName} on Kotrol`;
 
   const text = [
     `You have been added to ${organizationName} as an organization ${roleLabel}.`,
@@ -130,8 +130,8 @@ export function buildExistingUserOrganizationInviteEmail({
   const html = buildEmailHtml({
     organizationName,
     role,
-    headline: "У вас есть доступ к рабочему пространству Minutia",
-    body: `You were added to ${organizationName}. Your existing Minutia sign-in still works.`,
+    headline: "У вас есть доступ к рабочему пространству Kotrol",
+    body: `You were added to ${organizationName}. Your existing Kotrol sign-in still works.`,
     buttonLabel: "Открыть рабочее пространство",
     buttonUrl: settingsUrl,
     footer: "Use your existing password or magic link to sign in if this browser does not already have a session.",

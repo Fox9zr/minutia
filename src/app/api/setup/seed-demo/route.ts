@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
     .insert({
       owner_id: ownerId,
       name: "Еженедельная синхронизация с подрядчиками",
-      description: "Пример серии встреч с демо-задачами для ознакомления с Minutia.",
+      description: "Пример серии встреч с демо-задачами для ознакомления с Kotrol.",
       cadence: "weekly",
       default_attendees: ["alice@partner.co", "bob@vendor.io"],
     })

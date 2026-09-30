@@ -34,7 +34,7 @@ function resolveTitle(pathname: string): string {
   const prefix = Object.keys(pageTitles).find(
     (key) => key !== "/" && pathname.startsWith(key)
   );
-  return prefix ? pageTitles[prefix] : "Minutia";
+  return prefix ? pageTitles[prefix] : "Kotrol";
 }
 
 export function AppHeader() {

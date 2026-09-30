@@ -47,7 +47,7 @@ export function CompanionAuthorizeClient() {
       try {
         window.location.assign(url);
       } catch {
-        // Fall back to the "Открыть приложение Minutia" anchor below.
+        // Fall back to the "Открыть приложение Kotrol" anchor below.
       }
     } catch {
       setError("Не удалось авторизовать приложение-компаньон.");
@@ -60,7 +60,7 @@ export function CompanionAuthorizeClient() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="font-display text-ink">
-            Authorize the Minutia companion app on {device}?
+            Authorize the Kotrol companion app on {device}?
           </CardTitle>
           <CardDescription className="text-ink-3">
             This signs the desktop companion app into your account so it can
@@ -71,14 +71,14 @@ export function CompanionAuthorizeClient() {
         {status === "done" ? (
           <CardContent className="space-y-3">
             <p className="text-sm text-ink-2" role="status">
-              Approved. Opening the Minutia app.
+              Approved. Opening the Kotrol app.
             </p>
             {callbackUrl && (
               <a
                 href={callbackUrl}
                 className="inline-flex h-9 items-center justify-center rounded-lg bg-accent px-4 text-sm font-medium text-white hover:bg-accent-hover"
               >
-                Open the Minutia app
+                Open the Kotrol app
               </a>
             )}
           </CardContent>

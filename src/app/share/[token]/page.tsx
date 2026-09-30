@@ -165,7 +165,7 @@ function ShareLayout({
               href="/"
               className="inline-flex items-center gap-1 rounded-md bg-ink px-4 py-2 text-sm font-medium text-paper transition-colors hover:bg-ink-2"
             >
-              Try Minutia Cloud
+              Try Kotrol Cloud
               <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
@@ -191,7 +191,7 @@ function ErrorView({
           href="/"
           className="mt-6 inline-flex items-center gap-1 text-sm font-medium text-accent hover:underline"
         >
-          Go to Minutia
+          Go to Kotrol
           <span aria-hidden="true">&rarr;</span>
         </a>
       </div>
@@ -662,7 +662,7 @@ export async function generateMetadata({
 
   const type = payload?.resource_type ?? "resource";
   return {
-    title: `Shared ${type} | Minutia`,
+    title: `Shared ${type} | Kotrol`,
   };
 }
 

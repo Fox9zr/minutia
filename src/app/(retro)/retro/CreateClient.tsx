@@ -82,7 +82,7 @@ export function CreateClient() {
               color: "var(--studio-ink)",
             }}
           >
-            Minutia Retro
+            Kotrol Retro
           </span>
         </div>
         <h1

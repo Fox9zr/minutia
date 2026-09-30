@@ -34,7 +34,7 @@ export function RetroDisabled() {
             margin: "0 0 24px",
           }}
         >
-          This Minutia instance hasn&apos;t turned on free retro boards. An admin
+          This Kotrol instance hasn&apos;t turned on free retro boards. An admin
           can enable them in workspace settings.
         </p>
         <Link
@@ -46,7 +46,7 @@ export function RetroDisabled() {
             color: "var(--accent)",
           }}
         >
-          Back to Minutia →
+          Back to Kotrol →
         </Link>
       </div>
     </div>

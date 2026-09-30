@@ -44,7 +44,7 @@ function buildPrompt(input: {
   }>;
 }) {
   return [
-    "Ответы на вопросы по повторяющейся серии встреч Minutia.",
+    "Ответы на вопросы по повторяющейся серии встреч Kotrol.",
     "Верните строгий JSON с полями answer, citations и unsupported.",
     "Ссылки должны указывать только на ID источников из предоставленного контекста.",
     "If the context does not prove the answer, set unsupported true, answer exactly: The source context does not prove the answer., and return no citations.",

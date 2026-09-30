@@ -115,7 +115,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Оформление</CardTitle>
             <CardDescription>
-              Choose how Minutia looks for you.
+              Choose how Kotrol looks for you.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -213,7 +213,7 @@ export default function SettingsPage() {
                   if (!allIssues) return;
                   downloadFile(
                     issuesToCsv(allIssues),
-                    `minutia-issues-${new Date().toISOString().slice(0, 10)}.csv`,
+                    `kotrol-issues-${new Date().toISOString().slice(0, 10)}.csv`,
                     "text/csv"
                   );
                 }}
@@ -229,7 +229,7 @@ export default function SettingsPage() {
                   if (!allIssues) return;
                   downloadFile(
                     issuesToJson(allIssues),
-                    `minutia-issues-${new Date().toISOString().slice(0, 10)}.json`,
+                    `kotrol-issues-${new Date().toISOString().slice(0, 10)}.json`,
                     "application/json"
                   );
                 }}

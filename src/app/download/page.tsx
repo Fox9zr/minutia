@@ -10,9 +10,9 @@ import {
 } from "@/lib/desktop-download";
 
 export const metadata: Metadata = {
-  title: "Minutia для Mac",
+  title: "Kotrol для Mac",
   description:
-    "Record your meetings from the menu bar. No bot joins the call. Recaps land in Minutia seconds after you hit stop.",
+    "Record your meetings from the menu bar. No bot joins the call. Recaps land in Kotrol seconds after you hit stop.",
 };
 
 export const revalidate = 300;
@@ -21,7 +21,7 @@ const steps = [
   {
     title: "Установить и выполнить Sign in",
     description:
-      "Скачайте приложение и выполните Sign in под своим аккаунтом Minutia. Оно работает в строке меню и не мешает работе.",
+      "Скачайте приложение и выполните Sign in под своим аккаунтом Kotrol. Оно работает в строке меню и не мешает работе.",
   },
   {
     title: "Запись из строки меню",
@@ -31,7 +31,7 @@ const steps = [
   {
     title: "Остановить и подвести итоги",
     description:
-      "Нажмите «Стоп», и через пару секунд в Minutia откроется протокол с поручениями.",
+      "Нажмите «Стоп», и через пару секунд в Kotrol откроется протокол с поручениями.",
   },
 ];
 
@@ -82,13 +82,13 @@ export default async function DownloadPage() {
       {/* ─── Hero ─── */}
       <section className="mx-auto max-w-3xl px-6 pt-24 pb-20 text-center sm:pt-32 sm:pb-28">
         <p className="text-xs font-mono uppercase tracking-wider text-accent mb-5">
-          Minutia for Mac
+          Kotrol for Mac
         </p>
         <h1 className="font-display text-4xl font-bold leading-tight tracking-tight text-ink sm:text-6xl">
           Record your meetings from the menu bar.
         </h1>
         <p className="mt-6 text-lg text-ink-2 sm:text-xl">
-          No bot joins the call. Minutia captures your mic and system audio
+          No bot joins the call. Kotrol captures your mic and system audio
           right from the menu bar, and the recap lands in your workspace seconds
           after you hit stop.
         </p>
@@ -147,7 +147,7 @@ export default async function DownloadPage() {
                 Bring your meetings in automatically.
               </h2>
               <p className="mt-4 text-ink-2">
-                Sign in with your Minutia account and start capturing in
+                Sign in with your Kotrol account and start capturing in
                 minutes.
               </p>
               <div className="mt-8">
@@ -161,7 +161,7 @@ export default async function DownloadPage() {
                 Start capturing on the web today.
               </h2>
               <p className="mt-4 text-ink-2">
-                The Mac companion is on the way. Minutia runs in your browser
+                The Mac companion is on the way. Kotrol runs in your browser
                 right now, and the desktop app slots in the moment it ships.
               </p>
               <div className="mt-8">
@@ -182,7 +182,7 @@ export default async function DownloadPage() {
       <footer className="border-t border-rule">
         <div className="mx-auto max-w-5xl px-6 py-8 flex items-center justify-between">
           <Link href="/" className="font-display text-sm font-semibold text-ink">
-            Minutia
+            Kotrol
           </Link>
           <p className="text-xs text-ink-4">
             The open-source Outstanding Issues Log. Run it yourself.

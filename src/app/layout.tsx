@@ -25,20 +25,20 @@ const jetbrains = localFont({
 
 export const metadata: Metadata = {
   title: {
-    default: "Minutia",
-    template: "%s | Minutia",
+    default: "Kotrol",
+    template: "%s | Kotrol",
   },
   description:
-    "The open-source Outstanding Issues Log for recurring meetings. Track outstanding issues, decisions, and action items across every meeting.",
+    "Реестр встреч, поручений и контроля исполнения.",
   icons: {
-    icon: { url: "/icon.svg", type: "image/svg+xml" },
-    apple: "/icon.svg",
+    icon: { url: "/icon-192.png", type: "image/png" },
+    apple: "/icon-192.png",
   },
   manifest: "/manifest.json",
   openGraph: {
-    title: "Minutia",
+    title: "Kotrol",
     description:
-      "Open-source реестр открытых вопросов для регулярных встреч.",
+      "Реестр встреч, поручений и контроля исполнения.",
     type: "website",
   },
   other: {

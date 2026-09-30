@@ -42,7 +42,7 @@ export function Lobby({ boardName, template, people, facilitatorName, onEnter }:
       <div style={{ width: "100%", maxWidth: 520, textAlign: "center" }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 8, color: "var(--accent-bright)", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.12em", textTransform: "uppercase" }}>
           <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--accent)", boxShadow: "var(--glow-accent)" }} />
-          Minutia Retro
+          Kotrol Retro
         </div>
 
         <h1 style={{ fontFamily: "var(--font-serif)", fontSize: "clamp(2.2rem,5vw,3.2rem)", fontWeight: 600, lineHeight: 1.08, letterSpacing: "-0.015em", color: "var(--studio-ink)", margin: "16px 0 10px" }}>

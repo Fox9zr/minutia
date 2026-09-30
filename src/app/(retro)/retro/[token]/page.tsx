@@ -47,7 +47,7 @@ export default async function RetroBoardPage({
             }}
           >
             Free retro boards are kept for 30 days. Start a fresh one, or save your
-            retros into Minutia to keep them.
+            retros into Kotrol to keep them.
           </p>
           <Link
             href="/retro"

@@ -4,7 +4,7 @@
 // enhance-notes user prompt so we reuse the mental model, not the output format.
 
 export const SUMMARY_SYSTEM_PROMPT =
-  "You write a concise, flowing recap of a recurring meeting for Minutia. Return prose only: two or three short paragraphs a busy teammate can read in under a minute. No headings, no bullet lists, no structured data, no markdown fences. Lead with what was decided and who owns what. Do not invent owners, dates, or decisions; if the transcript is thin, keep the recap short.";
+  "You write a concise, flowing recap of a recurring meeting for Kotrol. Return prose only: two or three short paragraphs a busy teammate can read in under a minute. No headings, no bullet lists, no structured data, no markdown fences. Lead with what was decided and who owns what. Do not invent owners, dates, or decisions; if the transcript is thin, keep the recap short.";
 
 const MAX_TRANSCRIPT_CHARS = 80_000;
 

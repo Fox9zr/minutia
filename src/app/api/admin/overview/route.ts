@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
     series: seriesRes.count ?? 0,
     meetings: meetingsRes.count ?? 0,
     openIssues: openIssuesRes.count ?? 0,
-    instanceName: config.instance_name || "Minutia",
+    instanceName: config.instance_name || "Kotrol",
     version: process.env.npm_package_version || "0.1.0",
     deploymentMode: config.hosted_mode === "true" ? "hosted" : "self-host",
   });

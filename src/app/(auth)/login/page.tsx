@@ -220,7 +220,7 @@ function LoginForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Не удалось запросить приглашение");
       setInviteState("sent");
-      setInviteMessage("Запрос на приглашение отправлен администратору Minutia.");
+      setInviteMessage("Запрос на приглашение отправлен администратору Kotrol.");
     } catch (err) {
       setInviteState("error");
       setInviteMessage(err instanceof Error ? err.message : "Не удалось запросить приглашение");
@@ -238,7 +238,7 @@ function LoginForm() {
         {/* Logo */}
         <div className="mb-8 text-center">
           <h1 className="font-display text-3xl font-semibold tracking-tight text-ink">
-            minutia
+            Kotrol
           </h1>
           <p className="mt-2 font-sans text-sm text-ink-3">
             The open-source Outstanding Issues Log for recurring meetings.
@@ -416,7 +416,7 @@ function LoginForm() {
 
             {publicSignupEnabled ? (
               <p className="mt-6 text-center font-sans text-sm text-ink-3">
-                New to Minutia?{" "}
+                New to Kotrol?{" "}
                 <Link
                   href={`/signup${nextPath !== "/" ? `?next=${encodeURIComponent(nextPath)}` : ""}`}
                   className="inline-flex items-center gap-1 font-medium text-accent underline-offset-4 transition-colors hover:underline"
@@ -428,7 +428,7 @@ function LoginForm() {
             ) : (
               <div className="mt-5 rounded-[14px] border border-rule bg-paper px-4 py-3">
                 <p className="font-sans text-xs font-medium text-ink">
-                  Need access to this Minutia workspace?
+                  Need access to this Kotrol workspace?
                 </p>
                 <div className="mt-2 flex items-center justify-between gap-3">
                   <p className="font-sans text-xs text-ink-4">

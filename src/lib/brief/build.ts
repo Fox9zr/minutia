@@ -147,7 +147,7 @@ export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
       "",
       `See the live log: ${cta.href}`,
       "",
-      "Отправлено через Minutia",
+      "Отправлено через Kotrol",
     ]
       .filter((line) => line !== undefined)
       .join("\n");
