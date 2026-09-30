@@ -126,7 +126,7 @@ function LoginForm() {
     }
   }
 
-  async function handleForgotПароль() {
+  async function handleForgotPassword() {
     if (!email.trim()) return;
     if (resetCooldown > 0 || formState === "loading") return;
 
@@ -294,7 +294,7 @@ function LoginForm() {
                   </Label>
                   <button
                     type="button"
-                    onClick={handleForgotПароль}
+                    onClick={handleForgotPassword}
                     disabled={
                       formState === "loading" ||
                       !email.trim() ||

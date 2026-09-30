@@ -166,7 +166,7 @@ export function CreateSeriesDialog({
               {createSeries.isPending && (
                 <Loader2 className="size-3.5 animate-spin" />
               )}
-              Create series
+              Создать серию
             </Button>
           </div>
         </form>

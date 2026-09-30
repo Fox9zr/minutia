@@ -53,7 +53,7 @@ export default function SeriesListPage() {
             onClick={() => setDialogOpen(true)}
           >
             <Plus className="size-4" data-icon="inline-start" />
-            Create series
+            Создать серию
           </Button>
         </div>
 
