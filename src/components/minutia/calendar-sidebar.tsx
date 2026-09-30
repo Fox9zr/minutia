@@ -245,7 +245,7 @@ function DayAgenda({
                         {event.meetingStatus === "live" && (
                           <span className="size-1.5 rounded-full bg-accent animate-pulse" />
                         )}
-                        {event.seriesKind === "recurring" ? "Recurring" : "Ad hoc"}
+                        {event.seriesKind === "recurring" ? "Периодическая" : "Разовая"}
                       </span>
                       {event.meetingUrl && (
                         <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-full bg-paper-3 text-ink-3 font-medium">

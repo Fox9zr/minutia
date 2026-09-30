@@ -40,7 +40,7 @@ export function CreateRetro({ open, initialName, templates, onClose, onCreate }:
 
         {/* Name */}
         <label style={{ display: "block", fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)", marginBottom: 8 }}>Название ретроспективы</label>
-        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Platform squad, Sprint 24" size="lg" style={{ marginBottom: 28 }} />
+        <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Напр., платформа, спринт 24" size="lg" style={{ marginBottom: 28 }} />
 
         {/* Template */}
         <div style={{ fontFamily: "var(--font-sans)", fontSize: 12, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--studio-ink-3)", marginBottom: 10 }}>Шаблон</div>

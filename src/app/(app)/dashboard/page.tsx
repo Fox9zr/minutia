@@ -643,7 +643,7 @@ function OutstandingWidget({
             >
               {ownerFilter && (
                 <Badge variant="secondary" className="gap-1">
-                  Owner: {ownerFilter.label}
+                  Ответственный: {ownerFilter.label}
                   <button
                     type="button"
                     aria-label="Сбросить фильтр по ответственному"

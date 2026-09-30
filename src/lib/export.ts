@@ -9,7 +9,7 @@ function issueToCsvRow(issue: Issue): Record<string, string> {
     Category: issue.category,
     Status: issue.status,
     Priority: issue.priority,
-    Owner: issue.owner_name ?? "",
+    Ответственный: issue.owner_name ?? "",
     "Due Date": issue.due_date ? String(issue.due_date) : "",
     "Дата создания": String(issue.created_at),
   };

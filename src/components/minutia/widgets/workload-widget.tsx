@@ -85,7 +85,7 @@ export function WorkloadWidget({
                   : "bg-paper-2 text-ink-3 hover:text-ink-2"
               )}
             >
-              {v === "owner" ? "By Owner" : v === "series" ? "По сериям" : "Overdue"}
+              {v === "owner" ? "По ответственным" : v === "series" ? "По сериям" : "Просрочено"}
             </button>
           ))}
         </div>

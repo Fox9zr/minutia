@@ -48,7 +48,7 @@ function issueRows(issues: Issue[], appUrl: string) {
         issueKey,
         issue.category,
         issue.status.replaceAll("_", " "),
-        issue.owner_name ? `Owner: ${issue.owner_name}` : null,
+        issue.owner_name ? `Ответственный: ${issue.owner_name}` : null,
         issue.due_date ? `Due: ${formatDate(issue.due_date)}` : null,
       ].filter(Boolean);
 

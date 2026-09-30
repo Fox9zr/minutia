@@ -425,7 +425,7 @@ export function RetroClient({
   }
 
   if (!me) {
-    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--studio-ink-3)", fontFamily: "var(--font-sans)" }}>Loading…</div>;
+    return <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--studio-ink-3)", fontFamily: "var(--font-sans)" }}>Загрузка…</div>;
   }
 
   const showLobby = needsJoin || phase === "lobby";

@@ -97,7 +97,7 @@ export function MemberCombobox({
           />
           <CommandList>
             {(filteredMembers.length > 0 || filteredAttendees.length > 0) && (
-              <CommandGroup heading="Workspace">
+              <CommandGroup heading="Команда">
                 {filteredMembers.map((member) => {
                   const label = member.name || member.email;
                   return (

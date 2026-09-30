@@ -88,7 +88,7 @@ export function CreateSeriesDialog({
             <Label htmlFor="series-name" className="text-sm font-semibold text-ink">Название</Label>
             <Input
               id="series-name"
-              placeholder="e.g. Weekly Standup"
+              placeholder="Напр., еженедельная планёрка"
               {...register("name")}
               aria-invalid={!!errors.name}
               className="h-11"

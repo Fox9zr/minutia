@@ -11,10 +11,10 @@ import { HintTooltip } from "@/components/minutia/hint-tooltip";
 const pageTitles: Record<string, string> = {
   "/": "Доска OIL",
   "/dashboard": "Доска OIL",
-  "/series": "Series",
+  "/series": "Серии встреч",
   "/actions": "Мои поручения",
-  "/inbox": "Inbox",
-  "/settings": "Settings",
+  "/inbox": "Входящие",
+  "/settings": "Настройки",
 };
 
 function resolveTitle(pathname: string): string {
@@ -25,7 +25,7 @@ function resolveTitle(pathname: string): string {
   if (/^\/series\/[^/]+$/.test(pathname)) return "Серии встреч";
 
   // Meeting detail
-  if (/^\/series\/[^/]+\/meetings\/[^/]+$/.test(pathname)) return "Meeting";
+  if (/^\/series\/[^/]+\/meetings\/[^/]+$/.test(pathname)) return "Встреча";
 
   // Issue detail
   if (/^\/issues\/[^/]+$/.test(pathname)) return "Поручение";

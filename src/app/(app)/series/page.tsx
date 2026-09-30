@@ -151,7 +151,7 @@ export default function SeriesListPage() {
                         </span>
                       )}
                       <span className="font-mono text-ink-4">
-                        Updated {formatDate(series.updated_at)}
+                        Обновлено {formatDate(series.updated_at)}
                       </span>
                     </div>
                   </div>
@@ -174,7 +174,7 @@ export default function SeriesListPage() {
                         <div className="mt-2 flex items-center gap-2 text-[10px] font-mono uppercase tracking-wider text-ink-4">
                           <span>{CADENCE_LABELS[series.cadence]}</span>
                           <span aria-hidden="true">/</span>
-                          <span>Updated {formatDate(series.updated_at)}</span>
+                          <span>Обновлено {formatDate(series.updated_at)}</span>
                         </div>
                       </motion.div>
                     )}

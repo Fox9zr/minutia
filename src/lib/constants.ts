@@ -11,7 +11,7 @@ export const CADENCE_LABELS: Record<Cadence, string> = {
   weekly: "Еженедельно",
   biweekly: "Раз в две недели",
   monthly: "Ежемесячно",
-  adhoc: "Ad hoc",
+  adhoc: "Разовая",
 };
 
 export const STATUS_CONFIG: Record<IssueStatus, { label: string; color: string }> = {

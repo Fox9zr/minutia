@@ -162,7 +162,7 @@ export function InviteRequestReviewClient({
               {state.message}
             </p>
           ) : (
-            <p className="text-sm text-ink-3">This action applies to {organizationName}.</p>
+            <p className="text-sm text-ink-3">Действие применяется к {organizationName}.</p>
           )}
           <Button
             type="button"

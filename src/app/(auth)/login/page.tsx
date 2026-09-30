@@ -309,7 +309,7 @@ function LoginForm() {
                     className="font-sans text-xs text-ink-3 underline underline-offset-4 transition-colors hover:text-ink-2 disabled:pointer-events-none disabled:opacity-40"
                   >
                     {resetCooldown > 0
-                      ? `Forgot password? (${resetCooldown}s)`
+                      ? `Забыли пароль? (${resetCooldown}s)`
                       : "Забыли пароль?"}
                   </button>
                 </div>

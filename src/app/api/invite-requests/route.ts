@@ -185,8 +185,8 @@ export async function POST(request: NextRequest) {
                   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fffdf8;border:1px solid #e8e2d8;border-radius:18px;overflow:hidden;">
                     <tr>
                       <td style="padding:28px 30px 10px;">
-                        <p style="margin:0 0 16px;color:#d4572a;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">minutia access</p>
-                        <h1 style="margin:0;color:#171717;font-size:26px;font-weight:760;line-height:32px;">Approve access for ${escapeHtml(requestedEmail)}?</h1>
+                        <p style="margin:0 0 16px;color:#d4572a;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;">Доступ к Kotrol</p>
+                        <h1 style="margin:0;color:#171717;font-size:26px;font-weight:760;line-height:32px;">Одобрить доступ для ${escapeHtml(requestedEmail)}?</h1>
                         <p style="margin:12px 0 0;color:#6b665f;font-size:14px;line-height:22px;">A visitor asked to join ${escapeHtml(inviteTarget.organizationName)}. Review the request before changing workspace access.</p>
                       </td>
                     </tr>

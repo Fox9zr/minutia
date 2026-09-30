@@ -15,7 +15,7 @@ export async function generateMetadata({
     supabase.from("meetings").select("sequence_number").eq("id", meetingId).single(),
   ]);
 
-  const seriesName = series?.name ?? "Series";
+  const seriesName = series?.name ?? "Серия встреч";
   const num = meeting?.sequence_number ?? "";
   return { title: `Meeting ${num} | ${seriesName}` };
 }

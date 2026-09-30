@@ -54,7 +54,7 @@ export function ShareInvite({ open, boardName, template, people, link, onClose, 
 
         <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 14px", borderRadius: "var(--r-control)", background: "var(--studio-surface)", border: "1px solid var(--studio-line)", marginBottom: 24 }}>
           <PresenceStack people={people.slice(0, 4)} size={28} showCount={false} />
-          <span style={{ fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--studio-ink-2)" }}>People are starting to join…</span>
+          <span style={{ fontFamily: "var(--font-sans)", fontSize: 13, color: "var(--studio-ink-2)" }}>Участники начинают подключаться…</span>
           <span style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 6, fontFamily: "var(--font-mono)", fontSize: 12.5, color: "var(--studio-ink-3)" }}>
             <span style={{ width: 7, height: 7, borderRadius: "50%", background: "var(--success)" }} /> {people.length} here
           </span>

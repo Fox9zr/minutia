@@ -523,7 +523,7 @@ function IssueShareView({
 
       {/* Owner and dates */}
       <div className="mb-8 flex flex-wrap items-center gap-4 text-xs text-ink-3">
-        {issue.owner_name && <span className="font-mono">Owner: {issue.owner_name}</span>}
+        {issue.owner_name && <span className="font-mono">Ответственный: {issue.owner_name}</span>}
         {issue.due_date && (
           <span className="font-mono">
             Due {formatShortDate(issue.due_date)}

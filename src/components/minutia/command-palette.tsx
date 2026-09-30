@@ -95,7 +95,7 @@ export function CommandPalette() {
         <CommandEmpty>Ничего не найдено.</CommandEmpty>
 
         {/* Navigation */}
-        <CommandGroup heading="Navigation">
+        <CommandGroup heading="Навигация">
           {NAV_ITEMS.map((item) => {
             const Icon = item.icon;
             return (
@@ -112,7 +112,7 @@ export function CommandPalette() {
 
         {/* Series */}
         {seriesList && seriesList.length > 0 && (
-          <CommandGroup heading="Series">
+          <CommandGroup heading="Серии">
             {seriesList.map((series) => (
               <CommandItem
                 key={series.id}
@@ -130,7 +130,7 @@ export function CommandPalette() {
 
         {/* Issues */}
         {displayedIssues.length > 0 && (
-          <CommandGroup heading="Issues">
+          <CommandGroup heading="Поручения">
             {displayedIssues.map((issue) => {
               const catConfig =
                 CATEGORY_CONFIG[issue.category as IssueCategory];
@@ -162,7 +162,7 @@ export function CommandPalette() {
         )}
         {/* Decisions */}
         {decisions && decisions.length > 0 && (
-          <CommandGroup heading="Decisions">
+          <CommandGroup heading="Решения">
             {decisions.slice(0, 5).map((d) => (
               <CommandItem
                 key={d.id}

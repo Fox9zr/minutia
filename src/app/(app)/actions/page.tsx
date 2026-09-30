@@ -163,7 +163,7 @@ function ActionRow({
               overdue && !checked ? "text-accent font-medium" : "text-ink-4"
             )}
           >
-            {overdue && !checked ? "Overdue" : formatShortDate(issue.due_date)}
+            {overdue && !checked ? "Просрочено" : formatShortDate(issue.due_date)}
           </span>
         )}
       </div>

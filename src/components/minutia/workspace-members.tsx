@@ -347,7 +347,7 @@ export function WorkspaceMembers() {
               </div>
               <Button type="submit" size="sm" disabled={inviteState === "loading" || !inviteEmail}>
                 <UserPlus className="size-3.5" />
-                {inviteState === "loading" ? "Sending" : "Invite"}
+                {inviteState === "loading" ? "Отправляем" : "Пригласить"}
               </Button>
             </form>
             {inviteMessage && (
@@ -389,7 +389,7 @@ export function WorkspaceMembers() {
                 <Users className="size-4" />
               </span>
               <div className="space-y-0.5">
-                <p className="text-sm font-medium text-ink">Bring your team into {orgAdmin.organization.name}</p>
+                <p className="text-sm font-medium text-ink">Позовите команду в {orgAdmin.organization.name}</p>
                 <p className="text-xs text-ink-3">
                   This workspace is solo right now. Upgrade to invite teammates and assign work across your meetings.
                 </p>

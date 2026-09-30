@@ -198,7 +198,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
               <SidebarMenuButton
                 asChild
                 isActive={isActive(pathname, "/admin")}
-                tooltip="Admin"
+                tooltip="Админ"
                 className={cn(
                   "h-9 rounded-md px-3 gap-3 text-[14px] text-ink-2 transition-all",
                   isActive(pathname, "/admin") && "text-ink font-medium"
@@ -215,7 +215,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
             <SidebarMenuButton
               asChild
               isActive={isActive(pathname, "/settings")}
-              tooltip="Settings"
+              tooltip="Настройки"
               className={cn(
                 "h-9 rounded-md px-3 gap-3 text-[14px] text-ink-2 transition-all",
                 isActive(pathname, "/settings") && "text-ink font-medium"
@@ -235,7 +235,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
           />
           <div className="flex min-w-0 flex-1 flex-col">
             <span className="truncate text-xs font-medium text-ink">
-              {profile?.name || "User"}
+              {profile?.name || "Пользователь"}
             </span>
             <span className="truncate text-xs text-ink-4">
               {profile?.email ?? ""}

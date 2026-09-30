@@ -10,7 +10,7 @@ import { WIDGET_REGISTRY, type WidgetMeta } from "./widget-registry";
 
 const GROUP_LABELS: Record<string, string> = {
   pulse: "Health",
-  agenda: "Meeting",
+  agenda: "Встреча",
   workload: "People",
 };
 
@@ -119,13 +119,13 @@ export function AddWidgetButton() {
                             <p className="text-sm font-medium text-ink">
                               {w.name}
                               {w.span === 2 && (
-                                <span className="ml-1.5 text-[10px] font-mono text-ink-4">wide</span>
+                                <span className="ml-1.5 text-[10px] font-mono text-ink-4">широкий</span>
                               )}
                             </p>
                             <p className="text-xs text-ink-3 mt-0.5">{w.description}</p>
                           </div>
                           {isActive && (
-                            <span className="text-[10px] font-mono text-ink-4 mt-0.5 shrink-0">added</span>
+                            <span className="text-[10px] font-mono text-ink-4 mt-0.5 shrink-0">добавлено</span>
                           )}
                         </button>
                       );

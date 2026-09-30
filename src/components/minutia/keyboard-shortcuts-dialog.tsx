@@ -108,7 +108,7 @@ export function KeyboardShortcutsDialog() {
                             {key}
                           </kbd>
                           {i < shortcut.keys.length - 1 && key !== "⌘" && (
-                            <span className="text-ink-4 text-[10px] mx-0.5">then</span>
+                            <span className="text-ink-4 text-[10px] mx-0.5">затем</span>
                           )}
                         </span>
                       ))}

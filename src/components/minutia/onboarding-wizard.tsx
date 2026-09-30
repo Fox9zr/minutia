@@ -376,7 +376,7 @@ function StepCreateSeries({
           id="onboard-series"
           value={seriesName}
           onChange={(e) => onSeriesNameChange(e.target.value)}
-          placeholder="e.g. Weekly Standup, Vendor Sync, 1:1 with Alex"
+          placeholder="Напр., планёрка, синк с поставщиком, 1:1"
           autoFocus
           className="h-11 rounded-xl"
         />

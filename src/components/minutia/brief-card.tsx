@@ -20,7 +20,7 @@ function formatTimeUntil(date: Date): string {
   const now = new Date();
   const diff = new Date(date).getTime() - now.getTime();
 
-  if (diff < 0) return "Overdue";
+  if (diff < 0) return "Просрочено";
 
   const hours = Math.floor(diff / (1000 * 60 * 60));
   const days = Math.floor(hours / 24);
