@@ -96,11 +96,11 @@ function formatRelativeDue(date: Date | string): { label: string; overdue: boole
 
   if (diffDays < 0) {
     const absDays = Math.abs(diffDays);
-    return { label: `Overdue by ${absDays}d`, overdue: true };
+    return { label: `Просрочено на ${absDays} дн.`, overdue: true };
   }
   if (diffDays === 0) return { label: "Срок сегодня", overdue: false };
   if (diffDays === 1) return { label: "Срок завтра", overdue: false };
-  if (diffDays <= 7) return { label: `Due in ${diffDays}d`, overdue: false };
+  if (diffDays <= 7) return { label: `Срок через ${diffDays}d`, overdue: false };
   return { label: `Due ${formatShortDate(date)}`, overdue: false };
 }
 
@@ -978,7 +978,7 @@ function AgeWidget({ id, widgetIndex, issues }: { id: string; widgetIndex: numbe
       </div>
       {maxAge > 0 && (
         <p className="text-xs text-ink-3 mb-4">
-          Oldest issue is <span className="text-ink font-medium">{maxAge} days</span> old.
+          Самое старое поручение: <span className="text-ink font-medium">{maxAge} дн.</span>
         </p>
       )}
       <div className="space-y-2.5">
