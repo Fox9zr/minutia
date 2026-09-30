@@ -53,7 +53,7 @@ export function CreateRetro({ open, initialName, templates, onClose, onCreate }:
                 border: "1px solid " + (active ? "var(--accent)" : "var(--studio-line-2)"), boxShadow: active ? "var(--glow-accent)" : "none", transition: "all var(--dur-fast) var(--ease-out)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
                   <span style={{ fontFamily: "var(--font-serif)", fontSize: "1.1rem", fontWeight: 600, color: "var(--studio-ink)" }}>{t.name}</span>
-                  {t.kotrol && <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "#1a1815", background: "var(--accent)", padding: "2px 6px", borderRadius: "var(--r-pill)" }}>Kotrol</span>}
+                  {t.minutia && <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.06em", textTransform: "uppercase", color: "#1a1815", background: "var(--accent)", padding: "2px 6px", borderRadius: "var(--r-pill)" }}>Kotrol</span>}
                 </div>
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: 12.5, color: "var(--studio-ink-2)", margin: "0 0 10px", lineHeight: 1.4 }}>{t.desc}</p>
                 <div style={{ display: "flex", gap: 6 }}>
