@@ -81,7 +81,7 @@ export default function SetupPage() {
   const [smtpTestResult, setSmtpTestResult] = React.useState<{ success: boolean; message: string } | null>(null);
   const [configSaving, setConfigSaving] = React.useState(false);
 
-  const [aiSkipped, setAiSkipped] = React.useState(false);
+  const [aiПропуститьped, setAiПропуститьped] = React.useState(false);
 
   const [seedDemo, setSeedDemo] = React.useState(true);
   const [completing, setCompleting] = React.useState(false);
@@ -334,7 +334,7 @@ export default function SetupPage() {
                   onTestSmtp={handleTestSmtp}
                   saving={configSaving}
                   onNext={handleSaveConfig}
-                  onSkip={goNext}
+                  onПропустить={goNext}
                 />
               </motion.div>
             )}
@@ -352,7 +352,7 @@ export default function SetupPage() {
                 <StepAi
                   setupHeaders={setupHeaders}
                   onNext={goNext}
-                  onSkip={() => { setAiSkipped(true); goNext(); }}
+                  onПропустить={() => { setAiПропуститьped(true); goNext(); }}
                 />
               </motion.div>
             )}
@@ -372,7 +372,7 @@ export default function SetupPage() {
                   onSeedDemoChange={setSeedDemo}
                   completing={completing}
                   onComplete={handleComplete}
-                  aiSkipped={aiSkipped}
+                  aiПропуститьped={aiПропуститьped}
                 />
               </motion.div>
             )}
@@ -696,7 +696,7 @@ function StepConfigure({
   onTestSmtp,
   saving,
   onNext,
-  onSkip,
+  onПропустить,
 }: {
   instanceName: string;
   onInstanceNameChange: (v: string) => void;
@@ -713,7 +713,7 @@ function StepConfigure({
   onTestSmtp: () => void;
   saving: boolean;
   onNext: () => void;
-  onSkip: () => void;
+  onПропустить: () => void;
 }) {
   const smtpFilled = smtpHost.trim().length > 0;
 
@@ -794,8 +794,8 @@ function StepConfigure({
       </div>
 
       <div className="flex gap-3 pt-1">
-        <Button variant="ghost" onClick={onSkip} className="text-ink-3">
-          Skip for now
+        <Button variant="ghost" onClick={onПропустить} className="text-ink-3">
+          Пропустить for now
         </Button>
         <Button variant="accent"
           onClick={onNext}
@@ -826,11 +826,11 @@ function StepConfigure({
 function StepAi({
   setupHeaders,
   onNext,
-  onSkip,
+  onПропустить,
 }: {
   setupHeaders: () => Record<string, string>;
   onNext: () => void;
-  onSkip: () => void;
+  onПропустить: () => void;
 }) {
   const [provider, setProvider] = React.useState<"openai-compatible" | "anthropic">("openai-compatible");
   const [baseUrl, setBaseUrl] = React.useState("https://openrouter.ai/api/v1");
@@ -938,8 +938,8 @@ function StepAi({
       </div>
 
       <div className="flex gap-3 pt-1">
-        <Button variant="ghost" onClick={onSkip} className="text-ink-3">
-          Skip for now
+        <Button variant="ghost" onClick={onПропустить} className="text-ink-3">
+          Пропустить for now
         </Button>
         <Button variant="accent"
           onClick={handleSave}
@@ -972,13 +972,13 @@ function StepReady({
   onSeedDemoChange,
   completing,
   onComplete,
-  aiSkipped,
+  aiПропуститьped,
 }: {
   seedDemo: boolean;
   onSeedDemoChange: (v: boolean) => void;
   completing: boolean;
   onComplete: () => void;
-  aiSkipped: boolean;
+  aiПропуститьped: boolean;
 }) {
   return (
     <div className="space-y-6">
@@ -999,7 +999,7 @@ function StepReady({
         </p>
       </div>
 
-      {aiSkipped && (
+      {aiПропуститьped && (
         <div className="flex items-start gap-2 rounded-lg border border-rule bg-paper-2 px-3 py-2.5">
           <Sparkles className="size-4 text-ink-3 mt-0.5 shrink-0" />
           <p className="text-xs text-ink-3">

@@ -627,7 +627,7 @@ function OutstandingWidget({
               searchRef.current?.blur();
             }
           }}
-          placeholder="Filter issues… /"
+          placeholder="Поиск поручений… /"
           aria-label="Фильтр задач"
           className="mb-2 w-full max-w-[240px] rounded-md border border-rule bg-paper px-2.5 py-1.5 text-xs text-ink placeholder:text-ink-4 outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-paper"
         />

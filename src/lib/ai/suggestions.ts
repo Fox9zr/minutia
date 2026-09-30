@@ -101,7 +101,7 @@ export function buildContextAwarePrompt(input: {
     "4. Flag contradictions: if the discussion contradicts a past decision, surface it as a risk new_item and name the prior decision in details.",
     "5. Only emit a new_item for something genuinely not represented in the OIL below.",
     "6. Reference OIL items by their number exactly as shown (OIL-<number>).",
-    "7. Prefer fewer, high-signal suggestions. Skip greetings, small talk, and items discussed with no real change.",
+    "7. Prefer fewer, high-signal suggestions. Пропустить greetings, small talk, and items discussed with no real change.",
     "8. Emit at most 10 suggestions total. If more seem to qualify, keep only the ten highest-confidence ones.",
     "9. Attributed transcript: each line is \"Name: text\". A first-person self-assignment by a speaker makes that speaker the owner_name. An unmapped speaker line reads \"Speaker A:\"; treat those as unattributed, never invent a name.",
     "",

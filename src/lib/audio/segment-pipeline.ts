@@ -189,7 +189,7 @@ export function createSegmentPipeline(
     }
 
     // Recorder has stopped, so every buffered cluster is complete: cut one
-    // final segment from all remaining bytes. Skip only when nothing is pending
+    // final segment from all remaining bytes. Пропустить only when nothing is pending
     // and an earlier segment already completed (the tail is that last segment).
     if (buffer.length > 0) {
       enqueueSegment(buildSegmentFile(init, buffer));

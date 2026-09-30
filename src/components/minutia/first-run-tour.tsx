@@ -194,7 +194,7 @@ export function FirstRunTour({ userId }: { userId: string }) {
                   Рекомендуем сначала пройти короткий обзор.
                 </p>
                 <p className="mt-1 text-xs leading-5 text-ink-3">
-                  It shows where dashboard panels, issues, series, meetings, and shortcuts live before your first real meeting.
+                  Обзор покажет, где находятся панели дашборда, поручения, серии, встречи и ярлыки — до вашей первой настоящей встречи.
                 </p>
                 <div className="mt-3 flex flex-wrap gap-2">
                   <Button variant="accent"

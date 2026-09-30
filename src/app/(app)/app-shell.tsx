@@ -37,7 +37,7 @@ export function AppShell({ profile, organizations, children }: AppShellProps) {
       if (e.key !== "n" || e.metaKey || e.ctrlKey || e.altKey) return;
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
-      // Skip if inside a contenteditable element.
+      // Пропустить if inside a contenteditable element.
       const el = e.target as HTMLElement;
       if (el.isContentEditable) return;
       e.preventDefault();
@@ -72,7 +72,7 @@ export function AppShell({ profile, organizations, children }: AppShellProps) {
         href="#main-content"
         className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white"
       >
-        Skip to content
+        Пропустить to content
       </a>
       <AppSidebar profile={profile} organizations={organizations} />
       <SidebarInset>

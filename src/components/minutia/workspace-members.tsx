@@ -224,7 +224,7 @@ export function WorkspaceMembers() {
     if (
       !(await confirm({
         title: "Удалить участника?",
-        description: `${email} will lose access to this workspace.`,
+        description: `${email} потеряет доступ к этому рабочему пространству.`,
         confirmLabel: "Remove",
         danger: true,
       }))
@@ -391,7 +391,7 @@ export function WorkspaceMembers() {
               <div className="space-y-0.5">
                 <p className="text-sm font-medium text-ink">Позовите команду в {orgAdmin.organization.name}</p>
                 <p className="text-xs text-ink-3">
-                  This workspace is solo right now. Upgrade to invite teammates and assign work across your meetings.
+                  Сейчас в рабочем пространстве один участник. Обновите план, чтобы приглашать коллег и распределять поручения.
                 </p>
                 {upgradeError && (
                   <p className="text-xs text-danger">Не удалось запустить обновление. Повторите попытку.</p>

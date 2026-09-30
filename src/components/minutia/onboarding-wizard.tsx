@@ -102,7 +102,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
     router.refresh();
   }
 
-  async function handleSkip() {
+  async function handleПропустить() {
     await completeOnboarding.mutateAsync();
     router.push("/");
     router.refresh();
@@ -183,7 +183,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
                   attendees={attendees}
                   onAttendeesChange={setAttendees}
                   onNext={handleFinishStep1}
-                  onSkip={goNext}
+                  onПропустить={goNext}
                   isPending={createSeries.isPending}
                 />
               </motion.div>
@@ -208,13 +208,13 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
           </AnimatePresence>
         </div>
 
-        {/* Skip link */}
+        {/* Пропустить link */}
         <div className="mt-4 text-center">
           <button
-            onClick={handleSkip}
+            onClick={handleПропустить}
             className="text-xs text-ink-4 hover:text-ink-3 transition-colors"
           >
-            Skip setup
+            Пропустить setup
           </button>
         </div>
       </div>
@@ -344,7 +344,7 @@ function StepCreateSeries({
   attendees,
   onAttendeesChange,
   onNext,
-  onSkip,
+  onПропустить,
   isPending,
 }: {
   seriesName: string;
@@ -354,7 +354,7 @@ function StepCreateSeries({
   attendees: string;
   onAttendeesChange: (v: string) => void;
   onNext: () => void;
-  onSkip: () => void;
+  onПропустить: () => void;
   isPending: boolean;
 }) {
   return (
@@ -421,10 +421,10 @@ function StepCreateSeries({
       <div className="flex gap-3">
         <Button
           variant="ghost"
-          onClick={onSkip}
+          onClick={onПропустить}
           className="flex-1 h-11 rounded-xl text-ink-3"
         >
-          Skip for now
+          Пропустить for now
         </Button>
         <Button variant="accent"
           onClick={onNext}

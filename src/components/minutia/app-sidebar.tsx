@@ -186,7 +186,7 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
           <div className="mb-3 px-2">
             <label className="mb-1.5 flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.1em] text-ink-4">
               <Building2 className="size-3" />
-              Organization
+              Организация
             </label>
             <div className="truncate rounded-md border border-rule bg-paper px-2 py-2 text-sm text-ink">
               {currentOrganization.name}

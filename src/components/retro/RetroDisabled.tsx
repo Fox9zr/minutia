@@ -34,8 +34,8 @@ export function RetroDisabled() {
             margin: "0 0 24px",
           }}
         >
-          This Kotrol instance hasn&apos;t turned on free retro boards. An admin
-          can enable them in workspace settings.
+          На этом инстансе Kotrol бесплатные ретро-доски не включены. Администратор
+          может включить их в настройках рабочего пространства.
         </p>
         <Link
           href="/"

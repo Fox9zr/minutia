@@ -192,7 +192,7 @@ export function useMeetingRealtime(meetingId: string, seriesId: string) {
 
     const supabase = createClient();
     const refreshMeeting = () => {
-      // Skip a tick while any mutation is in flight so the poll cannot overwrite
+      // Пропустить a tick while any mutation is in flight so the poll cannot overwrite
       // an optimistic write before it commits; the next tick (2s) reconciles.
       if (queryClient.isMutating()) return;
       void queryClient.invalidateQueries({
