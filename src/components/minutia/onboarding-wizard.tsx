@@ -102,7 +102,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
     router.refresh();
   }
 
-  async function handleПропустить() {
+  async function handleSkip() {
     await completeOnboarding.mutateAsync();
     router.push("/");
     router.refresh();
@@ -211,7 +211,7 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
         {/* Пропустить link */}
         <div className="mt-4 text-center">
           <button
-            onClick={handleПропустить}
+            onClick={handleSkip}
             className="text-xs text-ink-4 hover:text-ink-3 transition-colors"
           >
             Пропустить setup
