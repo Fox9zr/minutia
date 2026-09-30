@@ -35,7 +35,7 @@ async function withPg<T>(fn: (client: any) => Promise<T>): Promise<T> {
     host, port: Number(process.env.SUPABASE_DB_PORT || 5432),
     database: process.env.POSTGRES_DB || "minutia",
     user: "postgres", password: process.env.POSTGRES_PASSWORD,
-    connectionTimeoutMillis: 10_000, statement_timeout: 30_000,
+    connectionTimeoutMillis: 10_000, statement_timeout: 30_000, idle_in_transaction_session_timeout: 120_000,
   });
   await client.connect();
   try { return await fn(client); } finally { await client.end().catch(() => {}); }
@@ -77,7 +77,7 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
       [MAX_ATTEMPTS]
     );
 
-    //claim: сессионный advisory не нужен — соединение одно на тик; транзакция короткая (только claim)
+    // xact-лок держится весь тик (claim → SMTP → REPEAT → COMMIT); при падении соединения транзакция откатывается
     await pg.query("BEGIN");
     const got = await pg.query("SELECT pg_try_advisory_xact_lock($1) AS ok", [LOCK_KEY]);
     if (!got.rows[0].ok) { await pg.query("ROLLBACK"); return; }
@@ -95,7 +95,8 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
             SELECT 1 FROM reminder_log rl
             WHERE rl.issue_id = i.id AND rl.kind = 'due'
               AND rl.due_date_value = i.due_date
-              AND rl.status IN ('sent','pending','failed','failed_final')
+              AND (rl.status IN ('sent','failed_final')
+                OR (rl.status = 'pending' AND rl.updated_at >= now() - interval '30 minutes'))
           )
         ORDER BY i.due_date ASC LIMIT $1
       )
@@ -128,7 +129,9 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
         SELECT * FROM cand WHERE base_at IS NOT NULL
           AND (base_at AT TIME ZONE $2) + make_interval(hours => $3) <= (now() AT TIME ZONE $2)
           AND NOT EXISTS (SELECT 1 FROM reminder_log r WHERE r.issue_id=cand.id AND r.kind='repeat'
-              AND r.send_date_msk = (now() AT TIME ZONE $2)::date AND r.status IN ('sent','pending','failed','failed_final'))
+              AND r.send_date_msk = (now() AT TIME ZONE $2)::date
+              AND (r.status IN ('sent','failed_final')
+                OR (r.status = 'pending' AND r.updated_at >= now() - interval '30 minutes')))
         LIMIT $1
       )
       INSERT INTO reminder_log (issue_id, kind, due_date_value, recipient_email, status, attempts, claim_token, updated_at)
@@ -140,8 +143,9 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
          OR (reminder_log.status = 'pending' AND reminder_log.attempts < $4 AND reminder_log.updated_at < $5)
       RETURNING id, issue_id, kind, attempts, claim_token`;
     const repClaims = (await pg.query(repQ, [BATCH_LIMIT, MSK, st.repeat_hours, MAX_ATTEMPTS, cutoff])).rows;
-    await pg.query("COMMIT");
+    // COMMIT перенесён в finally: лок держится на SMTP-отправку и REPEAT-этап (single-instance guard)
 
+    // (лока держится до COMMIT в конце тика; при исключении соединение закроется → транзакция откатится автоматически)
     // email-резолв: справочник → user profile
     const claims: Claim[] = [];
     for (const row of [...dueClaims, ...repClaims]) {
@@ -191,6 +195,7 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
         out.failed++;
       }
     }
+    await pg.query("COMMIT").catch(() => pg.query("ROLLBACK"));
   });
   return out;
 }
