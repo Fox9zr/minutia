@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { absoluteAppUrl, getSmtpConfig, sendMail } from "@/lib/email";
 import { resolveSenderFrom, isDeliverableSender } from "@/lib/email-sender";
+import { getInstanceConfigMap } from "@/lib/instance-config";
 import {
   formatOwnerEmail,
   gatherOwnerReminders,
@@ -89,8 +90,13 @@ export async function POST(
   }
 
   const smtp = await getSmtpConfig();
-  const sender = resolveSenderFrom(smtp, request.url);
-  if (!isDeliverableSender(sender)) {
+  const configMap = await getInstanceConfigMap(["smtp_from"]);
+  const sender = resolveSenderFrom(
+    configMap.smtp_from,
+    process.env.EMAIL_FROM,
+    process.env.SMTP_ADMIN_EMAIL
+  );
+  if (!smtp || !isDeliverableSender(sender)) {
     return NextResponse.json(
       { error: "Отправка писем не настроена (SMTP)" },
       { status: 400 }
