@@ -56,9 +56,12 @@ export function createMailTransport(smtp: SmtpConfig) {
   // Gmail OAuth2 mode: avoids app-passwords entirely (env-gated).
   if (process.env.SMTP_OAUTH2 === "1" && process.env.GMAIL_OAUTH_USER) {
     return nodemailer.createTransport({
+      service: "gmail",
       host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      name: "localhost",
       auth: {
         type: "OAuth2",
         user: process.env.GMAIL_OAUTH_USER,
