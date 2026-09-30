@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { CATEGORY_CONFIG, ISSUE_CATEGORIES } from "@/lib/constants";
 import { MinutiaCategoryIcon } from "@/components/minutia/minutia-icons";
 import { HintTooltip } from "@/components/minutia/hint-tooltip";
+import { VoiceInput } from "@/components/minutia/voice-input";
 import type { IssueCategory } from "@/lib/types";
 
 interface CaptureInputProps {
@@ -104,6 +105,19 @@ export function CaptureInput({ onSubmit, onCancel }: CaptureInputProps) {
           role="radiogroup"
           aria-label="Категория задачи"
         >
+          <VoiceInput
+            className="mr-1"
+            onText={(t) => {
+              setText((prev) => (prev ? prev + " " + t : t));
+              // auto-category by keywords in dictated text
+              const lower = t.toLowerCase();
+              if (/\b(решили|решено|постановили)\b/.test(lower)) setCategory("decision");
+              else if (/\b(риск|угроза)\b/.test(lower)) setCategory("risk");
+              else if (/\b(блок|не может|мешает|заблокир)\w*/.test(lower)) setCategory("blocker");
+              else if (/\b(информация|к сведению|сообщил)\w*/.test(lower)) setCategory("info");
+              else if (/\b(поручи\w*|сдела\w*|подготов\w*|отправ\w*|срок)\b/.test(lower)) setCategory("action");
+            }}
+          />
           {ISSUE_CATEGORIES.map((cat) => {
             const config = CATEGORY_CONFIG[cat];
             const isSelected = category === cat;

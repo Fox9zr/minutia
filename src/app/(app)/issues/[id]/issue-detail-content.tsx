@@ -6,6 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { toast } from "sonner";
+import { VoiceInput } from "@/components/minutia/voice-input";
 import {
   ArrowLeft,
   Bell,
@@ -686,8 +687,9 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                 }}
               />
               <div className="flex items-center justify-between">
-                <span className="text-xs text-ink-4">
-                  Enter to submit, Esc to cancel
+                <span className="text-xs text-ink-4 flex items-center gap-2">
+                  <VoiceInput onText={(t) => setUpdateNote((prev) => (prev ? prev + " " + t : t))} />
+                  Enter — отправить, Esc — отмена
                 </span>
                 <div className="flex items-center gap-2">
                   <Button
