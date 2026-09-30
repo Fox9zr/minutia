@@ -241,7 +241,7 @@ function LoginForm() {
             Kotrol
           </h1>
           <p className="mt-2 font-sans text-sm text-ink-3">
-            The open-source Outstanding Issues Log for recurring meetings.
+            Реестр вопросов и поручений для регулярных встреч.
           </p>
         </div>
 
