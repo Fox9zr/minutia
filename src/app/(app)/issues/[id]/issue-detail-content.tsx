@@ -8,6 +8,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import {
   ArrowLeft,
+  Bell,
   Check,
   Pencil,
   Trash2,
@@ -246,6 +247,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
   const addUpdate = useAddIssueUpdate();
   const assignIssue = useAssignIssue();
   const [showUpdateForm, setShowUpdateForm] = React.useState(false);
+  const [remindPending, setRemindPending] = React.useState(false);
   const [updateNote, setUpdateNote] = React.useState("");
   const [dueOpen, setDueOpen] = React.useState(false);
   const updateInputRef = React.useRef<HTMLTextAreaElement>(null);
@@ -461,7 +463,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
         <div className="space-y-2 mb-6">
           {/* Owner */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Ответственный</span>
+            <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Ответственный</span>
             <MemberCombobox
               ownerName={issue.owner_name}
               onAssign={(payload) =>
@@ -476,7 +478,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
           {/* Due date */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Срок</span>
+            <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Срок</span>
             <Popover open={dueOpen} onOpenChange={setDueOpen}>
               <PopoverTrigger asChild>
                 <Button
@@ -517,7 +519,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
           {/* Priority */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Приоритет</span>
+            <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Приоритет</span>
             <Select value={issue.priority} onValueChange={handlePriorityChange}>
               <SelectTrigger
                 size="sm"
@@ -542,7 +544,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
           {/* Source */}
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">Источник</span>
+            <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Источник</span>
             <span className="text-xs bg-paper-2 text-ink-2 px-2 py-0.5 rounded-full">
               {sourceBadgeLabel(issue.source)}
             </span>
@@ -551,7 +553,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           {/* Raised in meeting */}
           {raisedIn && (
             <div className="flex items-center gap-2 text-sm">
-              <span className="text-ink-3 w-20 shrink-0">Создано в</span>
+              <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Создано в</span>
               <Link
                 href={`/series/${issue.series_id}/meetings/${raisedIn.id}`}
                 className="text-sm text-ink hover:text-accent transition-colors underline underline-offset-2"
@@ -564,14 +566,14 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           {/* Duration and meetings touched */}
           <div className="flex items-center gap-4 text-sm">
             <div className="flex items-center gap-2">
-              <span className="text-ink-3 w-20 shrink-0">Длительность</span>
+              <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Длительность</span>
               <span className="text-xs font-mono text-ink-2">
                 {durationDays} дн.
               </span>
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm">
-            <span className="text-ink-3 w-20 shrink-0">С изменениями</span>
+            <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">С изменениями</span>
             <span className="text-xs font-mono text-ink-2">
               {meetingsTouched} встреч с изменениями
             </span>
@@ -627,7 +629,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
         )}
 
         {/* Add update */}
-        <div className="mb-8">
+        <div className="mb-8 flex flex-wrap items-center gap-2">
           {!showUpdateForm ? (
             <Button
               variant="outline"
@@ -639,8 +641,32 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                 C
               </kbd>
             </Button>
-          ) : (
-            <div className="border border-rule rounded-md p-3 space-y-3">
+          ) : null}
+          {issue.owner_user_id || issue.owner_name?.trim() ? (
+            <Button
+              variant="outline"
+              className="text-sm"
+              disabled={remindPending || issue.status === "resolved" || issue.status === "dropped"}
+              onClick={async () => {
+                setRemindPending(true);
+                try {
+                  const res = await fetch(`/api/issues/${issue.id}/remind`, { method: "POST" });
+                  const json = await res.json();
+                  if (!res.ok) throw new Error(json.error ?? "Не удалось отправить");
+                  toast(`Напоминание отправлено: ${json.sentTo}`);
+                } catch (e) {
+                  toast.error(e instanceof Error ? e.message : "Не удалось отправить напоминание");
+                } finally {
+                  setRemindPending(false);
+                }
+              }}
+            >
+              <Bell className="size-3.5" />
+              {remindPending ? "Отправляем…" : "Напомнить"}
+            </Button>
+          ) : null}
+          {showUpdateForm ? (
+            <div className="border border-rule rounded-md p-3 space-y-3 w-full">
               <textarea
                 ref={updateInputRef}
                 value={updateNote}
@@ -686,7 +712,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Divider before danger zone */}

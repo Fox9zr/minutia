@@ -89,6 +89,25 @@ export async function POST(
   }
 
   const owners = gatherOwnerReminders(issues, profilesById);
+
+  // People directory: real emails for owners without accounts (matched by full_name)
+  const directoryEmails = new Map<string, string>();
+  {
+    const { data: dirRows } = await admin
+      .from("people_directory")
+      .select("full_name, email");
+    for (const row of (dirRows ?? []) as { full_name: string; email: string }[]) {
+      if (row.full_name && row.email && !directoryEmails.has(row.full_name)) {
+        directoryEmails.set(row.full_name, row.email);
+      }
+    }
+  }
+  for (const owner of owners) {
+    if (!owner.ownerEmail && owner.ownerName) {
+      const dirEmail = directoryEmails.get(owner.ownerName.trim());
+      if (dirEmail) owner.ownerEmail = dirEmail;
+    }
+  }
   if (owners.length === 0) {
     return NextResponse.json(
       { error: "Нет открытых вопросов для напоминания." },
