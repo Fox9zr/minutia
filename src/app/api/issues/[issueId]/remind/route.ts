@@ -33,9 +33,6 @@ export async function POST(
   // Rate limit: max 5 single-issue reminders per user per minute (review finding R2)
   const now = Date.now();
   const windowStart = now - 60_000;
-  for (const [ts] of remindRateLimit.get(user.id) ?? []) {
-    // prune below
-  }
   const hits = (remindRateLimit.get(user.id) ?? []).filter((ts) => ts > windowStart);
   if (hits.length >= 5) {
     return NextResponse.json(
