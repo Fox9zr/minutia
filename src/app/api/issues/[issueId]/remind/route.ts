@@ -12,6 +12,9 @@ import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
 import type { Issue } from "@/lib/types";
 
+// per-user rate limit buckets (in-memory; single instance)
+const remindRateLimit = new Map<string, number[]>();
+
 // Single-issue reminder: emails the owner of one issue (works for owners without
 // accounts via people_directory lookup by full_name).
 export async function POST(
@@ -26,6 +29,22 @@ export async function POST(
   if (!user) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
+
+  // Rate limit: max 5 single-issue reminders per user per minute (review finding R2)
+  const now = Date.now();
+  const windowStart = now - 60_000;
+  for (const [ts] of remindRateLimit.get(user.id) ?? []) {
+    // prune below
+  }
+  const hits = (remindRateLimit.get(user.id) ?? []).filter((ts) => ts > windowStart);
+  if (hits.length >= 5) {
+    return NextResponse.json(
+      { error: "Слишком много напоминаний. Подождите минуту." },
+      { status: 429 }
+    );
+  }
+  hits.push(now);
+  remindRateLimit.set(user.id, hits);
 
   const { data: issue } = await supabase
     .from("issues")
@@ -75,19 +94,14 @@ export async function POST(
     if (dirRow?.email) owner.ownerEmail = dirRow.email;
   }
 
-  // Translit demo fallback (same as series remind)
-  const translitMap: Record<string, string> = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
-  const translit = (str: string) => str.toLowerCase().split('').map(ch => translitMap[ch] ?? ch).join('');
-  const targetEmail = owner.ownerEmail || (owner.ownerName ? translit(owner.ownerName)
-    .replace(/[^a-z ]/g, ' ')
-    .trim()
-    .split(/\s+/)
-    .filter((p: string) => p.length > 1)
-    .slice(0, 2)
-    .join('.') + '@demo.tps.by' : null);
-  if (!targetEmail) {
-    return NextResponse.json({ error: "Не удалось определить email ответственного" }, { status: 400 });
+  // No silent demo-email fallback (review finding R2): require a real address
+  if (!owner.ownerEmail) {
+    return NextResponse.json(
+      { error: "У ответственного нет email в справочнике — добавьте его в «Справочнике»" },
+      { status: 400 }
+    );
   }
+  const targetEmail = owner.ownerEmail;
 
   const smtp = await getSmtpConfig();
   const configMap = await getInstanceConfigMap(["smtp_from"]);

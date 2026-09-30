@@ -1,6 +1,16 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 
+
+async function requireAdmin(supabase: Awaited<ReturnType<typeof createClient>>, userId: string): Promise<boolean> {
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", userId)
+    .single();
+  return profile?.role === "admin";
+}
+
 export type DirectoryPerson = {
   id: string;
   full_name: string;
@@ -36,6 +46,9 @@ export async function POST(request: Request) {
   if (!user) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
   }
+  if (!(await requireAdmin(supabase, user.id))) {
+    return NextResponse.json({ error: "Только администратор может изменять справочник" }, { status: 403 });
+  }
   const body = await request.json().catch(() => null);
   const full_name = typeof body?.full_name === "string" ? body.full_name.trim() : "";
   const email = typeof body?.email === "string" ? body.email.trim().toLowerCase() : "";
@@ -61,6 +74,9 @@ export async function PATCH(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  }
+  if (!(await requireAdmin(supabase, user.id))) {
+    return NextResponse.json({ error: "Только администратор может изменять справочник" }, { status: 403 });
   }
   const body = await request.json().catch(() => null);
   const id = typeof body?.id === "string" ? body.id : "";
@@ -92,6 +108,9 @@ export async function DELETE(request: Request) {
   } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Не авторизован" }, { status: 401 });
+  }
+  if (!(await requireAdmin(supabase, user.id))) {
+    return NextResponse.json({ error: "Только администратор может изменять справочник" }, { status: 403 });
   }
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
