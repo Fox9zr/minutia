@@ -687,8 +687,8 @@ export default function AdminSettingsPage() {
               </SelectContent>
             </Select>
             <p className="text-xs text-ink-3">
-              Оригинальные записи — самый sensitive artifact this instance stores. Discarding after
-              transcription keeps only the text.
+              Оригинальные записи — самые чувствительные данные этого инстанса. Удаление после
+              расшифровки сохраняет только the text.
             </p>
             {retentionMessage && (
               <p
