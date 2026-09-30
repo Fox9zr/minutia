@@ -13,7 +13,7 @@ export type IssuePreview = {
   proposed_due_date: string | null;
 };
 
-function RespondClient({
+export default function RespondClient({
   token,
   issue,
   due,
