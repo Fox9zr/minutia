@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { absoluteAppUrl, sendMail } from "@/lib/email";
 import { SENDER_NOT_CONFIGURED_MESSAGE } from "@/lib/email-sender";
-import { buildSeriesBrief, type BriefIssue } from "@/lib/brief";
+import { buildСерииBrief, type BriefIssue } from "@/lib/brief";
 import { extractEmails } from "@/lib/meeting-notes-email";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceRoleClient } from "@/lib/supabase/service-role";
@@ -14,7 +14,7 @@ function isEmailUnconfigured(message: string): boolean {
   );
 }
 
-async function ensureSeriesShareToken(
+async function ensureСерииShareToken(
   admin: ReturnType<typeof createServiceRoleClient>,
   seriesId: string,
   userId: string
@@ -94,7 +94,7 @@ export async function POST(
   }
 
   const recipients = extractEmails(series.default_attendees ?? []);
-  const token = await ensureSeriesShareToken(admin, seriesId, user.id);
+  const token = await ensureСерииShareToken(admin, seriesId, user.id);
   const guestUrl = absoluteAppUrl(request.url, `/share/${token}`);
 
   if (dryRun) {
@@ -144,7 +144,7 @@ export async function POST(
     .limit(1)
     .maybeSingle();
 
-  const briefs = buildSeriesBrief({
+  const briefs = buildСерииBrief({
     series: { name: series.name, cadence: series.cadence },
     nextMeeting: nextMeetingRow ?? null,
     openIssues: briefIssues,

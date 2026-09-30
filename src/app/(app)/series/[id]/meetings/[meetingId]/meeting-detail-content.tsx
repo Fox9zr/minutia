@@ -18,7 +18,7 @@ import {
   useUpdateMeetingTranscript,
   useUpdateSpeakerMap,
 } from "@/lib/hooks/use-meetings";
-import { useSeriesDetail, useSeriesParticipantRole } from "@/lib/hooks/use-series";
+import { useСерииDetail, useСерииParticipantRole } from "@/lib/hooks/use-series";
 import { useProfile } from "@/lib/hooks/use-profile";
 import { CompanionInstallPrompt } from "@/components/minutia/companion-install-prompt";
 import { buildCompanionRecordUrl, isMacPlatform } from "@/lib/companion-links";
@@ -591,8 +591,8 @@ export function MeetingDetailContent({
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: meeting, isLoading: meetingLoading } = useMeeting(meetingId);
-  const { data: series } = useSeriesDetail(seriesId);
-  const { data: participantRole } = useSeriesParticipantRole(seriesId);
+  const { data: series } = useСерииDetail(seriesId);
+  const { data: participantRole } = useСерииParticipantRole(seriesId);
   const { data: profile } = useProfile();
   const { data: seriesIssues } = useIssues(seriesId);
 
@@ -831,8 +831,8 @@ export function MeetingDetailContent({
     (issue) => issue.status !== "resolved" && issue.status !== "dropped"
   );
   // Issues resolved/dropped during this meeting (both carried AND raised here)
-  const allSeriesIssues = seriesIssues ?? [];
-  const doneThisMeeting = allSeriesIssues.filter(
+  const allСерииIssues = seriesIssues ?? [];
+  const doneThisMeeting = allСерииIssues.filter(
     (issue) =>
       (issue.status === "resolved" || issue.status === "dropped") &&
       issue.resolved_in_meeting_id === meetingId
@@ -843,7 +843,7 @@ export function MeetingDetailContent({
         .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
         .findIndex((m) => m.id === meetingId) + 1
     : null;
-  const liveMeetingInSeries = series?.meetings?.find((m) => m.status === "live");
+  const liveMeetingInСерии = series?.meetings?.find((m) => m.status === "live");
   const canManageMeeting =
     participantRole === "owner" || participantRole === "facilitator";
 
@@ -923,7 +923,7 @@ export function MeetingDetailContent({
   }
 
   function handleStatusChange(issueId: string, newStatus: IssueStatus) {
-    const issue = [...raisedInThisMeeting, ...allSeriesIssues].find(
+    const issue = [...raisedInThisMeeting, ...allСерииIssues].find(
       (i) => i.id === issueId
     );
     if (!issue) return;
@@ -1474,7 +1474,7 @@ export function MeetingDetailContent({
               disabled={startOrJoinMeeting.isPending}
             >
               <Play className="size-4" />
-              {liveMeetingInSeries ? "Присоединиться к встрече" : "Начать встречу"}
+              {liveMeetingInСерии ? "Присоединиться к встрече" : "Начать встречу"}
             </Button>
           </div>
 

@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { hasAiConfigured } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
 import { generateMeetingSuggestions } from "@/lib/ai/suggestions";
-import { userManagesSeries } from "@/lib/series/manage-access";
+import { userManagesСерии } from "@/lib/series/manage-access";
 
 const requestSchema = z.object({
   mode: z.enum(["generate"]).default("generate"),
@@ -89,7 +89,7 @@ export async function POST(
   }
   // Generation deletes and replaces pending suggestions and spends an AI call,
   // so restrict it to those who manage the series (mirrors the accept route).
-  if (!user || !(await userManagesSeries(meeting.series_id, user.id))) {
+  if (!user || !(await userManagesСерии(meeting.series_id, user.id))) {
     return NextResponse.json(
       { error: "Только владельцы и ведущие серии могут генерировать предложения ИИ.", request_id: requestId },
       { status: 403 }

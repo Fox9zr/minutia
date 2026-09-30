@@ -3,15 +3,15 @@ import { z } from "zod";
 import { absoluteAppUrl, sendMail } from "@/lib/email";
 import { buildMeetingNotesEmail, extractEmails } from "@/lib/meeting-notes-email";
 import { createClient } from "@/lib/supabase/server";
-import { userManagesSeries } from "@/lib/series/manage-access";
-import type { Decision, Issue, Meeting, MeetingSeries } from "@/lib/types";
+import { userManagesСерии } from "@/lib/series/manage-access";
+import type { Decision, Issue, Meeting, MeetingСерии } from "@/lib/types";
 
 const schema = z.object({
   recipients: z.array(z.string().email()).max(50).optional(),
 });
 
 type MeetingPayload = Meeting & {
-  series: Pick<MeetingSeries, "id" | "name" | "default_attendees">;
+  series: Pick<MeetingСерии, "id" | "name" | "default_attendees">;
   issues: Issue[];
   decisions: Decision[];
 };
@@ -57,7 +57,7 @@ export async function POST(
 
   const payload = meeting as MeetingPayload;
 
-  const canManage = await userManagesSeries(payload.series_id, user.id);
+  const canManage = await userManagesСерии(payload.series_id, user.id);
   if (!canManage) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

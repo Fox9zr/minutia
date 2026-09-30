@@ -5,7 +5,7 @@ import type { GoogleCalendarAgendaItem, MeetingStatus } from "./types";
 
 type ServiceClient = ReturnType<typeof createServiceRoleClient>;
 
-type SeriesRow = {
+type СерииRow = {
   id: string;
   name: string;
 };
@@ -144,7 +144,7 @@ export async function recordCalendarAgendaSyncFailure({
   if (error) throw error;
 }
 
-async function ensureSeries({
+async function ensureСерии({
   supabase,
   userId,
   organizationId,
@@ -154,14 +154,14 @@ async function ensureSeries({
   userId: string;
   organizationId: string;
   event: NormalizedGoogleCalendarEvent;
-}): Promise<SeriesRow> {
+}): Promise<СерииRow> {
   const { data: existing, error: existingError } = await supabase
     .from("meeting_series")
     .select("id, name")
     .eq("owner_id", userId)
     .eq("organization_id", organizationId)
     .eq("gcal_series_key", event.seriesKey)
-    .maybeSingle<SeriesRow>();
+    .maybeSingle<СерииRow>();
 
   if (existingError) throw existingError;
 
@@ -183,7 +183,7 @@ async function ensureSeries({
       .update(payload)
       .eq("id", existing.id)
       .select("id, name")
-      .single<SeriesRow>();
+      .single<СерииRow>();
 
     if (error) throw error;
     return data;
@@ -197,7 +197,7 @@ async function ensureSeries({
       organization_id: organizationId,
     })
     .select("id, name")
-    .single<SeriesRow>();
+    .single<СерииRow>();
 
   if (error) throw error;
   return data;
@@ -383,7 +383,7 @@ export async function syncCalendarAgenda({
   const agenda: GoogleCalendarAgendaItem[] = [];
 
   for (const event of events) {
-    const series = await ensureSeries({ supabase, userId, organizationId, event });
+    const series = await ensureСерии({ supabase, userId, organizationId, event });
     const meeting = await ensureMeeting({ supabase, seriesId: series.id, event });
     const calendarEvent = await upsertCalendarEvent({
       supabase,

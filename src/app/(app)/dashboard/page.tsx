@@ -37,7 +37,7 @@ import {
   useUpdateIssueStatus,
   useReorderIssues,
 } from "@/lib/hooks/use-issues";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useСерии } from "@/lib/hooks/use-series";
 import { useAllMeetings } from "@/lib/hooks/use-meetings";
 import { useDecisions } from "@/lib/hooks/use-decisions";
 import { CADENCE_LABELS, STATUS_CONFIG, PRIORITY_CONFIG } from "@/lib/constants";
@@ -69,7 +69,7 @@ import { WidgetCanvas } from "@/components/minutia/widgets/widget-canvas";
 import { AddWidgetButton } from "@/components/minutia/widgets/add-widget";
 import { UpgradeConfirmation } from "@/components/minutia/upgrade-confirmation";
 import { StaleItemsWidget } from "@/components/minutia/widgets/stale-items-widget";
-import { SeriesHealthWidget } from "@/components/minutia/widgets/series-health-widget";
+import { СерииHealthWidget } from "@/components/minutia/widgets/series-health-widget";
 import { MeetingTriageWidget } from "@/components/minutia/widgets/meeting-triage-widget";
 import { WorkloadWidget } from "@/components/minutia/widgets/workload-widget";
 import { useCalendarEvents } from "@/lib/hooks/use-google-calendar";
@@ -78,7 +78,7 @@ import { ITEM_LIMIT } from "@/lib/hooks/use-issues";
 import type {
   Issue,
   IssueStatus,
-  MeetingSeries,
+  MeetingСерии,
   Decision,
   GoogleCalendarEvent,
 } from "@/lib/types";
@@ -306,11 +306,11 @@ function NextMeetingWidget({
 }: {
   id: string;
   widgetIndex: number;
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  seriesList: (MeetingСерии & { open_issues_count: number })[];
   calendarEvents?: GoogleCalendarEvent[];
 }) {
-  const nextSeries = seriesList[0];
-  if (!nextSeries) return null;
+  const nextСерии = seriesList[0];
+  if (!nextСерии) return null;
 
   const nextEvent = calendarEvents?.[0];
   const eventTime = nextEvent?.start?.dateTime
@@ -328,7 +328,7 @@ function NextMeetingWidget({
         </span>
       </div>
       <h3 className="font-display text-lg font-semibold text-ink mb-1 break-words">
-        {nextSeries.name}
+        {nextСерии.name}
       </h3>
       {eventTime ? (
         <div className="mb-4">
@@ -340,23 +340,23 @@ function NextMeetingWidget({
               </span>
             )}
           </p>
-          {nextEvent?.summary && nextEvent.summary !== nextSeries.name && (
+          {nextEvent?.summary && nextEvent.summary !== nextСерии.name && (
             <p className="text-xs text-ink-3 mt-0.5 truncate">{nextEvent.summary}</p>
           )}
         </div>
       ) : (
         <p className="mb-4 inline-flex items-center gap-1.5 text-sm text-ink-2">
-          <MinutiaCadenceIcon cadence={nextSeries.cadence} className="size-3.5 text-ink" />
-          {CADENCE_LABELS[nextSeries.cadence]}
+          <MinutiaCadenceIcon cadence={nextСерии.cadence} className="size-3.5 text-ink" />
+          {CADENCE_LABELS[nextСерии.cadence]}
         </p>
       )}
-      {nextSeries.open_issues_count > 0 && (
+      {nextСерии.open_issues_count > 0 && (
         <p className="text-sm text-ink-2 mb-5">
-          <span className="text-accent font-medium"><span className="font-mono">{nextSeries.open_issues_count}</span> поручений ожидает</span> с прошлой встречи.
+          <span className="text-accent font-medium"><span className="font-mono">{nextСерии.open_issues_count}</span> поручений ожидает</span> с прошлой встречи.
         </p>
       )}
       <div className="flex items-center gap-3">
-        <Link href={`/series/${nextSeries.id}`} className="w-full">
+        <Link href={`/series/${nextСерии.id}`} className="w-full">
           <Button variant="accent" className="w-full h-10">
             Открыть серию
             <ArrowRight className="size-3.5 ml-1.5" />
@@ -382,17 +382,17 @@ function OutstandingWidget({
   id: string;
   widgetIndex: number;
   issues: Issue[];
-  seriesMap: Map<string, MeetingSeries & { open_issues_count: number }>;
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  seriesMap: Map<string, MeetingСерии & { open_issues_count: number }>;
+  seriesList: (MeetingСерии & { open_issues_count: number })[];
   onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
   const router = useRouter();
   const groupBy = useUIStore((s) => s.groupBy);
   const setGroupBy = useUIStore((s) => s.setGroupBy);
-  const bySeries = groupBy === "series";
+  const byСерии = groupBy === "series";
   const [filter, setFilter] = React.useState<"all" | "open" | "pending" | "overdue">("all");
   const [focusedIdx, setFocusedIdx] = React.useState(-1);
-  const [expandedSeries, setExpandedSeries] = React.useState<Set<string>>(new Set());
+  const [expandedСерии, setExpandedСерии] = React.useState<Set<string>>(new Set());
   const [ownerFilter, setOwnerFilter] = React.useState<{ key: string; label: string } | null>(null);
   const [query, setQuery] = React.useState("");
   const deferredQuery = React.useDeferredValue(query);
@@ -409,7 +409,7 @@ function OutstandingWidget({
   // Reordering rewrites positions within a series, so it is only offered in the
   // by-series view on the full, unfiltered set (a filtered subset would rewrite
   // hidden rows' positions).
-  const dragEnabled = bySeries && filter === "all" && !ownerFilter && !query;
+  const dragEnabled = byСерии && filter === "all" && !ownerFilter && !query;
 
   const issueById = React.useMemo(() => {
     const map = new Map<string, Issue>();
@@ -436,17 +436,17 @@ function OutstandingWidget({
   }
 
   const flatIssues = React.useMemo(() => {
-    if (!bySeries) return filtered.slice().sort(outstandingListSort);
+    if (!byСерии) return filtered.slice().sort(outstandingListSort);
     const result: Issue[] = [];
     for (const series of seriesList) {
       const seriesIssues = (grouped.get(series.id) ?? []).slice().sort(byManualOrder);
-      const visible = expandedSeries.has(series.id)
+      const visible = expandedСерии.has(series.id)
         ? seriesIssues
         : seriesIssues.slice(0, PREVIEW_COUNT);
       result.push(...visible);
     }
     return result;
-  }, [filtered, seriesList, expandedSeries, bySeries]);
+  }, [filtered, seriesList, expandedСерии, byСерии]);
 
   React.useEffect(() => {
     function handleKey(e: KeyboardEvent) {
@@ -470,7 +470,7 @@ function OutstandingWidget({
     return () => window.removeEventListener("keydown", handleKey);
   }, [flatIssues, focusedIdx, router, activeId]);
 
-  React.useEffect(() => { setFocusedIdx(-1); }, [filter, ownerFilter, query, bySeries, expandedSeries]);
+  React.useEffect(() => { setFocusedIdx(-1); }, [filter, ownerFilter, query, byСерии, expandedСерии]);
 
   // Capture phase so "/" focuses in-board search before the ⌘K palette's
   // bubble-phase listener sees it (the two stay distinct surfaces).
@@ -694,13 +694,13 @@ function OutstandingWidget({
               Clear filters
             </Button>
           </div>
-        ) : bySeries ? (
+        ) : byСерии ? (
           <div className="divide-y divide-rule">
             {seriesList.map((series) => {
               const seriesIssues = (grouped.get(series.id) ?? []).slice().sort(byManualOrder);
               if (seriesIssues.length === 0) return null;
 
-              const isExpanded = expandedSeries.has(series.id);
+              const isExpanded = expandedСерии.has(series.id);
               const visible = isExpanded ? seriesIssues : seriesIssues.slice(0, PREVIEW_COUNT);
               const hiddenCount = seriesIssues.length - PREVIEW_COUNT;
               const groupSortedIds = seriesIssues.map((i) => i.id);
@@ -746,7 +746,7 @@ function OutstandingWidget({
                       <div className="flex items-center gap-3 pl-3 pt-1">
                         <button
                           type="button"
-                          onClick={() => setExpandedSeries((prev) => {
+                          onClick={() => setExpandedСерии((prev) => {
                             const next = new Set(prev);
                             next.add(series.id);
                             return next;
@@ -767,7 +767,7 @@ function OutstandingWidget({
                     {isExpanded && hiddenCount > 0 && (
                       <button
                         type="button"
-                        onClick={() => setExpandedSeries((prev) => {
+                        onClick={() => setExpandedСерии((prev) => {
                           const next = new Set(prev);
                           next.delete(series.id);
                           return next;
@@ -1012,7 +1012,7 @@ function DecisionsWidget({
   id: string;
   widgetIndex: number;
   decisions: Decision[];
-  seriesMap: Map<string, MeetingSeries & { open_issues_count: number }>;
+  seriesMap: Map<string, MeetingСерии & { open_issues_count: number }>;
 }) {
   const recent = decisions.slice(0, 5);
 
@@ -1049,7 +1049,7 @@ function DecisionsWidget({
 }
 
 // ---------------------------------------------------------------------------
-// Series quick list widget
+// Серии quick list widget
 // ---------------------------------------------------------------------------
 
 // Cap the quick list so the widget stays inside its canvas slot; the overflow
@@ -1057,14 +1057,14 @@ function DecisionsWidget({
 // which would re-grow the card).
 const SERIES_PREVIEW_LIMIT = 5;
 
-function SeriesWidget({
+function СерииWidget({
   id,
   widgetIndex,
   seriesList,
 }: {
   id: string;
   widgetIndex: number;
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  seriesList: (MeetingСерии & { open_issues_count: number })[];
 }) {
   return (
     <WidgetShell id={id} index={widgetIndex}>
@@ -1196,8 +1196,8 @@ function WidgetRenderer({
   widgetType: string;
   widgetIndex: number;
   issues: Issue[];
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
-  seriesMap: Map<string, MeetingSeries & { open_issues_count: number }>;
+  seriesList: (MeetingСерии & { open_issues_count: number })[];
+  seriesMap: Map<string, MeetingСерии & { open_issues_count: number }>;
   meetings: (any & { issues_raised: number; issues_resolved: number })[];
   decisions: Decision[];
   openCount: number;
@@ -1241,7 +1241,7 @@ function WidgetRenderer({
       );
     case "series":
       return (
-        <SeriesWidget
+        <СерииWidget
           id={widgetId}
           widgetIndex={widgetIndex}
           seriesList={seriesList}
@@ -1274,7 +1274,7 @@ function WidgetRenderer({
       );
     case "series-health":
       return (
-        <SeriesHealthWidget
+        <СерииHealthWidget
           id={widgetId}
           index={widgetIndex}
           issues={issues}
@@ -1314,19 +1314,19 @@ function WidgetRenderer({
 export default function Dashboard() {
   const router = useRouter();
   const { data: issues, isLoading: issuesLoading } = useIssues();
-  const { data: seriesList, isLoading: seriesLoading } = useSeries();
+  const { data: seriesList, isLoading: seriesLoading } = useСерии();
   const { data: meetings, isLoading: meetingsLoading } = useAllMeetings();
   const { data: allDecisions } = useDecisions(undefined, undefined, true, 5);
   const updateStatus = useUpdateIssueStatus();
   const widgets = useWidgetStore((s) => s.widgets);
 
-  const firstSeriesId = seriesList?.[0]?.gcal_sync_enabled ? seriesList[0].id : undefined;
-  const { data: calendarEvents } = useCalendarEvents(firstSeriesId);
+  const firstСерииId = seriesList?.[0]?.gcal_sync_enabled ? seriesList[0].id : undefined;
+  const { data: calendarEvents } = useCalendarEvents(firstСерииId);
 
   const isLoading = issuesLoading || seriesLoading || meetingsLoading;
 
   const seriesMap = React.useMemo(() => {
-    const map = new Map<string, MeetingSeries & { open_issues_count: number }>();
+    const map = new Map<string, MeetingСерии & { open_issues_count: number }>();
     for (const s of seriesList ?? []) map.set(s.id, s);
     return map;
   }, [seriesList]);

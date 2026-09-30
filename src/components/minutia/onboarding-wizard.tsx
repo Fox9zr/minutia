@@ -11,7 +11,7 @@ import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { cn } from "@/lib/utils";
 import { useUpdateProfile } from "@/lib/hooks/use-profile";
 import { useCompleteOnboarding } from "@/lib/hooks/use-profile";
-import { useCreateSeries } from "@/lib/hooks/use-series";
+import { useCreateСерии } from "@/lib/hooks/use-series";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
 import type { Cadence } from "@/lib/types";
 
@@ -31,13 +31,13 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
   const nameInputRef = React.useRef<HTMLInputElement>(null);
 
   const [name, setName] = React.useState(userName ?? "");
-  const [seriesName, setSeriesName] = React.useState("");
+  const [seriesName, setСерииName] = React.useState("");
   const [cadence, setCadence] = React.useState<Cadence>("weekly");
   const [attendees, setAttendees] = React.useState("");
-  const [createdSeriesId, setCreatedSeriesId] = React.useState<string | null>(null);
+  const [createdСерииId, setCreatedСерииId] = React.useState<string | null>(null);
 
   const updateProfile = useUpdateProfile();
-  const createSeries = useCreateSeries();
+  const createСерии = useCreateСерии();
   const completeOnboarding = useCompleteOnboarding();
 
   // A fresh post-signup arrival (auth callback appends ?confirmed=1 for new
@@ -82,20 +82,20 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
-      const series = await createSeries.mutateAsync({
+      const series = await createСерии.mutateAsync({
         name: seriesName.trim(),
         cadence,
         default_attendees: attendeeList,
       });
-      setCreatedSeriesId(series.id);
+      setCreatedСерииId(series.id);
     }
     goNext();
   }
 
   async function handleComplete() {
     await completeOnboarding.mutateAsync();
-    if (createdSeriesId) {
-      router.push(`/series/${createdSeriesId}`);
+    if (createdСерииId) {
+      router.push(`/series/${createdСерииId}`);
     } else {
       router.push("/");
     }
@@ -175,16 +175,16 @@ export function OnboardingWizard({ userName }: OnboardingWizardProps) {
                 exit="exit"
                 transition={{ duration: 0.3, ease: [0.2, 0.8, 0.2, 1] }}
               >
-                <StepCreateSeries
+                <StepCreateСерии
                   seriesName={seriesName}
-                  onSeriesNameChange={setSeriesName}
+                  onСерииNameChange={setСерииName}
                   cadence={cadence}
                   onCadenceChange={setCadence}
                   attendees={attendees}
                   onAttendeesChange={setAttendees}
                   onNext={handleFinishStep1}
                   onПропустить={goNext}
-                  isPending={createSeries.isPending}
+                  isPending={createСерии.isPending}
                 />
               </motion.div>
             )}
@@ -336,9 +336,9 @@ function StepWelcome({
 // Step 1: Create first series
 // ---------------------------------------------------------------------------
 
-function StepCreateSeries({
+function StepCreateСерии({
   seriesName,
-  onSeriesNameChange,
+  onСерииNameChange,
   cadence,
   onCadenceChange,
   attendees,
@@ -348,7 +348,7 @@ function StepCreateSeries({
   isPending,
 }: {
   seriesName: string;
-  onSeriesNameChange: (v: string) => void;
+  onСерииNameChange: (v: string) => void;
   cadence: Cadence;
   onCadenceChange: (v: Cadence) => void;
   attendees: string;
@@ -375,7 +375,7 @@ function StepCreateSeries({
         <Input
           id="onboard-series"
           value={seriesName}
-          onChange={(e) => onSeriesNameChange(e.target.value)}
+          onChange={(e) => onСерииNameChange(e.target.value)}
           placeholder="Напр., планёрка, синк с поставщиком, 1:1"
           autoFocus
           className="h-11 rounded-xl"

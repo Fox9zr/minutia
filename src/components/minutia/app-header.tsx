@@ -21,7 +21,7 @@ function resolveTitle(pathname: string): string {
   // Exact match first
   if (pageTitles[pathname]) return pageTitles[pathname];
 
-  // Series detail
+  // Серии detail
   if (/^\/series\/[^/]+$/.test(pathname)) return "Серии встреч";
 
   // Meeting detail

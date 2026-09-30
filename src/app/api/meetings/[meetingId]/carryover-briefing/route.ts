@@ -45,7 +45,7 @@ function buildPrompt(input: {
     "- Flag items open a long time as stale.",
     "Не добавляйте вымышленных ответственных, даты или решения. Используйте только предоставленные данные.",
     "",
-    `Series: ${input.seriesName}`,
+    `Серии: ${input.seriesName}`,
     `Upcoming meeting: ${input.meetingTitle}`,
     `Totals: ${input.summary.total} open, ${input.summary.overdue_count} overdue, ${input.summary.no_owner_count} without an owner, ${input.summary.stale_count} stale.`,
     "",

@@ -6,9 +6,9 @@ import { WidgetShell } from "./widget-shell";
 import { MinutiaCadenceIcon } from "@/components/minutia/minutia-icons";
 import { CADENCE_LABELS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import type { Issue, MeetingSeries } from "@/lib/types";
+import type { Issue, MeetingСерии } from "@/lib/types";
 
-export function SeriesHealthWidget({
+export function СерииHealthWidget({
   id,
   index,
   issues,
@@ -17,7 +17,7 @@ export function SeriesHealthWidget({
   id: string;
   index: number;
   issues: Issue[];
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  seriesList: (MeetingСерии & { open_issues_count: number })[];
 }) {
   const seriesStats = React.useMemo(() => {
     return seriesList.map((series) => {
@@ -48,7 +48,7 @@ export function SeriesHealthWidget({
     <WidgetShell id={id} index={index}>
       <div className="flex flex-wrap items-start justify-between gap-2 mb-5">
         <h3 className="font-display text-lg font-semibold text-ink">
-          Series health
+          Серии health
         </h3>
         <span className="text-[11px] text-ink-4">Распределение по статусам</span>
       </div>

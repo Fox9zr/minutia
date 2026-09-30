@@ -10,7 +10,7 @@ import { createServiceRoleClient } from "@/lib/supabase/service-role";
  * Keyed on the passed userId via the service-role client to avoid
  * series_participants RLS false-negatives on the membership lookup.
  */
-export async function userManagesSeries(
+export async function userManagesСерии(
   seriesId: string,
   userId: string
 ): Promise<boolean> {

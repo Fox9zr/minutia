@@ -1,4 +1,4 @@
-// MIN-121: Series-history context for AI item extraction.
+// MIN-121: Серии-history context for AI item extraction.
 //
 // This is the moat. Competitors summarize one meeting in isolation; Minutia
 // feeds the model the living state of the whole series (open OIL items, recent
@@ -13,7 +13,7 @@
 /** Statuses that count as "still open" and therefore carry across meetings. */
 export const OPEN_ISSUE_STATUSES = ["open", "in_progress", "pending"] as const;
 
-export interface SeriesContextIssue {
+export interface СерииContextIssue {
   issue_number: number;
   title: string;
   category: string;
@@ -23,14 +23,14 @@ export interface SeriesContextIssue {
   due_date: string | null;
 }
 
-export interface SeriesContextDecision {
+export interface СерииContextDecision {
   title: string;
   rationale: string | null;
   made_by: string | null;
   created_at: string;
 }
 
-export interface SeriesContextUpdate {
+export interface СерииContextUpdate {
   issue_number: number | null;
   issue_title: string | null;
   previous_status: string | null;
@@ -39,10 +39,10 @@ export interface SeriesContextUpdate {
   created_at: string;
 }
 
-export interface SeriesContext {
-  openIssues: SeriesContextIssue[];
-  recentDecisions: SeriesContextDecision[];
-  recentUpdates: SeriesContextUpdate[];
+export interface СерииContext {
+  openIssues: СерииContextIssue[];
+  recentDecisions: СерииContextDecision[];
+  recentUpdates: СерииContextUpdate[];
 }
 
 // Minimal structural shape of the Supabase query builder we depend on. Split
@@ -63,10 +63,10 @@ interface SupabaseLike {
   from(table: string): { select(columns: string): FilterLike<Record<string, unknown>> };
 }
 
-/** The slice of the Supabase client buildSeriesContext needs. Exported so the
+/** The slice of the Supabase client buildСерииContext needs. Exported so the
  * caller can cast its richly-typed client (whose PostgREST generics are too deep
  * for TS to structurally verify against this) without re-deriving the shape. */
-export type SeriesContextClient = SupabaseLike;
+export type СерииContextClient = SupabaseLike;
 
 // Bound the context so the prompt stays well within the model's window even for
 // long-running series. Most-recent-first ordering keeps the freshest signal.
@@ -87,10 +87,10 @@ function num(value: unknown): number | null {
  * and the most recent status changes. All three are series-scoped (RLS already
  * confines them to series the caller can access).
  */
-export async function buildSeriesContext(
+export async function buildСерииContext(
   supabase: SupabaseLike,
   seriesId: string
-): Promise<SeriesContext> {
+): Promise<СерииContext> {
   const [issuesRes, decisionsRes, updatesRes] = await Promise.all([
     supabase
       .from("issues")
@@ -115,7 +115,7 @@ export async function buildSeriesContext(
       .limit(UPDATE_LIMIT),
   ]);
 
-  const openIssues: SeriesContextIssue[] = (issuesRes.data ?? []).map((row) => ({
+  const openIssues: СерииContextIssue[] = (issuesRes.data ?? []).map((row) => ({
     issue_number: num(row.issue_number) ?? 0,
     title: str(row.title) ?? "",
     category: str(row.category) ?? "action",
@@ -125,14 +125,14 @@ export async function buildSeriesContext(
     due_date: str(row.due_date),
   }));
 
-  const recentDecisions: SeriesContextDecision[] = (decisionsRes.data ?? []).map((row) => ({
+  const recentDecisions: СерииContextDecision[] = (decisionsRes.data ?? []).map((row) => ({
     title: str(row.title) ?? "",
     rationale: str(row.rationale),
     made_by: str(row.made_by),
     created_at: str(row.created_at) ?? "",
   }));
 
-  const recentUpdates: SeriesContextUpdate[] = (updatesRes.data ?? []).flatMap((row) => {
+  const recentUpdates: СерииContextUpdate[] = (updatesRes.data ?? []).flatMap((row) => {
     // PostgREST returns the embedded to-one relation as an object, but tolerate
     // an array shape too so a provider quirk never throws here.
     const embedded = (Array.isArray(row.issue) ? row.issue[0] : row.issue) as
@@ -162,7 +162,7 @@ export async function buildSeriesContext(
  * runs. Empty sections read "(none)" rather than vanishing, so the model knows
  * the difference between "no history" and "history omitted".
  */
-export function formatSeriesContextForPrompt(context: SeriesContext): string {
+export function formatСерииContextForPrompt(context: СерииContext): string {
   const issues = context.openIssues.length
     ? context.openIssues
         .map(

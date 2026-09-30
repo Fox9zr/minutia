@@ -18,7 +18,7 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useIssues } from "@/lib/hooks/use-issues";
-import { useSeries } from "@/lib/hooks/use-series";
+import { useСерии } from "@/lib/hooks/use-series";
 import { useDecisions } from "@/lib/hooks/use-decisions";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { CATEGORY_CONFIG, STATUS_CONFIG } from "@/lib/constants";
@@ -51,7 +51,7 @@ export function CommandPalette() {
   const closeCommandPalette = useUIStore((s) => s.closeCommandPalette);
   const toggleCommandPalette = useUIStore((s) => s.toggleCommandPalette);
   const { data: issues } = useIssues(undefined, open);
-  const { data: seriesList } = useSeries(open);
+  const { data: seriesList } = useСерии(open);
   const { data: decisions } = useDecisions(undefined, undefined, open);
 
   // Cmd+K / Ctrl+K and "/" listener
@@ -110,7 +110,7 @@ export function CommandPalette() {
           })}
         </CommandGroup>
 
-        {/* Series */}
+        {/* Серии */}
         {seriesList && seriesList.length > 0 && (
           <CommandGroup heading="Серии">
             {seriesList.map((series) => (

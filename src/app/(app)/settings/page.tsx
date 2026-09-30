@@ -115,7 +115,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Оформление</CardTitle>
             <CardDescription>
-              Choose how Kotrol looks for you.
+              Выберите, как Kotrol looks for you.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -145,7 +145,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Подключенные аккаунты</CardTitle>
             <CardDescription>
-              Link external services to enhance your workflow.
+              Подключите внешние сервисы, чтобы расширить your workflow.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -200,7 +200,7 @@ export default function SettingsPage() {
           <CardHeader>
             <CardTitle>Экспорт данных</CardTitle>
             <CardDescription>
-              Download all your issues as CSV or JSON.
+              Скачать все поручения как CSV or JSON.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -247,9 +247,9 @@ export default function SettingsPage() {
         </Card>
 
         <p className="text-xs text-ink-3">
-          Manage workspace members and instance settings in the{" "}
+          Управление участниками рабочего пространства и инстансом settings in the{" "}
           <Link href="/admin" className="font-medium text-ink underline-offset-2 hover:underline">
-            Admin panel
+            Панель администратора
           </Link>
           .
         </p>

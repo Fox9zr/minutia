@@ -6,7 +6,7 @@ import { StatusChip } from "@/components/minutia/status-chip";
 import { CategoryBadge } from "@/components/minutia/category-badge";
 import { PrefetchIssueLink } from "@/components/minutia/prefetch-issue-link";
 import { cn } from "@/lib/utils";
-import type { Issue, IssueStatus, MeetingSeries } from "@/lib/types";
+import type { Issue, IssueStatus, MeetingСерии } from "@/lib/types";
 import { isOverdue } from "@/lib/issue-utils";
 
 interface OwnerGroup {
@@ -25,7 +25,7 @@ export function WorkloadWidget({
   id: string;
   index: number;
   issues: Issue[];
-  seriesList: (MeetingSeries & { open_issues_count: number })[];
+  seriesList: (MeetingСерии & { open_issues_count: number })[];
   onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
   const [view, setView] = React.useState<"owner" | "series" | "overdue">("owner");
@@ -61,7 +61,7 @@ export function WorkloadWidget({
   const totalOverdue = openIssues.filter(isOverdue).length;
 
   const seriesMap = React.useMemo(() => {
-    const m = new Map<string, MeetingSeries>();
+    const m = new Map<string, MeetingСерии>();
     for (const s of seriesList) m.set(s.id, s);
     return m;
   }, [seriesList]);

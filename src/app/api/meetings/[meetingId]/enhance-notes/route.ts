@@ -59,7 +59,7 @@ function buildPrompt(input: {
     "Do not invent owners, dates, or decisions. If uncertain, put the uncertainty in open_questions.",
     "Формулируйте кратко и с указанием ответственных.",
     "",
-    `Series: ${input.seriesName}`,
+    `Серии: ${input.seriesName}`,
     `Meeting: ${input.title}`,
     `Attendees: ${input.attendees.join(", ") || "Unknown"}`,
     "",

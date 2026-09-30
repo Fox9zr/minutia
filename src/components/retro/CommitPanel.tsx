@@ -18,13 +18,13 @@ export interface CommitPanelProps {
   onSave: () => void;
   onExport: () => void;
   saving: boolean;
-  savedSeriesId: string | null;
+  savedСерииId: string | null;
   saveError: string | null;
   canEnd: boolean;
   onEnd: () => void;
 }
 
-export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onSave, onExport, saving, savedSeriesId, saveError, canEnd, onEnd }: CommitPanelProps) {
+export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onSave, onExport, saving, savedСерииId, saveError, canEnd, onEnd }: CommitPanelProps) {
   const [confirmEnd, setConfirmEnd] = React.useState(false);
   return (
     <div style={{ height: "100%", overflowY: "auto", display: "flex", justifyContent: "center", padding: "var(--space-12) var(--space-6)", position: "relative" }}>
@@ -76,7 +76,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
         ) : (
           // The nudge, a calm card, not a modal wall. Wired to real save/export.
           <div style={{ background: "var(--paper)", color: "var(--card-ink)", borderRadius: "var(--r-panel)", padding: "var(--space-6)", boxShadow: "var(--lift-card)", backgroundImage: "radial-gradient(rgba(0,0,0,0.02) 1px, transparent 1px)", backgroundSize: "4px 4px" }}>
-            {savedSeriesId ? (
+            {savedСерииId ? (
               <React.Fragment>
                 <div style={{ display: "inline-flex", alignItems: "center", gap: 7, fontFamily: "var(--font-sans)", fontSize: 11.5, fontWeight: 600, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--success)", marginBottom: 10 }}>
                   <Icons.CheckCircle size={16} /> Saved
@@ -87,7 +87,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
                 <p style={{ fontFamily: "var(--font-sans)", fontSize: 15, lineHeight: 1.5, color: "color-mix(in oklab, var(--card-ink) 78%, transparent)", margin: "0 0 20px", maxWidth: 460 }}>
                   Next retro starts with whatever&apos;s still open.
                 </p>
-                <Link href={`/series/${savedSeriesId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-deep)" }}>
+                <Link href={`/series/${savedСерииId}`} style={{ fontFamily: "var(--font-sans)", fontSize: 15, fontWeight: 600, color: "var(--accent-deep)" }}>
                   Open the series &rarr;
                 </Link>
               </React.Fragment>
@@ -134,7 +134,7 @@ export function CommitPanel({ actions, sealed, isFacilitator, onSeal, bloom, onS
           tone="danger"
           title="Завершить ретроспективу?"
           body="This ends the retro for everyone. The board becomes read-only and live editing stops. This can't be undone."
-          warning={savedSeriesId ? undefined : "Вы экспортировали Markdown, но не сохранили данные в Kotrol, поэтому срок действия этой доски истечет через 30 дней."}
+          warning={savedСерииId ? undefined : "Вы экспортировали Markdown, но не сохранили данные в Kotrol, поэтому срок действия этой доски истечет через 30 дней."}
           confirmLabel="Завершить ретро"
           onConfirm={() => { setConfirmEnd(false); onEnd(); }}
           onCancel={() => setConfirmEnd(false)}

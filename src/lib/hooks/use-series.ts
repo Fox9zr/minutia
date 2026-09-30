@@ -8,11 +8,11 @@ import {
 } from "@tanstack/react-query";
 import { createClient } from "@/lib/supabase/client";
 import { applyOptimistic, patch } from "@/lib/optimistic";
-import { patchSeriesFields, isListCache } from "@/lib/optimistic-updates";
-import type { MeetingSeries, SeriesParticipantRole, SeriesWithMeetings } from "@/lib/types";
-import type { CreateSeriesInput } from "@/lib/schemas";
+import { patchСерииFields, isListCache } from "@/lib/optimistic-updates";
+import type { MeetingСерии, СерииParticipantRole, СерииWithMeetings } from "@/lib/types";
+import type { CreateСерииInput } from "@/lib/schemas";
 
-type SeriesListRow = MeetingSeries & { open_issues_count: number };
+type СерииListRow = MeetingСерии & { open_issues_count: number };
 
 // ---------------------------------------------------------------------------
 // Query key factory
@@ -27,12 +27,12 @@ const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 // ---------------------------------------------------------------------------
-// useSeries - all series for the current user with open issue counts
+// useСерии - all series for the current user with open issue counts
 // ---------------------------------------------------------------------------
-export function useSeries(enabled = true) {
+export function useСерии(enabled = true) {
   const supabase = createClient();
 
-  return useQuery<(MeetingSeries & { open_issues_count: number })[]>({
+  return useQuery<(MeetingСерии & { open_issues_count: number })[]>({
     queryKey: seriesKeys.all,
     enabled,
     queryFn: async () => {
@@ -58,13 +58,13 @@ export function useSeries(enabled = true) {
 }
 
 // ---------------------------------------------------------------------------
-// useSeriesDetail - single series with its meetings
+// useСерииDetail - single series with its meetings
 // ---------------------------------------------------------------------------
-export function useSeriesDetail(id: string) {
+export function useСерииDetail(id: string) {
   const supabase = createClient();
   const validId = UUID_PATTERN.test(id);
 
-  return useQuery<SeriesWithMeetings | null>({
+  return useQuery<СерииWithMeetings | null>({
     queryKey: seriesKeys.detail(id),
     enabled: !!id,
     queryFn: async () => {
@@ -82,18 +82,18 @@ export function useSeriesDetail(id: string) {
       return {
         ...data,
         open_issues_count: (data as any).issues?.[0]?.count ?? 0,
-      } as unknown as SeriesWithMeetings;
+      } as unknown as СерииWithMeetings;
     },
   });
 }
 
 // ---------------------------------------------------------------------------
-// useSeriesParticipantRole - current user's role in a series
+// useСерииParticipantRole - current user's role in a series
 // ---------------------------------------------------------------------------
-export function useSeriesParticipantRole(seriesId: string) {
+export function useСерииParticipantRole(seriesId: string) {
   const supabase = createClient();
 
-  return useQuery<SeriesParticipantRole | null>({
+  return useQuery<СерииParticipantRole | null>({
     queryKey: seriesKeys.role(seriesId),
     enabled: !!seriesId,
     queryFn: async () => {
@@ -110,15 +110,15 @@ export function useSeriesParticipantRole(seriesId: string) {
         .maybeSingle();
 
       if (error) throw error;
-      return (data?.role ?? null) as SeriesParticipantRole | null;
+      return (data?.role ?? null) as СерииParticipantRole | null;
     },
   });
 }
 
 // ---------------------------------------------------------------------------
-// useSeriesRealtime - refresh series detail when meeting state changes
+// useСерииRealtime - refresh series detail when meeting state changes
 // ---------------------------------------------------------------------------
-export function useSeriesRealtime(seriesId: string) {
+export function useСерииRealtime(seriesId: string) {
   const queryClient = useQueryClient();
 
   React.useEffect(() => {
@@ -162,14 +162,14 @@ export function useSeriesRealtime(seriesId: string) {
 }
 
 // ---------------------------------------------------------------------------
-// useCreateSeries
+// useCreateСерии
 // ---------------------------------------------------------------------------
-export function useCreateSeries() {
+export function useCreateСерии() {
   const supabase = createClient();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (input: CreateSeriesInput) => {
+    mutationFn: async (input: CreateСерииInput) => {
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -194,7 +194,7 @@ export function useCreateSeries() {
         .single();
 
       if (error) throw error;
-      return data as MeetingSeries;
+      return data as MeetingСерии;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: seriesKeys.all });
@@ -203,16 +203,16 @@ export function useCreateSeries() {
 }
 
 // ---------------------------------------------------------------------------
-// useUpdateSeries
+// useUpdateСерии
 // ---------------------------------------------------------------------------
-export function useUpdateSeries() {
+export function useUpdateСерии() {
   const supabase = createClient();
   const queryClient = useQueryClient();
 
   return useMutation<
-    MeetingSeries,
+    MeetingСерии,
     Error,
-    Partial<CreateSeriesInput> & { id: string },
+    Partial<CreateСерииInput> & { id: string },
     { rollback: () => void }
   >({
     mutationFn: async ({ id, ...input }) => {
@@ -224,17 +224,17 @@ export function useUpdateSeries() {
         .single();
 
       if (error) throw error;
-      return data as MeetingSeries;
+      return data as MeetingСерии;
     },
     onMutate: ({ id, ...input }) =>
       applyOptimistic(queryClient, [
         // List rows (array caches only, never the detail/role sub-caches).
-        patch<SeriesListRow[]>(
+        patch<СерииListRow[]>(
           { queryKey: seriesKeys.all, predicate: isListCache },
-          patchSeriesFields(id, input as Partial<SeriesListRow>)
+          patchСерииFields(id, input as Partial<СерииListRow>)
         ),
         // Detail cache, exact key so the participant-role sub-key is untouched.
-        patch<SeriesWithMeetings | null>(
+        patch<СерииWithMeetings | null>(
           { queryKey: seriesKeys.detail(id), exact: true },
           (old) => (old ? { ...old, ...input } : old)
         ),
@@ -250,9 +250,9 @@ export function useUpdateSeries() {
 }
 
 // ---------------------------------------------------------------------------
-// useDeleteSeries
+// useDeleteСерии
 // ---------------------------------------------------------------------------
-export function useDeleteSeries() {
+export function useDeleteСерии() {
   const supabase = createClient();
   const queryClient = useQueryClient();
 

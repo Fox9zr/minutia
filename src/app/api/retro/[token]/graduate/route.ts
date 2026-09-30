@@ -83,7 +83,7 @@ export async function POST(
   }
 
   // Validate access to an existing target up front (read-only, before claiming).
-  let existingSeriesId: string | null = null;
+  let existingСерииId: string | null = null;
   if (body.target === "existing") {
     if (!body.series_id) {
       return NextResponse.json({ error: "series_id required" }, { status: 400 });
@@ -96,7 +96,7 @@ export async function POST(
     if (!series) {
       return NextResponse.json({ error: "Серия недоступна" }, { status: 403 });
     }
-    existingSeriesId = series.id;
+    existingСерииId = series.id;
   }
 
   // Atomic claim: prevents concurrent double-graduation (double-click, auto +
@@ -125,8 +125,8 @@ export async function POST(
 
   // Resolve the target series (create new only after claiming).
   let seriesId: string;
-  if (existingSeriesId) {
-    seriesId = existingSeriesId;
+  if (existingСерииId) {
+    seriesId = existingСерииId;
   } else {
     const { data: profile } = await supabase
       .from("profiles")

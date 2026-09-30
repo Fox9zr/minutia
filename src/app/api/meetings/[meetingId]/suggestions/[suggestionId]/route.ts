@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { z } from "zod";
 import { createClient } from "@/lib/supabase/server";
-import { userManagesSeries } from "@/lib/series/manage-access";
+import { userManagesСерии } from "@/lib/series/manage-access";
 
 const reviewSchema = z.object({
   action: z.enum(["accept", "reject"]),
@@ -52,7 +52,7 @@ export async function PATCH(
 
   // Accepting a suggestion mutates the OIL (creates an issue/decision, or moves
   // an existing item), so restrict review to those who manage the series.
-  if (!(await userManagesSeries(suggestion.series_id, user.id))) {
+  if (!(await userManagesСерии(suggestion.series_id, user.id))) {
     return NextResponse.json(
       { error: "Только владельцы и ведущие серии могут проверять предложения ИИ.", request_id: requestId },
       { status: 403 }

@@ -12,7 +12,7 @@ export type BriefEmail = {
   text: string;
 };
 
-export type BuildSeriesBriefInput = {
+export type BuildСерииBriefInput = {
   series: { name: string; cadence?: string | null };
   nextMeeting?: { title?: string | null; date: Date | string } | null;
   openIssues: BriefIssue[];
@@ -89,7 +89,7 @@ function sectionText(title: string, issues: BriefIssue[], emptyNote: string): st
   return [title, ...lines].join("\n");
 }
 
-export function buildSeriesBrief(input: BuildSeriesBriefInput): BriefEmail[] {
+export function buildСерииBrief(input: BuildСерииBriefInput): BriefEmail[] {
   const { series, nextMeeting, openIssues, recipients, guestUrl, instanceUrl } =
     input;
 
