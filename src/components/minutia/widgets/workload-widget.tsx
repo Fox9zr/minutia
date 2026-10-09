@@ -7,6 +7,7 @@ import { CategoryBadge } from "@/components/minutia/category-badge";
 import { PrefetchIssueLink } from "@/components/minutia/prefetch-issue-link";
 import { cn } from "@/lib/utils";
 import type { Issue, IssueStatus, MeetingSeries } from "@/lib/types";
+import { isActiveStatus } from "@/lib/workflow";
 import { isOverdue } from "@/lib/issue-utils";
 
 interface OwnerGroup {
@@ -32,7 +33,7 @@ export function WorkloadWidget({
   const [expanded, setExpanded] = React.useState<Set<string>>(new Set());
 
   const openIssues = issues.filter(
-    (i) => i.status !== "resolved" && i.status !== "dropped"
+    (i) => isActiveStatus(i.status)
   );
 
   const ownerGroups = React.useMemo(() => {

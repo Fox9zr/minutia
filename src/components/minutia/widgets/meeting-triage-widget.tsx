@@ -7,6 +7,7 @@ import { CategoryBadge } from "@/components/minutia/category-badge";
 import { PrefetchIssueLink } from "@/components/minutia/prefetch-issue-link";
 import { cn } from "@/lib/utils";
 import type { Issue, IssueStatus, Meeting, MeetingSeries } from "@/lib/types";
+import { isActiveStatus } from "@/lib/workflow";
 import { daysSince } from "@/lib/date-utils";
 
 function formatOrdinal(value: number): string {
@@ -41,7 +42,7 @@ export function MeetingTriageWidget({
   onStatusChange: (issueId: string, oldStatus: IssueStatus, newStatus: IssueStatus, seriesId: string) => void;
 }) {
   const openIssues = issues.filter(
-    (i) => i.status !== "resolved" && i.status !== "dropped"
+    (i) => isActiveStatus(i.status)
   );
 
   const sortedMeetings = React.useMemo(

@@ -74,7 +74,7 @@ export function useOfflineSync() {
               priority: (item.priority ?? "medium") as string,
               raised_in_meeting_id: item.meeting_id,
               series_id: item.series_id,
-              status: "open" as IssueStatus,
+              status: "assigned" as IssueStatus,
               source: "manual",
               owner_user_id: user.id,
             });

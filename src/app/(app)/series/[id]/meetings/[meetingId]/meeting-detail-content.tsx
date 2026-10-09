@@ -57,6 +57,7 @@ import { ArrowLeft, Square, Play, Check, X, Sparkles, Loader2, ListChecks, FileT
 import { cn } from "@/lib/utils";
 import { formatShortDate } from "@/lib/date-utils";
 import type { IssueCategory, IssueStatus, Issue, Decision, Meeting, MeetingAiSuggestion } from "@/lib/types";
+import { isActiveStatus, isClosedStatus } from "@/lib/workflow";
 import Link from "next/link";
 
 interface MeetingDetailContentProps {
@@ -292,8 +293,10 @@ function CarriedIssueCard({
     const keyMap: Record<string, IssueStatus> = {
       r: "resolved",
       p: "in_progress",
-      x: "dropped",
-      o: "open",
+      x: "cancelled",
+      o: "assigned",
+      a: "accepted",
+      v: "under_review",
     };
     const newStatus = keyMap[e.key.toLowerCase()];
     if (newStatus && newStatus !== issue.status) {
@@ -362,9 +365,10 @@ function CarriedIssueCard({
         <span
           className={cn(
             "size-2 rounded-full shrink-0 transition-colors",
-            issue.status === "in_progress" ? "bg-accent" :
+            issue.status === "in_progress" || issue.status === "accepted" ? "bg-accent" :
             issue.status === "resolved" ? "bg-success" :
-            issue.status === "dropped" ? "bg-ink-4" :
+            issue.status === "dropped" || issue.status === "cancelled" ? "bg-ink-4" :
+            issue.status === "under_review" || issue.status === "pending" ? "bg-warn" :
             "bg-ink"
           )}
         />
@@ -404,7 +408,11 @@ function CarriedIssueCard({
           "text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0",
           issue.status === "resolved" ? "bg-success/10 text-success" : "bg-paper-2 text-ink-4"
         )}>
-          {issue.status === "resolved" ? "Resolved" : "Dropped"}
+          {issue.status === "resolved"
+            ? "Завершено"
+            : issue.status === "cancelled"
+              ? "Отменено"
+              : "Исключено"}
         </span>
       )}
 
@@ -419,8 +427,9 @@ function CarriedIssueCard({
             className="flex items-center gap-1 shrink-0"
           >
             <ActionButton letter="R" label="Решить" onClick={() => handleActionClick("resolved")} />
+            <ActionButton letter="V" label="На проверку" onClick={() => handleActionClick("under_review")} />
             <ActionButton letter="P" label="Прогресс" onClick={() => handleActionClick("in_progress")} />
-            <ActionButton letter="X" label="Исключить" onClick={() => handleActionClick("dropped")} />
+            <ActionButton letter="X" label="Отменить" onClick={() => handleActionClick("cancelled")} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -435,13 +444,15 @@ function CarriedIssueCard({
             className={cn(
               "text-xs font-medium px-2 py-0.5 rounded-full",
               justChanged === "resolved" && "bg-success-soft text-success",
-              justChanged === "in_progress" && "bg-accent-soft text-accent",
-              justChanged === "dropped" && "bg-paper-2 text-ink-3"
+              justChanged === "under_review" && "bg-warn-soft text-warn",
+              justChanged === "cancelled" && "bg-paper-2 text-ink-3",
+              justChanged === "in_progress" && "bg-accent-soft text-accent"
             )}
           >
-            {justChanged === "resolved" ? "Resolved" :
-             justChanged === "in_progress" ? "В работе" :
-             justChanged === "dropped" ? "Dropped" : justChanged}
+            {justChanged === "resolved" ? "Завершено" :
+             justChanged === "under_review" ? "На проверке" :
+             justChanged === "cancelled" ? "Отменено" :
+             justChanged === "in_progress" ? "В работе" : justChanged}
           </motion.span>
         )}
       </AnimatePresence>
@@ -828,13 +839,13 @@ export function MeetingDetailContent({
     (issue) => issue.raised_in_meeting_id !== meetingId
   );
   const carriedIssues = allCarriedIssues.filter(
-    (issue) => issue.status !== "resolved" && issue.status !== "dropped"
+    (issue) => isActiveStatus(issue.status)
   );
   // Issues resolved/dropped during this meeting (both carried AND raised here)
   const allSeriesIssues = seriesIssues ?? [];
   const doneThisMeeting = allSeriesIssues.filter(
     (issue) =>
-      (issue.status === "resolved" || issue.status === "dropped") &&
+      isClosedStatus(issue.status) &&
       issue.resolved_in_meeting_id === meetingId
   );
 
@@ -1437,7 +1448,7 @@ export function MeetingDetailContent({
   // =========================================================================
   if (meeting.status === "upcoming") {
     const openIssues = (seriesIssues ?? []).filter(
-      (issue) => issue.status !== "resolved" && issue.status !== "dropped"
+      (issue) => isActiveStatus(issue.status)
     );
     const agendaDrafts = raisedInThisMeeting.filter(
       (issue) => issue.source === "calendar_auto_draft"

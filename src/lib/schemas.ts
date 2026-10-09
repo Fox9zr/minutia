@@ -1,7 +1,17 @@
 import { z } from "zod";
 
 const issueCategoryEnum = z.enum(["action", "decision", "info", "risk", "blocker"]);
-const issueStatusEnum = z.enum(["open", "in_progress", "pending", "resolved", "dropped"]);
+const issueStatusEnum = z.enum([
+  "open",
+  "assigned",
+  "accepted",
+  "in_progress",
+  "pending",
+  "under_review",
+  "resolved",
+  "dropped",
+  "cancelled",
+]);
 const priorityEnum = z.enum(["low", "medium", "high", "critical"]);
 const cadenceEnum = z.enum(["daily", "weekly", "biweekly", "monthly", "adhoc"]);
 const sharePermissionEnum = z.enum(["view", "comment"]);

@@ -10,6 +10,7 @@ import {
   Settings,
   Users,
   ShieldCheck,
+  ClipboardCheck,
   LogOut,
   Building2,
 } from "lucide-react";
@@ -32,6 +33,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { isMyActionIssue } from "@/lib/my-actions";
+import { isOpen } from "@/lib/issue-utils";
 import type { OrganizationOption, Profile } from "@/lib/types";
 
 function isActive(pathname: string, href: string): boolean {
@@ -83,16 +85,18 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
     (organization) => organization.id === profile?.current_organization_id
   );
 
-  const openIssues = (issues ?? []).filter(
-    (i) => i.status !== "resolved" && i.status !== "dropped"
-  );
+  const openIssues = (issues ?? []).filter(isOpen);
   const outstandingCount = openIssues.length;
+  const underReviewCount = openIssues.filter(
+    (i) => i.status === "under_review"
+  ).length;
   const myActionsCount = profile
     ? openIssues.filter((issue) => isMyActionIssue(issue, profile)).length
     : 0;
 
   const navItems = [
     { label: "К исполнению", href: "/", icon: CircleDot, count: outstandingCount },
+    { label: "Проверка ГМ", href: "/gm", icon: ClipboardCheck, count: underReviewCount },
     { label: "Серия", href: "/series", icon: SquareStack, count: 0 },
     { label: "Мои поручения", href: "/actions", icon: CheckSquare, count: myActionsCount },
     { label: "Входящие", href: "/inbox", icon: Bell, count: unreadCount ?? 0 },

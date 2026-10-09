@@ -420,7 +420,7 @@ function OutstandingWidget({
   const openIssues = issues.filter(isOpen);
 
   const filtered = openIssues.filter((issue) => {
-    if (filter === "open" && issue.status !== "open") return false;
+    if (filter === "open" && issue.status === "pending") return false;
     if (filter === "pending" && issue.status !== "pending") return false;
     if (filter === "overdue" && !isOverdue(issue)) return false;
     if (ownerFilter && ownerKeyOf(issue) !== ownerFilter.key) return false;
@@ -1332,7 +1332,7 @@ export default function Dashboard() {
   }, [seriesList]);
 
   const openCount = React.useMemo(
-    () => (issues ?? []).filter((i) => i.status === "open").length,
+    () => (issues ?? []).filter((i) => isOpen(i) && i.status !== "pending").length,
     [issues]
   );
   const pendingCount = React.useMemo(

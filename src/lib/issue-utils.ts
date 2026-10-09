@@ -1,5 +1,6 @@
 import type { Issue } from "@/lib/types";
 import { PRIORITY_CONFIG } from "@/lib/constants";
+import { isActiveStatus, isEffectiveOverdue } from "@/lib/workflow";
 
 export function formatIssueKey(issue: Pick<Issue, "issue_number">): string {
   return `OIL-${issue.issue_number}`;
@@ -15,13 +16,13 @@ export function parseIssueKey(value: string): number | null {
 }
 
 export function isOpen(issue: Issue): boolean {
-  return issue.status !== "resolved" && issue.status !== "dropped";
+  return isActiveStatus(issue.status);
 }
 
+// Overdue is judged against the EFFECTIVE deadline (hold-until extends it), so a
+// paused task is never nagged as overdue before it is due back.
 export function isOverdue(issue: Issue): boolean {
-  if (issue.status === "resolved" || issue.status === "dropped") return false;
-  if (!issue.due_date) return false;
-  return new Date(issue.due_date) < new Date();
+  return isEffectiveOverdue(issue);
 }
 
 // Manual drag order (positive sort_order) wins; issues that have never been

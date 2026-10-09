@@ -1,5 +1,20 @@
 export type IssueCategory = "action" | "decision" | "info" | "risk" | "blocker";
-export type IssueStatus = "open" | "in_progress" | "pending" | "resolved" | "dropped";
+// Kotrol workflow (Phase 2 v2, P0). "assigned" is the start of the cycle
+// (replacing the legacy "open"); "cancelled" is the terminal negative state
+// (replacing "dropped"). "open" and "dropped" remain only so legacy rows keep
+// rendering — they are hidden from every status picker. "under_review" is the
+// gate before a GM confirms "resolved". Hold is NOT a status: it lives in the
+// hold_reason/hold_until fields and keeps the issue in its current status.
+export type IssueStatus =
+  | "open"
+  | "assigned"
+  | "accepted"
+  | "in_progress"
+  | "pending"
+  | "under_review"
+  | "resolved"
+  | "dropped"
+  | "cancelled";
 export type Priority = "low" | "medium" | "high" | "critical";
 export type MeetingStatus = "upcoming" | "live" | "completed";
 export type Cadence = "daily" | "weekly" | "biweekly" | "monthly" | "adhoc";
@@ -221,8 +236,41 @@ export interface Issue {
   updated_at: Date;
   update_count?: number;
   accepted_at?: Date | null;
+  accepted_by?: string;
   proposed_due_date?: Date | null;
   proposed_note?: string | null;
+  closed_at?: Date | null;
+  closed_by?: string;
+  hold_reason?: string;
+  hold_until?: Date | null;
+  parent_task_id?: string | null;
+  co_owners?: string;
+}
+
+// Phase 2 v2 history log: every meaningful transition of an issue lands in
+// public.task_events so the accept-cycle is auditable independent of the
+// free-text issue_updates timeline.
+export type TaskEventType =
+  | "created"
+  | "assigned"
+  | "accepted"
+  | "due_proposed"
+  | "due_changed"
+  | "status_changed"
+  | "hold"
+  | "resumed"
+  | "closed"
+  | "reopened"
+  | "split"
+  | "comment";
+
+export interface TaskEvent {
+  id: string;
+  issue_id: string;
+  event: TaskEventType;
+  payload: Record<string, unknown>;
+  actor: string;
+  created_at: Date;
 }
 
 export interface MeetingAiSuggestion {
@@ -308,6 +356,7 @@ export interface Notification {
 
 export type IssueWithUpdates = Issue & {
   updates: IssueUpdate[];
+  task_events: TaskEvent[];
   raised_in_meeting: Meeting;
 };
 

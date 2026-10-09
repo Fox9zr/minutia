@@ -35,7 +35,17 @@ const suggestionSchema = z.object({
   // referential-integrity pass below is the real gate.
   related_issue_number: z.number().int().nullable().default(null),
   suggested_status: z
-    .enum(["open", "in_progress", "pending", "resolved", "dropped"])
+    .enum([
+      "open",
+      "assigned",
+      "accepted",
+      "in_progress",
+      "pending",
+      "under_review",
+      "resolved",
+      "dropped",
+      "cancelled",
+    ])
     .nullable()
     .default(null),
 });

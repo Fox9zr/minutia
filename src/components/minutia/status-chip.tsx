@@ -3,7 +3,7 @@
 import * as React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { cn } from "@/lib/utils";
-import { STATUS_CONFIG, ISSUE_STATUSES } from "@/lib/constants";
+import { STATUS_CONFIG, SELECTABLE_ISSUE_STATUSES } from "@/lib/constants";
 import type { IssueStatus } from "@/lib/types";
 
 interface StatusChipProps {
@@ -14,9 +14,13 @@ interface StatusChipProps {
 
 const statusColorMap: Record<IssueStatus, { bg: string; text: string }> = {
   open: { bg: "bg-paper-3", text: "text-ink" },
+  assigned: { bg: "bg-paper-3", text: "text-ink" },
+  accepted: { bg: "bg-accent-soft", text: "text-accent" },
   in_progress: { bg: "bg-accent-soft", text: "text-accent" },
   pending: { bg: "bg-warn-soft", text: "text-warn" },
+  under_review: { bg: "bg-warn-soft", text: "text-warn" },
   resolved: { bg: "bg-success-soft", text: "text-success" },
+  cancelled: { bg: "bg-paper-3", text: "text-ink-3" },
   dropped: { bg: "bg-paper-3", text: "text-ink-3" },
 };
 
@@ -69,7 +73,7 @@ export function StatusChip({ status, onChange, readonly }: StatusChipProps) {
       return;
     }
 
-    const statuses = ISSUE_STATUSES.filter((s) => s !== status);
+    const statuses = SELECTABLE_ISSUE_STATUSES.filter((s) => s !== status);
 
     switch (e.key) {
       case "ArrowRight":
@@ -101,7 +105,7 @@ export function StatusChip({ status, onChange, readonly }: StatusChipProps) {
     }
   }
 
-  const otherStatuses = ISSUE_STATUSES.filter((s) => s !== status);
+  const otherStatuses = SELECTABLE_ISSUE_STATUSES.filter((s) => s !== status);
 
   return (
     <div ref={containerRef} className="inline-flex">

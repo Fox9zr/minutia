@@ -13,6 +13,7 @@ import { PrefetchIssueLink } from "@/components/minutia/prefetch-issue-link";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Issue } from "@/lib/types";
 import { isOverdue } from "@/lib/issue-utils";
+import { isClosedStatus } from "@/lib/workflow";
 import { isMyActionIssue } from "@/lib/my-actions";
 import { formatShortDate } from "@/lib/date-utils";
 import { cn } from "@/lib/utils";
@@ -115,7 +116,7 @@ function ActionRow({
     >
       <button
         type="button"
-        aria-label={done ? "Completed" : "Отметить выполненным"}
+        aria-label={done ? "Завершено" : "Отправить на проверку"}
         disabled={checked}
         onClick={() => {
           if (checked) return;
@@ -221,7 +222,7 @@ export default function MyActionsPage() {
     const completed: Issue[] = [];
 
     for (const issue of myIssues) {
-      if (issue.status === "resolved" || issue.status === "dropped") {
+      if (isClosedStatus(issue.status)) {
         completed.push(issue);
       } else if (issue.status === "pending") {
         pending.push(issue);
@@ -256,7 +257,7 @@ export default function MyActionsPage() {
         issueId: issue.id,
         seriesId: issue.series_id,
         oldStatus: issue.status,
-        newStatus: "resolved",
+        newStatus: "under_review",
       },
       { onError: opts.onError }
     );

@@ -11,7 +11,14 @@
 // pure and deterministic.
 
 /** Statuses that count as "still open" and therefore carry across meetings. */
-export const OPEN_ISSUE_STATUSES = ["open", "in_progress", "pending"] as const;
+export const OPEN_ISSUE_STATUSES = [
+  "open",
+  "assigned",
+  "accepted",
+  "in_progress",
+  "pending",
+  "under_review",
+] as const;
 
 export interface SeriesContextIssue {
   issue_number: number;

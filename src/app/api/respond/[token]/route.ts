@@ -57,11 +57,18 @@ export async function POST(
   const action = body?.action;
 
   if (action === "accept") {
+    const nowIso = new Date().toISOString();
     const { error } = await admin
       .from("issues")
-      .update({ accepted_at: new Date().toISOString() })
+      .update({ accepted_at: nowIso, status: "accepted" })
       .eq("id", row.issue_id);
     if (error) return NextResponse.json({ error: "Не удалось зафиксировать" }, { status: 500 });
+    await admin.from("task_events").insert({
+      issue_id: row.issue_id,
+      event: "accepted",
+      actor: "respond-link",
+      payload: { to: "accepted" },
+    });
     await admin.from("issue_response_tokens").update({ used_at: new Date().toISOString() }).eq("id", row.id);
     return NextResponse.json({ ok: true, message: "Принято зафиксировано. Спасибо!" });
   }
@@ -76,6 +83,12 @@ export async function POST(
       .update({ proposed_due_date: due, proposed_note: note || null })
       .eq("id", row.issue_id);
     if (error) return NextResponse.json({ error: "Не удалось сохранить предложение" }, { status: 500 });
+    await admin.from("task_events").insert({
+      issue_id: row.issue_id,
+      event: "due_proposed",
+      actor: "respond-link",
+      payload: { due, note },
+    });
     await admin.from("issue_response_tokens").update({ used_at: new Date().toISOString() }).eq("id", row.id);
     return NextResponse.json({ ok: true, message: "Предложение отправлено. Ответственный за серию увидит его в карточке поручения." });
   }

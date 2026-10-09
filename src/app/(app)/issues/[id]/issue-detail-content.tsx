@@ -22,6 +22,8 @@ import {
   useDeleteIssue,
   useAddIssueUpdate,
   useAssignIssue,
+  useAcceptIssue,
+  useSetHold,
   issueKeys,
 } from "@/lib/hooks/use-issues";
 import { applyOptimistic, patch } from "@/lib/optimistic";
@@ -39,6 +41,7 @@ import { MemberCombobox } from "@/components/minutia/member-combobox";
 import { PriorityIndicator } from "@/components/minutia/priority-indicator";
 import { MaterialLinksSection } from "@/components/minutia/material-links";
 import { TimelineNode } from "@/components/minutia/timeline-node";
+import { TaskHistory } from "@/components/minutia/task-history";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -53,6 +56,7 @@ import {
 import { cn } from "@/lib/utils";
 import { daysBetween, toLocalISODate } from "@/lib/date-utils";
 import { PRIORITIES, STATUS_CONFIG } from "@/lib/constants";
+import { effectiveDueDate, isOnHold } from "@/lib/workflow";
 import type { Issue, IssueStatus, Priority, IssueUpdate, Meeting } from "@/lib/types";
 
 // Mirrors the priority color tokens in priority-indicator.tsx.
@@ -247,13 +251,24 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
   const deleteIssue = useDeleteIssue();
   const addUpdate = useAddIssueUpdate();
   const assignIssue = useAssignIssue();
+  const acceptIssue = useAcceptIssue();
+  const setHold = useSetHold();
   const [showUpdateForm, setShowUpdateForm] = React.useState(false);
   const [remindPending, setRemindPending] = React.useState(false);
   const [updateNote, setUpdateNote] = React.useState("");
   const [dueOpen, setDueOpen] = React.useState(false);
+  const [showHoldForm, setShowHoldForm] = React.useState(false);
+  const [holdReasonDraft, setHoldReasonDraft] = React.useState("");
+  const [holdUntilDraft, setHoldUntilDraft] = React.useState("");
   const updateInputRef = React.useRef<HTMLTextAreaElement>(null);
 
-  const statusCycle: IssueStatus[] = ["open", "pending", "in_progress", "resolved"];
+  const statusCycle: IssueStatus[] = [
+    "assigned",
+    "in_progress",
+    "under_review",
+    "pending",
+    "resolved",
+  ];
 
   React.useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -279,7 +294,13 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
         case "d":
           if (issue) {
             e.preventDefault();
-            handleStatusChange("dropped");
+            handleStatusChange("cancelled");
+          }
+          break;
+        case "v":
+          if (issue) {
+            e.preventDefault();
+            handleStatusChange("under_review");
           }
           break;
         case "s":
@@ -343,6 +364,8 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
 
   // Derived data
   const raisedIn = issue.raised_in_meeting;
+  const effectiveDue = effectiveDueDate(issue);
+  const onHold = isOnHold(issue);
   const updates = [...(issue.updates ?? [])].sort(
     (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
   );
@@ -377,6 +400,34 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
     const val = date ? formatISODate(date) : null;
     handleFieldSave("due_date", val);
     setDueOpen(false);
+  }
+
+  function handleAccept() {
+    if (!issue) return;
+    acceptIssue.mutate({ issueId: issue.id, seriesId: issue.series_id });
+  }
+
+  function handleStartHold() {
+    if (!issue) return;
+    setHold.mutate({
+      issueId: issue.id,
+      seriesId: issue.series_id,
+      reason: holdReasonDraft.trim(),
+      until: holdUntilDraft || null,
+    });
+    setShowHoldForm(false);
+    setHoldReasonDraft("");
+    setHoldUntilDraft("");
+  }
+
+  function handleResume() {
+    if (!issue) return;
+    setHold.mutate({
+      issueId: issue.id,
+      seriesId: issue.series_id,
+      reason: "",
+      until: null,
+    });
   }
 
   async function handleSubmitUpdate() {
@@ -458,6 +509,18 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             status={issue.status}
             onChange={handleStatusChange}
           />
+          {issue.status === "assigned" && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="text-xs"
+              disabled={acceptIssue.isPending}
+              onClick={handleAccept}
+            >
+              <Check className="size-3.5" />
+              {acceptIssue.isPending ? "Принимаем…" : "Принять поручение"}
+            </Button>
+          )}
         </div>
 
         {/* Meta details */}
@@ -553,6 +616,43 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             </Popover>
           </div>
 
+          {/* Эффективный срок: отличается от номинального, пока идёт приостановка */}
+          {effectiveDue &&
+            (!issue.due_date ||
+              new Date(effectiveDue).getTime() !==
+                new Date(issue.due_date).getTime()) && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">
+                  Эффективный срок
+                </span>
+                <span className="text-xs font-mono text-warn">
+                  {formatDate(effectiveDue)} (с учётом приостановки)
+                </span>
+              </div>
+            )}
+
+          {/* Приостановка */}
+          {onHold && (
+            <div className="flex items-center gap-2 text-sm">
+              <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">
+                Приостановлено
+              </span>
+              <span className="text-xs text-warn bg-warn-soft rounded px-1.5 py-0.5">
+                {issue.hold_reason?.trim() || "без причины"}
+                {issue.hold_until ? ` · до ${formatDate(issue.hold_until)}` : ""}
+              </span>
+              <Button
+                variant="ghost"
+                size="xs"
+                className="text-xs"
+                disabled={setHold.isPending}
+                onClick={handleResume}
+              >
+                Возобновить
+              </Button>
+            </div>
+          )}
+
           {/* Priority */}
           <div className="flex items-center gap-2 text-sm">
             <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Приоритет</span>
@@ -631,6 +731,60 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           />
         </div>
 
+        {/* Приостановка (hold) — ветка, не статус */}
+        {issue.status !== "resolved" &&
+          issue.status !== "cancelled" &&
+          issue.status !== "dropped" &&
+          !onHold && (
+            <div className="mb-8">
+              {!showHoldForm ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="text-sm"
+                  onClick={() => setShowHoldForm(true)}
+                >
+                  Приостановить
+                </Button>
+              ) : (
+                <div className="border border-rule rounded-md p-3 space-y-3 max-w-md">
+                  <input
+                    value={holdReasonDraft}
+                    onChange={(e) => setHoldReasonDraft(e.target.value)}
+                    placeholder="Причина приостановки"
+                    aria-label="Причина приостановки"
+                    className="w-full bg-transparent border border-rule rounded-md px-2 py-1 text-sm focus:outline-none focus:border-ink-3"
+                  />
+                  <input
+                    type="date"
+                    value={holdUntilDraft}
+                    onChange={(e) => setHoldUntilDraft(e.target.value)}
+                    aria-label="Вернуться к рассмотрению"
+                    className="w-full bg-transparent border border-rule rounded-md px-2 py-1 text-sm focus:outline-none focus:border-ink-3"
+                  />
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="text-xs"
+                      onClick={() => setShowHoldForm(false)}
+                    >
+                      Отмена
+                    </Button>
+                    <Button
+                      size="sm"
+                      className="text-xs"
+                      disabled={setHold.isPending}
+                      onClick={handleStartHold}
+                    >
+                      {setHold.isPending ? "Сохраняем…" : "Приостановить"}
+                    </Button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
         {/* Материалы: именованные ссылки на файлы (Яндекс.Диск и т.п.) */}
         <MaterialLinksSection
           target={{ seriesId: issue.series_id, issueId: issue.id }}
@@ -664,6 +818,9 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
           </section>
         )}
 
+        {/* История изменений (task_events) — аудит accept-цикла */}
+        <TaskHistory events={issue.task_events ?? []} className="mb-8" />
+
         {/* Add update */}
         <div className="mb-8 flex flex-wrap items-center gap-2">
           {!showUpdateForm ? (
@@ -682,7 +839,7 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             <Button
               variant="outline"
               className="text-sm"
-              disabled={remindPending || issue.status === "resolved" || issue.status === "dropped"}
+              disabled={remindPending || issue.status === "resolved" || issue.status === "cancelled" || issue.status === "dropped"}
               onClick={async () => {
                 setRemindPending(true);
                 try {
@@ -780,6 +937,7 @@ function statusBadgeStyle(status: string): string {
     case "in_progress":
       return "text-accent bg-accent-soft";
     case "dropped":
+    case "cancelled":
       return "text-ink-3 bg-paper-2";
     default:
       return "text-ink bg-paper-2";
@@ -809,7 +967,7 @@ function TimelineUpdateNode({
   function nodeColor(): string {
     if (isResolved) return "bg-success";
     if (displayStatus === "in_progress") return "bg-accent";
-    if (displayStatus === "dropped") return "bg-ink-4";
+    if (displayStatus === "dropped" || displayStatus === "cancelled") return "bg-ink-4";
     if (isRaised) return "bg-ink";
     return "bg-ink-3";
   }

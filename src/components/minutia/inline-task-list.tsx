@@ -24,6 +24,7 @@ import {
 import { useWorkspaceDirectorySearch } from "@/lib/hooks/use-google-workspace";
 import { useOrgMembers } from "@/lib/hooks/use-org-members";
 import type { Issue, IssueCategory, IssueStatus } from "@/lib/types";
+import { isClosedStatus } from "@/lib/workflow";
 
 type AssigneePayload = { owner_user_id: string | null; owner_name: string };
 
@@ -74,7 +75,7 @@ function InlineTaskItem({
   const mentionRef = React.useRef<HTMLDivElement>(null);
   const itemRef = React.useRef<HTMLDivElement>(null);
 
-  const isChecked = issue.status === "resolved" || issue.status === "dropped";
+  const isChecked = isClosedStatus(issue.status);
 
   React.useEffect(() => {
     setEditValue(issue.title);
@@ -101,7 +102,7 @@ function InlineTaskItem({
 
   function handleCheckboxClick() {
     if (readOnly) return;
-    const newStatus: IssueStatus = isChecked ? "open" : "resolved";
+    const newStatus: IssueStatus = isChecked ? "assigned" : "resolved";
     onStatusChange(issue.id, newStatus);
   }
 

@@ -22,7 +22,11 @@ const PRIORITY_RANK: Record<Priority, number> = {
 };
 
 function isOpen(issue: Issue): boolean {
-  return issue.status !== "resolved" && issue.status !== "dropped";
+  return (
+    issue.status !== "resolved" &&
+    issue.status !== "dropped" &&
+    issue.status !== "cancelled"
+  );
 }
 
 function sortIssues(issues: Issue[]): Issue[] {

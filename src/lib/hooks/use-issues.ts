@@ -10,13 +10,43 @@ import { toast } from "sonner";
 import { createClient } from "@/lib/supabase/client";
 import { isFeatureGatingEnabled } from "@/lib/feature-access";
 import { isPendingDelete, clearPendingDelete } from "@/lib/pending-delete";
+import { STATUS_CONFIG, ACTIVE_ISSUE_STATUSES } from "@/lib/constants";
+import { isClosedStatus, statusTransitionEvent } from "@/lib/workflow";
 import type {
   Issue,
   IssueWithUpdates,
   IssueStatus,
   IssueUpdate,
+  TaskEvent,
+  TaskEventType,
 } from "@/lib/types";
 import type { CreateIssueInput } from "@/lib/schemas";
+
+type SupabaseClient = ReturnType<typeof createClient>;
+
+// Append-only history writer. Best-effort: a failed history insert must never
+// abort the user's actual action, so callers fire-and-forget / or await and
+// ignore the error deliberately.
+export async function logTaskEvent(
+  supabase: SupabaseClient,
+  params: {
+    issueId: string;
+    event: TaskEventType;
+    actor?: string;
+    payload?: Record<string, unknown>;
+  }
+): Promise<void> {
+  try {
+    await supabase.from("task_events").insert({
+      issue_id: params.issueId,
+      event: params.event,
+      actor: params.actor ?? "",
+      payload: params.payload ?? {},
+    });
+  } catch {
+    // history is non-critical; never surface a write failure to the user
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Query key factory
@@ -26,6 +56,7 @@ export const issueKeys = {
   list: (seriesId?: string) =>
     seriesId ? (["issues", seriesId] as const) : (["issues"] as const),
   detail: (id: string) => ["issues", "detail", id] as const,
+  taskEvents: (id: string) => ["issues", "task-events", id] as const,
 };
 
 type IssueListSnapshot = [readonly unknown[], Issue[] | undefined][];
@@ -112,12 +143,33 @@ export function useIssue(id: string) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("issues")
-        .select("*, updates:issue_updates(*), raised_in_meeting:meetings!raised_in_meeting_id(*)")
+        .select("*, updates:issue_updates(*), task_events(*), raised_in_meeting:meetings!raised_in_meeting_id(*)")
         .eq("id", id)
         .single();
 
       if (error) throw error;
       return data as unknown as IssueWithUpdates;
+    },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// useTaskEvents - the Phase 2 v2 history log (public.task_events) for one issue
+// ---------------------------------------------------------------------------
+export function useTaskEvents(issueId: string) {
+  const supabase = createClient();
+
+  return useQuery<TaskEvent[]>({
+    queryKey: issueKeys.taskEvents(issueId),
+    enabled: !!issueId,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("task_events")
+        .select("*")
+        .eq("issue_id", issueId)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return (data ?? []) as unknown as TaskEvent[];
     },
   });
 }
@@ -148,7 +200,7 @@ export async function countActiveIssuesForOrg(
     .from("issues")
     .select("id", { count: "exact", head: true })
     .in("series_id", seriesIds)
-    .in("status", ["open", "in_progress", "pending"]);
+    .in("status", [...ACTIVE_ISSUE_STATUSES]);
 
   if (countError) return null;
   return count ?? 0;
@@ -197,7 +249,7 @@ export function useCreateIssue() {
           due_date: input.due_date,
           raised_in_meeting_id: input.meeting_id,
           series_id: input.series_id,
-          status: "open" as IssueStatus,
+          status: "assigned" as IssueStatus,
           source: "manual",
           owner_user_id: input.owner_name ? null : user.id,
         })
@@ -205,6 +257,12 @@ export function useCreateIssue() {
         .single();
 
       if (error) throw error;
+      await logTaskEvent(supabase, {
+        issueId: (data as Issue).id,
+        event: "created",
+        actor: user.email ?? user.id,
+        payload: { title: input.title, status: "assigned" },
+      });
       return data as Issue;
     },
     onSuccess: (_data, variables) => {
@@ -222,14 +280,6 @@ export function useCreateIssue() {
 // ---------------------------------------------------------------------------
 // useUpdateIssueStatus - optimistic update + creates IssueUpdate record
 // ---------------------------------------------------------------------------
-const STATUS_LABEL: Record<string, string> = {
-  open: "open",
-  in_progress: "in progress",
-  pending: "pending",
-  resolved: "resolved",
-  dropped: "dropped",
-};
-
 type UpdateIssueStatusVars = {
   issueId: string;
   seriesId: string;
@@ -261,15 +311,30 @@ export function useUpdateIssueStatus() {
       const {
         data: { user },
       } = await supabase.auth.getUser();
+      const actor = user?.email ?? user?.id ?? "";
+      const nowIso = new Date().toISOString();
 
-      // Update the issue status
+      // Terminal/accept stamps travel with the status so the workflow fields
+      // (accepted_at/closed_at) never drift from the status itself.
+      const patch: Record<string, unknown> = {
+        status: newStatus,
+        resolved_in_meeting_id: newStatus === "resolved" ? meetingId : null,
+      };
+      if (newStatus === "accepted") {
+        patch.accepted_at = nowIso;
+        patch.accepted_by = actor;
+      }
+      if (newStatus === "resolved") {
+        patch.closed_at = nowIso;
+        patch.closed_by = actor;
+      } else if (isClosedStatus(oldStatus)) {
+        patch.closed_at = null;
+        patch.closed_by = "";
+      }
+
       const { data: issue, error: issueError } = await supabase
         .from("issues")
-        .update({
-          status: newStatus,
-          resolved_in_meeting_id:
-            newStatus === "resolved" ? meetingId : null,
-        })
+        .update(patch)
         .eq("id", issueId)
         .select()
         .single();
@@ -289,6 +354,13 @@ export function useUpdateIssueStatus() {
         });
 
       if (updateError) throw updateError;
+
+      await logTaskEvent(supabase, {
+        issueId,
+        event: statusTransitionEvent(oldStatus, newStatus),
+        actor,
+        payload: { from: oldStatus, to: newStatus },
+      });
 
       return issue as Issue;
     },
@@ -351,7 +423,7 @@ export function useUpdateIssueStatus() {
       // Universal one-tap Undo for any status change. Suppressed on the undo's
       // own success so undo-of-undo does not chain toasts.
       if (!variables.isUndo) {
-        toast(`Marked ${STATUS_LABEL[variables.newStatus] ?? variables.newStatus}`, {
+        toast(`Статус: ${STATUS_CONFIG[variables.newStatus]?.label ?? variables.newStatus}`, {
           action: {
             label: "Отменить",
             onClick: () =>
@@ -371,6 +443,10 @@ export function useUpdateIssueStatus() {
     onSettled: (_data, _error, variables) => {
       queryClient.invalidateQueries({
         queryKey: issueKeys.detail(variables.issueId),
+        refetchType: "inactive",
+      });
+      queryClient.invalidateQueries({
+        queryKey: issueKeys.taskEvents(variables.issueId),
         refetchType: "inactive",
       });
       if (variables.meetingId) {
@@ -525,6 +601,16 @@ export function useAssignIssue() {
         p_owner_name: owner_name ?? "",
       });
       if (error) throw error;
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      await logTaskEvent(supabase, {
+        issueId,
+        event: "assigned",
+        actor: user?.email ?? user?.id ?? "",
+        payload: { owner_name: owner_name ?? "", owner_user_id: owner_user_id ?? null },
+      });
     },
 
     onMutate: async ({ issueId, owner_user_id, owner_name }) => {
@@ -735,5 +821,78 @@ export function useDeleteIssue() {
       clearPendingDelete(issueId);
       queryClient.invalidateQueries({ queryKey: issueKeys.all });
     },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// useAcceptIssue - the assignee confirms wording + due date. Sets the accept
+// stamps atomically with the status (accepted_at/accepted_by) and logs the
+// accept event. Kept separate from a plain status change so the stamp can never
+// drift from the accepted status.
+// ---------------------------------------------------------------------------
+export function useAcceptIssue() {
+  const supabase = createClient();
+  const queryClient = useQueryClient();
+
+  return useMutation<void, Error, { issueId: string; seriesId: string }>({
+    mutationFn: async ({ issueId }) => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const actor = user?.email ?? user?.id ?? "";
+      const nowIso = new Date().toISOString();
+      const { error } = await supabase
+        .from("issues")
+        .update({ status: "accepted", accepted_at: nowIso, accepted_by: actor })
+        .eq("id", issueId);
+      if (error) throw error;
+      await logTaskEvent(supabase, { issueId, event: "accepted", actor });
+    },
+    onSettled: (_d, _e, v) => {
+      queryClient.invalidateQueries({ queryKey: issueKeys.all });
+      queryClient.invalidateQueries({ queryKey: issueKeys.detail(v.issueId) });
+      queryClient.invalidateQueries({ queryKey: issueKeys.taskEvents(v.issueId) });
+    },
+    meta: { errorMessage: "Не удалось подтвердить поручение." },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// useSetHold - pause / resume an issue via hold_reason + hold_until. Hold is a
+// branch, never a status: the issue keeps its current status while parked.
+// Resume passes reason="" + until=null and logs "resumed".
+// ---------------------------------------------------------------------------
+export function useSetHold() {
+  const supabase = createClient();
+  const queryClient = useQueryClient();
+
+  return useMutation<
+    void,
+    Error,
+    { issueId: string; seriesId: string; reason: string; until: string | null }
+  >({
+    mutationFn: async ({ issueId, reason, until }) => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      const actor = user?.email ?? user?.id ?? "";
+      const { error } = await supabase
+        .from("issues")
+        .update({ hold_reason: reason, hold_until: until })
+        .eq("id", issueId);
+      if (error) throw error;
+      await logTaskEvent(supabase, {
+        issueId,
+        event: reason || until ? "hold" : "resumed",
+        actor,
+        payload: { reason, until },
+      });
+    },
+    onSettled: (_d, _e, v) => {
+      queryClient.invalidateQueries({ queryKey: issueKeys.all });
+      queryClient.invalidateQueries({ queryKey: issueKeys.detail(v.issueId) });
+      queryClient.invalidateQueries({ queryKey: issueKeys.taskEvents(v.issueId) });
+    },
+    meta: { errorMessage: "Не удалось сохранить приостановку." },
   });
 }

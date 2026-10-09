@@ -16,9 +16,13 @@ import type { IssueStatus, SuggestionType } from "@/lib/types";
 
 const STATUS_PALETTE: Record<IssueStatus, string> = {
   open: "bg-paper-2 text-ink-2 ring-rule",
+  assigned: "bg-paper-2 text-ink-2 ring-rule",
+  accepted: "bg-accent-soft text-accent ring-accent/20",
   in_progress: "bg-accent-soft text-accent ring-accent/20",
   pending: "bg-warn-soft text-warn ring-warn/20",
+  under_review: "bg-warn-soft text-warn ring-warn/20",
   resolved: "bg-success-soft text-success ring-success/25",
+  cancelled: "bg-paper-2 text-ink-3 ring-rule",
   dropped: "bg-paper-2 text-ink-3 ring-rule",
 };
 

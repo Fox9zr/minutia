@@ -107,11 +107,13 @@ const CATEGORY_MAP: Record<string, IssueCategory> = {
 };
 
 const STATUS_MAP: Record<string, IssueStatus> = {
-  open: "open", new: "open", backlog: "open", todo: "open",
+  open: "assigned", new: "assigned", backlog: "assigned", todo: "assigned", assigned: "assigned",
+  accepted: "accepted", approved: "accepted",
   in_progress: "in_progress", "in progress": "in_progress", active: "in_progress", doing: "in_progress", wip: "in_progress",
-  pending: "pending", waiting: "pending", review: "pending", blocked: "pending",
+  pending: "pending", waiting: "pending", hold: "pending", blocked: "pending",
+  review: "under_review", "under review": "under_review", "in review": "under_review",
   resolved: "resolved", done: "resolved", closed: "resolved", completed: "resolved", fixed: "resolved",
-  dropped: "dropped", cancelled: "dropped", canceled: "dropped", wontfix: "dropped",
+  cancelled: "cancelled", canceled: "cancelled", dropped: "cancelled", wontfix: "cancelled",
 };
 
 const PRIORITY_MAP: Record<string, Priority> = {
@@ -129,7 +131,7 @@ function normalizeValue(field: FieldKey, raw: string): string | null {
     case "category":
       return CATEGORY_MAP[val.toLowerCase().replace(/[^a-z]/g, "")] ?? "action";
     case "status":
-      return STATUS_MAP[val.toLowerCase().replace(/[_-]/g, " ").trim()] ?? "open";
+      return STATUS_MAP[val.toLowerCase().replace(/[_-]/g, " ").trim()] ?? "assigned";
     case "priority":
       return PRIORITY_MAP[val.toLowerCase().replace(/[^a-z0-9]/g, "")] ?? "medium";
     case "due_date": {

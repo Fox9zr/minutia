@@ -11,6 +11,7 @@ import { IssueKey } from "./issue-key";
 import { PrefetchIssueLink } from "./prefetch-issue-link";
 import { PriorityIndicator } from "./priority-indicator";
 import { isDateOverdue, formatShortDate } from "@/lib/date-utils";
+import { isClosedStatus, effectiveDueDate } from "@/lib/workflow";
 
 interface IssueCardProps {
   issue: Issue;
@@ -25,7 +26,8 @@ export function IssueCard({
   onExpand,
   expanded,
 }: IssueCardProps) {
-  const overdue = issue.status !== "resolved" && isDateOverdue(issue.due_date);
+  const effectiveDue = effectiveDueDate(issue);
+  const overdue = !isClosedStatus(issue.status) && isDateOverdue(effectiveDue);
 
   function handleStatusChange(newStatus: IssueStatus) {
     onStatusChange?.(issue.id, newStatus);
@@ -42,7 +44,7 @@ export function IssueCard({
     }
   }
 
-  const isDone = issue.status === "resolved" || issue.status === "dropped";
+  const isDone = isClosedStatus(issue.status);
 
   return (
     <motion.article
@@ -90,7 +92,7 @@ export function IssueCard({
           <span className="text-xs text-ink-3">{issue.owner_name}</span>
         )}
 
-        {issue.due_date && (
+        {effectiveDue && (
           <span
             className={cn(
               "text-xs font-mono",
@@ -98,7 +100,7 @@ export function IssueCard({
             )}
           >
             {overdue && "Просрочено: "}
-            {formatShortDate(issue.due_date)}
+            {formatShortDate(effectiveDue)}
           </span>
         )}
       </div>
