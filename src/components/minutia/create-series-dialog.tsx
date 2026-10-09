@@ -7,6 +7,7 @@ import { motion } from "motion/react";
 import { createSeriesSchema, type CreateSeriesInput } from "@/lib/schemas";
 import { useCreateSeries } from "@/lib/hooks/use-series";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
+import { useThemeCatalog, activeGroupNames, activeTopicNames } from "@/lib/hooks/use-themes";
 import type { Cadence } from "@/lib/types";
 import {
   Dialog,
@@ -54,6 +55,8 @@ export function CreateSeriesDialog({
   });
 
   const selectedCadence = watch("cadence");
+  const { data: catalog } = useThemeCatalog();
+  const themeGroups = activeGroupNames(catalog ?? []);
 
   async function onSubmit(data: CreateSeriesInput) {
     await createSeries.mutateAsync(data);
@@ -143,6 +146,45 @@ export function CreateSeriesDialog({
                 </RadioGroupItem>
               ))}
             </RadioGroup>
+          </div>
+
+          {/* Theme (group + topic) from the catalog */}
+          <div className="space-y-2">
+            <Label htmlFor="series-theme-group" className="text-sm font-semibold text-ink">Тема</Label>
+            <div className="grid grid-cols-2 gap-2">
+              <Input
+                id="series-theme-group"
+                list="series-theme-group-list"
+                placeholder="Группа"
+                {...register("theme_group")}
+                className="h-11"
+              />
+              <Input
+                id="series-theme-topic"
+                list="series-theme-topic-list"
+                placeholder="Тема"
+                {...register("theme_subtopic")}
+                onChange={(e) => {
+                  register("theme_subtopic").onChange(e);
+                  const grp = (catalog ?? []).find(
+                    (r) => r.is_active && r.topic_name === e.target.value
+                  )?.group_name;
+                  if (grp) setValue("theme_group", grp, { shouldDirty: true });
+                }}
+                className="h-11"
+              />
+            </div>
+            <datalist id="series-theme-group-list">
+              {themeGroups.map((g) => (
+                <option key={g} value={g} />
+              ))}
+            </datalist>
+            <datalist id="series-theme-topic-list">
+              {activeTopicNames(catalog ?? [], watch("theme_group")).map((t) => (
+                <option key={t} value={t} />
+              ))}
+            </datalist>
+            <p className="text-xs text-ink-4">Тема из справочника; группа подставится автоматически</p>
           </div>
 
           {/* Default attendees */}

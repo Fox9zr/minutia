@@ -13,6 +13,7 @@ import {
   ClipboardCheck,
   LogOut,
   Building2,
+  Tags,
 } from "lucide-react";
 import { signOut } from "@/lib/supabase/auth-actions";
 import { useSeries } from "@/lib/hooks/use-series";
@@ -229,6 +230,22 @@ export function AppSidebar({ profile, organizations }: AppSidebarProps) {
               <Link href="/settings/directory">
                 <Users className="size-4" />
                 <span>Справочник</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              isActive={isActive(pathname, "/settings/themes")}
+              tooltip="Справочник тем"
+              className={cn(
+                "h-9 rounded-md px-3 gap-3 text-[14px] text-ink-2 transition-all",
+                isActive(pathname, "/settings/themes") && "text-ink font-medium"
+              )}
+            >
+              <Link href="/settings/themes">
+                <Tags className="size-4" />
+                <span>Темы</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

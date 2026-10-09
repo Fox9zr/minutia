@@ -46,6 +46,7 @@ import {
 } from "@/components/ui/dialog";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
 import { distinctThemeGroups } from "@/lib/theme-groups";
+import { useThemeCatalog, activeGroupNames, activeTopicNames } from "@/lib/hooks/use-themes";
 import { createSeriesSchema, type CreateSeriesInput } from "@/lib/schemas";
 import { useConfirm } from "@/components/ui/confirm";
 import { ShareButton } from "@/components/minutia/share-button";
@@ -453,10 +454,14 @@ function SeriesSettingsDialog({
   const updateSeries = useUpdateSeries();
   const deleteSeries = useDeleteSeries();
   const { data: allSeries } = useSeries();
-  const themeGroupOptions = React.useMemo(
-    () => distinctThemeGroups(allSeries ?? []),
-    [allSeries]
-  );
+  const { data: catalog } = useThemeCatalog();
+  const themeGroupOptions = React.useMemo(() => {
+    const set = new Set<string>([
+      ...activeGroupNames(catalog ?? []),
+      ...distinctThemeGroups(allSeries ?? []),
+    ]);
+    return [...set].sort((a, b) => a.localeCompare(b, "ru"));
+  }, [catalog, allSeries]);
   const { data: gcalStatus } = useGoogleCalendarStatus();
   const { data: calendarList } = useCalendarList();
   const linkCalendar = useLinkCalendar();
@@ -643,12 +648,25 @@ function SeriesSettingsDialog({
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="edit-theme-subtopic">Подтема</Label>
+            <Label htmlFor="edit-theme-subtopic">Тема (из справочника)</Label>
             <Input
               id="edit-theme-subtopic"
-              placeholder="Уточнение темы (необязательно)"
+              list="theme-topic-options"
+              placeholder="Тема (необязательно)"
               {...register("theme_subtopic")}
+              onChange={(e) => {
+                register("theme_subtopic").onChange(e);
+                const grp = (catalog ?? []).find(
+                  (r) => r.is_active && r.topic_name === e.target.value
+                )?.group_name;
+                if (grp) setValue("theme_group", grp, { shouldDirty: true });
+              }}
             />
+            <datalist id="theme-topic-options">
+              {activeTopicNames(catalog ?? [], watch("theme_group")).map((t) => (
+                <option key={t} value={t} />
+              ))}
+            </datalist>
           </div>
 
           <DialogFooter>
