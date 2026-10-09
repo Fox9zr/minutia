@@ -9,7 +9,8 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { applyOptimistic, patch } from "@/lib/optimistic";
 import { patchSeriesFields, isListCache } from "@/lib/optimistic-updates";
-import type { MeetingSeries, SeriesParticipantRole, SeriesWithMeetings } from "@/lib/types";
+import { isActiveStatus, isEffectiveOverdue } from "@/lib/workflow";
+import type { MeetingSeries, SeriesParticipantRole, SeriesWithMeetings, IssueStatus, Issue } from "@/lib/types";
 import type { CreateSeriesInput } from "@/lib/schemas";
 
 type SeriesListRow = MeetingSeries & { open_issues_count: number };
@@ -19,6 +20,7 @@ type SeriesListRow = MeetingSeries & { open_issues_count: number };
 // ---------------------------------------------------------------------------
 export const seriesKeys = {
   all: ["series"] as const,
+  tree: ["series", "tree"] as const,
   detail: (id: string) => ["series", id] as const,
   role: (id: string) => ["series", id, "participant-role"] as const,
 };
@@ -53,6 +55,74 @@ export function useSeries(enabled = true) {
         ...s,
         open_issues_count: s.issues?.[0]?.count ?? 0,
       }));
+    },
+  });
+}
+
+// ---------------------------------------------------------------------------
+// useSeriesTree - series with per-row hierarchy counters for the theme tree.
+//
+// Unlike useSeries (which returns only a raw issue count), this hook pulls the
+// minimal per-issue fields needed to evaluate the effective deadline, so the
+// tree can show open-issue and overdue counters per series without N+1
+// queries. Grouping into theme groups happens in the caller (lib/theme-groups).
+// ---------------------------------------------------------------------------
+export interface SeriesTreeRow {
+  id: string;
+  name: string;
+  description: string | null;
+  cadence: MeetingSeries["cadence"];
+  theme_group: string;
+  theme_subtopic: string;
+  updated_at: Date;
+  meetings_count: number;
+  open_issues_count: number;
+  overdue_count: number;
+}
+
+type TreeIssue = {
+  status: IssueStatus;
+  due_date: string | null;
+  hold_until: string | null;
+  hold_reason: string | null;
+};
+
+export function useSeriesTree(enabled = true) {
+  const supabase = createClient();
+
+  return useQuery<SeriesTreeRow[]>({
+    queryKey: seriesKeys.tree,
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("meeting_series")
+        .select(
+          "id, name, description, cadence, theme_group, theme_subtopic, updated_at, meetings(count), issues(status, due_date, hold_until, hold_reason)"
+        )
+        .order("name", { ascending: true });
+
+      if (error) throw error;
+
+      return (data ?? []).map((s: any): SeriesTreeRow => {
+        const issues: TreeIssue[] = (s.issues ?? []) as TreeIssue[];
+        const open = issues.filter((i) => isActiveStatus(i.status));
+        // due_date arrives as an ISO string over the wire; workflow helpers
+        // accept the Date-typed Issue shape but only ever call new Date(), so a
+        // narrowing cast is safe here.
+        const overdue = open.filter((i) => isEffectiveOverdue(i as unknown as Issue));
+        return {
+          id: s.id,
+          name: s.name,
+          description: s.description ?? null,
+          cadence: s.cadence,
+          theme_group: s.theme_group ?? "",
+          theme_subtopic: s.theme_subtopic ?? "",
+          updated_at: s.updated_at,
+          meetings_count: s.meetings?.[0]?.count ?? 0,
+          open_issues_count: open.length,
+          overdue_count: overdue.length,
+        };
+      });
     },
   });
 }

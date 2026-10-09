@@ -38,6 +38,7 @@ import {
   useReorderIssues,
 } from "@/lib/hooks/use-issues";
 import { useSeries } from "@/lib/hooks/use-series";
+import { groupByTheme } from "@/lib/theme-groups";
 import { useAllMeetings } from "@/lib/hooks/use-meetings";
 import { useDecisions } from "@/lib/hooks/use-decisions";
 import { CADENCE_LABELS, STATUS_CONFIG, PRIORITY_CONFIG } from "@/lib/constants";
@@ -557,6 +558,9 @@ function OutstandingWidget({
     (s) => (grouped.get(s.id)?.length ?? 0) === 0
   ).length;
 
+  // Phase 2 v2 P0.3: wrap the by-series view in its top-level theme groups.
+  const themeGroups = React.useMemo(() => groupByTheme(seriesList), [seriesList]);
+
   return (
     <WidgetShell id={id} index={widgetIndex}>
       <DndContext
@@ -695,8 +699,19 @@ function OutstandingWidget({
             </Button>
           </div>
         ) : bySeries ? (
-          <div className="divide-y divide-rule">
-            {seriesList.map((series) => {
+          <div className="space-y-6">
+            {themeGroups.map((tg) => {
+              const seriesWithIssues = tg.series.filter(
+                (s) => (grouped.get(s.id)?.length ?? 0) > 0
+              );
+              if (seriesWithIssues.length === 0) return null;
+              return (
+                <div key={tg.key}>
+                  <h4 className="mb-2 text-[11px] font-medium uppercase tracking-[0.1em] text-ink-4">
+                    {tg.label}
+                  </h4>
+                  <div className="divide-y divide-rule">
+            {seriesWithIssues.map((series) => {
               const seriesIssues = (grouped.get(series.id) ?? []).slice().sort(byManualOrder);
               if (seriesIssues.length === 0) return null;
 
@@ -777,6 +792,10 @@ function OutstandingWidget({
                         Show less
                       </button>
                     )}
+                  </div>
+                </div>
+              );
+            })}
                   </div>
                 </div>
               );

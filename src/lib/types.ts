@@ -118,6 +118,11 @@ export interface MeetingSeries {
   gcal_series_key: string | null;
   gcal_series_kind: "recurring" | "adhoc" | null;
   gcal_last_synced_at: Date | null;
+  // Phase 2 v2 P0.3 theme hierarchy: a series belongs to a top-level theme
+  // group (text, SSOT — no separate groups table) and may carry a subtopic.
+  // '' means "ungrouped" and renders under the synthetic "Без группы" bucket.
+  theme_group: string;
+  theme_subtopic: string;
   created_at: Date;
   updated_at: Date;
 }

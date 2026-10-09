@@ -23,6 +23,9 @@ export const createSeriesSchema = z.object({
   description: z.string().optional(),
   cadence: cadenceEnum,
   default_attendees: z.array(z.string()),
+  // Phase 2 v2 P0.3 theme hierarchy (optional; '' = ungrouped).
+  theme_group: z.string().max(200).optional(),
+  theme_subtopic: z.string().max(200).optional(),
 });
 
 export const createMeetingSchema = z.object({

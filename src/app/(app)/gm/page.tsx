@@ -13,6 +13,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "@/components/minutia";
 import { PRIORITY_CONFIG } from "@/lib/constants";
 import { effectiveDueDate, isEffectiveOverdue } from "@/lib/workflow";
+import { themeGroupLabel, UNGROUPED_THEME_LABEL } from "@/lib/theme-groups";
 import { formatShortDate } from "@/lib/date-utils";
 import type { Issue, IssueStatus } from "@/lib/types";
 
@@ -30,22 +31,43 @@ export default function GmReviewPage() {
     return map;
   }, [seriesList]);
 
+  // series id → its theme group label ('' → "Без группы").
+  const seriesThemeMap = React.useMemo(() => {
+    const map = new Map<string, string>();
+    for (const s of seriesList ?? []) map.set(s.id, themeGroupLabel(s.theme_group));
+    return map;
+  }, [seriesList]);
+
   const reviewIssues = React.useMemo(
     () => (issues ?? []).filter((i) => i.status === "under_review"),
     [issues]
   );
 
+  // Group review issues into the theme hierarchy: theme group → series → issues.
   const grouped = React.useMemo(() => {
-    const map = new Map<string, Issue[]>();
+    const byTheme = new Map<string, Map<string, Issue[]>>();
     for (const issue of reviewIssues) {
-      const arr = map.get(issue.series_id) ?? [];
+      const theme = seriesThemeMap.get(issue.series_id) ?? UNGROUPED_THEME_LABEL;
+      const seriesBucket = byTheme.get(theme) ?? new Map<string, Issue[]>();
+      const arr = seriesBucket.get(issue.series_id) ?? [];
       arr.push(issue);
-      map.set(issue.series_id, arr);
+      seriesBucket.set(issue.series_id, arr);
+      byTheme.set(theme, seriesBucket);
     }
-    return [...map.entries()].sort((a, b) =>
-      (seriesMap.get(a[0]) ?? "").localeCompare(seriesMap.get(b[0]) ?? "")
-    );
-  }, [reviewIssues, seriesMap]);
+    return [...byTheme.entries()]
+      .sort((a, b) => {
+        const au = a[0] === UNGROUPED_THEME_LABEL;
+        const bu = b[0] === UNGROUPED_THEME_LABEL;
+        if (au !== bu) return au ? 1 : -1;
+        return a[0].localeCompare(b[0], "ru");
+      })
+      .map(([theme, seriesBucket]) => ({
+        theme,
+        series: [...seriesBucket.entries()].sort((a, b) =>
+          (seriesMap.get(a[0]) ?? "").localeCompare(seriesMap.get(b[0]) ?? "", "ru")
+        ),
+      }));
+  }, [reviewIssues, seriesMap, seriesThemeMap]);
 
   function act(issue: Issue, newStatus: IssueStatus) {
     updateStatus.mutate(
@@ -93,12 +115,17 @@ export default function GmReviewPage() {
           <EmptyState variant="no-actions" />
         ) : (
           <div className="space-y-8">
-            {grouped.map(([seriesId, list]) => (
-              <div key={seriesId}>
-                <h2 className="mb-2 text-[11px] font-medium uppercase tracking-[0.1em] text-ink-4">
-                  {seriesMap.get(seriesId) ?? "Серия"}
+            {grouped.map((group) => (
+              <div key={group.theme} className="space-y-5">
+                <h2 className="font-display text-lg font-medium text-ink">
+                  {group.theme}
                 </h2>
-                <div className="space-y-3">
+                {group.series.map(([seriesId, list]) => (
+                  <div key={seriesId}>
+                    <h3 className="mb-2 text-[11px] font-medium uppercase tracking-[0.1em] text-ink-4">
+                      {seriesMap.get(seriesId) ?? "Серия"}
+                    </h3>
+                    <div className="space-y-3">
                   {list.map((issue) => {
                     const due = effectiveDueDate(issue);
                     const overdue = isEffectiveOverdue(issue);
@@ -172,7 +199,9 @@ export default function GmReviewPage() {
                       </div>
                     );
                   })}
-                </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>

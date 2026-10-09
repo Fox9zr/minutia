@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "motion/react";
 import {
   useSeriesDetail,
+  useSeries,
   useSeriesParticipantRole,
   useSeriesRealtime,
   useUpdateSeries,
@@ -44,6 +45,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { CADENCES, CADENCE_LABELS } from "@/lib/constants";
+import { distinctThemeGroups } from "@/lib/theme-groups";
 import { createSeriesSchema, type CreateSeriesInput } from "@/lib/schemas";
 import { useConfirm } from "@/components/ui/confirm";
 import { ShareButton } from "@/components/minutia/share-button";
@@ -444,12 +446,17 @@ function SeriesSettingsDialog({
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  series: { id: string; name: string; description: string | null; cadence: Cadence; default_attendees: string[]; gcal_calendar_id: string | null; gcal_sync_enabled: boolean };
+  series: { id: string; name: string; description: string | null; cadence: Cadence; default_attendees: string[]; gcal_calendar_id: string | null; gcal_sync_enabled: boolean; theme_group: string; theme_subtopic: string };
 }) {
   const router = useRouter();
   const confirm = useConfirm();
   const updateSeries = useUpdateSeries();
   const deleteSeries = useDeleteSeries();
+  const { data: allSeries } = useSeries();
+  const themeGroupOptions = React.useMemo(
+    () => distinctThemeGroups(allSeries ?? []),
+    [allSeries]
+  );
   const { data: gcalStatus } = useGoogleCalendarStatus();
   const { data: calendarList } = useCalendarList();
   const linkCalendar = useLinkCalendar();
@@ -468,6 +475,8 @@ function SeriesSettingsDialog({
       description: series.description ?? "",
       cadence: series.cadence,
       default_attendees: series.default_attendees ?? [],
+      theme_group: series.theme_group ?? "",
+      theme_subtopic: series.theme_subtopic ?? "",
     },
   });
 
@@ -613,6 +622,33 @@ function SeriesSettingsDialog({
                 </SelectContent>
               </Select>
             )}
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-theme-group">Тема (группа)</Label>
+            <Input
+              id="edit-theme-group"
+              list="theme-group-options"
+              placeholder="Например: Стратегия и цели"
+              {...register("theme_group")}
+            />
+            <datalist id="theme-group-options">
+              {themeGroupOptions.map((group) => (
+                <option key={group} value={group} />
+              ))}
+            </datalist>
+            <p className="text-[10px] text-ink-4">
+              Выберите существующую группу или введите новую
+            </p>
+          </div>
+
+          <div className="space-y-1.5">
+            <Label htmlFor="edit-theme-subtopic">Подтема</Label>
+            <Input
+              id="edit-theme-subtopic"
+              placeholder="Уточнение темы (необязательно)"
+              {...register("theme_subtopic")}
+            />
           </div>
 
           <DialogFooter>
