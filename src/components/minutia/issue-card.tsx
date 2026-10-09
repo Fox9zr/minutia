@@ -28,6 +28,11 @@ export function IssueCard({
 }: IssueCardProps) {
   const effectiveDue = effectiveDueDate(issue);
   const overdue = !isClosedStatus(issue.status) && isDateOverdue(effectiveDue);
+  // Phase 2 v2 P1: соисполнители (co_owners, через запятую) — только счётчик в списке.
+  const coOwnerCount = (issue.co_owners ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean).length;
 
   function handleStatusChange(newStatus: IssueStatus) {
     onStatusChange?.(issue.id, newStatus);
@@ -89,7 +94,14 @@ export function IssueCard({
         <CategoryBadge category={issue.category} />
 
         {issue.owner_name && (
-          <span className="text-xs text-ink-3">{issue.owner_name}</span>
+          <span className="text-xs text-ink-3">
+            {issue.owner_name}
+            {coOwnerCount > 0 && (
+              <span className="ml-1 text-ink-4" title={issue.co_owners ?? undefined}>
+                +{coOwnerCount} соисп.
+              </span>
+            )}
+          </span>
         )}
 
         {effectiveDue && (

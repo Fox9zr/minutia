@@ -4,6 +4,7 @@ import { resolveSenderFrom, isDeliverableSender } from "@/lib/email-sender";
 import { getInstanceConfigMap } from "@/lib/instance-config";
 import {
   buildSlackMessage,
+  buildAbsenceLookup,
   buildWebhookPayload,
   formatOwnerEmail,
   formatReminderDigest,
@@ -89,20 +90,25 @@ export async function POST(
     }
   }
 
-  const owners = gatherOwnerReminders(issues, profilesById);
-
-  // People directory: real emails for owners without accounts (matched by full_name)
+  // People directory: real emails + absence for owners without accounts
+  // (matched by full_name). Phase 2 v2 P1.
   const directoryEmails = new Map<string, string>();
-  {
-    const { data: dirRows } = await admin
-      .from("people_directory")
-      .select("full_name, email");
-    for (const row of (dirRows ?? []) as { full_name: string; email: string }[]) {
-      if (row.full_name && row.email && !directoryEmails.has(row.full_name)) {
-        directoryEmails.set(row.full_name, row.email);
-      }
+  const { data: dirRows } = await admin
+    .from("people_directory")
+    .select("full_name, email, absent_until");
+  const dirList = (dirRows ?? []) as {
+    full_name: string;
+    email: string;
+    absent_until: string | null;
+  }[];
+  for (const row of dirList) {
+    if (row.full_name && row.email && !directoryEmails.has(row.full_name)) {
+      directoryEmails.set(row.full_name, row.email);
     }
   }
+  const absence = buildAbsenceLookup(dirList);
+
+  const owners = gatherOwnerReminders(issues, profilesById, { absence });
   for (const owner of owners) {
     if (!owner.ownerEmail && owner.ownerName) {
       const dirEmail = directoryEmails.get(owner.ownerName.trim());
@@ -154,6 +160,9 @@ export async function POST(
 
     if (channel === "email") {
       for (const owner of owners) {
+        // Phase 2 v2 P1: пока ответственный отсутствует — напоминание не шлём
+        // (оно появится в дайджесте с пометкой, но email откладывается).
+        if (owner.absentUntil) continue;
         // Daiko demo fallback: derive demo email from owner name when no account exists
         const translitMap: Record<string, string> = {а:'a',б:'b',в:'v',г:'g',д:'d',е:'e',ё:'e',ж:'zh',з:'z',и:'i',й:'y',к:'k',л:'l',м:'m',н:'n',о:'o',п:'p',р:'r',с:'s',т:'t',у:'u',ф:'f',х:'h',ц:'ts',ч:'ch',ш:'sh',щ:'sch',ъ:'',ы:'y',ь:'',э:'e',ю:'yu',я:'ya'};
         const translit = (str: string) => str.toLowerCase().split('').map(ch => translitMap[ch] ?? ch).join('');

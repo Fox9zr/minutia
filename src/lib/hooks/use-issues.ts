@@ -484,6 +484,7 @@ export function useUpdateIssue() {
       due_date?: string | null;
       priority?: string;
       proposed_due_date?: string | null;
+      co_owners?: string | null;
     },
     {
       previousIssueLists: IssueListSnapshot;

@@ -235,6 +235,61 @@ function InlineEditText({
 }
 
 // ---------------------------------------------------------------------------
+// Co-owners editor (Phase 2 v2 P1): свободный список соисполнителей строкой
+// через запятую. Главный ответственный — отдельное поле (MemberCombobox выше);
+// здесь только соисполнители.
+// ---------------------------------------------------------------------------
+
+function CoOwnersEditor({
+  value,
+  onSave,
+}: {
+  value: string;
+  onSave: (v: string) => void;
+}) {
+  const [draft, setDraft] = React.useState(value);
+  React.useEffect(() => {
+    setDraft(value);
+  }, [value]);
+  const dirty = draft.trim() !== value.trim();
+
+  function commit() {
+    if (dirty) onSave(draft.trim());
+  }
+
+  return (
+    <div className="flex min-w-0 flex-1 items-center gap-2">
+      <input
+        type="text"
+        value={draft}
+        onChange={(e) => setDraft(e.target.value)}
+        onBlur={commit}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            e.preventDefault();
+            commit();
+          }
+        }}
+        placeholder="через запятую"
+        aria-label="Соисполнители, через запятую"
+        className="w-full max-w-md rounded-md border border-rule bg-transparent px-2 py-0.5 text-sm text-ink-2 focus:border-ink-3 focus:outline-none"
+      />
+      {dirty && (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="h-7 text-xs"
+          onClick={commit}
+        >
+          Сохранить
+        </Button>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Issue Detail Content
 // ---------------------------------------------------------------------------
 
@@ -537,6 +592,15 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
                   owner_name: payload.owner_name,
                 })
               }
+            />
+          </div>
+
+          {/* Co-owners (соисполнители) */}
+          <div className="flex items-center gap-2 text-sm">
+            <span className="text-ink-3 w-28 shrink-0 whitespace-nowrap">Соисполнители</span>
+            <CoOwnersEditor
+              value={issue.co_owners ?? ""}
+              onSave={(v) => handleFieldSave("co_owners", v)}
             />
           </div>
 

@@ -132,6 +132,7 @@ export default function DirectoryPage() {
                 <th className="p-2 font-medium">ФИО</th>
                 <th className="p-2 font-medium">Email</th>
                 <th className="p-2 font-medium">Должность</th>
+                <th className="p-2 font-medium w-40">Отсутствует до</th>
                 <th className="p-2 font-medium w-24">Действия</th>
               </tr>
             </thead>
@@ -143,6 +144,14 @@ export default function DirectoryPage() {
                       <td className="p-2"><Input value={editing.full_name} onChange={(e) => setEditing({ ...editing, full_name: e.target.value })} /></td>
                       <td className="p-2"><Input value={editing.email} onChange={(e) => setEditing({ ...editing, email: e.target.value })} /></td>
                       <td className="p-2"><Input value={editing.position} onChange={(e) => setEditing({ ...editing, position: e.target.value })} /></td>
+                      <td className="p-2">
+                        <Input
+                          type="date"
+                          aria-label="Отсутствует до"
+                          value={editing.absent_until ?? ""}
+                          onChange={(e) => setEditing({ ...editing, absent_until: e.target.value || null })}
+                        />
+                      </td>
                       <td className="p-2 whitespace-nowrap">
                         <Button size="sm" disabled={saveMutation.isPending} onClick={() => saveMutation.mutate(editing)}>Сохранить</Button>{" "}
                         <Button size="sm" variant="ghost" onClick={() => setEditing(null)}>Отмена</Button>
@@ -153,6 +162,11 @@ export default function DirectoryPage() {
                       <td className="p-2">{p.full_name}{!p.active && <span className="ml-2 text-xs text-ink-4">(неактивен)</span>}</td>
                       <td className="p-2 font-mono text-xs">{p.email || "—"}</td>
                       <td className="p-2 text-ink-3">{p.position || "—"}</td>
+                      <td className="p-2 font-mono text-xs">
+                        {p.absent_until
+                          ? `до ${p.absent_until.slice(8, 10)}.${p.absent_until.slice(5, 7)}.${p.absent_until.slice(0, 4)}`
+                          : "—"}
+                      </td>
                       <td className="p-2 whitespace-nowrap">
                         <Button size="sm" variant="ghost" onClick={() => setEditing(p)}>Изменить</Button>{" "}
                         <Button size="sm" variant="ghost" className="text-red-600" disabled={deleteMutation.isPending} onClick={() => { if (confirm(`Удалить ${p.full_name}?`)) deleteMutation.mutate(p.id); }}>
@@ -164,7 +178,7 @@ export default function DirectoryPage() {
                 </tr>
               ))}
               {people.length === 0 && (
-                <tr><td colSpan={4} className="p-4 text-center text-ink-3">Ничего не найдено</td></tr>
+                <tr><td colSpan={5} className="p-4 text-center text-ink-3">Ничего не найдено</td></tr>
               )}
             </tbody>
           </table>

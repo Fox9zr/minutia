@@ -866,6 +866,11 @@ function IssueRow({
     disabled: !draggable,
   });
   const isOwnerActive = activeOwnerKey !== null && activeOwnerKey === ownerKeyOf(issue);
+  // Phase 2 v2 P1: соисполнители (co_owners, через запятую) — компактный счётчик.
+  const coOwnerCount = (issue.co_owners ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean).length;
 
   React.useEffect(() => {
     if (focused && ref.current) {
@@ -921,19 +926,29 @@ function IssueRow({
           </div>
           <div data-testid="issue-assignee-lane" className="hidden size-6 items-center justify-center justify-self-center sm:flex">
             {issue.owner_name ? (
-              <HintTooltip label={`Assignee: ${issue.owner_name}`} side="left">
-                <button
-                  type="button"
-                  aria-label={`Assignee: ${issue.owner_name}`}
-                  aria-pressed={isOwnerActive}
-                  onClick={() => onOwnerClick(issue)}
-                  className={cn(
-                    "flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-ink outline-none transition-colors hover:bg-paper-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-paper",
-                    isOwnerActive ? "bg-accent/20 ring-1 ring-accent/40" : "bg-paper-3"
+              <HintTooltip
+                label={`Assignee: ${issue.owner_name}${coOwnerCount > 0 ? ` (+${coOwnerCount} соисп.)` : ""}`}
+                side="left"
+              >
+                <span className="relative inline-flex">
+                  <button
+                    type="button"
+                    aria-label={`Assignee: ${issue.owner_name}`}
+                    aria-pressed={isOwnerActive}
+                    onClick={() => onOwnerClick(issue)}
+                    className={cn(
+                      "flex size-6 items-center justify-center rounded-full text-[10px] font-medium text-ink outline-none transition-colors hover:bg-paper-2 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 focus-visible:ring-offset-paper",
+                      isOwnerActive ? "bg-accent/20 ring-1 ring-accent/40" : "bg-paper-3"
+                    )}
+                  >
+                    {issue.owner_name.charAt(0).toUpperCase()}
+                  </button>
+                  {coOwnerCount > 0 && (
+                    <span className="pointer-events-none absolute -right-1.5 -top-1.5 rounded-full bg-accent px-1 text-[8px] font-semibold leading-3 text-white">
+                      +{coOwnerCount}
+                    </span>
                   )}
-                >
-                  {issue.owner_name.charAt(0).toUpperCase()}
-                </button>
+                </span>
               </HintTooltip>
             ) : null}
           </div>

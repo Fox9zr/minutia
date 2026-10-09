@@ -5,6 +5,8 @@ import { getInstanceConfigMap } from "@/lib/instance-config";
 import {
   formatOwnerEmail,
   gatherOwnerReminders,
+  isAbsentOn,
+  mskTodayISO,
   type ReminderContext,
   type ReminderProfile,
 } from "@/lib/reminders";
@@ -82,14 +84,23 @@ export async function POST(
     return NextResponse.json({ error: "Не удалось определить ответственного" }, { status: 400 });
   }
 
-  // People directory fallback for owners without accounts
-  if (!owner.ownerEmail && owner.ownerName) {
-    const { data: dirRow } = await admin
-      .from("people_directory")
-      .select("email")
-      .eq("full_name", owner.ownerName.trim())
-      .maybeSingle();
-    if (dirRow?.email) owner.ownerEmail = dirRow.email;
+  // People directory: email fallback for owners without accounts + absence.
+  const { data: dirRow } = await admin
+    .from("people_directory")
+    .select("email, absent_until")
+    .eq("full_name", (owner.ownerName ?? "").trim())
+    .maybeSingle();
+  if (!owner.ownerEmail && owner.ownerName && dirRow?.email) {
+    owner.ownerEmail = dirRow.email;
+  }
+
+  // Phase 2 v2 P1: пока ответственный отсутствует, напоминание не отправляем.
+  if (isAbsentOn(dirRow?.absent_until, mskTodayISO())) {
+    const [y, m, d] = (dirRow!.absent_until as string).slice(0, 10).split("-");
+    return NextResponse.json(
+      { error: `Ответственный отсутствует до ${d}.${m} — напоминание отложено` },
+      { status: 409 }
+    );
   }
 
   // No silent demo-email fallback (review finding R2): require a real address

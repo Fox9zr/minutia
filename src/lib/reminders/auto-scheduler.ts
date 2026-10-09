@@ -90,6 +90,14 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
         FROM issues i
         WHERE i.status IN ('open','in_progress','pending')
           AND i.due_date IS NOT NULL
+          -- Phase 2 v2 P1: пока ответственный отсутствует (people_directory.absent_until
+          -- >= сегодня), его напоминания откладываются: кандидат не берётся в тик.
+          AND NOT EXISTS (
+            SELECT 1 FROM people_directory pd
+            WHERE pd.full_name = i.owner_name
+              AND pd.absent_until IS NOT NULL
+              AND pd.absent_until >= (now() AT TIME ZONE $2)::date
+          )
           AND i.due_date <= ((now() AT TIME ZONE $2)::date + make_interval(days => $3))
           AND NOT EXISTS (
             SELECT 1 FROM reminder_log rl
@@ -123,6 +131,13 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
         FROM issues i
         WHERE i.status IN ('open','in_progress','pending')
           AND i.accepted_at IS NULL
+          -- Phase 2 v2 P1: отсутствующего ответственного не беспокоим повторами.
+          AND NOT EXISTS (
+            SELECT 1 FROM people_directory pd
+            WHERE pd.full_name = i.owner_name
+              AND pd.absent_until IS NOT NULL
+              AND pd.absent_until >= (now() AT TIME ZONE $2)::date
+          )
           AND EXISTS (SELECT 1 FROM reminder_log d WHERE d.issue_id=i.id AND d.kind='due' AND d.status='sent' AND d.due_date_value=i.due_date)
       ),
       elig AS (

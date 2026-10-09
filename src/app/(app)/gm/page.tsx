@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { ShieldCheck, Check, RotateCcw, X } from "lucide-react";
 import { toast } from "sonner";
 import { useIssues, useUpdateIssueStatus } from "@/lib/hooks/use-issues";
@@ -24,6 +25,45 @@ export default function GmReviewPage() {
   const { data: issues, isLoading } = useIssues();
   const { data: seriesList } = useSeries();
   const updateStatus = useUpdateIssueStatus();
+
+  // Phase 2 v2 P1: кто сейчас отсутствует (people_directory.absent_until >= сегодня).
+  // Такой ответственный помечается в дайджесте; соисполнители (co_owners) здесь
+  // намеренно НЕ выводятся — только главный ответственный.
+  const { data: directory } = useQuery<{
+    people: { full_name: string; absent_until: string | null }[];
+  }>({
+    queryKey: ["directory"],
+    queryFn: async () => {
+      const res = await fetch("/api/directory");
+      if (!res.ok) return { people: [] };
+      return res.json();
+    },
+  });
+
+  const absentByName = React.useMemo(() => {
+    const today = new Date(
+      Date.now() + (3 * 60 + new Date().getTimezoneOffset()) * 60_000
+    )
+      .toISOString()
+      .slice(0, 10);
+    const map = new Map<string, string>();
+    for (const p of directory?.people ?? []) {
+      if (p.absent_until && p.absent_until.slice(0, 10) >= today) {
+        map.set(
+          p.full_name.trim().toLowerCase().replace(/\s+/g, " "),
+          p.absent_until.slice(0, 10)
+        );
+      }
+    }
+    return map;
+  }, [directory]);
+
+  function absenceFor(name: string | null | undefined): string | null {
+    if (!name) return null;
+    return (
+      absentByName.get(name.trim().toLowerCase().replace(/\s+/g, " ")) ?? null
+    );
+  }
 
   const seriesMap = React.useMemo(() => {
     const map = new Map<string, string>();
@@ -129,6 +169,7 @@ export default function GmReviewPage() {
                   {list.map((issue) => {
                     const due = effectiveDueDate(issue);
                     const overdue = isEffectiveOverdue(issue);
+                    const absent = absenceFor(issue.owner_name);
                     return (
                       <div
                         key={issue.id}
@@ -154,6 +195,14 @@ export default function GmReviewPage() {
                             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-ink-3">
                               <StatusChip status={issue.status} readonly />
                               {issue.owner_name && <span>{issue.owner_name}</span>}
+                              {absent && (
+                                <span
+                                  className="text-amber-700"
+                                  title="Ответственный отсутствует"
+                                >
+                                  Ответственный отсутствует до {absent.slice(8, 10)}.{absent.slice(5, 7)}
+                                </span>
+                              )}
                               {due && (
                                 <span
                                   className={overdue ? "text-accent font-mono" : "font-mono"}

@@ -9,6 +9,19 @@ function ownerLabel(owner: OwnerReminder): string {
   return owner.ownerName?.trim() || "Без ответственного";
 }
 
+// Phase 2 v2 P1: an owner who is currently absent keeps their items in the
+// digest but the entry is flagged, so a paused reminder is not read as live.
+function formatDayMonth(iso: string): string {
+  const [y, m, d] = iso.slice(0, 10).split("-");
+  return d && m ? `${d}.${m}` : iso;
+}
+
+function absentMarker(owner: OwnerReminder): string {
+  return owner.absentUntil
+    ? ` (Ответственный отсутствует до ${formatDayMonth(owner.absentUntil)})`
+    : "";
+}
+
 function issueLine(issue: Issue): string {
   return `${issue.title} (#${issue.issue_number})`;
 }
@@ -32,7 +45,7 @@ function leadLine(owners: OwnerReminder[], ctx: ReminderContext): string {
 function renderMarkdown(owners: OwnerReminder[], ctx: ReminderContext): string {
   const lines = [`# Открытые поручения: ${ctx.seriesName}`, "", leadLine(owners, ctx), ""];
   for (const owner of owners) {
-    lines.push(`## ${ownerLabel(owner)}`);
+    lines.push(`## ${ownerLabel(owner)}${absentMarker(owner)}`);
     for (const issue of owner.issues) lines.push(`- ${issueLine(issue)}`);
     lines.push("");
   }
@@ -43,7 +56,7 @@ function renderMarkdown(owners: OwnerReminder[], ctx: ReminderContext): string {
 function renderText(owners: OwnerReminder[], ctx: ReminderContext): string {
   const lines = [`Открытые поручения: ${ctx.seriesName}`, "", leadLine(owners, ctx), ""];
   for (const owner of owners) {
-    lines.push(`${ownerLabel(owner)}:`);
+    lines.push(`${ownerLabel(owner)}${absentMarker(owner)}:`);
     for (const issue of owner.issues) lines.push(`  - ${issueLine(issue)}`);
     lines.push("");
   }
@@ -68,7 +81,7 @@ function renderHtml(owners: OwnerReminder[], ctx: ReminderContext, respondUrls?:
         .join("");
       return `
         <div style="margin-top:20px;">
-          <p style="margin:0 0 6px;color:#6b665f;font-size:11px;font-weight:700;line-height:16px;text-transform:uppercase;letter-spacing:.08em;" class="m-muted">${escapeHtml(ownerLabel(owner))}</p>
+          <p style="margin:0 0 6px;color:#6b665f;font-size:11px;font-weight:700;line-height:16px;text-transform:uppercase;letter-spacing:.08em;" class="m-muted">${escapeHtml(ownerLabel(owner))}${owner.absentUntil ? ` <span style="color:#b45309;">(Ответственный отсутствует до ${formatDayMonth(owner.absentUntil)})</span>` : ""}</p>
           <ul style="margin:0;padding-left:18px;">${items}</ul>
         </div>`;
     })
@@ -116,7 +129,7 @@ export function buildSlackMessage(owners: OwnerReminder[], ctx: ReminderContext)
 
   for (const owner of owners) {
     const text = [
-      `*${ownerLabel(owner)}*`,
+      `*${ownerLabel(owner)}*${absentMarker(owner)}`,
       ...owner.issues.map((issue) => `• ${issueLine(issue)}`),
     ].join("\n");
     blocks.push({ type: "section", text: { type: "mrkdwn", text } });
