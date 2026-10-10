@@ -117,9 +117,9 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
           )
         ORDER BY i.due_date ASC LIMIT $1
       )
-      INSERT INTO reminder_log (issue_id, kind, due_date_value, status, attempts, claim_token, updated_at)
-      SELECT c.id, 'due', c.due_date, 'pending', 1, gen_random_uuid(), now() FROM cand c
-      ON CONFLICT (issue_id, due_date_value) WHERE kind = 'due'
+      INSERT INTO reminder_log (issue_id, kind, channel, due_date_value, status, attempts, claim_token, updated_at)
+      SELECT c.id, 'due', 'email', c.due_date, 'pending', 1, gen_random_uuid(), now() FROM cand c
+      ON CONFLICT (issue_id, channel, due_date_value) WHERE kind = 'due'
       DO UPDATE SET status='pending', attempts = reminder_log.attempts + 1,
              claim_token = gen_random_uuid(), updated_at = now()
       WHERE reminder_log.status = 'failed' AND reminder_log.attempts < $4 AND reminder_log.updated_at < $5
@@ -166,9 +166,9 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
                 OR (r.status = 'pending' AND r.updated_at >= now() - interval '30 minutes')))
         LIMIT $1
       )
-      INSERT INTO reminder_log (issue_id, kind, due_date_value, recipient_email, status, attempts, claim_token, updated_at)
-      SELECT e.id, 'repeat', NULL, NULL, 'pending', 1, gen_random_uuid(), now() FROM elig e
-      ON CONFLICT (issue_id, send_date_msk) WHERE kind = 'repeat'
+      INSERT INTO reminder_log (issue_id, kind, channel, due_date_value, recipient_email, status, attempts, claim_token, updated_at)
+      SELECT e.id, 'repeat', 'email', NULL, NULL, 'pending', 1, gen_random_uuid(), now() FROM elig e
+      ON CONFLICT (issue_id, channel, send_date_msk) WHERE kind = 'repeat'
       DO UPDATE SET status='pending', attempts = reminder_log.attempts + 1,
              claim_token = gen_random_uuid(), updated_at = now()
       WHERE reminder_log.status = 'failed' AND reminder_log.attempts < $4 AND reminder_log.updated_at < $5
