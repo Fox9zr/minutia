@@ -73,6 +73,49 @@ export async function POST(
     return NextResponse.json({ ok: true, message: "Принято зафиксировано. Спасибо!" });
   }
 
+if (action === "resolve") {
+    // status goes to "under_review", review_deadline = now + 48h
+    // if body.note exists, log it as an artifact in task_events or issue note
+    const { data: st } = await admin.from("instance_config").select("value").eq("key", "review_sla_hours").maybeSingle();
+    const slaHours = parseInt(st?.value || "48", 10);
+    const deadline = new Date(Date.now() + slaHours * 3600000).toISOString();
+    
+    const note = body?.note || null;
+    const { error } = await admin
+      .from("issues")
+      .update({ status: "under_review", review_deadline: deadline })
+      .eq("id", row.issue_id);
+    if (error) return NextResponse.json({ error: "Не удалось зафиксировать" }, { status: 500 });
+    
+    await admin.from("task_events").insert({
+      issue_id: row.issue_id,
+      event: "status_changed",
+      actor: "respond-link",
+      payload: { to: "under_review", note },
+    });
+    // We don't mark token used so they can click other links? Actually, yes we do mark it used.
+    await admin.from("issue_response_tokens").update({ used_at: new Date().toISOString() }).eq("id", row.id);
+    return NextResponse.json({ ok: true, message: "Переведено на проверку." });
+  }
+
+  if (action === "rework") {
+    const note = body?.note || null;
+    const { error } = await admin
+      .from("issues")
+      .update({ status: "rework" }) // "rework" is added in enum
+      .eq("id", row.issue_id);
+    if (error) return NextResponse.json({ error: "Не удалось зафиксировать" }, { status: 500 });
+    
+    await admin.from("task_events").insert({
+      issue_id: row.issue_id,
+      event: "status_changed",
+      actor: "respond-link",
+      payload: { to: "rework", note },
+    });
+    await admin.from("issue_response_tokens").update({ used_at: new Date().toISOString() }).eq("id", row.id);
+    return NextResponse.json({ ok: true, message: "Возвращено на доработку." });
+  }
+
   if (action === "propose") {
     const due = body?.due_date;
     const note = typeof body?.note === "string" ? body.note.slice(0, 500) : "";

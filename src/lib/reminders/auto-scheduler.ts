@@ -88,8 +88,17 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
       WITH cand AS (
         SELECT i.id, i.title, i.owner_name, i.owner_user_id, i.due_date
         FROM issues i
-        WHERE i.status IN ('open','in_progress','pending')
+        WHERE i.status IN ('open','assigned','accepted','in_progress','pending','rework')
           AND i.due_date IS NOT NULL
+          -- Phase 6b: TG-канал (notify_channel='tg') шлёт отдельный kotrol-tg бот; email их не дублирует
+          AND NOT EXISTS (
+            SELECT 1 FROM profiles p
+            WHERE p.id = i.owner_user_id AND p.notify_channel = 'tg'
+          )
+          AND EXISTS (
+            SELECT 1 FROM reminder_matrix m
+            WHERE m.status = i.status AND m.recipient = 'executor' AND m.enabled = true
+          )
           -- Phase 2 v2 P1: пока ответственный отсутствует (people_directory.absent_until
           -- >= сегодня), его напоминания откладываются: кандидат не берётся в тик.
           AND NOT EXISTS (
@@ -129,8 +138,16 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
                  (SELECT MAX(rl1.sent_at) FROM reminder_log rl1 WHERE rl1.issue_id=i.id AND rl1.kind='due' AND rl1.status='sent' AND rl1.due_date_value=i.due_date)
                ) AS base_at
         FROM issues i
-        WHERE i.status IN ('open','in_progress','pending')
+        WHERE i.status IN ('open','assigned','accepted','in_progress','pending','rework')
           AND i.accepted_at IS NULL
+          AND NOT EXISTS (
+            SELECT 1 FROM profiles p
+            WHERE p.id = i.owner_user_id AND p.notify_channel = 'tg'
+          )
+          AND EXISTS (
+            SELECT 1 FROM reminder_matrix m
+            WHERE m.status = i.status AND m.recipient = 'executor' AND m.enabled = true
+          )
           -- Phase 2 v2 P1: отсутствующего ответственного не беспокоим повторами.
           AND NOT EXISTS (
             SELECT 1 FROM people_directory pd
@@ -190,13 +207,30 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
       try {
         // re-check: issue всё ещё открыт и срок не изменился
         const { data: iss } = await admin.from("issues").select("status, due_date").eq("id", c.issue_id).single();
-        if (!iss || !["open", "in_progress", "pending"].includes(iss.status)) {
+        if (!iss || !["open", "assigned", "accepted", "in_progress", "pending", "rework"].includes(iss.status)) {
           await pg.query("UPDATE reminder_log SET status='skipped_cancelled', updated_at=now() WHERE id=$1 AND claim_token=$2", [c.id, c.claim_token]);
           continue;
         }
         const smtp = await getSmtpConfig();
         if (!smtp) throw new Error("SMTP не настроен");
-        const bodyText = `Здравствуйте${c.owner_name ? ", " + c.owner_name : ""}!\n\n${c.kind === "due" ? "Приближается срок поручения" : "Напоминаем о поручении"}: «${c.issue_title}».\nПроверьте статус в системе: ${process.env.SITE_URL || "https://kotrol.alexkot.dev"}\n\n— Kotrol`;
+        // Phase 6b: приглашение в TG (одноразовый код), если ещё не привязан и не отписывался
+        let tgInvite = "";
+        try {
+          const { data: iu } = await admin.from("issues").select("owner_user_id").eq("id", c.issue_id).single();
+          if (iu?.owner_user_id) {
+            const { data: tu } = await admin.from("tg_users").select("unlinked_at, audit").eq("user_id", iu.owner_user_id).limit(1);
+            const rec = tu?.[0];
+            const optedOut = rec && rec.unlinked_at && JSON.stringify(rec.audit ?? {}).includes("unlink");
+            if (!rec || (!rec.unlinked_at && !optedOut)) {
+              const { randomBytes, createHash } = await import("node:crypto");
+              const code = "KOT-" + randomBytes(6).toString("hex").toUpperCase();
+              const hash = createHash("sha256").update(code).digest("hex");
+              await pg.query("INSERT INTO tg_link_codes (code_hash, user_id, expires_at) VALUES ($1,$2, now() + interval '7 days')", [hash, iu.owner_user_id]);
+              tgInvite = `\n\n— — —\nПолучать напоминания в Telegram: откройте @kotrol_tasks_bot и отправьте:\n/start ${code}\n(код действует 7 дней)`;
+            }
+          }
+        } catch (e: any) { console.error("TG invite fail:", e?.message ?? e); }
+        const bodyText = `Здравствуйте${c.owner_name ? ", " + c.owner_name : ""}!\n\n${c.kind === "due" ? "Приближается срок поручения" : "Напоминаем о поручении"}: «${c.issue_title}».\nПроверьте статус в системе: ${process.env.SITE_URL || "https://kotrol.alexkot.dev"}${tgInvite}\n\n— Kotrol`;
         await sendMail({
           to: c.recipient_email!,
           subject: `Напоминание: «${c.issue_title}»`,

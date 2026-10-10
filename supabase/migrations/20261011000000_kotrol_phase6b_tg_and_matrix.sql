@@ -1,0 +1,23 @@
+
+ALTER TABLE issues DROP CONSTRAINT IF EXISTS issues_status_check;
+ALTER TABLE issues ADD CONSTRAINT issues_status_check CHECK (status = ANY (ARRAY['open','assigned','accepted','in_progress','pending','under_review','resolved','dropped','cancelled','rework']));
+ALTER TABLE issues ADD COLUMN IF NOT EXISTS review_deadline timestamptz;
+ALTER TABLE reminder_log ADD COLUMN IF NOT EXISTS channel text NOT NULL DEFAULT 'email';
+DROP INDEX IF EXISTS idx_reminder_due_unique;
+CREATE UNIQUE INDEX idx_reminder_due_unique ON reminder_log (issue_id, channel, due_date_value) WHERE kind = 'due';
+DROP INDEX IF EXISTS idx_reminder_repeat_unique;
+CREATE UNIQUE INDEX idx_reminder_repeat_unique ON reminder_log (issue_id, channel, send_date_msk) WHERE kind = 'repeat';
+ALTER TABLE meeting_series ADD COLUMN IF NOT EXISTS tg_allowed boolean NOT NULL DEFAULT false;
+ALTER TABLE profiles ADD COLUMN IF NOT EXISTS notify_channel text NOT NULL DEFAULT 'email';
+CREATE TABLE IF NOT EXISTS reminder_matrix (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), status text NOT NULL, recipient text NOT NULL, remind_before_days int, repeat_hours int, enabled boolean NOT NULL DEFAULT true, preset_id text NOT NULL DEFAULT 'standard', UNIQUE(status, recipient, preset_id));
+CREATE TABLE IF NOT EXISTS tg_users (user_id uuid PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE, tg_user_id bigint, tg_chat_id bigint, tg_username text, linked_at timestamptz DEFAULT now(), unlinked_at timestamptz, audit jsonb DEFAULT '[]'::jsonb);
+CREATE UNIQUE INDEX IF NOT EXISTS tg_users_tg_user_id_active_idx ON tg_users(tg_user_id) WHERE unlinked_at IS NULL;
+CREATE TABLE IF NOT EXISTS tg_link_codes (code_hash text PRIMARY KEY, user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE, expires_at timestamptz NOT NULL, used_at timestamptz);
+CREATE TABLE IF NOT EXISTS tg_fsm (chat_id bigint PRIMARY KEY, state jsonb NOT NULL, expires_at timestamptz NOT NULL);
+CREATE TABLE IF NOT EXISTS tg_callback_refs (seq bigserial PRIMARY KEY, issue_id uuid REFERENCES issues(id) ON DELETE CASCADE, action text NOT NULL, message_id bigint, chat_id bigint, user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE, expires_at timestamptz NOT NULL, used_at timestamptz);
+CREATE TABLE IF NOT EXISTS tg_update_log (update_id bigint PRIMARY KEY, tg_payload jsonb NOT NULL, status text NOT NULL, attempts int DEFAULT 0, claimed_at timestamptz, fencing_token uuid, error text);
+CREATE TABLE IF NOT EXISTS tg_ack_pending (update_id bigint PRIMARY KEY, kind text, payload jsonb, attempts int DEFAULT 0);
+CREATE TABLE IF NOT EXISTS tg_reminder_queue (id uuid PRIMARY KEY DEFAULT gen_random_uuid(), issue_id uuid REFERENCES issues(id) ON DELETE CASCADE, recipient_user_id uuid, kind text NOT NULL, scheduled_for date NOT NULL DEFAULT CURRENT_DATE, status text NOT NULL DEFAULT 'scheduled', attempts int DEFAULT 0, fencing_token uuid, updated_at timestamptz DEFAULT now());
+CREATE UNIQUE INDEX IF NOT EXISTS tg_reminder_queue_dedup_idx ON tg_reminder_queue (issue_id, kind, scheduled_for);
+UPDATE issues SET review_deadline = now() + interval '48 hours' WHERE status = 'under_review' AND review_deadline IS NULL;
+INSERT INTO reminder_matrix (id, status, recipient, remind_before_days, repeat_hours, enabled, preset_id) SELECT gen_random_uuid(), t.status, 'executor', COALESCE((SELECT value::int FROM instance_config WHERE key='reminder_days_before' LIMIT 1), 2), COALESCE((SELECT value::int FROM instance_config WHERE key='reminder_repeat_hours' LIMIT 1), 48), true, 'standard' FROM (VALUES ('open'),('assigned'),('accepted'),('rework')) AS t(status) ON CONFLICT DO NOTHING;

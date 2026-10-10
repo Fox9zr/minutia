@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ReminderSettingsCard } from "@/components/admin/ReminderSettingsCard";
+import { ReminderMatrixCard } from "@/components/admin/ReminderMatrixCard";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -705,6 +706,7 @@ export default function AdminSettingsPage() {
       </Card>
 
       <ReminderSettingsCard />
+      <ReminderMatrixCard />
 
       <div className="flex flex-wrap items-center gap-3">
         <Button type="button" size="sm" disabled={saving} onClick={handleSave}>

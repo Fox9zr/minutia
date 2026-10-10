@@ -1,5 +1,21 @@
 services:
   minutia-web:
     logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+    restart: unless-stopped
   supabase-db:
+    logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
+  kotrol-tg:
+    image: node:22-alpine
+    working_dir: /app
+    volumes:
+      - ./scripts/tg-bot.mjs:/app/tg-bot.mjs:ro
+    environment:
+      TG_BOT_TOKEN: ${TG_BOT_TOKEN}
+      SUPABASE_DB_HOST: daiko-minutia-supabase-db-1
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    command: sh -c "npm install pg && node tg-bot.mjs"
+    restart: unless-stopped
+    depends_on:
+      - supabase-db
     logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
