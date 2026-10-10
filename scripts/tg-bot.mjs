@@ -384,6 +384,69 @@ async function cleanupLoop(pg) {
   await pg.query("DELETE FROM tg_update_log WHERE status IN ('done','failed') AND claimed_at < now() - interval '7 days'");
 }
 
+
+// ── GM-дайджест (ежедневная коротышка для руководителя, role='gm', привязавшего TG) ──
+async function gmDigestTick(pg) {
+  const { rows: gms } = await pg.query(
+    `SELECT p.id FROM profiles p JOIN tg_users t ON t.user_id=p.id
+     WHERE p.role='gm' AND p.notify_channel='tg' AND t.unlinked_at IS NULL`
+  );
+  if (gms.length === 0) return;
+  const today = new Date().toISOString().slice(0, 10);
+
+  const { rows: review } = await pg.query(
+    `SELECT i.id, i.issue_number, i.title, i.review_deadline, u.name AS owner
+     FROM issues i LEFT JOIN profiles u ON u.id=i.owner_user_id
+     WHERE i.status='under_review' ORDER BY i.review_deadline ASC NULLS LAST LIMIT 20`
+  );
+  const { rows: overdue } = await pg.query(
+    `SELECT i.id, i.issue_number, i.title, i.due_date, u.name AS owner
+     FROM issues i LEFT JOIN profiles u ON u.id=i.owner_user_id
+     WHERE i.status IN ('assigned','accepted','in_progress','rework')
+       AND i.due_date < CURRENT_DATE
+     ORDER BY i.due_date ASC LIMIT 20`
+  );
+
+  // дедуп: раз в сутки на GM (key = 'gm_digest:'+user+':'+date)
+  for (const gm of gms) {
+    // дедуп по kind='gm_digest' + recipient_user_id (NOT NULL) + scheduled_for — покрыт UNIQUE-индексом? нет:
+    // индекс (issue_id, kind, scheduled_for) с issue_id=NULL не дедупит → используем SELECT-then-INSERT (бот единственный, гонок нет)
+    const key = `gm_digest:${gm.id}:${today}`;
+    const { rows: already } = await pg.query(
+      `SELECT 1 FROM tg_reminder_queue WHERE recipient_user_id=$1 AND kind='gm_digest' AND scheduled_for=CURRENT_DATE AND status='sent' LIMIT 1`,
+      [gm.id]
+    );
+    if (already.length > 0) continue; // уже отправляли сегодня
+    const claimed = await pg.query(
+      `INSERT INTO tg_reminder_queue (recipient_user_id, kind, scheduled_for, status, fencing_token)
+       VALUES ($1, 'gm_digest', CURRENT_DATE, 'sending', gen_random_uuid()) RETURNING id`,
+      [gm.id]
+    );
+
+    const lines = ["📋 Котрол: сводка на проверку"];
+    if (review.length === 0 && overdue.length === 0) {
+      lines.push("Всё чисто — на проверке ничего не ждёт 🎉");
+    }
+    if (review.length > 0) {
+      lines.push(`\n🔍 На проверке (${review.length}):`);
+      for (const r of review) lines.push(`  #${r.issue_number ?? r.id.slice(0,8)} ${r.title}${r.owner ? ` — ${r.owner}` : ""}${r.review_deadline ? ` (до ${new Date(r.review_deadline).toISOString().slice(0,10)})` : ""}`);
+    }
+    if (overdue.length > 0) {
+      lines.push(`\n⏰ Просрочено (${overdue.length}):`);
+      for (const o of overdue) lines.push(`  #${o.issue_number ?? o.id.slice(0,8)} ${o.title}${o.owner ? ` — ${o.owner}` : ""} (срок ${new Date(o.due_date).toISOString().slice(0,10)})`);
+    }
+    try {
+      const { rows: t } = await pg.query(`SELECT tg_chat_id FROM tg_users WHERE user_id=$1 AND unlinked_at IS NULL`, [gm.id]);
+      await tg("sendMessage", { chat_id: t[0].tg_chat_id, text: lines.join("\n") });
+      await pg.query(`UPDATE tg_reminder_queue SET status='sent', updated_at=now() WHERE id=$1`, [claimed.rows[0].id]);
+      console.log("[gm-digest] sent to", gm.id);
+    } catch (e) {
+      console.error("[gm-digest] fail", e.message);
+      await pg.query(`DELETE FROM tg_reminder_queue WHERE id=$1`, [claimed.rows[0].id]); // завтра повторит
+    }
+  }
+}
+
 async function main() {
   const pg = new Client({ ...pgCfg });
   await pg.connect();
@@ -393,6 +456,8 @@ async function main() {
   setInterval(() => ackRetryLoop(pg).catch(e => console.error("ack", e)), 30_000);
   setInterval(() => cleanupLoop(pg).catch(e => console.error("cleanup", e)), CLEANUP_INTERVAL_MS);
   setInterval(() => tgReminderTick(pg).catch(e => console.error("tg-tick", e)), 15 * 60 * 1000);
+  setInterval(() => gmDigestTick(pg).catch(e => console.error("gm-digest", e)), 60 * 60 * 1000);
+  gmDigestTick(pg).catch(e => console.error("gm-digest init", e));
   tgReminderTick(pg).catch(e => console.error("tg-tick init", e));
 
   while (true) {
