@@ -222,8 +222,11 @@ export async function runReminderTick(nowOverride?: { hour?: number; date?: stri
             const rec = tu?.[0];
             const optedOut = rec && rec.unlinked_at && JSON.stringify(rec.audit ?? {}).includes("unlink");
             if (!rec || (!rec.unlinked_at && !optedOut)) {
+              // post-deploy fix: реюз действующего кода (иначе плодим коды на каждый тик)
               const { randomBytes, createHash } = await import("node:crypto");
-              const code = "KOT-" + randomBytes(6).toString("hex").toUpperCase();
+              let code = "KOT-" + randomBytes(6).toString("hex").toUpperCase();
+              // коды хранятся хэшами — показанный код не восстановить; вместо реюза гасим старые и выдаём один новый
+              await pg.query("UPDATE tg_link_codes SET used_at=now() WHERE user_id=$1 AND used_at IS NULL AND expires_at > now()", [iu.owner_user_id]);
               const hash = createHash("sha256").update(code).digest("hex");
               await pg.query("INSERT INTO tg_link_codes (code_hash, user_id, expires_at) VALUES ($1,$2, now() + interval '7 days')", [hash, iu.owner_user_id]);
               tgInvite = `\n\n— — —\nПолучать напоминания в Telegram: откройте @kotrol_tasks_bot и отправьте:\n/start ${code}\n(код действует 7 дней)`;

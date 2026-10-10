@@ -87,8 +87,9 @@ async function handleStart(pg, msg) {
     await tg("sendMessage", { chat_id: chatId, text: "Kotrol: пришлите код привязки из письма (вид: /start ABCD-...). Отвязка: /stop" });
     return;
   }
-  const { crypto } = await import("node:crypto");
-  const hash = crypto.createHash("sha256").update(code.trim()).digest("hex");
+  const { createHash } = await import("node:crypto");
+  const hash = createHash("sha256").update(code.trim()).digest("hex");
+  await pg.query("BEGIN"); // post-deploy fix: код гасится в ТОЙ ЖЕ транзакции, что и привязка
   const { rows } = await pg.query(
     `UPDATE tg_link_codes SET used_at=now()
      WHERE code_hash=$1 AND used_at IS NULL AND expires_at > now()
@@ -96,11 +97,11 @@ async function handleStart(pg, msg) {
     [hash]
   );
   if (rows.length === 0) {
+    await pg.query("ROLLBACK");
     await tg("sendMessage", { chat_id: chatId, text: "Код недействителен или уже использован. Запросите новое письмо." });
     return;
   }
   const userId = rows[0].user_id;
-  await pg.query("BEGIN");
   try {
     await pg.query(
       `INSERT INTO tg_users (user_id, tg_user_id, tg_chat_id, tg_username, linked_at, audit)
@@ -139,13 +140,13 @@ const BUTTONS = {
   rework: [["🛠 В работу", "a:start"], ["✔️ Решено", "a:resolve"]],
 };
 
-async function issueKeyboard(pg, issueId, status) {
+async function issueKeyboard(pg, issueId, status, chatId, userId) {
   const labels = BUTTONS[status] || [];
   const btns = [];
   for (const [label, action] of labels) {
     const { rows } = await pg.query(
-      "INSERT INTO tg_callback_refs (issue_id, action, expires_at) VALUES ($1,$2, now() + interval '30 days') RETURNING seq",
-      [issueId, action.replace("a:", "")]
+      "INSERT INTO tg_callback_refs (issue_id, action, chat_id, user_id, expires_at) VALUES ($1,$2,$3,$4, now() + interval '30 days') RETURNING seq",
+      [issueId, action.replace("a:", ""), chatId, userId]
     );
     btns.push([{ text: label, callback_data: "a" + rows[0].seq }]);
   }
@@ -167,7 +168,7 @@ async function handleTasks(pg, msg) {
   if (rows.length === 0) { await tg("sendMessage", { chat_id: msg.chat.id, text: "Активных поручений нет 🎉" }); return; }
   for (const it of rows) {
     if (!it.tg_allowed) continue; // sensitive-серия без opt-in — кнопок не даём (v1: показываем только список)
-    const kb = await issueKeyboard(pg, it.id, it.status);
+    const kb = await issueKeyboard(pg, it.id, it.status, msg.chat.id, link.user_id);
     await tg("sendMessage", {
       chat_id: msg.chat.id,
       text: `#${it.issue_number ?? ""} ${it.title}\nСтатус: ${it.status}${it.due_date ? `\nСрок: ${it.due_date.toISOString().slice(0,10)}` : ""}`,
@@ -194,7 +195,8 @@ async function handleCallback(pg, cq) {
     await tg("sendMessage", { chat_id: cq.message.chat.id, text: "⚠️ Статус уже изменён или кнопка устарела. /tasks — актуальный список." });
     return;
   }
-  if (ref.chat_id && ref.chat_id !== cq.message.chat.id) return; // пересланная кнопка
+  if (ref.chat_id && String(ref.chat_id) !== String(cq.message.chat.id)) return; // пересланная кнопка (text vs number!)
+  if (ref.user_id && ref.user_id !== link.user_id) return; // чужая кнопка (post-deploy fix)
   if (ref.owner_user_id !== link.user_id) {
     await tg("sendMessage", { chat_id: cq.message.chat.id, text: "⚠️ Нет доступа к этой задаче." });
     return;
@@ -397,8 +399,8 @@ async function main() {
     try {
       const updates = await tg("getUpdates", { offset: offset + 1, timeout: POLL_TIMEOUT_S, allowed_updates: ["message", "callback_query"] });
       for (const u of updates) {
-        offset = Math.max(offset, u.update_id);
         await processUpdate(pg, u); // последовательная обработка = непрерывный префикс
+        offset = Math.max(offset, u.update_id); // сдвигаем ТОЛЬКО после успешной записи в БД (post-deploy fix)
       }
     } catch (e) {
       console.error("poll error", e.message);

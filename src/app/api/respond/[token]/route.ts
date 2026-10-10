@@ -84,7 +84,8 @@ if (action === "resolve") {
     const { error } = await admin
       .from("issues")
       .update({ status: "under_review", review_deadline: deadline })
-      .eq("id", row.issue_id);
+      .eq("id", row.issue_id)
+      .in("status", ["in_progress", "accepted", "pending"]); // CAS: только из живых исполнительских статусов (post-deploy fix)
     if (error) return NextResponse.json({ error: "Не удалось зафиксировать" }, { status: 500 });
     
     await admin.from("task_events").insert({
@@ -102,8 +103,9 @@ if (action === "resolve") {
     const note = body?.note || null;
     const { error } = await admin
       .from("issues")
-      .update({ status: "rework" }) // "rework" is added in enum
-      .eq("id", row.issue_id);
+      .update({ status: "rework" })
+      .eq("id", row.issue_id)
+      .eq("status", "under_review"); // CAS: rework только из under_review (post-deploy fix)
     if (error) return NextResponse.json({ error: "Не удалось зафиксировать" }, { status: 500 });
     
     await admin.from("task_events").insert({
