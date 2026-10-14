@@ -180,6 +180,11 @@ async function handleTasks(pg, msg) {
 // ── callback ──
 async function handleCallback(pg, cq) {
   await tg("answerCallbackQuery", { callback_query_id: cq.id }).catch(() => {}); // ранний ack (снятие спиннера)
+  if (cq.data === "cancel_fsm") {
+    await pg.query("DELETE FROM tg_fsm WHERE chat_id=$1", [cq.message.chat.id]);
+    await tg("editMessageText", { chat_id: cq.message.chat.id, message_id: cq.message.message_id, text: "❌ Действие отменено." }).catch(() => {});
+    return;
+  }
   const link = await activeLink(pg, cq.from.id);
   if (!link) { await tg("sendMessage", { chat_id: cq.message.chat.id, text: "⚠️ Нет доступа. Привяжите аккаунт: /start <код>" }); return; }
   const seq = Number(String(cq.data || "").replace(/^a/, ""));
@@ -207,8 +212,10 @@ async function handleCallback(pg, cq) {
     // FSM: запросить артефакт
     const prompt = await tg("sendMessage", {
       chat_id: cq.message.chat.id,
-      text: `Задача #${ref.issue_id.slice(0,8)}: пришлите ссылку на результат или комментарий для Вероники (ответьте РЕПЛАЕМ на это сообщение). /cancel — отмена. Таймаут 15 мин.`,
-      reply_markup: { force_reply: true, selective: true },
+      text: `Задача #${ref.issue_id.slice(0,8)}: пришлите ссылку на результат или комментарий для Вероники (ответьте РЕПЛАЕМ на это сообщение).\nИли нажмите кнопку «Отмена» ниже:`,
+      reply_markup: {
+        inline_keyboard: [[{ text: "❌ Отмена", callback_data: "cancel_fsm" }]]
+      },
     });
     await pg.query(
       `INSERT INTO tg_fsm (chat_id, state, expires_at) VALUES ($1,$2, now() + interval '15 minutes')
@@ -225,8 +232,10 @@ async function handleCallback(pg, cq) {
   if (action === "propose") {
     const prompt = await tg("sendMessage", {
       chat_id: cq.message.chat.id,
-      text: `Предложите новый срок для задачи (ответьте РЕПЛАЕМ, формат: ДД.ММ.ГГГГ + комментарий). /cancel — отмена.`,
-      reply_markup: { force_reply: true, selective: true },
+      text: `Предложите новый срок для задачи (ответьте РЕПЛАЕМ, формат: ДД.ММ.ГГГГ + комментарий).\nИли нажмите кнопку «Отмена» ниже:`,
+      reply_markup: {
+        inline_keyboard: [[{ text: "❌ Отмена", callback_data: "cancel_fsm" }]]
+      },
     });
     await pg.query(
       `INSERT INTO tg_fsm (chat_id, state, expires_at) VALUES ($1,$2, now() + interval '15 minutes')
