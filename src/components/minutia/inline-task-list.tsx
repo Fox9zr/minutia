@@ -351,7 +351,7 @@ function InlineTaskItem({
           title="Создано автоматически из события календаря"
           className="text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0 bg-accent/10 text-accent"
         >
-          Draft
+          Черновик
         </span>
       )}
 

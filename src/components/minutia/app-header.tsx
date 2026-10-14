@@ -7,6 +7,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useUIStore } from "@/lib/stores/ui-store";
 import { Separator } from "@/components/ui/separator";
 import { HintTooltip } from "@/components/minutia/hint-tooltip";
+import { HelpSheet } from "@/components/minutia/help-sheet";
 
 const pageTitles: Record<string, string> = {
   "/": "Доска OIL",
@@ -80,6 +81,9 @@ export function AppHeader() {
           <span className="sr-only">Поиск</span>
         </Button>
       </HintTooltip>
+
+      {/* Справка */}
+      <HelpSheet />
 
       {/* Desktop: panel toggle */}
       <HintTooltip label={calendarSidebarOpen ? "Закрыть повестку календаря." : "Открыть повестку календаря."}>

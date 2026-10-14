@@ -66,12 +66,12 @@ function relativeTime(date: Date | string): string {
   const d = new Date(date).getTime();
   const diff = now - d;
   const minutes = Math.floor(diff / 60000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
+  if (minutes < 1) return "только что";
+  if (minutes < 60) return `${minutes} мин. назад`;
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return `${hours} ч. назад`;
   const days = Math.floor(hours / 24);
-  if (days < 7) return `${days}d ago`;
+  if (days < 7) return `${days} дн. назад`;
   return new Date(date).toLocaleDateString("ru-RU", {
     month: "short",
     day: "numeric",
@@ -167,11 +167,11 @@ export default function InboxPage() {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="font-display text-2xl font-semibold text-ink">
-            Inbox
+            Входящие
           </h1>
           {hasUnread && (
             <p className="text-xs text-ink-4 mt-1">
-              {unread.length} unread notification{unread.length !== 1 ? "s" : ""}
+              {unread.length} непрочитанных уведомлений
             </p>
           )}
         </div>
@@ -184,7 +184,7 @@ export default function InboxPage() {
             className="text-ink-3 hover:text-ink"
           >
             <CheckCheck className="size-4 mr-1.5" />
-            Mark all read
+            Прочитать все
           </Button>
         )}
       </div>

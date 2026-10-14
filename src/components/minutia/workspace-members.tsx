@@ -528,7 +528,7 @@ export function WorkspaceMembers() {
               variant="outline"
               onClick={() => setPendingInvite(false)}
             >
-              Cancel
+              Отмена
             </Button>
             <Button
               onClick={async () => {

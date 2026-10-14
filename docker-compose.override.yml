@@ -1,5 +1,8 @@
 services:
   minutia-web:
+    extra_hosts:
+      - "api.alexkot.dev:188.114.97.3"
+      - "kotrol.alexkot.dev:188.114.96.3"
     logging: {driver: json-file, options: {max-size: "10m", max-file: "3"}}
     restart: unless-stopped
   supabase-db:

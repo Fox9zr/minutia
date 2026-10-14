@@ -300,7 +300,7 @@ export function SeriesDetailContent({ seriesId }: SeriesDetailContentProps) {
                 Спросить по серии
               </h2>
               <p className="mt-1 text-xs text-ink-3">
-                Query this series only. Answers cite the meeting memory that supports them.
+                Поиск только по этой серии встреч. Ответ подтверждается цитатами из материалов встреч.
               </p>
             </div>
             <Sparkles className="mt-1 size-4 shrink-0 text-accent" />

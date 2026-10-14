@@ -2128,7 +2128,7 @@ export function MeetingDetailContent({
                   variant="ghost"
                   onClick={() => setAiPreview(null)}
                 >
-                  Cancel
+                  Отмена
                 </Button>
                 <Button variant="accent"
                   type="button"

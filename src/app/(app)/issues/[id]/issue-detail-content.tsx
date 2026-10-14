@@ -38,6 +38,7 @@ import { StatusChip } from "@/components/minutia/status-chip";
 import { CategoryBadge } from "@/components/minutia/category-badge";
 import { IssueKey } from "@/components/minutia/issue-key";
 import { MemberCombobox } from "@/components/minutia/member-combobox";
+import { splitEvidence } from "@/lib/parse-evidence";
 import { PriorityIndicator } from "@/components/minutia/priority-indicator";
 import { MaterialLinksSection } from "@/components/minutia/material-links";
 import { TimelineNode } from "@/components/minutia/timeline-node";
@@ -786,13 +787,34 @@ export function IssueDetailContent({ issueId }: IssueDetailContentProps) {
             Описание
           </h2>
           <InlineEditText
-            value={issue.description ?? ""}
+            value={splitEvidence(issue.description).main}
             onSave={(v) => handleFieldSave("description", v)}
             className="text-sm text-ink-2 leading-relaxed"
             as="p"
             placeholder="Нет описания. Нажмите, чтобы добавить."
             multiline
           />
+          {(() => {
+            const { quotes } = splitEvidence(issue.description);
+            if (quotes.length === 0) return null;
+            return (
+              <details className="mt-3 group" open>
+                <summary className="cursor-pointer select-none text-[11px] font-medium uppercase tracking-wider text-ink-3 hover:text-accent transition-colors">
+                  🔎 Источник · дословные цитаты ({quotes.length})
+                </summary>
+                <div className="mt-2 space-y-2">
+                  {quotes.map((q, i) => (
+                    <blockquote key={i} className="border-l-2 border-accent/60 pl-3 py-1 text-sm italic text-ink-2">
+                      «{q.text}»
+                      {q.speaker && (
+                        <footer className="mt-1 text-[11px] not-italic text-ink-4">— {q.speaker}, встреча (запись)</footer>
+                      )}
+                    </blockquote>
+                  ))}
+                </div>
+              </details>
+            );
+          })()}
         </div>
 
         {/* Приостановка (hold) — ветка, не статус */}

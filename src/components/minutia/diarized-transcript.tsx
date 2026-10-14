@@ -136,10 +136,10 @@ function SpeakerChip({
         />
         <div className="flex justify-end gap-1.5">
           <Button type="button" size="sm" variant="ghost" onClick={() => setOpen(false)}>
-            Cancel
+            Отмена
           </Button>
           <Button type="button" size="sm" onClick={commit}>
-            Save
+            Сохранить
           </Button>
         </div>
       </PopoverContent>

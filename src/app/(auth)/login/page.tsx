@@ -43,6 +43,17 @@ function LoginForm() {
   const [formState, setFormState] = useState<FormState>("idle");
   const [inviteState, setInviteState] = useState<InviteState>("idle");
   const [inviteMessage, setInviteMessage] = useState("");
+
+function ruAuthError(e: { message?: string } | null | undefined): string {
+  const m = (e?.message || "").toLowerCase();
+  if (m.includes("invalid login")) return "Неверный email или пароль";
+  if (m.includes("email not confirmed")) return "Email не подтверждён — проверьте почту";
+  if (m.includes("too many requests")) return "Слишком много попыток — подождите немного";
+  if (m.includes("user already registered")) return "Пользователь уже зарегистрирован";
+  if (m.includes("password")) return "Пароль должен быть не короче 6 символов";
+  return e?.message || "Не удалось войти";
+}
+
   const [errorMessage, setErrorMessage] = useState("");
   const [sentMessage, setSentMessage] = useState(
     "Мы отправили ссылку для входа на"
@@ -97,7 +108,7 @@ function LoginForm() {
 
     if (error) {
       setFormState("error");
-      setErrorMessage(error.message);
+      setErrorMessage(ruAuthError(error));
     } else {
       window.location.replace(nextPath);
     }
@@ -119,7 +130,7 @@ function LoginForm() {
 
     if (error) {
       setFormState("error");
-      setErrorMessage(error.message);
+      setErrorMessage(ruAuthError(error));
     } else {
       setSentMessage("Мы отправили ссылку для входа на");
       setFormState("sent");
@@ -174,7 +185,7 @@ function LoginForm() {
 
     if (error) {
       setFormState("error");
-      setErrorMessage(error.message);
+      setErrorMessage(ruAuthError(error));
     }
   }
 

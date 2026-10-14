@@ -254,11 +254,11 @@ function AcceptInviteForm() {
               {state === "saving" ? (
                 <span className="flex items-center gap-2">
                   <LoadingDots />
-                  Saving
+                  Сохраняем...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  Set password
+                  Задать пароль
                   <ArrowRight className="h-4 w-4" />
                 </span>
               )}

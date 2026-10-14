@@ -246,7 +246,7 @@ export function QuickAddDialog() {
               size="sm"
               onClick={closeQuickAddDialog}
             >
-              Cancel
+              Отмена
             </Button>
             <Button type="submit" variant="accent" size="sm" disabled={createIssue.isPending}>
               {createIssue.isPending ? "Adding..." : "Добавить проблему"}

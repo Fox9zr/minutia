@@ -12,6 +12,7 @@ import { PrefetchIssueLink } from "./prefetch-issue-link";
 import { PriorityIndicator } from "./priority-indicator";
 import { isDateOverdue, formatShortDate } from "@/lib/date-utils";
 import { isClosedStatus, effectiveDueDate } from "@/lib/workflow";
+import { splitEvidence } from "@/lib/parse-evidence";
 
 interface IssueCardProps {
   issue: Issue;

@@ -661,11 +661,11 @@ function StepCreateAdmin({
             {creating ? (
               <>
                 <Loader2 className="size-4 mr-1.5 animate-spin" />
-                Creating...
+                Создаём...
               </>
             ) : (
               <>
-                Create admin
+                Создать администратора
                 <ArrowRight className="size-4 ml-1" />
               </>
             )}

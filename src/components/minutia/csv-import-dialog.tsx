@@ -409,7 +409,7 @@ export function CsvImportDialog({
           </div>
         )}
 
-        {/* Step: Done */}
+        {/* Step: Готово */}
         {step === "done" && (
           <div className="flex flex-col items-center gap-3 py-8">
             <div className="flex items-center justify-center size-12 rounded-full bg-success/10">
@@ -474,7 +474,7 @@ export function CsvImportDialog({
           )}
           {step === "done" && (
             <Button size="sm" onClick={() => handleOpenChange(false)}>
-              Done
+              Готово
             </Button>
           )}
         </DialogFooter>

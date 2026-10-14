@@ -240,7 +240,7 @@ export default function SettingsPage() {
             </div>
             {allIssues && (
               <p className="mt-2 text-xs text-ink-3">
-                {allIssues.length} issues available for export.
+                {allIssues.length} поручений доступно для экспорта.
               </p>
             )}
           </CardContent>
