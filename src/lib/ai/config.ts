@@ -7,6 +7,7 @@ export type AiConfig = {
   baseUrl: string;
   apiKey: string;
   model: string;
+  modelAsk?: string;
 };
 
 const VALID_PROVIDERS = new Set<string>(["openai-compatible", "anthropic"]);
@@ -49,6 +50,9 @@ export function resolveAiConfig(
   const model =
     pick(map.ai_model, env.AI_MODEL, env.OPENROUTER_MODEL) ?? DEFAULT_MODEL;
 
+  const modelAsk =
+    pick(map.ai_model_ask, env.AI_MODEL_ASK, env.AI_MODEL_SEARCH) ?? undefined;
+
   // baseUrl: anthropic always uses canonical URL; openai-compatible: map -> env -> default
   let baseUrl: string;
   if (provider === "anthropic") {
@@ -59,7 +63,7 @@ export function resolveAiConfig(
     baseUrl = baseUrl.replace(/\/$/, "");
   }
 
-  return { provider, baseUrl, apiKey, model };
+  return { provider, baseUrl, apiKey, model, modelAsk };
 }
 
 export async function getAiConfig(): Promise<AiConfig | null> {
@@ -68,6 +72,7 @@ export async function getAiConfig(): Promise<AiConfig | null> {
     "ai_base_url",
     "ai_api_key",
     "ai_model",
+    "ai_model_ask",
   ]);
   return resolveAiConfig(map, process.env);
 }

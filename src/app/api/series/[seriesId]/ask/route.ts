@@ -3,7 +3,7 @@ import { z } from "zod";
 import { parseAskSeriesAnswer } from "@/lib/ai/ask-series-answer";
 import { createClient } from "@/lib/supabase/server";
 import { callAi } from "@/lib/ai/call";
-import { hasAiConfigured } from "@/lib/ai/config";
+import { hasAiConfigured, getAiConfig } from "@/lib/ai/config";
 import { requireAiAccess } from "@/lib/ai/access";
 
 const PROMPT_VERSION = "ask-series-v1";
@@ -152,7 +152,13 @@ export async function POST(
   let providerData: unknown;
   let model: string;
   try {
-    ({ data: providerData, model } = await callAi({ system: SYSTEM_PROMPT, prompt }));
+    const aiConfig = await getAiConfig();
+    const askModel = aiConfig?.modelAsk || "deepseek-v4-flash";
+    ({ data: providerData, model } = await callAi({
+      system: SYSTEM_PROMPT,
+      prompt,
+      model: askModel,
+    }));
   } catch {
     return NextResponse.json(
       { error: "Сбой запроса к провайдеру ИИ.", request_id: requestId },

@@ -32,10 +32,12 @@ export async function dispatchAi(
     prompt: string;
     timeoutMs?: number;
     retries?: number;
+    model?: string;
   }
 ): Promise<{ data: unknown; model: string }> {
   const timeoutMs = input.timeoutMs ?? 30000;
   const retries = input.retries ?? 1;
+  const targetModel = input.model || config.model;
 
   let lastError: unknown;
   for (let attempt = 0; attempt <= retries; attempt++) {
@@ -43,8 +45,8 @@ export async function dispatchAi(
       let data: unknown;
       if (config.provider === "anthropic") {
         const raw = await callAnthropic({
-          apiKey: config.apiKey,
-          model: config.model,
+          apiKey: ***
+          model: targetModel,
           system: input.system,
           prompt: input.prompt,
           timeoutMs,
@@ -54,14 +56,14 @@ export async function dispatchAi(
       } else {
         data = await callOpenAiCompatible({
           baseUrl: config.baseUrl,
-          apiKey: config.apiKey,
-          model: config.model,
+          apiKey: ***
+          model: targetModel,
           system: input.system,
           prompt: input.prompt,
           timeoutMs,
         });
       }
-      return { data, model: config.model };
+      return { data, model: targetModel };
     } catch (err) {
       lastError = err;
     }
@@ -74,6 +76,7 @@ export async function callAi(input: {
   prompt: string;
   timeoutMs?: number;
   retries?: number;
+  model?: string;
 }): Promise<{ data: unknown; model: string }> {
   const config = await getAiConfig();
   if (!config) throw new AiNotConfiguredError("ИИ не настроен.");
